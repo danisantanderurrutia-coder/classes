@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // ============================================================================
-// 1. ASTROPHYSICAL & ACADEMIC METADATA (INCLUDES VENUS, NEPTUNE & ASTEROIDS)
+// 1. ASTROPHYSICAL & ACADEMIC METADATA
 // ============================================================================
 export const PLANET_SUBJECTS = [
   {
@@ -77,7 +77,7 @@ export const PLANET_SUBJECTS = [
   {
     id: 'earth',
     name: 'Earth',
-    spectralClass: 'Active Biosphere / Hydro-Atmosphere',
+    spectralClass: 'Active Biosphere / Human Civilization',
     academicAreaEn: 'Höhere Mathematik & Classical Mechanics (TU9 Core)',
     academicAreaEs: 'Höhere Mathematik y Mecánica Clásica (Núcleo TU9)',
     courseId: 'klausur',
@@ -88,12 +88,12 @@ export const PLANET_SUBJECTS = [
     distance: 15.0,
     speed: 1.25,
     eccentricity: 0.0167,
-    inclination: 0.0, // Ecliptic reference
+    inclination: 0.0,
     axialTilt: 23.44,
     hasClouds: true,
     hasAtmosphere: true,
     hasMoon: true,
-    hasAsteroidCloud: true, // Near-Earth Asteroid Swarm
+    hasSatellites: true, // LEO, MEO, GEO & ISS satellite fleet
     orbitalPeriod: '365.25 days',
     temperatureK: '288 K (Mean)',
     semiMajorAxisAU: '1.000 AU',
@@ -194,6 +194,29 @@ export const PLANET_SUBJECTS = [
     orbitalSpeedKms: '5.4 km/s',
     realSize: 0.52,
     realDistance: 5850,
+  },
+  {
+    id: 'blackhole',
+    name: 'Sagittarius A* (Galactic Center)',
+    spectralClass: 'Supermassive Black Hole (4.15×10⁶ M☉)',
+    academicAreaEn: 'General Relativity, Gravitational Waves & Black Holes',
+    academicAreaEs: 'Relatividad General, Ondas Gravitacionales y Agujeros Negros',
+    courseId: 'relativity',
+    descriptionEn: 'The supermassive gravitational anchor of the Milky Way (26,000 light-years away). Schwarzschild & Kerr spacetime metrics, event horizon geometry, gravitational lensing photon sphere, and relativistic Doppler accretion.',
+    descriptionEs: 'El ancla gravitacional supermasiva de la Vía Láctea (a 26.000 años luz). Métricas de Schwarzschild y Kerr, horizonte de sucesos, esfera de fotones por lente gravitacional y disco de acreción con emisión Doppler relativista.',
+    color: '#A855F7',
+    size: 7.2,
+    distance: 195,
+    speed: 0.1,
+    eccentricity: 0.07,
+    axialTilt: 62.0,
+    orbitalPeriod: '230 Million Years (Cosmic Year)',
+    temperatureK: '1.4×10⁻¹⁴ K (Hawking) / 10⁷ K (Accretion Disk)',
+    semiMajorAxisAU: '26,000 Light-Years (8.2 kpc)',
+    orbitalSpeedKms: '230 km/s (Galactic Orbit of Sol)',
+    realSize: 32.0,
+    realDistance: 12000,
+    isBlackHole: true,
   }
 ];
 
@@ -255,7 +278,7 @@ function createNoiseGenerator() {
 const noise = createNoiseGenerator();
 
 // ============================================================================
-// 3. SCIENTIFIC PROCEDURAL TEXTURES
+// 3. SCIENTIFIC PROCEDURAL TEXTURES (DAY + PHOTOREALISTIC NIGHT CITY LIGHTS)
 // ============================================================================
 
 function createStarSpriteTexture() {
@@ -302,7 +325,7 @@ function createAnamorphicStreakTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// VENUS: Dense, swirling sulfuric acid & carbon dioxide atmosphere
+// VENUS
 function createVenusTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 1024; canvas.height = 512;
@@ -315,12 +338,9 @@ function createVenusTexture() {
     for (let x = 0; x < 1024; x++) {
       const idx = (y * 1024 + x) * 4;
       const xNorm = x / 1024;
-
-      // Equatorial chevron / Y-feature super-rotation wave
       const chevron = Math.abs(lat) * 2.5 + Math.sin(xNorm * Math.PI * 2) * 0.4;
       const turb = noise.fbm2D(xNorm * 10.0 + chevron, lat * 6.0, 5, 0.55, 2.0);
 
-      // Pale amber & buttery cream cloud decks
       const r = Math.min(255, Math.floor(242 - turb * 25));
       const g = Math.min(255, Math.floor(220 - turb * 35));
       const b = Math.min(255, Math.floor(165 - turb * 45));
@@ -334,7 +354,7 @@ function createVenusTexture() {
   return texture;
 }
 
-// EARTH: Vibrant oceans and continents
+// EARTH: Daytime surface (Oceans, Continents, Ice)
 function createEarthDiffuseTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 1024; canvas.height = 512;
@@ -355,7 +375,6 @@ function createEarthDiffuseTexture() {
 
       const continentField = noise.fbm2D(nx * 1.8 + 10.0, ny * 1.8 + nz * 1.8, 6, 0.52, 2.05);
       const elevation = continentField + noise.fbm2D(nx * 8.0, ny * 8.0 + nz * 8.0, 3, 0.5, 2.0) * 0.15;
-
       const isIce = (Math.abs(lat) / (Math.PI * 0.5)) + noise.noise2D(nx * 4.0, nz * 4.0) * 0.08 > 0.82;
 
       let r, g, b;
@@ -386,6 +405,103 @@ function createEarthDiffuseTexture() {
     }
   }
   ctx.putImageData(imgData, 0, 0);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.anisotropy = 8;
+  return texture;
+}
+
+// EARTH: NIGHT CITY LIGHTS MAP (NASA Black Marble Photography Style)
+function createEarthNightTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024; canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+
+  // Pitch black deep ocean background
+  ctx.fillStyle = '#010204';
+  ctx.fillRect(0, 0, 1024, 512);
+
+  // Helper to render glowing incandescent metropolitan nodes
+  const paintCityNode = (cx, cy, radius, intensity = 1.0, color = 'rgba(255, 215, 120, ') => {
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    grad.addColorStop(0.0, `${color}${0.95 * intensity})`);
+    grad.addColorStop(0.3, `${color}${0.65 * intensity})`);
+    grad.addColorStop(0.7, `rgba(255, 160, 50, ${0.25 * intensity})`);
+    grad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  const paintCorridor = (x1, y1, x2, y2, width = 1.5) => {
+    ctx.strokeStyle = 'rgba(255, 200, 100, 0.45)';
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  };
+
+  // 1. NORTH AMERICA (US East Coast, Midwest, California, Texas)
+  paintCityNode(295, 138, 22, 1.2); // NYC / Boston / DC Megalopolis
+  paintCityNode(255, 142, 16, 1.0); // Chicago / Great Lakes
+  paintCityNode(175, 160, 15, 1.0); // Los Angeles / SoCal
+  paintCityNode(168, 145, 12, 0.9); // Bay Area
+  paintCityNode(260, 175, 14, 0.9); // Texas Triangle (Houston/Dallas)
+  paintCityNode(285, 178, 12, 0.85); // Florida / Atlanta
+  paintCorridor(295, 138, 255, 142, 2);
+  paintCorridor(255, 142, 260, 175, 1.5);
+
+  // 2. WESTERN & CENTRAL EUROPE (Dense urban web)
+  paintCityNode(515, 115, 14, 1.1); // London
+  paintCityNode(522, 125, 14, 1.1); // Paris
+  paintCityNode(535, 118, 18, 1.3); // Rhine-Ruhr / Benelux
+  paintCityNode(510, 145, 12, 0.9); // Madrid / Lisbon
+  paintCityNode(542, 140, 13, 0.95); // Po Valley / Milan / Rome
+  paintCityNode(550, 112, 12, 0.9); // Berlin / Warsaw
+  paintCityNode(615, 105, 16, 1.0); // Moscow
+  paintCorridor(515, 115, 522, 125, 2);
+  paintCorridor(522, 125, 535, 118, 2);
+  paintCorridor(535, 118, 542, 140, 1.5);
+
+  // 3. ASIA (Tokyo, Shanghai, Beijing, Seoul, Pearl River)
+  paintCityNode(915, 152, 24, 1.5); // Tokyo Greater Area (Most luminous cluster on Earth)
+  paintCityNode(895, 158, 16, 1.2); // Osaka / Nagoya
+  paintCityNode(875, 148, 16, 1.2); // Seoul & South Korea
+  paintCityNode(860, 165, 20, 1.3); // Shanghai / Yangtze Delta
+  paintCityNode(845, 142, 18, 1.2); // Beijing / Tianjin
+  paintCityNode(838, 192, 22, 1.4); // Pearl River Delta (Guangzhou / HK / Shenzhen)
+  paintCityNode(865, 185, 12, 0.9); // Taiwan
+  paintCorridor(915, 152, 895, 158, 2.5);
+  paintCorridor(860, 165, 838, 192, 1.8);
+
+  // 4. INDIA & MIDDLE EAST
+  paintCityNode(735, 175, 20, 1.2); // New Delhi & Indo-Gangetic Plain
+  paintCityNode(720, 205, 16, 1.1); // Mumbai
+  paintCityNode(745, 220, 14, 1.0); // Bangalore / Chennai
+  paintCityNode(605, 180, 14, 1.1); // Dubai / Abu Dhabi / Persian Gulf
+  paintCityNode(545, 172, 18, 1.3); // Nile River Delta (Iconic glowing lotus flower)
+  paintCorridor(545, 172, 545, 215, 2.0); // The Nile River ribbon
+
+  // 5. SOUTH AMERICA, AFRICA & OCEANIA
+  paintCityNode(380, 318, 18, 1.2); // São Paulo & Rio de Janeiro
+  paintCityNode(345, 355, 16, 1.1); // Buenos Aires
+  paintCityNode(310, 345, 12, 0.9); // Santiago
+  paintCityNode(595, 335, 14, 1.0); // Johannesburg / Pretoria
+  paintCityNode(945, 350, 14, 1.0); // Sydney
+  paintCityNode(925, 362, 13, 0.95); // Melbourne
+
+  // Background subtle web of human transport corridors and towns
+  for (let i = 0; i < 600; i++) {
+    const rx = Math.random() * 1024;
+    const ry = Math.random() * 512;
+    // Concentrate in Northern Hemisphere temperate latitudes
+    if (ry > 95 && ry < 240 && Math.random() > 0.4) {
+      ctx.fillStyle = `rgba(255, 205, 110, ${Math.random() * 0.45})`;
+      ctx.fillRect(rx, ry, Math.random() * 2 + 1, Math.random() * 2 + 1);
+    }
+  }
+
   const texture = new THREE.CanvasTexture(canvas);
   texture.anisotropy = 8;
   return texture;
@@ -436,15 +552,12 @@ function createMercuryTexture() {
     for (let x = 0; x < 1024; x++) {
       const lon = (x / 1024) * Math.PI * 2;
       const idx = (y * 1024 + x) * 4;
-
       const nx = Math.cos(lon) * cosLat;
       const ny = Math.sin(lat);
       const nz = Math.sin(lon) * cosLat;
-
       const baseAlbedo = noise.fbm2D(nx * 2.5, ny * 2.5 + nz * 2.5, 6, 0.5, 2.0);
       const tone = 0.48 + baseAlbedo * 0.38;
       const byteVal = Math.min(255, Math.max(45, Math.floor(tone * 255)));
-
       d[idx] = byteVal; d[idx + 1] = Math.floor(byteVal * 0.98); d[idx + 2] = Math.floor(byteVal * 0.95); d[idx + 3] = 255;
     }
   }
@@ -467,11 +580,9 @@ function createMarsTexture() {
     for (let x = 0; x < 1024; x++) {
       const lon = (x / 1024) * Math.PI * 2;
       const idx = (y * 1024 + x) * 4;
-
       const nx = Math.cos(lon) * cosLat;
       const ny = Math.sin(lat);
       const nz = Math.sin(lon) * cosLat;
-
       const elevation = noise.fbm2D(nx * 2.2 + 5.0, ny * 2.2 + nz * 2.2, 6, 0.52, 2.0);
       const isPolarCap = (Math.abs(lat) / (Math.PI * 0.5)) > 0.85;
 
@@ -493,7 +604,6 @@ function createMarsTexture() {
   }
   ctx.putImageData(imgData, 0, 0);
 
-  // Valles Marineris canyon
   ctx.strokeStyle = 'rgba(60, 25, 15, 0.9)';
   ctx.lineWidth = 6;
   ctx.beginPath();
@@ -517,9 +627,7 @@ function createJupiterTexture() {
     const lat = ((y / 512) - 0.5) * Math.PI;
     for (let x = 0; x < 1024; x++) {
       const idx = (y * 1024 + x) * 4;
-      const xNorm = x / 1024;
-
-      const turb = noise.fbm2D(xNorm * 18.0, lat * 8.0, 5, 0.55, 2.1);
+      const turb = noise.fbm2D((x / 1024) * 18.0, lat * 8.0, 5, 0.55, 2.1);
       const bandWave = Math.sin(lat * 18.0 + turb * 1.5) * 0.5 + 0.5;
 
       let r, g, b;
@@ -538,7 +646,6 @@ function createJupiterTexture() {
   }
   ctx.putImageData(imgData, 0, 0);
 
-  // Great Red Spot
   const grsGrad = ctx.createRadialGradient(640, 320, 5, 640, 320, 65);
   grsGrad.addColorStop(0.0, 'rgba(215, 55, 28, 0.98)');
   grsGrad.addColorStop(0.5, 'rgba(235, 115, 55, 0.88)');
@@ -632,7 +739,6 @@ function createSaturnRingTexture() {
   return texture;
 }
 
-// NEPTUNE: Deep royal azure blue with Great Dark Spot & methane cirrus streaks
 function createNeptuneTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 1024; canvas.height = 512;
@@ -644,34 +750,25 @@ function createNeptuneTexture() {
     const lat = ((y / 512) - 0.5) * Math.PI;
     for (let x = 0; x < 1024; x++) {
       const idx = (y * 1024 + x) * 4;
-      const xNorm = x / 1024;
-
-      const turb = noise.fbm2D(xNorm * 14.0, lat * 8.0, 5, 0.55, 2.0) * 0.15;
+      const turb = noise.fbm2D((x / 1024) * 14.0, lat * 8.0, 5, 0.55, 2.0) * 0.15;
       const band = Math.sin(lat * 16.0 + turb) * 0.5 + 0.5;
 
-      // Radiant azure/cobalt blue palette
       const r = Math.floor(25 + band * 20);
       const g = Math.floor(85 + band * 45);
       const b = Math.floor(205 + band * 45);
-
       d[idx] = r; d[idx + 1] = g; d[idx + 2] = b; d[idx + 3] = 255;
     }
   }
   ctx.putImageData(imgData, 0, 0);
 
-  // Great Dark Spot (Neptunian anticyclone)
   ctx.fillStyle = 'rgba(12, 35, 95, 0.85)';
   ctx.beginPath();
   ctx.ellipse(600, 310, 55, 28, -0.08, 0, Math.PI * 2);
   ctx.fill();
 
-  // White methane cirrus companion clouds ("Scooter")
   ctx.fillStyle = 'rgba(240, 248, 255, 0.88)';
   ctx.beginPath();
   ctx.ellipse(605, 345, 42, 6, -0.06, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(320, 210, 65, 8, 0.05, 0, Math.PI * 2);
   ctx.fill();
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -698,8 +795,71 @@ function createMoonTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
+// SAGITTARIUS A*: Relativistic Doppler-beamed accretion disk with turbulent Keplerian plasma filaments
+function createBlackHoleAccretionTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.createImageData(1024, 512);
+  const d = imgData.data;
+
+  for (let y = 0; y < 512; y++) {
+    const thetaNorm = y / 512;
+    const theta = thetaNorm * Math.PI * 2;
+    // Relativistic Doppler beaming boost factor on approaching side
+    const doppler = Math.pow(Math.max(0.08, 0.58 + 0.42 * Math.cos(theta)), 2.2);
+
+    for (let x = 0; x < 1024; x++) {
+      const idx = (y * 1024 + x) * 4;
+      const u = x / 1024; // 0 at inner radius (ISCO), 1 at outer boundary
+
+      // Swirling Keplerian plasma filaments along logarithmic spirals
+      const spiralCoord = thetaNorm * 18.0 + u * 12.0;
+      const filamentNoise = noise.fbm2D(u * 12.0, spiralCoord, 4, 0.52, 2.1);
+      const intensity = Math.max(0, Math.min(1.0, (1.0 - u) * 1.35 * filamentNoise * doppler));
+
+      let r, g, b, alpha;
+      if (u < 0.22) {
+        // Blistering hot inner boundary (white-hot to incandescent amber)
+        const t = u / 0.22;
+        r = 255;
+        g = Math.floor(245 - t * 55);
+        b = Math.floor(215 - t * 165);
+        alpha = Math.floor(intensity * 255);
+      } else if (u < 0.65) {
+        // Relativistic orange-vermilion synchrotron plasma
+        const t = (u - 0.22) / 0.43;
+        r = Math.floor(255 - t * 45);
+        g = Math.floor(180 - t * 110);
+        b = Math.floor(40 - t * 30);
+        alpha = Math.floor(intensity * 240);
+      } else {
+        // Outer cooler accretion boundary fading into dark interstellar medium
+        const t = (u - 0.65) / 0.35;
+        r = Math.floor(210 * (1.0 - t));
+        g = Math.floor(70 * (1.0 - t));
+        b = Math.floor(20 * (1.0 - t));
+        alpha = Math.floor(intensity * (1.0 - t) * 190);
+      }
+
+      d[idx] = r;
+      d[idx + 1] = g;
+      d[idx + 2] = b;
+      d[idx + 3] = Math.min(255, Math.max(0, alpha));
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.anisotropy = 8;
+  return texture;
+}
+
 // ============================================================================
-// 4. SCIENTIFIC GLSL SHADERS
+// 4. SCIENTIFIC GLSL SHADERS (SOLAR PLASMA & EARTH DAY-NIGHT WITH CITY LIGHTS)
 // ============================================================================
 
 const SunShader = {
@@ -800,6 +960,65 @@ const SunShader = {
   `
 };
 
+// Earth Custom Day-Night Shader: Direct Sunlight on Day Side + Incandescent City Lights on Night Side
+const EarthDayNightShader = {
+  uniforms: {
+    uDayMap: { value: null },
+    uNightMap: { value: null },
+    uSunPosition: { value: new THREE.Vector3(0, 0, 0) },
+  },
+  vertexShader: `
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      vNormal = normalize(normalMatrix * normal);
+      vec4 worldPos = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPos.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldPos;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D uDayMap;
+    uniform sampler2D uNightMap;
+    uniform vec3 uSunPosition;
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vec3 normal = normalize(vNormal);
+      vec3 viewDir = normalize(cameraPosition - vWorldPosition);
+      vec3 sunDir = normalize(uSunPosition - vWorldPosition);
+
+      float nDotL = dot(normal, sunDir);
+      
+      // Smooth terminator transition
+      float dayFactor = smoothstep(-0.18, 0.22, nDotL);
+      float nightFactor = smoothstep(0.15, -0.18, nDotL);
+
+      vec4 dayColor = texture2D(uDayMap, vUv);
+      vec4 nightLights = texture2D(uNightMap, vUv);
+
+      // Specular ocean sun glint
+      float isOcean = step(dayColor.r, 0.14) * (1.0 - step(dayColor.b, 0.25));
+      vec3 halfVector = normalize(sunDir + viewDir);
+      float spec = pow(max(0.0, dot(normal, halfVector)), 24.0) * isOcean * dayFactor;
+
+      // Day side: Direct warm sunlight + base ambiance
+      vec3 litDay = dayColor.rgb * (dayFactor * 4.4 + 0.42) + spec * vec3(1.0, 0.95, 0.85);
+
+      // Night side: Soft legible continental silhouette + blazing golden city lights!
+      vec3 nightSilhouette = dayColor.rgb * 0.35;
+      vec3 litNight = nightSilhouette + nightLights.rgb * nightFactor * 2.8;
+
+      vec3 finalColor = mix(litNight, litDay, dayFactor);
+      gl_FragColor = vec4(finalColor, 1.0);
+    }
+  `
+};
+
 // ============================================================================
 // 5. MAIN OBSERVATORY COMPONENT
 // ============================================================================
@@ -810,6 +1029,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const [cameraMode, setCameraMode] = useState('focus');
   const [isRealScale, setIsRealScale] = useState(false);
+  const [isGalacticDriftActive, setIsGalacticDriftActive] = useState(true);
   const [liveTelemetry, setLiveTelemetry] = useState({ rAU: '1.000 AU', velKms: '29.8 km/s', nuDeg: '0.0°' });
 
   const animStateRef = useRef({
@@ -819,6 +1039,8 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     cameraMode: 'focus',
     isRealScale: false,
     isTransitioning: false,
+    isGalacticDriftActive: true,
+    galacticAngle: 0,
   });
 
   useEffect(() => {
@@ -840,6 +1062,10 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
   useEffect(() => {
     animStateRef.current.isRealScale = isRealScale;
   }, [isRealScale]);
+
+  useEffect(() => {
+    animStateRef.current.isGalacticDriftActive = isGalacticDriftActive;
+  }, [isGalacticDriftActive]);
 
   useEffect(() => {
     if (selectedSubjectId) {
@@ -952,9 +1178,182 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     scene.add(starPoints);
 
     // ========================================================================
-    // LIGHTING SYSTEM: BRIGHT SUNLIGHT + FULL 360° VISIBILITY OF DARK SECTOR
+    // LIGHTING & AMBIENT SYSTEM
     // ========================================================================
-    // Direct point sunlight without quadratic falloff (decay = 0)
+    const ambientLight = new THREE.AmbientLight(0xDCE8FC, 0.90);
+    scene.add(ambientLight);
+
+    const hemiLight = new THREE.HemisphereLight(0xFFF8EB, 0x1E293B, 0.65);
+    scene.add(hemiLight);
+
+    // ========================================================================
+    // 1. GALACTIC CENTER: SUPERMASSIVE BLACK HOLE (SAGITTARIUS A*) AT (0, 0, 0)
+    // ========================================================================
+    const blackHoleGroup = new THREE.Group();
+    blackHoleGroup.position.set(0, 0, 0);
+    scene.add(blackHoleGroup);
+
+    // Event Horizon (Absolute Singularity Shadow)
+    const sgrGeo = new THREE.SphereGeometry(7.2, 64, 64);
+    const sgrMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const sgrMesh = new THREE.Mesh(sgrGeo, sgrMat);
+    blackHoleGroup.add(sgrMesh);
+
+    // Relativistic Doppler-Beamed Accretion Disk
+    const diskInner = 9.2;
+    const diskOuter = 34.0;
+    const diskGeo = new THREE.RingGeometry(diskInner, diskOuter, 128, 8);
+    const posAttrD = diskGeo.attributes.position;
+    const uvAttrD = diskGeo.attributes.uv;
+    for (let i = 0; i < posAttrD.count; i++) {
+      const vx = posAttrD.getX(i);
+      const vy = posAttrD.getY(i);
+      const vr = Math.sqrt(vx * vx + vy * vy);
+      const uRad = (vr - diskInner) / (diskOuter - diskInner);
+      const theta = (Math.atan2(vy, vx) + Math.PI) / (2 * Math.PI);
+      uvAttrD.setXY(i, uRad, theta);
+    }
+    uvAttrD.needsUpdate = true;
+
+    const diskTex = createBlackHoleAccretionTexture();
+    const diskMat = new THREE.MeshBasicMaterial({
+      map: diskTex,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.96,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const diskMesh = new THREE.Mesh(diskGeo, diskMat);
+    diskMesh.rotation.x = Math.PI / 2 + 0.18;
+    diskMesh.rotation.z = 0.25;
+    blackHoleGroup.add(diskMesh);
+
+    // Gravitational Lensing Photon Halo Rings
+    const photonHaloGeo = new THREE.TorusGeometry(9.6, 0.48, 30, 100);
+    const photonHaloMat = new THREE.MeshBasicMaterial({
+      color: 0xFFA000,
+      transparent: true,
+      opacity: 0.92,
+      blending: THREE.AdditiveBlending,
+    });
+    const photonHaloMesh = new THREE.Mesh(photonHaloGeo, photonHaloMat);
+    photonHaloMesh.rotation.y = 0.28;
+    photonHaloMesh.rotation.x = 0.15;
+    blackHoleGroup.add(photonHaloMesh);
+
+    const outerHaloGeo = new THREE.TorusGeometry(11.8, 0.32, 24, 96);
+    const outerHaloMat = new THREE.MeshBasicMaterial({
+      color: 0x818CF8,
+      transparent: true,
+      opacity: 0.65,
+      blending: THREE.AdditiveBlending,
+    });
+    const outerHaloMesh = new THREE.Mesh(outerHaloGeo, outerHaloMat);
+    outerHaloMesh.rotation.y = 0.28;
+    blackHoleGroup.add(outerHaloMesh);
+
+    // Photon Sphere Glow Shell
+    const photonSphereGeo = new THREE.SphereGeometry(7.8, 48, 48);
+    const photonSphereMat = new THREE.MeshBasicMaterial({
+      color: 0xFFB703,
+      transparent: true,
+      opacity: 0.45,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+    });
+    const photonSphereMesh = new THREE.Mesh(photonSphereGeo, photonSphereMat);
+    blackHoleGroup.add(photonSphereMesh);
+
+    // Relativistic Bipolar Jets
+    const jetGeo = new THREE.CylinderGeometry(0.8, 5.5, 78, 32, 1, true);
+    const jetMat = new THREE.MeshBasicMaterial({
+      color: 0x6366F1,
+      transparent: true,
+      opacity: 0.42,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const jetMeshNorth = new THREE.Mesh(jetGeo, jetMat);
+    jetMeshNorth.position.y = 44;
+    jetMeshNorth.rotation.x = 0.18;
+    blackHoleGroup.add(jetMeshNorth);
+
+    const jetMeshSouth = new THREE.Mesh(jetGeo, jetMat);
+    jetMeshSouth.position.y = -44;
+    jetMeshSouth.rotation.x = Math.PI - 0.18;
+    blackHoleGroup.add(jetMeshSouth);
+
+    // S-Star Nuclear Star Cluster
+    const sStarCount = 1200;
+    const sStarGeo = new THREE.BufferGeometry();
+    const sStarPositions = new Float32Array(sStarCount * 3);
+    const sStarColors = new Float32Array(sStarCount * 3);
+    const sStarSpeeds = new Float32Array(sStarCount);
+    const sStarRadii = new Float32Array(sStarCount);
+    const sStarAngles = new Float32Array(sStarCount);
+    const sStarIncs = new Float32Array(sStarCount);
+
+    for (let i = 0; i < sStarCount; i++) {
+      const rad = 14 + Math.random() * 65;
+      const ang = Math.random() * Math.PI * 2;
+      const inc = (Math.random() - 0.5) * Math.PI * 0.75;
+      sStarRadii[i] = rad;
+      sStarAngles[i] = ang;
+      sStarIncs[i] = inc;
+      sStarSpeeds[i] = Math.sqrt(800 / rad) * (0.8 + Math.random() * 0.4);
+
+      sStarPositions[i * 3] = rad * Math.cos(ang);
+      sStarPositions[i * 3 + 1] = rad * Math.sin(inc) * Math.sin(ang);
+      sStarPositions[i * 3 + 2] = rad * Math.cos(inc) * Math.sin(ang);
+
+      const isHot = Math.random() > 0.35;
+      sStarColors[i * 3] = isHot ? 0.85 : 1.0;
+      sStarColors[i * 3 + 1] = isHot ? 0.92 : 0.65;
+      sStarColors[i * 3 + 2] = isHot ? 1.0 : 0.35;
+    }
+    sStarGeo.setAttribute('position', new THREE.BufferAttribute(sStarPositions, 3));
+    sStarGeo.setAttribute('color', new THREE.BufferAttribute(sStarColors, 3));
+
+    const sStarMat = new THREE.PointsMaterial({
+      size: 2.2,
+      map: starSprite,
+      vertexColors: true,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const sStarPoints = new THREE.Points(sStarGeo, sStarMat);
+    blackHoleGroup.add(sStarPoints);
+
+    // Galactic Orbit Trajectory Line for the Sun
+    const galOrbitRes = 180;
+    const galOrbitRadius = 195;
+    const galOrbitPoints = [];
+    for (let i = 0; i <= galOrbitRes; i++) {
+      const th = (i / galOrbitRes) * Math.PI * 2;
+      const gx = galOrbitRadius * Math.cos(th);
+      const gz = galOrbitRadius * Math.sin(th);
+      const gy = Math.sin(th * 2.8) * 7.0;
+      galOrbitPoints.push(new THREE.Vector3(gx, gy, gz));
+    }
+    const galOrbitGeo = new THREE.BufferGeometry().setFromPoints(galOrbitPoints);
+    const galOrbitMat = new THREE.LineBasicMaterial({
+      color: 0x818CF8,
+      transparent: true,
+      opacity: 0.38,
+    });
+    const galOrbitLine = new THREE.LineLoop(galOrbitGeo, galOrbitMat);
+    scene.add(galOrbitLine);
+
+    // ========================================================================
+    // 2. SOLAR SYSTEM HIERARCHY (ORBITING AROUND SAGITTARIUS A*)
+    // ========================================================================
+    const solarSystemGroup = new THREE.Group();
+    scene.add(solarSystemGroup);
+
+    // Point Sunlight (Attached to the moving Sun)
     const sunLight = new THREE.PointLight(0xFFFBF0, 5.2, 0, 0);
     sunLight.position.set(0, 0, 0);
     sunLight.castShadow = true;
@@ -963,19 +1362,9 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     sunLight.shadow.camera.near = 0.5;
     sunLight.shadow.camera.far = 400;
     sunLight.shadow.bias = -0.0002;
-    scene.add(sunLight);
+    solarSystemGroup.add(sunLight);
 
-    // High-clarity ambient and hemisphere illumination:
-    // Guarantees the dark hemisphere is clearly legible, translucent, and visible 360°
-    const ambientLight = new THREE.AmbientLight(0xDCE8FC, 0.95);
-    scene.add(ambientLight);
-
-    const hemiLight = new THREE.HemisphereLight(0xFFF8EB, 0x334155, 0.65);
-    scene.add(hemiLight);
-
-    // ========================================================================
-    // SOL MESH & CORONA
-    // ========================================================================
+    // Sol Thermonuclear Mesh & Corona
     const sunUniforms = {
       uTime: { value: 0 },
       uColorCore: { value: new THREE.Color('#FFF8EB') },
@@ -990,7 +1379,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       fragmentShader: SunShader.fragmentShader,
     });
     const sunMesh = new THREE.Mesh(sunGeo, sunMat);
-    scene.add(sunMesh);
+    solarSystemGroup.add(sunMesh);
 
     const coronaGeo = new THREE.SphereGeometry(3.9, 48, 48);
     const coronaMat = new THREE.MeshBasicMaterial({
@@ -1000,7 +1389,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       side: THREE.BackSide,
     });
     const coronaMesh = new THREE.Mesh(coronaGeo, coronaMat);
-    scene.add(coronaMesh);
+    solarSystemGroup.add(coronaMesh);
 
     const streakTex = createAnamorphicStreakTexture();
     const streakMat = new THREE.SpriteMaterial({
@@ -1012,7 +1401,18 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     });
     const streakSprite = new THREE.Sprite(streakMat);
     streakSprite.scale.set(34, 1.8, 1);
-    scene.add(streakSprite);
+    solarSystemGroup.add(streakSprite);
+
+    // Solar Apex Velocity Vector (Forward direction through the galaxy)
+    const apexArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(0, 0, 0),
+      8.5,
+      0x10B981,
+      2.0,
+      1.1
+    );
+    solarSystemGroup.add(apexArrow);
 
     // ========================================================================
     // PLANETARY OBJECTS & ORBITAL MESHES
@@ -1027,7 +1427,15 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       radius: 0,
     });
 
-    PLANET_SUBJECTS.slice(1).forEach((pData) => {
+    // Cache Earth textures
+    const earthDayTex = createEarthDiffuseTexture();
+    const earthNightTex = createEarthNightTexture();
+
+    let earthMaterialRef = null;
+
+    const orbitalPlanets = PLANET_SUBJECTS.filter(p => p.id !== 'sun' && p.id !== 'blackhole');
+
+    orbitalPlanets.forEach((pData) => {
       const a = pData.distance;
       const e = pData.eccentricity;
       const inc = pData.inclination || 0;
@@ -1052,45 +1460,61 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         opacity: 0.22,
       });
       const orbitLine = new THREE.LineLoop(orbitGeo, orbitMat);
-      scene.add(orbitLine);
+      solarSystemGroup.add(orbitLine);
 
-      // Planet Hierarchy
+      // Planet Anchor & Axial Tilt
       const planetAnchor = new THREE.Group();
-      scene.add(planetAnchor);
+      solarSystemGroup.add(planetAnchor);
 
       const axialTiltGroup = new THREE.Group();
       axialTiltGroup.rotation.z = THREE.MathUtils.degToRad(pData.axialTilt || 0);
       planetAnchor.add(axialTiltGroup);
 
-      // Textures
-      let pTex;
-      if (pData.id === 'mercury') pTex = createMercuryTexture();
-      else if (pData.id === 'venus') pTex = createVenusTexture();
-      else if (pData.id === 'earth') pTex = createEarthDiffuseTexture();
-      else if (pData.id === 'mars') pTex = createMarsTexture();
-      else if (pData.id === 'jupiter') pTex = createJupiterTexture();
-      else if (pData.id === 'saturn') pTex = createSaturnTexture();
-      else if (pData.id === 'neptune') pTex = createNeptuneTexture();
-
       const pGeo = new THREE.SphereGeometry(pData.size, 48, 48);
-      const pMat = new THREE.MeshStandardMaterial({
-        map: pTex,
-        roughness: 0.52,
-        metalness: 0.04,
-        emissive: new THREE.Color(0x1a2638),
-        emissiveIntensity: 0.28, // Guarantees the dark side remains translucent and clear 360°
-      });
+      let pMesh;
 
-      const pMesh = new THREE.Mesh(pGeo, pMat);
+      // EARTH USES DUAL DAY-NIGHT CITY LIGHTS SHADER
+      if (pData.id === 'earth') {
+        const earthMat = new THREE.ShaderMaterial({
+          uniforms: {
+            uDayMap: { value: earthDayTex },
+            uNightMap: { value: earthNightTex },
+            uSunPosition: { value: new THREE.Vector3(0, 0, 0) },
+          },
+          vertexShader: EarthDayNightShader.vertexShader,
+          fragmentShader: EarthDayNightShader.fragmentShader,
+        });
+        earthMaterialRef = earthMat;
+        pMesh = new THREE.Mesh(pGeo, earthMat);
+      } else {
+        // OTHER PLANETS USE PBR STANDARD MATERIAL
+        let pTex;
+        if (pData.id === 'mercury') pTex = createMercuryTexture();
+        else if (pData.id === 'venus') pTex = createVenusTexture();
+        else if (pData.id === 'mars') pTex = createMarsTexture();
+        else if (pData.id === 'jupiter') pTex = createJupiterTexture();
+        else if (pData.id === 'saturn') pTex = createSaturnTexture();
+        else if (pData.id === 'neptune') pTex = createNeptuneTexture();
+
+        const pMat = new THREE.MeshStandardMaterial({
+          map: pTex,
+          roughness: 0.52,
+          metalness: 0.04,
+          emissive: new THREE.Color(0x1a2638),
+          emissiveIntensity: 0.25,
+        });
+        pMesh = new THREE.Mesh(pGeo, pMat);
+      }
+
       pMesh.castShadow = true;
       pMesh.receiveShadow = true;
       axialTiltGroup.add(pMesh);
 
       let cloudsMesh = null;
       let moonAnchor = null;
-      let asteroidCloudMesh = null;
+      let satellitesGroup = null;
 
-      // Earth Features: Clouds, Moon & Near-Earth Asteroid Swarm
+      // Earth Features: Clouds, Moon & Real Artificial Satellites (LEO, MEO, GEO, ISS)
       if (pData.hasClouds) {
         const cloudTex = createEarthCloudsTexture();
         const cloudGeo = new THREE.SphereGeometry(pData.size * 1.018, 48, 48);
@@ -1114,47 +1538,102 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         const moonGeo = new THREE.SphereGeometry(0.32, 24, 24);
         const moonMat = new THREE.MeshStandardMaterial({ map: moonTex, roughness: 0.85 });
         const moonMesh = new THREE.Mesh(moonGeo, moonMat);
-        moonMesh.position.set(2.8, 0.4, 0);
+        // Realistic Moon position (r = 4.2), far outside all artificial satellites
+        moonMesh.position.set(4.2, 0.5, 0);
         moonMesh.castShadow = true;
         moonMesh.receiveShadow = true;
         moonAnchor.add(moonMesh);
       }
 
-      // NEAR-EARTH ASTEROID SWARM (NEO CLOUD AROUND EARTH)
-      if (pData.hasAsteroidCloud) {
-        const neoCount = 420;
-        const neoGeo = new THREE.BufferGeometry();
-        const neoPositions = new Float32Array(neoCount * 3);
-        const neoColors = new Float32Array(neoCount * 3);
+      // REALISTIC 3D SPACECRAFT (ISS AT LEO r=1.36 & GEO COMM SATELLITE AT r=1.95 - WELL INSIDE MOON)
+      if (pData.hasSatellites) {
+        satellitesGroup = new THREE.Group();
+        planetAnchor.add(satellitesGroup);
 
-        for (let k = 0; k < neoCount; k++) {
-          const uRad = 2.2 + Math.random() * 2.8;
-          const uTheta = Math.random() * Math.PI * 2;
-          const uPhi = (Math.random() - 0.5) * 0.5;
-
-          neoPositions[k * 3] = uRad * Math.cos(uTheta);
-          neoPositions[k * 3 + 1] = uRad * Math.sin(uPhi);
-          neoPositions[k * 3 + 2] = uRad * Math.sin(uTheta);
-
-          // Stony asteroid chondrite hues
-          neoColors[k * 3] = 0.75 + Math.random() * 0.2;
-          neoColors[k * 3 + 1] = 0.7 + Math.random() * 0.2;
-          neoColors[k * 3 + 2] = 0.65 + Math.random() * 0.2;
-        }
-
-        neoGeo.setAttribute('position', new THREE.BufferAttribute(neoPositions, 3));
-        neoGeo.setAttribute('color', new THREE.BufferAttribute(neoColors, 3));
-
-        const neoMat = new THREE.PointsMaterial({
-          size: 1.8,
-          map: starSprite,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.88,
+        // 1. Low Earth Orbit (LEO) - International Space Station (ISS) with 3D Solar Arrays
+        const issGroup = new THREE.Group();
+        const moduleGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.16, 8);
+        const moduleMat = new THREE.MeshStandardMaterial({
+          color: 0xF1F5F9,
+          metalness: 0.9,
+          roughness: 0.15,
         });
+        const moduleMesh = new THREE.Mesh(moduleGeo, moduleMat);
+        moduleMesh.rotation.z = Math.PI / 2;
+        issGroup.add(moduleMesh);
 
-        asteroidCloudMesh = new THREE.Points(neoGeo, neoMat);
-        planetAnchor.add(asteroidCloudMesh);
+        const panelGeo = new THREE.BoxGeometry(0.008, 0.08, 0.22);
+        const panelMat = new THREE.MeshStandardMaterial({
+          color: 0x1E3A8A,
+          metalness: 0.95,
+          roughness: 0.1,
+        });
+        const leftPanel = new THREE.Mesh(panelGeo, panelMat);
+        leftPanel.position.set(0.11, 0, 0);
+        issGroup.add(leftPanel);
+
+        const rightPanel = new THREE.Mesh(panelGeo, panelMat);
+        rightPanel.position.set(-0.11, 0, 0);
+        issGroup.add(rightPanel);
+
+        // Orbit Anchor inclined at real 51.6°
+        const leoOrbitGroup = new THREE.Group();
+        leoOrbitGroup.rotation.x = THREE.MathUtils.degToRad(51.6);
+        issGroup.position.set(1.36, 0, 0);
+        leoOrbitGroup.add(issGroup);
+        satellitesGroup.add(leoOrbitGroup);
+
+        // Clean, subtle LEO Orbit Trace
+        const leoTraceGeo = new THREE.BufferGeometry().setFromPoints(
+          new THREE.EllipseCurve(0, 0, 1.36, 1.36, 0, Math.PI * 2, false, 0)
+            .getPoints(96)
+            .map(p => new THREE.Vector3(p.x, 0, p.y))
+        );
+        const leoTraceMat = new THREE.LineBasicMaterial({
+          color: 0x38BDF8,
+          transparent: true,
+          opacity: 0.28,
+        });
+        const leoTrace = new THREE.LineLoop(leoTraceGeo, leoTraceMat);
+        leoOrbitGroup.add(leoTrace);
+
+        // 2. Geostationary (GEO) Communications Satellite at r = 1.95 (Equatorial, well inside Moon at 4.2)
+        const geoSatellite = new THREE.Group();
+        const geoBusGeo = new THREE.BoxGeometry(0.045, 0.045, 0.045);
+        const geoBusMat = new THREE.MeshStandardMaterial({
+          color: 0xF59E0B, // Golden Kapton MLI thermal insulation
+          metalness: 0.88,
+          roughness: 0.2,
+        });
+        const geoBusMesh = new THREE.Mesh(geoBusGeo, geoBusMat);
+        geoSatellite.add(geoBusMesh);
+
+        const geoPanelGeo = new THREE.BoxGeometry(0.006, 0.06, 0.14);
+        const geoPanelMat = new THREE.MeshStandardMaterial({
+          color: 0x1E40AF,
+          metalness: 0.95,
+          roughness: 0.12,
+        });
+        const geoPanelMesh = new THREE.Mesh(geoPanelGeo, geoPanelMat);
+        geoSatellite.add(geoPanelMesh);
+
+        const geoOrbitGroup = new THREE.Group();
+        geoSatellite.position.set(1.95, 0, 0);
+        geoOrbitGroup.add(geoSatellite);
+        satellitesGroup.add(geoOrbitGroup);
+
+        const geoTraceGeo = new THREE.BufferGeometry().setFromPoints(
+          new THREE.EllipseCurve(0, 0, 1.95, 1.95, 0, Math.PI * 2, false, 0)
+            .getPoints(96)
+            .map(p => new THREE.Vector3(p.x, 0, p.y))
+        );
+        const geoTraceMat = new THREE.LineBasicMaterial({
+          color: 0xF59E0B,
+          transparent: true,
+          opacity: 0.18,
+        });
+        const geoTrace = new THREE.LineLoop(geoTraceGeo, geoTraceMat);
+        geoOrbitGroup.add(geoTrace);
       }
 
       // Saturn Rings
@@ -1201,50 +1680,86 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         mesh: pMesh,
         cloudsMesh,
         moonAnchor,
-        asteroidCloudMesh,
+        satellitesGroup,
         ringMesh,
         angle: Math.random() * Math.PI * 2,
         orbitLine,
       });
     });
 
-    // ========================================================================
-    // MAIN ASTEROID BELT (BETWEEN MARS AND JUPITER, r ∈ [24.5, 27.5])
-    // ========================================================================
-    const beltCount = 2800;
-    const beltGeo = new THREE.BufferGeometry();
-    const beltPositions = new Float32Array(beltCount * 3);
-    const beltColors = new Float32Array(beltCount * 3);
+    // Register Sagittarius A* into selectable planetObjects
+    planetObjects.push({
+      data: PLANET_SUBJECTS.find(p => p.id === 'blackhole'),
+      mesh: sgrMesh,
+      anchor: blackHoleGroup,
+      angle: 0,
+      radius: 0,
+    });
 
+    // ========================================================================
+    // 3. REALISTIC 3D INSTANCED ROCKY ASTEROID BELT (BETWEEN MARS AND JUPITER)
+    // ========================================================================
+    const beltCount = 1400;
+    const rockGeo = new THREE.DodecahedronGeometry(0.12, 1);
+    const rPos = rockGeo.attributes.position;
+    for (let i = 0; i < rPos.count; i++) {
+      const vx = rPos.getX(i);
+      const vy = rPos.getY(i);
+      const vz = rPos.getZ(i);
+      const disp = 1.0 + (Math.sin(vx * 14.0) + Math.cos(vy * 12.0) + Math.sin(vz * 16.0)) * 0.12;
+      rPos.setXYZ(i, vx * disp, vy * disp, vz * disp);
+    }
+    rockGeo.computeVertexNormals();
+
+    const rockMat = new THREE.MeshStandardMaterial({
+      color: 0x64748B,
+      roughness: 0.88,
+      metalness: 0.08,
+      flatShading: true,
+    });
+
+    const asteroidBelt = new THREE.InstancedMesh(rockGeo, rockMat, beltCount);
+    asteroidBelt.castShadow = true;
+    asteroidBelt.receiveShadow = true;
+
+    const dummyMatrix = new THREE.Matrix4();
+    const dummyPos = new THREE.Vector3();
+    const dummyRot = new THREE.Euler();
+    const dummyQuat = new THREE.Quaternion();
+    const dummyScale = new THREE.Vector3();
+
+    const asteroidData = [];
     for (let i = 0; i < beltCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      // Kirkwood resonance distribution
-      const r = 24.8 + Math.random() * 2.8 + (Math.random() - 0.5) * 0.4;
-      const verticalDispersion = (Math.random() - 0.5) * 1.2;
+      const r = 24.6 + Math.random() * 3.0 + (Math.random() - 0.5) * 0.6;
+      const verticalDispersion = (Math.random() - 0.5) * 1.4;
+      const speed = (0.42 / Math.sqrt(r)) * (0.85 + Math.random() * 0.3);
+      const scale = 0.06 + Math.pow(Math.random(), 2.8) * 0.26;
+      const rotSpeedX = (Math.random() - 0.5) * 1.8;
+      const rotSpeedY = (Math.random() - 0.5) * 1.8;
 
-      beltPositions[i * 3] = r * Math.cos(angle);
-      beltPositions[i * 3 + 1] = verticalDispersion;
-      beltPositions[i * 3 + 2] = r * Math.sin(angle);
+      asteroidData.push({
+        r,
+        angle,
+        verticalDispersion,
+        speed,
+        scale,
+        rotX: Math.random() * Math.PI * 2,
+        rotY: Math.random() * Math.PI * 2,
+        rotZ: Math.random() * Math.PI * 2,
+        rotSpeedX,
+        rotSpeedY,
+      });
 
-      // C-type carbonaceous & S-type stony minerals
-      const isStony = Math.random() > 0.4;
-      beltColors[i * 3] = isStony ? 0.8 : 0.55;
-      beltColors[i * 3 + 1] = isStony ? 0.72 : 0.52;
-      beltColors[i * 3 + 2] = isStony ? 0.6 : 0.48;
+      dummyPos.set(r * Math.cos(angle), verticalDispersion, r * Math.sin(angle));
+      dummyRot.set(Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, 0);
+      dummyQuat.setFromEuler(dummyRot);
+      dummyScale.set(scale, scale * (0.8 + Math.random() * 0.4), scale * (0.8 + Math.random() * 0.4));
+      dummyMatrix.compose(dummyPos, dummyQuat, dummyScale);
+      asteroidBelt.setMatrixAt(i, dummyMatrix);
     }
-
-    beltGeo.setAttribute('position', new THREE.BufferAttribute(beltPositions, 3));
-    beltGeo.setAttribute('color', new THREE.BufferAttribute(beltColors, 3));
-
-    const beltMat = new THREE.PointsMaterial({
-      size: 1.6,
-      map: starSprite,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.82,
-    });
-    const asteroidBelt = new THREE.Points(beltGeo, beltMat);
-    scene.add(asteroidBelt);
+    asteroidBelt.instanceMatrix.needsUpdate = true;
+    solarSystemGroup.add(asteroidBelt);
 
     // ========================================================================
     // INTERACTION & RAYCASTER
@@ -1319,12 +1834,63 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       sunMesh.rotation.y += 0.002;
       streakSprite.position.set(0, 0, 0);
 
-      // Asteroid Belt Keplerian spin
+      // 1. Galactic Drift: The Sun and its entire solar system orbit Sagittarius A*
+      if (!paused && animStateRef.current.isGalacticDriftActive) {
+        animStateRef.current.galacticAngle += delta * 0.024 * warp;
+      }
+      const gAngle = animStateRef.current.galacticAngle;
+      const sunGalX = galOrbitRadius * Math.cos(gAngle);
+      const sunGalZ = galOrbitRadius * Math.sin(gAngle);
+      const sunGalY = Math.sin(gAngle * 2.8) * 7.0;
+      solarSystemGroup.position.set(sunGalX, sunGalY, sunGalZ);
+      solarSystemGroup.rotation.y = -gAngle + Math.PI / 2;
+
+      // 2. Rotate Black Hole Accretion Disk & S-Stars
+      diskMesh.rotation.z += delta * 0.14;
+      photonHaloMesh.rotation.z -= delta * 0.08;
+
+      // S-Stars relativistic Keplerian orbits around Sgr A*
+      const posArray = sStarGeo.attributes.position.array;
+      for (let i = 0; i < sStarCount; i++) {
+        if (!paused) {
+          sStarAngles[i] += sStarSpeeds[i] * delta * 0.18 * warp;
+        }
+        const ang = sStarAngles[i];
+        const rad = sStarRadii[i];
+        const inc = sStarIncs[i];
+        posArray[i * 3] = rad * Math.cos(ang);
+        posArray[i * 3 + 1] = rad * Math.sin(inc) * Math.sin(ang);
+        posArray[i * 3 + 2] = rad * Math.cos(inc) * Math.sin(ang);
+      }
+      sStarGeo.attributes.position.needsUpdate = true;
+
+      // 3. Realistic 3D Instanced Asteroids tumbling and revolving around the Sun
       if (!paused) {
-        asteroidBelt.rotation.y += delta * 0.08 * warp;
+        for (let i = 0; i < beltCount; i++) {
+          const ast = asteroidData[i];
+          ast.angle += ast.speed * delta * 0.35 * warp;
+          ast.rotX += ast.rotSpeedX * delta;
+          ast.rotY += ast.rotSpeedY * delta;
+
+          dummyPos.set(
+            ast.r * Math.cos(ast.angle),
+            ast.verticalDispersion,
+            ast.r * Math.sin(ast.angle)
+          );
+          dummyRot.set(ast.rotX, ast.rotY, ast.rotZ);
+          dummyQuat.setFromEuler(dummyRot);
+          dummyScale.set(ast.scale, ast.scale, ast.scale);
+          dummyMatrix.compose(dummyPos, dummyQuat, dummyScale);
+          asteroidBelt.setMatrixAt(i, dummyMatrix);
+        }
+        asteroidBelt.instanceMatrix.needsUpdate = true;
       }
 
-      // Smoothly transition scale and distance between Balanced vs Real Scale
+      // Update Sun position in Earth Day/Night shader
+      if (earthMaterialRef) {
+        sunMesh.getWorldPosition(earthMaterialRef.uniforms.uSunPosition.value);
+      }
+
       const targetSunSize = realScaleMode ? 12.0 : 3.4;
       sunMesh.scale.lerp(new THREE.Vector3(targetSunSize / 3.4, targetSunSize / 3.4, targetSunSize / 3.4), 0.08);
 
@@ -1334,18 +1900,23 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       planetObjects.forEach((pObj) => {
         if (pObj.data.id === 'sun') {
           if (currentActive.id === 'sun') {
-            activeWorldPos.set(0, 0, 0);
+            sunMesh.getWorldPosition(activeWorldPos);
           }
           return;
         }
 
-        // Interpolate distance and size for Real Scale vs Balanced View
+        if (pObj.data.id === 'blackhole') {
+          if (currentActive.id === 'blackhole') {
+            blackHoleGroup.getWorldPosition(activeWorldPos);
+          }
+          return;
+        }
+
         const curA = realScaleMode ? pObj.data.realDistance : pObj.data.distance;
         const curSize = realScaleMode ? pObj.data.realSize : pObj.data.size;
         const e = pObj.data.eccentricity;
         const inc = pObj.data.inclination || 0;
 
-        // Apply scale transition to planet mesh
         const scaleFactor = curSize / pObj.data.size;
         pObj.mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
@@ -1362,6 +1933,8 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         const zTilted = z * Math.cos(inc);
 
         pObj.anchor.position.set(x, y, zTilted);
+
+        // Diurnal axial rotation
         pObj.mesh.rotation.y += delta * 0.45;
 
         if (pObj.cloudsMesh) {
@@ -1373,35 +1946,59 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
           pObj.moonAnchor.rotation.y += delta * 1.2;
         }
 
-        if (pObj.asteroidCloudMesh) {
-          pObj.asteroidCloudMesh.rotation.y += delta * 0.65;
+        // Real 3D Spacecraft (ISS & GEO) Rapid Orbit passes around Earth
+        if (pObj.satellitesGroup) {
+          pObj.satellitesGroup.rotation.y += delta * 0.85;
         }
 
         if (currentActive.id === pObj.data.id) {
-          activeWorldPos.copy(pObj.anchor.position);
+          pObj.anchor.getWorldPosition(activeWorldPos);
           activeSpeedKms = (pObj.data.distance / Math.max(1, r)) * 29.8;
         }
       });
 
-      // Telemetry update
       if (Math.random() < 0.1) {
-        const trueAnomalyDeg = ((activeWorldPos.length() > 0 ? Math.atan2(activeWorldPos.z, activeWorldPos.x) : 0) * (180 / Math.PI) + 360) % 360;
-        setLiveTelemetry({
-          rAU: currentActive.semiMajorAxisAU || '1.000 AU',
-          velKms: currentActive.orbitalSpeedKms || `${activeSpeedKms.toFixed(1)} km/s`,
-          nuDeg: `${trueAnomalyDeg.toFixed(1)}°`,
-        });
+        if (currentActive.id === 'blackhole') {
+          setLiveTelemetry({
+            rAU: '26,000 ly (8.2 kpc)',
+            velKms: '230 km/s (Sol Orbit)',
+            nuDeg: `${((gAngle * 180 / Math.PI) % 360).toFixed(1)}°`,
+          });
+        } else {
+          const trueAnomalyDeg = ((activeWorldPos.length() > 0 ? Math.atan2(activeWorldPos.z, activeWorldPos.x) : 0) * (180 / Math.PI) + 360) % 360;
+          setLiveTelemetry({
+            rAU: currentActive.semiMajorAxisAU || '1.000 AU',
+            velKms: currentActive.orbitalSpeedKms || `${activeSpeedKms.toFixed(1)} km/s`,
+            nuDeg: `${trueAnomalyDeg.toFixed(1)}°`,
+          });
+        }
       }
 
       // Camera Positioning
-      if (mode === 'overview' || currentActive.id === 'sun') {
-        const overviewCamPos = realScaleMode ? new THREE.Vector3(0, 1800, 2600) : new THREE.Vector3(0, 48, 70);
+      if (currentActive.id === 'blackhole') {
+        const sgrCamPos = realScaleMode ? new THREE.Vector3(0, 350, 520) : new THREE.Vector3(0, 24, 46);
         if (transitioning) {
-          controls.target.lerp(new THREE.Vector3(0, 0, 0), 0.05);
+          controls.target.lerp(new THREE.Vector3(0, 0, 0), 0.06);
+          camera.position.lerp(sgrCamPos, 0.06);
+          if (camera.position.distanceTo(sgrCamPos) < 1.0) {
+            animStateRef.current.isTransitioning = false;
+          }
+        } else {
+          controls.target.copy(activeWorldPos);
+        }
+      } else if (mode === 'overview' || currentActive.id === 'sun') {
+        const overviewOffset = realScaleMode ? new THREE.Vector3(0, 1800, 2600) : new THREE.Vector3(0, 52, 76);
+        const overviewCamPos = activeWorldPos.clone().add(overviewOffset);
+        if (transitioning) {
+          controls.target.lerp(activeWorldPos, 0.05);
           camera.position.lerp(overviewCamPos, 0.05);
           if (camera.position.distanceTo(overviewCamPos) < 1.0) {
             animStateRef.current.isTransitioning = false;
           }
+        } else {
+          const sunDelta = activeWorldPos.clone().sub(prevActivePlanetPos);
+          camera.position.add(sunDelta);
+          controls.target.copy(activeWorldPos);
         }
       } else {
         const sunToPlanet = activeWorldPos.clone().normalize();
@@ -1457,8 +2054,28 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       starGeo.dispose();
       starMat.dispose();
       starSprite.dispose();
-      beltGeo.dispose();
-      beltMat.dispose();
+      rockGeo.dispose();
+      rockMat.dispose();
+      asteroidBelt.dispose();
+      sgrGeo.dispose();
+      sgrMat.dispose();
+      diskGeo.dispose();
+      diskMat.dispose();
+      diskTex.dispose();
+      photonHaloGeo.dispose();
+      photonHaloMat.dispose();
+      outerHaloGeo.dispose();
+      outerHaloMat.dispose();
+      photonSphereGeo.dispose();
+      photonSphereMat.dispose();
+      jetGeo.dispose();
+      jetMat.dispose();
+      sStarGeo.dispose();
+      sStarMat.dispose();
+      galOrbitGeo.dispose();
+      galOrbitMat.dispose();
+      earthDayTex.dispose();
+      earthNightTex.dispose();
 
       planetObjects.forEach(pObj => {
         if (pObj.mesh && pObj.mesh.geometry) pObj.mesh.geometry.dispose();
@@ -1507,17 +2124,28 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                 {isRealScale ? 'Astronomical 1:1 Real Scale Engine' : 'Heliocentric Astrodynamics Model'}
               </h3>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-sky-400">
-                8 Planets + Asteroid Belts
+                8 Planets + Satellites + Belt
               </span>
             </div>
             <p className="font-mono text-[11px] text-slate-400">
-              Epoch J2000.0 • Full-Illumination Penumbra • 360° Planetary Silhouette
+              Epoch J2000.0 • Galactic Orbit around Sgr A* • 3D Satellite Fleet (ISS/GEO) & Rocky Asteroid Belt
             </p>
           </div>
 
           {/* Mode, Warp, and REAL SCALE Buttons */}
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs self-start md:self-auto">
-            {/* Real Scale Toggle Button */}
+            <button
+              onClick={() => setIsGalacticDriftActive(!isGalacticDriftActive)}
+              className={`px-3 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 ${
+                isGalacticDriftActive
+                  ? 'bg-purple-900/80 text-purple-200 border-purple-500 shadow-md shadow-purple-900/40'
+                  : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+              }`}
+              title="Toggle heliocentric drift around Sagittarius A* supermassive black hole"
+            >
+              <span>{isGalacticDriftActive ? '🌀 Galactic Orbit: Active' : '⏸ Galactic Orbit: Frozen'}</span>
+            </button>
+
             <button
               onClick={() => {
                 const nextState = !isRealScale;
@@ -1548,7 +2176,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                   : 'bg-slate-900 text-slate-300 border-slate-800 hover:bg-slate-850'
               }`}
             >
-              {cameraMode === 'overview' ? '🔭 System Overview' : '🎯 Terminator Focus'}
+              {cameraMode === 'overview' ? '🔭 System Overview' : '🎯 Focus Body'}
             </button>
 
             <button
@@ -1577,7 +2205,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
             <div className="bg-slate-900/70 border border-slate-800/80 rounded-xl px-3 py-1.5">
               <span className="text-[10px] text-slate-500 uppercase tracking-wider block">TARGET BODY</span>
-              <span className="text-white font-bold">{activePlanet.name.split(' ')[0]}</span>
+              <span className="text-white font-bold">{activePlanet.id === 'blackhole' ? 'Sgr A*' : activePlanet.name.split(' ')[0]}</span>
             </div>
             <div className="bg-slate-900/70 border border-slate-800/80 rounded-xl px-3 py-1.5">
               <span className="text-[10px] text-slate-500 uppercase tracking-wider block">SEMI-MAJOR AXIS</span>
@@ -1594,19 +2222,27 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
-            {PLANET_SUBJECTS.map((planet) => (
-              <button
-                key={planet.id}
-                onClick={() => handleSelectPlanet(planet)}
-                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono transition-all border ${
-                  activePlanet.id === planet.id
-                    ? 'bg-galileo-600/90 text-white border-galileo-400 font-semibold shadow-md shadow-galileo-600/40'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700'
-                }`}
-              >
-                {planet.name.split(' ')[0]}
-              </button>
-            ))}
+            {PLANET_SUBJECTS.map((planet) => {
+              const isBlackHole = planet.id === 'blackhole';
+              const isSelected = activePlanet.id === planet.id;
+              return (
+                <button
+                  key={planet.id}
+                  onClick={() => handleSelectPlanet(planet)}
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono transition-all border flex items-center gap-1 ${
+                    isSelected
+                      ? isBlackHole
+                        ? 'bg-purple-700 text-white border-purple-400 font-bold shadow-md shadow-purple-700/50 ring-2 ring-purple-400/40'
+                        : 'bg-galileo-600/90 text-white border-galileo-400 font-semibold shadow-md shadow-galileo-600/40'
+                      : isBlackHole
+                        ? 'bg-purple-950/60 text-purple-300 border-purple-900 hover:border-purple-600 hover:bg-purple-900/40'
+                        : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  {isBlackHole ? '🕳️ Sgr A*' : planet.name.split(' ')[0]}
+                </button>
+              );
+            })}
           </div>
 
         </div>
@@ -1614,7 +2250,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       </div>
 
       {/* ==================================================================== */}
-      {/* 2. REAL SCALE EXPLANATORY BANNER (ONLY VISIBLE IN REAL SCALE MODE)   */}
+      {/* 2. REAL SCALE EXPLANATORY BANNER (ONLY IN REAL SCALE MODE)          */}
       {/* ==================================================================== */}
       {isRealScale && (
         <div className="bg-gradient-to-r from-rose-950/90 via-slate-950/95 to-amber-950/90 border-b border-rose-500/40 p-4 sm:p-5 backdrop-blur-xl text-white font-mono text-xs shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -1648,11 +2284,12 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       <div className={`relative w-full ${isRealScale ? 'flex-1' : 'h-[500px] sm:h-[600px] md:h-[640px]'} bg-[#010204] overflow-hidden`}>
         <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
         
-        {/* Subtle hints & Active indicators */}
-        <div className="absolute bottom-3 left-4 pointer-events-none font-mono text-[10px] text-slate-400 bg-slate-950/80 px-3.5 py-1.5 rounded-xl border border-slate-800/80 backdrop-blur-md flex items-center gap-3">
-          <span>🖱 Click planet to focus • Drag to rotate camera • Scroll to zoom</span>
-          <span className="text-sky-400 hidden sm:inline">• Earth NEO Swarm Active</span>
-          <span className="text-amber-400 hidden md:inline">• Main Asteroid Belt Active</span>
+        {/* Active features indicators */}
+        <div className="absolute bottom-3 left-4 pointer-events-none font-mono text-[10px] text-slate-400 bg-slate-950/80 px-3.5 py-1.5 rounded-xl border border-slate-800/80 backdrop-blur-md flex flex-wrap items-center gap-3">
+          <span>🖱 Click body to focus • Drag to rotate camera • Scroll to zoom</span>
+          <span className="text-purple-400 hidden sm:inline">• Sgr A* Supermassive Black Hole & Relativistic Jets</span>
+          <span className="text-sky-400 hidden md:inline">• 3D Spacecraft (ISS & GEO inside Lunar Orbit)</span>
+          <span className="text-amber-400 hidden lg:inline">• 3D Instanced Asteroid Belt</span>
         </div>
       </div>
 
@@ -1680,7 +2317,11 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
 
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-emerald-400 font-semibold shadow-inner">
-                360° Clear Penumbra View
+                {activePlanet.id === 'earth'
+                  ? 'City Lights & 3D Orbital Fleet'
+                  : activePlanet.id === 'blackhole'
+                  ? 'Supermassive Event Horizon & Doppler Beaming'
+                  : '360° Clear Penumbra View'}
               </span>
             </div>
           </div>

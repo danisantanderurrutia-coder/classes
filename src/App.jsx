@@ -257,6 +257,40 @@ const ACADEMIC_COURSES = [
     badgeEs: "Objetivo Nota 7",
     image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=700&q=80",
     color: "#059669"
+  },
+  {
+    id: "relativity",
+    planetId: "blackhole",
+    code: "AST-401",
+    titleEn: "General Relativity, Gravitation & Black Hole Astrophysics",
+    titleEs: "Relatividad General, Gravitación y Astrofísica de Agujeros Negros",
+    facultyEn: "Theoretical Astrophysics & Gravitational Physics",
+    facultyEs: "Astrofísica Teórica y Física Gravitacional",
+    targetEn: "Students tackling differential geometry, curved spacetime metrics, and black hole dynamics.",
+    targetEs: "Estudiantes que investigan geometría diferencial, métricas de espacio-tiempo y dinámica de agujeros negros.",
+    rateHourly: 65,
+    packagePrice: 470,
+    packageHours: 8,
+    category: "master",
+    syllabusEn: [
+      "Equivalence principle, metric tensor g_μν, Christoffel symbols, and geodesic equations",
+      "Riemann curvature tensor, Ricci tensor R_μν, scalar curvature, and Bianchi identities",
+      "Einstein field equations: G_μν + Λg_μν = (8πG/c⁴) T_μν and energy-momentum conservation",
+      "Schwarzschild exterior solution, gravitational redshift, perihelion precession, and photon sphere",
+      "Kerr rotating black holes, frame-dragging (Lense-Thirring), event horizons, and gravitational waves (h_μν)"
+    ],
+    syllabusEs: [
+      "Principio de equivalencia, tensor métrico g_μν, símbolos de Christoffel y ecuaciones geodésicas",
+      "Tensor de curvatura de Riemann, tensor de Ricci R_μν, curvatura escalar e identidades de Bianchi",
+      "Ecuaciones de campo de Einstein: G_μν + Λg_μν = (8πG/c⁴) T_μν y conservación de energía-momento",
+      "Solución exterior de Schwarzschild, desplazamiento al rojo gravitacional, esfera de fotones y horizonte",
+      "Agujeros negros rotantes de Kerr, arrastre de marcos de referencia (Lense-Thirring) y ondas gravitacionales"
+    ],
+    skriptKeywords: ["Schwarzschild-Metrik", "Christoffel-Symbole", "Geodätengleichung", "Einstein-Feldgleichungen", "Kerr-Lösung"],
+    badgeEn: "General Relativity",
+    badgeEs: "Relatividad General",
+    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=700&q=80",
+    color: "#8B5CF6"
   }
 ];
 
@@ -341,6 +375,19 @@ const FOUNDATIONAL_BOOKS = [
     // Verified 200 OK image
     image: "https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=600&q=80",
     tag: "Continuum Physics"
+  },
+  {
+    id: "mtw_gravitation",
+    title: "Gravitation",
+    authors: "Charles W. Misner, Kip S. Thorne, John Archibald Wheeler",
+    edition: "Princeton University Press • Landmark Edition",
+    subjectEn: "General Relativity, Spacetime Curvature & Geometrodynamics",
+    subjectEs: "Relatividad General, Curvatura del Espacio-Tiempo y Geometrodinámica",
+    usedIn: ["AST-401", "PHY-201"],
+    descriptionEn: "The legendary bible of gravitational physics and black hole geometrodynamics: differential forms, Einstein field equations, Riemann curvature, and the Kerr black hole metric.",
+    descriptionEs: "La legendaria biblia de la física gravitacional y la geometrodinámica de agujeros negros: cálculo diferencial de formas, ecuaciones de Einstein y métrica de Kerr.",
+    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80",
+    tag: "General Relativity"
   }
 ];
 

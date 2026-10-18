@@ -3008,6 +3008,21 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       earthDayTex.dispose();
       earthNightTex.dispose();
 
+      coronalLoopsGroup.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) obj.material.dispose();
+      });
+      cmeGroup.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) obj.material.dispose();
+      });
+      parkerGroup.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) obj.material.dispose();
+      });
+      rockGeo.dispose();
+      rockMat.dispose();
+
       planetObjects.forEach(pObj => {
         if (pObj.mesh && pObj.mesh.geometry) pObj.mesh.geometry.dispose();
         if (pObj.mesh && pObj.mesh.material) {
@@ -3021,6 +3036,18 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         if (pObj.ringMesh) {
           pObj.ringMesh.geometry.dispose();
           pObj.ringMesh.material.dispose();
+        }
+        if (pObj.dclGroup) {
+          pObj.dclGroup.traverse((child) => {
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) child.material.dispose();
+          });
+        }
+        if (pObj.magnetosphereGroup) {
+          pObj.magnetosphereGroup.traverse((child) => {
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) child.material.dispose();
+          });
         }
       });
 
@@ -3039,6 +3066,10 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     };
   }, []);
 
+  const astroData = useMemo(() => {
+    return calculateAstrodynamics(activePlanet, liveTelemetry.rAU, liveTelemetry.velKms);
+  }, [activePlanet, liveTelemetry.rAU, liveTelemetry.velKms]);
+
   return (
     <div
       className={
@@ -3051,7 +3082,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       {/* ==================================================================== */}
       {/* 1. TOP HEADER PANEL: COMPACT & SLEEK OBSERVATORY BAR                 */}
       {/* ==================================================================== */}
-      <div className="px-4 py-2.5 sm:px-6 sm:py-3 bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-md">
+      <div className="px-4 py-2.5 sm:px-6 sm:py-3 bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-md relative z-40">
         
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           
@@ -3065,49 +3096,227 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
             </span>
           </div>
 
-          {/* 3 ARCHITECTURAL LEVELS - COMPACT CHIPS */}
-          <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-slate-800 rounded-xl font-mono text-[11px]">
-            <button
-              onClick={() => {
-                setArchLevel('planetary');
-                animStateRef.current.isTransitioning = true;
-              }}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                archLevel === 'planetary'
-                  ? 'bg-sky-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              🌍 {lang === 'en' ? 'Planet' : 'Planetario'}
-            </button>
+          <div className="flex items-center gap-2">
+            {/* 3 ARCHITECTURAL LEVELS - COMPACT CHIPS */}
+            <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-slate-800 rounded-xl font-mono text-[11px]">
+              <button
+                onClick={() => {
+                  setArchLevel('planetary');
+                  animStateRef.current.isTransitioning = true;
+                }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  archLevel === 'planetary'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                🌍 {lang === 'en' ? 'Planet' : 'Planetario'}
+              </button>
 
-            <button
-              onClick={() => {
-                setArchLevel('solar');
-                animStateRef.current.isTransitioning = true;
-              }}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                archLevel === 'solar'
-                  ? 'bg-amber-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              ☀️ {lang === 'en' ? 'Solar' : 'Solar'}
-            </button>
+              <button
+                onClick={() => {
+                  setArchLevel('solar');
+                  animStateRef.current.isTransitioning = true;
+                }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  archLevel === 'solar'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                ☀️ {lang === 'en' ? 'Solar' : 'Solar'}
+              </button>
 
-            <button
-              onClick={() => {
-                setArchLevel('galaxy');
-                animStateRef.current.isTransitioning = true;
-              }}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                archLevel === 'galaxy'
-                  ? 'bg-purple-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              🌌 {lang === 'en' ? 'Galaxy' : 'Galaxia'}
-            </button>
+              <button
+                onClick={() => {
+                  setArchLevel('galaxy');
+                  animStateRef.current.isTransitioning = true;
+                }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  archLevel === 'galaxy'
+                    ? 'bg-purple-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                🌌 {lang === 'en' ? 'Galaxy' : 'Galaxia'}
+              </button>
+            </div>
+
+            {/* MAGNETISM & ASTROPHYSICS DROPDOWN BUTTON */}
+            <div className="relative">
+              <button
+                onClick={() => setShowMagnetMenu(!showMagnetMenu)}
+                className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
+                  showMagnetMenu || isCmeActive || isReversing
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-400 shadow-amber-500/20'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
+                }`}
+                title={lang === 'en' ? 'Magnetohydrodynamics & Space Weather Lab' : 'Laboratorio de Magnetohidrodinámica y Clima Espacial'}
+              >
+                <span className={`w-2 h-2 rounded-full ${isCmeActive ? 'bg-amber-400 animate-ping' : isReversing ? 'bg-rose-400 animate-pulse' : 'bg-amber-400'}`} />
+                <span>🧲 {lang === 'en' ? 'Magnetism & Physics' : 'Magnetismo & Física'}</span>
+                <span className="text-[9px] opacity-70">{showMagnetMenu ? '▲' : '▾'}</span>
+              </button>
+
+              {/* FLOATING DROPDOWN MENU */}
+              {showMagnetMenu && (
+                <div className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-80 bg-slate-950/95 border border-amber-500/40 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl z-50 font-mono text-xs space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span className="text-amber-300 font-bold tracking-wider text-[11px] uppercase flex items-center gap-1.5">
+                      <span>⚡</span> {lang === 'en' ? 'MHD & Space Dynamics' : 'MHD & Dinámica Espacial'}
+                    </span>
+                    <button
+                      onClick={() => setShowMagnetMenu(false)}
+                      className="text-slate-500 hover:text-white text-xs px-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {/* DCL Vectors Toggle */}
+                    <button
+                      onClick={() => setShowDcl(!showDcl)}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        showDcl
+                          ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>📐</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? '3D DCL Vectors' : 'Vectores DCL 3D'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? 'Fg, Centripetal ac, Velocity v, Apparent Fcf' : 'Fg, ac centrípeta, v tangencial, Fcf'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showDcl ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                        {showDcl ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+
+                    {/* CME Trigger */}
+                    <button
+                      onClick={triggerCME}
+                      disabled={isCmeActive}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        isCmeActive
+                          ? 'bg-amber-950/60 text-amber-200 border-amber-500 animate-pulse'
+                          : 'bg-slate-900/60 text-amber-300 border-amber-900/60 hover:bg-amber-950/40 hover:border-amber-500/60'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>🌪️</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? 'Solar Storm (CME Blast)' : 'Tormenta Solar (CME)'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? '1,200 km/s blast compresses Earth bow shock' : 'Onda de choque a 1.200 km/s'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded">
+                        {isCmeActive ? (lang === 'en' ? 'ACTIVE' : 'ACTIVA') : (lang === 'en' ? 'BLAST' : 'DISPARAR')}
+                      </span>
+                    </button>
+
+                    {/* Geomagnetic Polarity Reversal */}
+                    <button
+                      onClick={triggerGeomagneticReversal}
+                      disabled={isReversing}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        isReversing
+                          ? 'bg-rose-950/60 text-rose-200 border-rose-500 animate-pulse'
+                          : 'bg-slate-900/60 text-rose-300 border-rose-900/60 hover:bg-rose-950/40 hover:border-rose-500/60'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>🔄</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? 'Geomagnetic Reversal' : 'Inversión Campo Geomagnético'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? 'Dipole collapse, chaotic excursion & N↔S flip' : 'Colapso dipolo, fase caótica y cambio N↔S'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/50 px-2 py-0.5 rounded">
+                        {isReversing ? (lang === 'en' ? 'FLIPPING...' : 'INVIRTIENDO...') : (magneticPolarity === 1 ? 'N (Normal)' : 'S (Invertido)')}
+                      </span>
+                    </button>
+
+                    {/* Earth Magnetosphere Toggle */}
+                    <button
+                      onClick={() => setShowMagnetosphere(!showMagnetosphere)}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        showMagnetosphere
+                          ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>🛡️</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? 'Earth Magnetosphere & Bow Shock' : 'Magnetosfera & Choque de Proa'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? '16 dipole field lines + day-side shock front' : 'Líneas dipolares + escudo frente al viento solar'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showMagnetosphere ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                        {showMagnetosphere ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+
+                    {/* Polar Auroras Toggle */}
+                    <button
+                      onClick={() => setShowAuroras(!showAuroras)}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        showAuroras
+                          ? 'bg-emerald-950/60 text-emerald-200 border-emerald-500/60 shadow-xs'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>🌌</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? 'Polar Auroral Ovals' : 'Óvalos Aurorales Boreales'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? 'Birkeland ionospheric precipitation rings' : 'Excitación atómica O I 557.7nm y N2+'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showAuroras ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                        {showAuroras ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+
+                    {/* Parker Spiral IMF Toggle */}
+                    <button
+                      onClick={() => setShowParkerSpiral(!showParkerSpiral)}
+                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                        showParkerSpiral
+                          ? 'bg-amber-950/60 text-amber-200 border-amber-500/60 shadow-xs'
+                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>🌀</span>
+                        <div>
+                          <div className="font-semibold">{lang === 'en' ? 'Parker Spiral (IMF)' : 'Espiral de Parker (Campo IMF)'}</div>
+                          <div className="text-[10px] text-slate-400 font-sans">
+                            {lang === 'en' ? 'Archimedean interplanetary magnetic field' : 'Líneas magnéticas solares en rotación'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showParkerSpiral ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                        {showParkerSpiral ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* COLLAPSIBLE CONTROLS TOGGLE */}
@@ -3267,6 +3476,14 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
           </button>
         </div>
 
+        {/* Real-time CME / Geomagnetic Event Alert HUD */}
+        {cmeToast && (
+          <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 z-40 px-4 py-2 sm:px-6 sm:py-2.5 rounded-full bg-amber-950/90 border border-amber-400 text-amber-200 font-mono text-xs sm:text-sm shadow-2xl backdrop-blur-md flex items-center gap-2.5 animate-bounce pointer-events-none">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping shrink-0" />
+            <span className="font-bold tracking-wide">{cmeToast}</span>
+          </div>
+        )}
+
         {/* Letterbox 2.39:1 (anamorphic cinema bars) */}
         <div
           className="absolute inset-x-0 top-0 bg-black pointer-events-none z-20"
@@ -3349,11 +3566,11 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       </div>
 
       {/* ==================================================================== */}
-      {/* 4. BOTTOM PANEL: CELESTIAL DOSSIER & SYLLABUS CARD                   */}
+      {/* 4. BOTTOM PANEL: 4-TAB ASTROPHYSICAL DOSSIER & SYLLABUS CARD          */}
       {/* ==================================================================== */}
       {activePlanet && !isRealScale && (
         <div className="bg-slate-950/95 border-t border-slate-800/90 backdrop-blur-md text-left transition-all">
-          <div className="p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-900">
             <div className="flex items-center gap-3">
               <span
                 className="w-3.5 h-3.5 rounded-full inline-block shadow-sm shrink-0"
@@ -3369,13 +3586,51 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            {/* TAB SELECTOR CHIPS */}
+            <div className="flex flex-wrap items-center gap-1 p-0.5 bg-slate-900/90 border border-slate-800 rounded-xl font-mono text-[11px]">
               <button
-                onClick={() => setShowPlanetDetails(!showPlanetDetails)}
-                className="px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-850 border border-slate-700 text-[11px] font-mono text-slate-300 hover:text-white transition-colors"
+                onClick={() => setActivePhysicsTab('dcl')}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  activePhysicsTab === 'dcl'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
               >
-                {showPlanetDetails ? '▲ Ocultar' : 'Detalles del Astro ▾'}
+                📐 {lang === 'en' ? 'DCL & Newton' : 'DCL & Newton'}
               </button>
+              <button
+                onClick={() => setActivePhysicsTab('magnetism')}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  activePhysicsTab === 'magnetism'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                🧲 {lang === 'en' ? 'MHD & Space' : 'Magnetismo & Clima'}
+              </button>
+              <button
+                onClick={() => setActivePhysicsTab('nuclear')}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  activePhysicsTab === 'nuclear'
+                    ? 'bg-rose-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                ⚛️ {lang === 'en' ? 'Nuclear & Core' : 'Física Nuclear'}
+              </button>
+              <button
+                onClick={() => setActivePhysicsTab('syllabus')}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                  activePhysicsTab === 'syllabus'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                📚 {lang === 'en' ? 'Syllabus & Klausur' : 'Temario & Klausur'}
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => {
                   if (onSelectSubject) onSelectSubject(activePlanet);
@@ -3392,31 +3647,277 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
             </div>
           </div>
 
-          {showPlanetDetails && (
-            <div className="px-4 pb-4 sm:px-6 sm:pb-5 pt-1 border-t border-slate-850 space-y-3">
-              <p className="text-xs text-slate-300 leading-relaxed font-sans max-w-4xl">
-                {lang === 'en' ? activePlanet.descriptionEn : activePlanet.descriptionEs}
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-[11px]">
-                <div>
-                  <span className="text-slate-500 block text-[9px] uppercase">Temperature</span>
-                  <span className="text-slate-200 font-semibold">{activePlanet.temperatureK}</span>
+          {/* TAB CONTENTS */}
+          <div className="p-4 sm:p-5 text-slate-300 font-mono text-xs">
+            {/* TAB 1: DCL & NEWTON */}
+            {activePhysicsTab === 'dcl' && (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                  <div className="flex items-center gap-2 text-sky-400 font-bold text-[11px] tracking-wider uppercase">
+                    <span>📐</span>
+                    <span>{lang === 'en' ? 'FREE BODY DIAGRAM & ASTRODYNAMICS' : 'DIAGRAMA DE CUERPO LIBRE & ASTRODINÁMICA'}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[10px]">
+                    <span className="text-slate-400">{lang === 'en' ? 'Orbit Radius:' : 'Radio Orbital:'} <strong className="text-slate-200">{liveTelemetry.rAU}</strong> ({astroData.r_millionKm} Mkm)</span>
+                    <span className="text-slate-400">{lang === 'en' ? 'Orbital Speed:' : 'Velocidad Orbital:'} <strong className="text-emerald-400">{liveTelemetry.velKms}</strong></span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-slate-500 block text-[9px] uppercase">Orbital Period</span>
-                  <span className="text-sky-300 font-semibold">{activePlanet.orbitalPeriod}</span>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {/* Fg Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-red-400 font-bold">Fuerza Gravitacional (Fg)</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-xs" title="Vector Rojo hacia el Sol" />
+                    </div>
+                    <div className="text-[10px] text-slate-400">Fg = G · (M☉ · m) / r²</div>
+                    <div className="text-sm font-bold text-white tracking-wide">{astroData.F_gravityScientific} N</div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Vector radial centrípeto hacia el baricentro solar. Gobierna la curvatura de la órbita kepleriana.
+                    </p>
+                  </div>
+
+                  {/* ac & Fcf Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-cyan-400 font-bold">Aceleración Centrípeta (ac)</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-xs" title="Vector Cian hacia el Sol" />
+                    </div>
+                    <div className="text-[10px] text-slate-400">ac = v² / r</div>
+                    <div className="text-sm font-bold text-white tracking-wide">{astroData.a_centripetalScientific} m/s²</div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Equilibra la fuerza centrífuga aparente Fcf en el marco rotante (vector magenta opuesto).
+                    </p>
+                  </div>
+
+                  {/* L & Mechanical Energy Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-amber-400 font-bold">Momento Angular (L)</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-xs" title="Vector Amarillo Normal a la Órbita" />
+                    </div>
+                    <div className="text-[10px] text-slate-400">L = r × m·v</div>
+                    <div className="text-sm font-bold text-white tracking-wide">{astroData.L_angularScientific} kg·m²/s</div>
+                    <div className="text-[10px] text-slate-400">
+                      Energía Total E = {astroData.E_totalScientific} J
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-slate-500 block text-[9px] uppercase">Eccentricity</span>
-                  <span className="text-amber-300 font-semibold">{activePlanet.eccentricity}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block text-[9px] uppercase">Axial Tilt</span>
-                  <span className="text-emerald-400 font-semibold">{activePlanet.axialTilt}°</span>
+
+                <div className="p-3 rounded-xl bg-sky-950/20 border border-sky-800/40 text-[11px] flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-sky-200">
+                    <span>💡</span>
+                    <span>
+                      {lang === 'en'
+                        ? `Escape Velocity v_esc = ${astroData.v_escapeKms} km/s. Orbital vectors are rendered live on 3D celestial bodies.`
+                        : `Velocidad de Escape Solar v_esc = ${astroData.v_escapeKms} km/s. Los vectores 3D se orientan en tiempo real sobre el modelo.`}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowDcl(!showDcl)}
+                    className="px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] transition-all"
+                  >
+                    {showDcl ? (lang === 'en' ? 'Hide 3D Vectors' : 'Ocultar Vectores 3D') : (lang === 'en' ? 'Show 3D Vectors' : 'Mostrar Vectores 3D')}
+                  </button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* TAB 2: MAGNETOHYDRODYNAMICS & SPACE WEATHER */}
+            {activePhysicsTab === 'magnetism' && (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                  <div className="flex items-center gap-2 text-amber-400 font-bold text-[11px] tracking-wider uppercase">
+                    <span>🧲</span>
+                    <span>{lang === 'en' ? 'MAGNETOHYDRODYNAMICS & SPACE WEATHER' : 'MAGNETOHIDRODINÁMICA & CLIMA ESPACIAL'}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px]">
+                    <span className="text-slate-400">Perturbación Geomagnética:</span>
+                    <span className={`px-2 py-0.5 rounded-full font-bold ${isCmeActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50' : 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'}`}>
+                      {isCmeActive ? 'Kp 8+ (Tormenta Severa G4-G5)' : 'Kp 1-2 (Tranquilo)'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {/* B-Field Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-amber-400 font-bold block">Campo Dipolar Superficial (B)</span>
+                    <div className="text-[10px] text-slate-400">Ecuación MHD: ∂B/∂t = ∇×(v×B) + η∇²B</div>
+                    <div className="text-sm font-bold text-white tracking-wide">
+                      {activePlanet.magneticFieldTesla || (lang === 'en' ? 'Negligible (< 10⁻⁹ T)' : 'Inapreciable (< 10⁻⁹ T)')}
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Generado por efecto dínamo geodinámica en el núcleo de hierro fundido en convección y rotación rápida (número de Rossby Ro &lt; 0.1).
+                    </p>
+                  </div>
+
+                  {/* Bow Shock Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-sky-400 font-bold block">Choque de Proa (Bow Shock)</span>
+                    <div className="text-[10px] text-slate-400">Presión Dinámica: P_dyn = ρ_sw · v_sw²</div>
+                    <div className="text-sm font-bold text-white tracking-wide">
+                      {isCmeActive ? '5.8 R_E (Sub-geoestacionario)' : '10 - 12 R_E (Nominal)'}
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Frente de onda magneto-acústico supersónico donde el viento solar desacelera a velocidades subsónicas frente al campo magnético terrestre.
+                    </p>
+                  </div>
+
+                  {/* Geomagnetic Polarity Card */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-rose-400 font-bold block">Polaridad Geomagnética</span>
+                    <div className="text-[10px] text-slate-400">Ciclos de Brunhes-Matuyama</div>
+                    <div className="text-sm font-bold text-white tracking-wide">
+                      {isReversing ? (lang === 'en' ? 'Chaotic Reversal' : 'Transición Caótica...') : (magneticPolarity === 1 ? 'Normal (Norte en Sur geo)' : 'Invertida (Fase Reversa)')}
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Durante una inversión, el dipolo colapsa al 10% y surgen polos multipolares caóticos temporales en latitudes intermedias.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <button
+                    onClick={triggerCME}
+                    disabled={isCmeActive}
+                    className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-bold text-[11px] transition-all flex items-center gap-1.5"
+                  >
+                    <span>🌪️</span>
+                    <span>{lang === 'en' ? 'Launch CME Solar Storm' : 'Disparar Tormenta Solar (CME)'}</span>
+                  </button>
+                  <button
+                    onClick={triggerGeomagneticReversal}
+                    disabled={isReversing}
+                    className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-bold text-[11px] transition-all flex items-center gap-1.5"
+                  >
+                    <span>🔄</span>
+                    <span>{lang === 'en' ? 'Trigger Field Reversal' : 'Disparar Inversión Geomagnética'}</span>
+                  </button>
+                  <button
+                    onClick={() => setShowMagnetosphere(!showMagnetosphere)}
+                    className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-[11px] transition-all"
+                  >
+                    {showMagnetosphere ? 'Ocultar Magnetosfera' : 'Ver Magnetosfera'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: NUCLEAR PHYSICS & SOLAR CORE */}
+            {activePhysicsTab === 'nuclear' && (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                  <div className="flex items-center gap-2 text-rose-400 font-bold text-[11px] tracking-wider uppercase">
+                    <span>⚛️</span>
+                    <span>{lang === 'en' ? 'STELLAR HYDROSTATIC EQUILIBRIUM & NUCLEAR FUSION' : 'EQUILIBRIO HIDROSTÁTICO ESTELAR & FUSIÓN NUCLEAR'}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    Luminosidad Solar: <strong className="text-amber-300">L☉ = 3.828 × 10²⁶ W</strong>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {/* Hydrostatic Balance */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-amber-400 font-bold block">Equilibrio Hidrostático</span>
+                    <div className="text-[10px] text-slate-400">dP/dr = -G·M(r)·ρ(r) / r²</div>
+                    <div className="text-sm font-bold text-white tracking-wide">∇P = -ρ · g</div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      El gradiente de presión térmica y radiativa hacia el exterior cancela con precisión milimétrica el peso colosal de la masa estelar hacia el centro.
+                    </p>
+                  </div>
+
+                  {/* Proton-Proton Chain */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-rose-400 font-bold block">Cadena Protón-Protón (p-p)</span>
+                    <div className="text-[10px] text-slate-400">4 ¹H → ⁴He + 2e⁺ + 2ν_e + 2γ</div>
+                    <div className="text-sm font-bold text-white tracking-wide">Q = +26.73 MeV</div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Por cada núcleo de helio sintetizado por efecto túnel cuántico, se liberan 26.73 megaelectronvoltios según el defecto de masa de Einstein (ΔE = Δm·c²).
+                    </p>
+                  </div>
+
+                  {/* Mass Loss Rate */}
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                    <span className="text-sky-400 font-bold block">Conversión Materia a Energía</span>
+                    <div className="text-[10px] text-slate-400">Δm / Δt = L☉ / c²</div>
+                    <div className="text-sm font-bold text-white tracking-wide">4.26 × 10⁹ kg / s</div>
+                    <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                      Cada segundo, el Sol aniquila más de 4 millones de toneladas de materia convirtiéndola en fotones gamma que tardan 100.000 años en emerger de la zona radiativa.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-800/40 text-[11px] space-y-1">
+                  <div className="text-amber-300 font-bold flex items-center gap-1.5">
+                    <span>☀️</span>
+                    <span>Rotación Diferencial &amp; Ciclo Solar de 11 años (Efecto Dinamo α-Ω)</span>
+                  </div>
+                  <p className="text-slate-300 text-[10px] font-sans leading-normal">
+                    El ecuador solar rota cada ~25 días terrestres mientras que los polos tardan ~35 días. Esta cizalladura fluidodinámica en la tacoclina estira las líneas magnéticas toroidales hasta que flotan a la fotosfera, formando las manchas solares activas (umbrales a ~3.800 K) y las erupciones coronales que se aprecian en el modelo.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: SYLLABUS & KLAUSUR */}
+            {activePhysicsTab === 'syllabus' && (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                  <div className="flex items-center gap-2 text-emerald-400 font-bold text-[11px] tracking-wider uppercase">
+                    <span>📚</span>
+                    <span>{lang === 'en' ? 'ACADEMIC COURSE & KLAUSUR PREPARATION' : 'TEMARIO DE CURSOS & PREPARACIÓN KLAUSUR'}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    Área: <strong className="text-emerald-300">{lang === 'en' ? activePlanet.academicAreaEn : activePlanet.academicAreaEs}</strong>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed font-sans max-w-4xl">
+                  {lang === 'en' ? activePlanet.descriptionEn : activePlanet.descriptionEs}
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-[11px]">
+                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                    <span className="text-slate-500 block text-[9px] uppercase">Temperature</span>
+                    <span className="text-slate-200 font-semibold">{activePlanet.temperatureK}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                    <span className="text-slate-500 block text-[9px] uppercase">Orbital Period</span>
+                    <span className="text-sky-300 font-semibold">{activePlanet.orbitalPeriod}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                    <span className="text-slate-500 block text-[9px] uppercase">Eccentricity</span>
+                    <span className="text-amber-300 font-semibold">{activePlanet.eccentricity}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                    <span className="text-slate-500 block text-[9px] uppercase">Axial Tilt</span>
+                    <span className="text-emerald-400 font-semibold">{activePlanet.axialTilt}°</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                  <span className="text-[11px] text-slate-400">
+                    ¿Te estás preparando para un examen o necesitas tutoría en cálculo, álgebra o física?
+                  </span>
+                  <button
+                    onClick={() => {
+                      if (onSelectSubject) onSelectSubject(activePlanet);
+                      if (onNavigate) {
+                        onNavigate('courses');
+                      } else {
+                        window.location.hash = '#/courses';
+                      }
+                    }}
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-mono text-xs transition-all shadow-md"
+                  >
+                    {lang === 'en' ? 'Open Course Syllabus →' : 'Explorar Temario Completo →'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

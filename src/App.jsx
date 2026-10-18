@@ -438,14 +438,14 @@ const WHY_ME_REASONS = [
     icon: ShieldCheck,
     titleEn: 'Clear and professional',
     titleEs: 'Claro y profesional',
-    textEn: 'Prices from €50/h, 8-hour packs, an online calculator and an official invoice (§ 19 UStG).',
-    textEs: 'Precios desde 50 €/h, paquetes de 8 h, calculadora online y factura oficial (§ 19 UStG).',
+    textEn: 'Prices from €50/h, 8-hour sprint packs, transparent rates, and direct communication.',
+    textEs: 'Precios desde 50 €/h, paquetes de 8 h, calculadora transparente y comunicación directa.',
   },
 ];
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  // Multi-page navigation state: 'landing' | 'courses' | 'library' | 'mentor' | 'calculator' | 'contact' | 'faq'
+  // Multi-page navigation state: 'landing' | 'courses' | 'library' | 'precios' | 'contact'
   const [currentPage, setCurrentPage] = useState('landing');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
   const [courseFilter, setCourseFilter] = useState('all');
@@ -493,7 +493,14 @@ export default function App() {
         setTimeout(() => {
           document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
-      } else if (['landing', 'courses', 'library', 'mentor', 'calculator', 'contact'].includes(hash)) {
+      } else if (['precios', 'calculator', 'mentor'].includes(hash)) {
+        setCurrentPage('precios');
+        if (hash === 'mentor') {
+          setTimeout(() => {
+            document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      } else if (['landing', 'courses', 'library', 'contact'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
         setCurrentPage('landing');
@@ -511,6 +518,18 @@ export default function App() {
       setTimeout(() => {
         document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 50);
+      return;
+    }
+    if (page === 'mentor' || page === 'calculator' || page === 'precios') {
+      setCurrentPage('precios');
+      window.location.hash = '#/precios';
+      if (page === 'mentor' || sectionId === 'mentor-dossier') {
+        setTimeout(() => {
+          document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       return;
     }
     setCurrentPage(page);
@@ -608,122 +627,96 @@ Sent from Galileo STEM Mentorship Portal`;
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-60" />
 
       {/* --- STICKY NAVIGATION BAR WITH DISTINCT PAGE ROUTING --- */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-black/85 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl shadow-lg shadow-black/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
           {/* Identity & Seal */}
           <button 
             onClick={() => navigateTo('landing')}
-            className="flex items-center gap-3.5 group text-left cursor-pointer"
+            className="flex items-center gap-3.5 group text-left cursor-pointer shrink-0"
           >
-            <div className="w-11 h-11 rounded-lg bg-white/10 border border-white/20 text-white flex items-center justify-center font-mono text-xl font-bold shadow-sm group-hover:bg-sky-900/60 transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500/20 to-emerald-500/20 border border-sky-400/40 text-sky-300 flex items-center justify-center font-mono text-xl font-bold shadow-sm group-hover:border-sky-400 group-hover:text-white transition-all">
               [Φ]
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight text-white group-hover:text-sky-300 transition-colors">
-                  DANIEL SANTANDER
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-slate-300 border border-white/15 font-semibold">
-                  GEOPHYSICIST &amp; M.Sc.
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 font-mono">
-                STEM Mentorship • Online &amp; In-Person (Hannover, DE)
+              <span className="font-extrabold text-base tracking-tight text-white group-hover:text-sky-300 transition-colors block leading-snug">
+                DANIEL SANTANDER
+              </span>
+              <p className="text-[11px] text-sky-400 font-mono font-semibold leading-tight">
+                Double M.Sc. &amp; Geophysicist
+              </p>
+              <p className="text-[10px] text-slate-400 font-mono leading-tight">
+                Online &amp; In-Person (Hannover, DE)
               </p>
             </div>
           </button>
 
-          {/* Dedicated Page Tabs */}
-          <nav className="hidden xl:flex items-center gap-1.5 p-1 bg-white/10 border border-white/10 rounded-xl text-xs font-mono font-semibold">
-            <button
-              onClick={() => navigateTo('landing')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                currentPage === 'landing'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Orbit className="w-3.5 h-3.5 text-sky-400" />
-              <span>{lang === 'en' ? 'Solar Landing' : 'Inicio Solar'}</span>
-            </button>
-
+          {/* Dedicated Page Tabs (Cursos, Librería, Precios, Contact & FAQ) */}
+          <nav className="hidden lg:flex items-center gap-1.5 p-1 bg-slate-900/90 border border-slate-800 rounded-2xl text-xs font-mono font-semibold shadow-inner">
             <button
               onClick={() => navigateTo('courses')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
                 currentPage === 'courses'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30 font-bold'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'Courses & Klausuren' : 'Cursos & Klausuren'}</span>
+              <BookOpen className="w-4 h-4 text-sky-400" />
+              <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
             </button>
 
             <button
               onClick={() => navigateTo('library')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
                 currentPage === 'library'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30 font-bold'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <Library className="w-3.5 h-3.5 text-amber-400" />
-              <span>{lang === 'en' ? 'STEM Library' : 'Biblioteca STEM'}</span>
+              <Library className="w-4 h-4 text-amber-400" />
+              <span>{lang === 'en' ? 'Library' : 'Librería'}</span>
             </button>
 
             <button
-              onClick={() => navigateTo('mentor')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                currentPage === 'mentor'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
+              onClick={() => navigateTo('precios')}
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                currentPage === 'precios'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-bold'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <Award className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{lang === 'en' ? 'Mentor Dossier' : 'Perfil del Mentor'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('calculator')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                currentPage === 'calculator'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Calculator className="w-3.5 h-3.5 text-sky-400" />
-              <span>{lang === 'en' ? 'Calculator' : 'Calculadora'}</span>
+              <Calculator className="w-4 h-4 text-emerald-400" />
+              <span>{lang === 'en' ? 'Pricing & Dossier' : 'Precios & Dossier'}</span>
             </button>
 
             <button
               onClick={() => navigateTo('contact')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
                 currentPage === 'contact'
-                  ? 'bg-white/15 text-white shadow-xs border border-white/20 font-bold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-white text-slate-900 shadow-md font-bold'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <Phone className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{lang === 'en' ? 'Contact & FAQ' : 'Contacto y FAQ'}</span>
+              <Phone className="w-4 h-4 text-emerald-400" />
+              <span>Contact &amp; FAQ</span>
             </button>
           </nav>
 
           {/* Language Switcher & Call CTA */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center bg-white/10 border border-white/10 rounded-lg p-0.5 text-xs font-mono">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-0.5 text-xs font-mono">
               <button
                 onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded transition-colors ${
-                  lang === 'en' ? 'bg-white/15 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                className={`px-2.5 py-1 rounded-lg transition-colors ${
+                  lang === 'en' ? 'bg-slate-800 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLang('es')}
-                className={`px-2.5 py-1 rounded transition-colors ${
-                  lang === 'es' ? 'bg-white/15 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                className={`px-2.5 py-1 rounded-lg transition-colors ${
+                  lang === 'es' ? 'bg-slate-800 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 ES
@@ -732,10 +725,16 @@ Sent from Galileo STEM Mentorship Portal`;
 
             <button
               onClick={() => handleOpenBooking()}
-              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-semibold transition-colors flex items-center gap-2 shadow-sm"
+              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 border border-sky-400/40 text-white text-xs font-mono font-bold transition-all flex items-center gap-2.5 shadow-md shadow-sky-600/25 shrink-0 text-left cursor-pointer"
             >
-              <Calendar className="w-3.5 h-3.5 text-sky-400" />
-              <span>{lang === 'en' ? 'Book Diagnostic Call' : 'Reservar Diagnóstico'}</span>
+              <Calendar className="w-4 h-4 text-sky-200 shrink-0" />
+              <span className="leading-tight block text-[11px]">
+                {lang === 'en' ? (
+                  <>Book Diagnostic<br /><span className="text-sky-200 font-semibold">Call (20 min)</span></>
+                ) : (
+                  <>Reservar Sesión<br /><span className="text-sky-200 font-semibold">Diagnóstica</span></>
+                )}
+              </span>
             </button>
           </div>
 
@@ -764,29 +763,13 @@ Sent from Galileo STEM Mentorship Portal`;
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-                    {lang === 'en' ? (
-                      <>
-                        STEM mentoring for your{' '}
-                        <span className="text-sky-300 underline decoration-sky-500/50 underline-offset-6">
-                          German university exams
-                        </span>
-                        , taught in English or Spanish.
-                      </>
-                    ) : (
-                      <>
-                        Mentoría de Mates y Física para tu{' '}
-                        <span className="text-sky-300 underline decoration-sky-500/50 underline-offset-6">
-                          Klausur
-                        </span>
-                        , en español o inglés.
-                      </>
-                    )}
+                    STEM Mentoring for your university exams
                   </h1>
 
-                  <p className="text-base sm:text-lg text-slate-400 font-medium max-w-3xl mx-auto mb-6 leading-relaxed font-sans">
+                  <p className="text-base sm:text-lg text-slate-300 font-medium max-w-3xl mx-auto mb-6 leading-relaxed font-sans">
                     {lang === 'en'
-                      ? '1-on-1 classes with an engineer and geophysicist for university and IB students. You understand the why, and you reach the exam with a method. Classes are taught in English or Spanish, not German.'
-                      : 'Clases 1-a-1 con un ingeniero y geofísico para estudiantes de universidades alemanas e IB. Entiendes el porqué y llegas al examen con método. Las clases son en español o inglés.'}
+                      ? 'Significantly improve your grades through 1-on-1 or group classes with a Double Master in Science & Geophysicist, for university and IB students.'
+                      : 'Mejora considerablemente tus notas mediante 1-on-1 or groupal classes with a double master in science and geophysicist, for university and IB Students.'}
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center gap-3">
@@ -820,6 +803,8 @@ Sent from Galileo STEM Mentorship Portal`;
                     onSelectSubject={handleSelectPlanetSubject}
                     selectedSubjectId={selectedSubjectId}
                     lang={lang}
+                    onNavigate={navigateTo}
+                    onOpenBooking={handleOpenBooking}
                   />
                 </div>
 
@@ -1376,320 +1361,324 @@ Sent from Galileo STEM Mentorship Portal`;
           </div>
         )}
 
+
+
         {/* ========================================================= */}
-        {/* PAGE 4: MENTOR DOSSIER & BIOPHYSICAL RESEARCH             */}
+        {/* PAGE 3: PRECIOS (UNIFIED TUITION CALCULATOR & MENTOR DOSSIER) */}
         {/* ========================================================= */}
-        {currentPage === 'mentor' && (
+        {currentPage === 'precios' && (
           <div className="py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
               
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
                 <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
                 <span>/</span>
-                <span className="text-slate-900 font-bold">Mentor Dossier</span>
+                <span className="text-slate-900 font-bold">{lang === 'en' ? 'Pricing & Mentor Dossier' : 'Precios & Dossier del Mentor'}</span>
               </div>
 
-              {/* Bento Grid Dossier Layout */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
-                
-                {/* Photo & University Verified Credentials (5 cols) */}
-                <div className="lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-8 space-y-6 shadow-sm">
-                  
-                  <div className="flex items-center gap-4">
-                    <img
-                      src="./profile.jpg"
-                      alt="Daniel Santander"
-                      className="w-20 h-20 rounded-2xl object-cover border-2 border-slate-300 shadow-sm"
-                    />
-                    <div>
-                      <h2 className="text-xl font-bold text-slate-900">Daniel Santander Urrutia</h2>
-                      <p className="text-xs font-mono text-sky-700 font-semibold">Geophysicist &amp; Double M.Sc. Engineer</p>
-                      <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500 font-mono">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Hannover, Germany • Online Worldwide</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Formal University Degrees Box */}
-                  <div className="space-y-3 font-mono text-xs">
-                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                      <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                        <span>Germany (CAU Kiel)</span>
-                        <span>Double Master Degree</span>
-                      </div>
-                      <span className="text-slate-900 font-bold block">M.Sc. Environmental Management</span>
-                      <span className="text-slate-500 text-[11px]">Christian-Albrechts-Universität zu Kiel</span>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                      <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                        <span>Poland (AMU Poznań)</span>
-                        <span>Double Master Degree</span>
-                      </div>
-                      <span className="text-slate-900 font-bold block">M.Sc. Integrated Catchment Management</span>
-                      <span className="text-slate-500 text-[11px]">Adam Mickiewicz University</span>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                      <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                        <span>Chile (FCFM)</span>
-                        <span>Engineering Degree</span>
-                      </div>
-                      <span className="text-slate-900 font-bold block">Engineering Geophysics (Geofísica)</span>
-                      <span className="text-slate-500 text-[11px]">Universidad de Chile (Facultad de Cs. Físicas y Matemáticas)</span>
-                    </div>
-                  </div>
-
-                  {/* Direct Contact Buttons */}
-                  <div className="pt-2 space-y-2">
-                    <a
-                      href="https://wa.me/4917676497440"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      <span>WhatsApp: +49 176 7649 7440</span>
-                    </a>
-
-                    <a
-                      href="https://github.com/danisantanderurrutia-coder/portafolio"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <GithubIcon className="w-3.5 h-3.5" />
-                      <span>Daniel's GitHub Portfolio</span>
-                    </a>
-                  </div>
-
-                </div>
-
-                {/* Pedagogical Methodology & Experience (7 cols) */}
-                <div className="lg:col-span-7 space-y-6">
-                  
-                  <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm">
-                    <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block">
-                      Philosophy &amp; Academic Perspective
-                    </span>
-                    <h3 className="text-2xl font-bold text-slate-900">
-                      Why Rote Learning Fails in German Engineering Faculties
-                    </h3>
-                    <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                      {lang === 'en'
-                        ? 'German university lectures (Vorlesungen) at institutions like TUM or RWTH Aachen are often very abstract: theorems and proofs are presented without visual intuition. International students also have to cope with technical German while wrestling with complex multi-variable tensors.'
-                        : 'Las clases magistrales en facultades como TUM o RWTH Aachen suelen ser muy abstractas: se enuncian teoremas y lemas sin contexto visual ni intuición física. Además, los estudiantes internacionales deben lidiar con el alemán técnico mientras trabajan con tensores complejos.'}
-                    </p>
-                    <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                      {lang === 'en'
-                        ? 'My approach reverses this failure pattern: we build the physical picture first—visualizing fluid circulation, stress tensors, or phase space trajectories—before writing down algebraic equations. Once the intuition is clear, the German examination mark schemes become predictable.'
-                        : 'Mi metodología invierte este patrón de frustración: primero construimos la imagen física intuitiva (visualizando líneas de flujo, tensores de esfuerzo o trayectorias en el espacio fase) antes de desarrollar el álgebra. Una vez clara la física, las Altklausuren se vuelven predecibles.'}
-                    </p>
-                  </div>
-
-                  {/* The 3 Pillars */}
-                  <div className="space-y-4">
-                    <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">01</span>
-                        <h4 className="text-base font-bold text-slate-900">Physical Intuition Precedes Algebra</h4>
-                      </div>
-                      <p className="text-xs text-slate-600 pl-10 leading-relaxed">
-                        Every formula is derived from a physical phenomenon: Stokes theorem as fluid circulation, Green functions as impulse responses.
-                      </p>
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center">02</span>
-                        <h4 className="text-base font-bold text-slate-900">German Klausur Marking Schemas (Punkte-Maximierung)</h4>
-                      </div>
-                      <p className="text-xs text-slate-600 pl-10 leading-relaxed">
-                        Structuring answers to capture maximum partial points: stating convergence criteria, checking boundary conditions, and Jacobian formatting.
-                      </p>
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold flex items-center justify-center">03</span>
-                        <h4 className="text-base font-bold text-slate-900">Classes in English or Spanish (not German)</h4>
-                      </div>
-                      <p className="text-xs text-slate-600 pl-10 leading-relaxed">
-                        Zero linguistic hesitation. Complex tensor calculus explained in English or Spanish, working from your own Skript and past exams.
-                      </p>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-          </div>
-        )}
-
-        {/* ========================================================= */}
-        {/* PAGE 5: TUITION & PACKAGE CALCULATOR                      */}
-        {/* ========================================================= */}
-        {currentPage === 'calculator' && (
-          <div className="py-12">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
-                <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
-                <span>/</span>
-                <span className="text-slate-900 font-bold">Tuition Calculator</span>
-              </div>
-
-              <div className="text-center max-w-2xl mx-auto mb-10">
-                <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
-                  Transparent Investment Estimation
+              {/* Page Header */}
+              <div className="text-center max-w-3xl mx-auto">
+                <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
+                  Transparent Tuition &amp; Academic Credentials
                 </span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                  Interactive Rate &amp; Klausur Sprint Calculator
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                  {lang === 'en' ? 'Transparent Rates & Mentor Dossier' : 'Precios Transparentes & Perfil del Mentor'}
                 </h1>
-                <p className="text-slate-600 text-sm">
-                  Transparent hourly rates and sprint packages with zero hidden fees.
+                <p className="text-slate-600 text-sm max-w-2xl mx-auto font-sans leading-relaxed">
+                  {lang === 'en'
+                    ? 'Calculate your customized investment, explore fixed Klausur sprint bundles, and inspect Daniel Santander’s verified engineering and geophysics background.'
+                    : 'Calcula tu inversión a medida, explora los planes de sprint para exámenes (Klausur) y conoce la formación y metodología de Daniel Santander.'}
                 </p>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                  
-                  <div className="md:col-span-7 space-y-6">
-                    <div>
-                      <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                        Academic Level / Study Cohort
-                      </label>
-                      <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-                        {[
-                          { id: 'ib', label: 'IB Diploma' },
-                          { id: 'bachelor', label: 'Bachelor (TU9)' },
-                          { id: 'master', label: 'Master & Thesis' }
-                        ].map((lvl) => (
+              {/* --- SECTION 1: INTERACTIVE RATE CALCULATOR --- */}
+              <div className="max-w-5xl mx-auto">
+                <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    
+                    <div className="md:col-span-7 space-y-6">
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
+                          Academic Level / Study Cohort
+                        </label>
+                        <div className="grid grid-cols-3 gap-2 font-mono text-xs">
+                          {[
+                            { id: 'ib', label: 'IB Diploma' },
+                            { id: 'bachelor', label: 'Bachelor (TU9)' },
+                            { id: 'master', label: 'Master & Thesis' }
+                          ].map((lvl) => (
+                            <button
+                              key={lvl.id}
+                              onClick={() => setCalcLevel(lvl.id)}
+                              className={`py-2 px-3 rounded-lg border transition-all ${
+                                calcLevel === lvl.id
+                                  ? 'bg-slate-900 border-slate-900 text-white font-bold'
+                                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              {lvl.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between items-center mb-2 font-mono text-xs">
+                          <span className="text-slate-500 uppercase font-semibold">Mentorship Volume</span>
+                          <span className="text-sky-800 font-bold text-lg">{calcHours} hours</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="2"
+                          max="20"
+                          step="1"
+                          value={calcHours}
+                          onChange={(e) => setCalcHours(parseInt(e.target.value, 10))}
+                          className="w-full accent-sky-700 bg-slate-200 rounded-lg cursor-pointer h-2"
+                        />
+                        <div className="flex justify-between font-mono text-[10px] text-slate-400 mt-1">
+                          <span>2h (Drill urgente)</span>
+                          <span>8h (Klausur Sprint)</span>
+                          <span>20h (Acompañamiento continuo)</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
+                          Delivery Format
+                        </label>
+                        <div className="grid grid-cols-2 gap-3 font-mono text-xs">
                           <button
-                            key={lvl.id}
-                            onClick={() => setCalcLevel(lvl.id)}
-                            className={`py-2 px-3 rounded-lg border transition-all ${
-                              calcLevel === lvl.id
-                                ? 'bg-slate-900 border-slate-900 text-white font-bold'
-                                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                            onClick={() => setCalcFormat('1on1')}
+                            className={`p-3 rounded-xl border text-left transition-all ${
+                              calcFormat === '1on1'
+                                ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
+                                : 'bg-white border-slate-200 text-slate-600'
                             }`}
                           >
-                            {lvl.label}
+                            <div className="font-bold text-slate-900">1-on-1 Individual</div>
+                            <div className="text-[11px] text-slate-500">Online &amp; In-Person in Hannover</div>
                           </button>
-                        ))}
-                      </div>
-                    </div>
 
-                    <div>
-                      <div className="flex justify-between items-center mb-2 font-mono text-xs">
-                        <span className="text-slate-500 uppercase font-semibold">Mentorship Volume</span>
-                        <span className="text-sky-800 font-bold text-lg">{calcHours} hours</span>
+                          <button
+                            onClick={() => setCalcFormat('group')}
+                            className={`p-3 rounded-xl border text-left transition-all ${
+                              calcFormat === 'group'
+                                ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600'
+                                : 'bg-white border-slate-200 text-slate-600'
+                            }`}
+                          >
+                            <div className="font-bold text-emerald-800">Study Group (Max 3)</div>
+                            <div className="text-[11px] text-emerald-700">-30% discount per student</div>
+                          </button>
+                        </div>
                       </div>
-                      <input
-                        type="range"
-                        min="2"
-                        max="20"
-                        step="1"
-                        value={calcHours}
-                        onChange={(e) => setCalcHours(parseInt(e.target.value, 10))}
-                        className="w-full accent-sky-700 bg-slate-200 rounded-lg cursor-pointer h-2"
-                      />
-                      <div className="flex justify-between font-mono text-[10px] text-slate-400 mt-1">
-                        <span>2h (Targeted Drill)</span>
-                        <span>8h (Exam Survival)</span>
-                        <span>20h (Semester Coverage)</span>
-                      </div>
-                    </div>
 
-                    <div>
-                      <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                        Delivery Format
+                      <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer text-xs font-mono">
+                        <input
+                          type="checkbox"
+                          checked={calcSprintDiscount}
+                          onChange={(e) => setCalcSprintDiscount(e.target.checked)}
+                          className="rounded border-slate-300 text-sky-700 focus:ring-sky-600"
+                        />
+                        <span className="text-slate-700 font-semibold">
+                          Apply 4-Week Klausur Sprint Bundle (-15% discount)
+                        </span>
                       </label>
-                      <div className="grid grid-cols-2 gap-3 font-mono text-xs">
-                        <button
-                          onClick={() => setCalcFormat('1on1')}
-                          className={`p-3 rounded-xl border text-left transition-all ${
-                            calcFormat === '1on1'
-                              ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
-                              : 'bg-white border-slate-200 text-slate-600'
-                          }`}
-                        >
-                          <div className="font-bold text-slate-900">1-on-1 Individual</div>
-                          <div className="text-[11px] text-slate-500">Complete personal focus</div>
-                        </button>
 
-                        <button
-                          onClick={() => setCalcFormat('group')}
-                          className={`p-3 rounded-xl border text-left transition-all ${
-                            calcFormat === 'group'
-                              ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600'
-                              : 'bg-white border-slate-200 text-slate-600'
-                          }`}
-                        >
-                          <div className="font-bold text-emerald-800">Study Group (Max 3)</div>
-                          <div className="text-[11px] text-emerald-700">-30% discount per student</div>
-                        </button>
+                    </div>
+
+                    <div className="md:col-span-5 bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 flex flex-col justify-between shadow-md">
+                      <div>
+                        <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-2 font-semibold">
+                          Estimated Investment
+                        </span>
+                        <div className="flex items-baseline gap-2 mb-2">
+                          <span className="text-5xl font-mono font-extrabold text-white">€{totalCost}</span>
+                          <span className="text-xs font-mono text-slate-400">total</span>
+                        </div>
+
+                        <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800">
+                          <span>Effective Rate: <strong className="text-emerald-400">€{effectiveRate}/hr</strong></span>
+                        </div>
+
+                        <ul className="space-y-2 text-xs text-slate-300 font-mono mb-6">
+                          <li className="flex items-center gap-2">
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Miro Whiteboard Vector PDF Export</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Step-by-step Altklausuren Solutions</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Structured Formula Sheets &amp; Exam Summaries</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Direct Async WhatsApp Q&amp;A Access</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <button
+                        onClick={() => handleOpenBooking({ code: 'CALC', titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h Plan` })}
+                        className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <span>{lang === 'en' ? 'Claim This Study Plan' : 'Elegir este Plan de Estudio'}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: MENTOR DOSSIER & VERIFIED CREDENTIALS */}
+              <div id="mentor-dossier" className="pt-8 border-t border-slate-200">
+                <div className="text-center max-w-2xl mx-auto mb-10">
+                  <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
+                    Academic Background &amp; Methodology
+                  </span>
+                  <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                    {lang === 'en' ? 'Meet Your Mentor: Daniel Santander' : 'Conoce al Mentor: Daniel Santander'}
+                  </h2>
+                  <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                    {lang === 'en' ? 'Geophysicist & Double Master of Science Engineer based in Germany.' : 'Geofísico e Ingeniero Doble Máster radicado en Alemania.'}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  
+                  {/* Photo & University Verified Credentials (5 cols) */}
+                  <div className="lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-8 space-y-6 shadow-sm">
+                    
+                    <div className="flex items-center gap-4">
+                      <img
+                        src="./profile.jpg"
+                        alt="Daniel Santander"
+                        className="w-20 h-20 rounded-2xl object-cover border-2 border-slate-300 shadow-sm"
+                      />
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900">Daniel Santander Urrutia</h3>
+                        <p className="text-xs font-mono text-sky-700 font-semibold">Geophysicist &amp; Double M.Sc. Engineer</p>
+                        <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500 font-mono">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Hannover, Germany • Online Worldwide</span>
+                        </div>
                       </div>
                     </div>
 
-                    <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer text-xs font-mono">
-                      <input
-                        type="checkbox"
-                        checked={calcSprintDiscount}
-                        onChange={(e) => setCalcSprintDiscount(e.target.checked)}
-                        className="rounded border-slate-300 text-sky-700 focus:ring-sky-600"
-                      />
-                      <span className="text-slate-700 font-semibold">
-                        Apply 4-Week Klausur Sprint Bundle (-15% discount)
-                      </span>
-                    </label>
+                    {/* Formal University Degrees Box */}
+                    <div className="space-y-3 font-mono text-xs">
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
+                          <span>Germany (CAU Kiel)</span>
+                          <span>Double Master Degree</span>
+                        </div>
+                        <span className="text-slate-900 font-bold block">M.Sc. Environmental Management</span>
+                        <span className="text-slate-500 text-[11px]">Christian-Albrechts-Universität zu Kiel</span>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
+                          <span>Poland (AMU Poznań)</span>
+                          <span>Double Master Degree</span>
+                        </div>
+                        <span className="text-slate-900 font-bold block">M.Sc. Integrated Catchment Management</span>
+                        <span className="text-slate-500 text-[11px]">Adam Mickiewicz University</span>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
+                          <span>Chile (FCFM)</span>
+                          <span>Engineering Degree</span>
+                        </div>
+                        <span className="text-slate-900 font-bold block">Engineering Geophysics (Geofísica)</span>
+                        <span className="text-slate-500 text-[11px]">Universidad de Chile (Facultad de Cs. Físicas y Matemáticas)</span>
+                      </div>
+                    </div>
+
+                    {/* Direct Contact Buttons */}
+                    <div className="pt-2 space-y-2">
+                      <a
+                        href="https://wa.me/4917676497440"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                        <span>WhatsApp: +49 176 7649 7440</span>
+                      </a>
+
+                      <a
+                        href="https://github.com/danisantanderurrutia-coder/portafolio"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <GithubIcon className="w-3.5 h-3.5" />
+                        <span>Daniel's GitHub Portfolio</span>
+                      </a>
+                    </div>
 
                   </div>
 
-                  <div className="md:col-span-5 bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 flex flex-col justify-between shadow-md">
-                    <div>
-                      <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-2 font-semibold">
-                        Estimated Investment
+                  {/* Pedagogical Methodology & Experience (7 cols) */}
+                  <div className="lg:col-span-7 space-y-6">
+                    
+                    <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm">
+                      <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block">
+                        The Mentorship Method
                       </span>
-                      <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-5xl font-mono font-extrabold text-white">€{totalCost}</span>
-                        <span className="text-xs font-mono text-slate-400">total</span>
-                      </div>
-
-                      <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800">
-                        <span>Effective Rate: <strong className="text-emerald-400">€{effectiveRate}/hr</strong></span>
-                      </div>
-
-                      <ul className="space-y-2 text-xs text-slate-300 font-mono mb-6">
-                        <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Miro Whiteboard Vector PDF Export</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Step-by-step Altklausuren Solutions</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Structured Formula Sheets &amp; Exam Summaries</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Direct Async WhatsApp Q&amp;A Access</span>
-                        </li>
-                      </ul>
+                      <h3 className="text-2xl font-bold text-slate-900">
+                        Rigorous physics intuition, exam-focused scoring, and zero linguistic friction.
+                      </h3>
+                      <p className="text-sm text-slate-600 leading-relaxed font-sans">
+                        Most university students do not fail exams due to a lack of talent. They fail because university lectures present proofs as abstract formalisms without grounding the physical meaning, while professors in Germany demand precise, step-by-step justification to award partial points.
+                      </p>
                     </div>
 
-                    <button
-                      onClick={() => handleOpenBooking({ code: 'CALC', titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h Plan` })}
-                      className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2"
-                    >
-                      <span>{lang === 'en' ? 'Claim This Study Plan' : 'Elegir este Plan de Estudio'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                        <span className="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center mb-3">01</span>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">Intuición Física Primero</h4>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          Visualizar el fenómeno físico antes de escribir la ecuación diferencial.
+                        </p>
+                      </div>
+
+                      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                        <span className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center mb-3">02</span>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">Criterios de Examen Alemán</h4>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          Estructura de respuesta para maximizar puntos parciales en cada pregunta.
+                        </p>
+                      </div>
+
+                      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                        <span className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold flex items-center justify-center mb-3">03</span>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">Clases en Español o Inglés</h4>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          Cero fatiga lingüística, trabajando con tus Skripte y Altklausuren oficiales.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900">¿Quieres revisar tu temario con Daniel?</h4>
+                        <p className="text-xs text-slate-600">Agenda una llamada diagnóstica de 20 minutos sin compromiso.</p>
+                      </div>
+                      <button
+                        onClick={() => handleOpenBooking()}
+                        className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold whitespace-nowrap cursor-pointer shadow-xs"
+                      >
+                        Reservar Diagnóstico →
+                      </button>
+                    </div>
+
                   </div>
 
                 </div>

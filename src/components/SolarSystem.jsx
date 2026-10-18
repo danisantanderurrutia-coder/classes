@@ -3456,218 +3456,22 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
               <span className={`w-2 h-2 rounded-full ${visualPhysicMode ? 'bg-cyan-300 animate-pulse' : 'bg-slate-500'}`} />
               <span>⚛️ Visual Physic mode</span>
             </button>
-
-            {/* MAGNETIC FIELD MODE TOGGLE BUTTON */}
-            <button
-              onClick={() => {
-                const nextVal = !magneticFieldMode;
-                setMagneticFieldMode(nextVal);
-                setShowMagnetosphere(nextVal);
-                animStateRef.current.magneticFieldMode = nextVal;
-                animStateRef.current.showMagnetosphere = nextVal;
-                if (nextVal) setActivePhysicsTab('magnetism');
-              }}
-              className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
-                magneticFieldMode
-                  ? 'bg-amber-600 text-white border-amber-400 shadow-amber-500/30'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
-              }`}
-              title="Magnetic Field mode: Visualiza los campos magnéticos activos del Sol y la Tierra"
-            >
-              <span className={`w-2 h-2 rounded-full ${magneticFieldMode ? 'bg-amber-300 animate-pulse' : 'bg-slate-500'}`} />
-              <span>🧲 Magnetic Field mode</span>
-            </button>
-
-            {/* MAGNETISM & ASTROPHYSICS DROPDOWN BUTTON */}
-            <div className="relative">
-              <button
-                onClick={() => setShowMagnetMenu(!showMagnetMenu)}
-                className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
-                  showMagnetMenu || isCmeActive || isReversing
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-400 shadow-amber-500/20'
-                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
-                }`}
-                title={lang === 'en' ? 'Magnetohydrodynamics & Space Weather Lab' : 'Laboratorio de Magnetohidrodinámica y Clima Espacial'}
-              >
-                <span className={`w-2 h-2 rounded-full ${isCmeActive ? 'bg-amber-400 animate-ping' : isReversing ? 'bg-rose-400 animate-pulse' : 'bg-amber-400'}`} />
-                <span>🧲 {lang === 'en' ? 'Magnetism & Physics' : 'Magnetismo & Física'}</span>
-                <span className="text-[9px] opacity-70">{showMagnetMenu ? '▲' : '▾'}</span>
-              </button>
-
-              {/* FLOATING DROPDOWN MENU */}
-              {showMagnetMenu && (
-                <div className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-80 bg-slate-950/95 border border-amber-500/40 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl z-50 font-mono text-xs space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <span className="text-amber-300 font-bold tracking-wider text-[11px] uppercase flex items-center gap-1.5">
-                      <span>⚡</span> {lang === 'en' ? 'MHD & Space Dynamics' : 'MHD & Dinámica Espacial'}
-                    </span>
-                    <button
-                      onClick={() => setShowMagnetMenu(false)}
-                      className="text-slate-500 hover:text-white text-xs px-1"
-                    >
-                      ✕
-                    </button>
-                  </div>
-
-                  <div className="space-y-2">
-                    {/* DCL Vectors Toggle */}
-                    <button
-                      onClick={() => setShowDcl(!showDcl)}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        showDcl
-                          ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
-                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>📐</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? '3D DCL Vectors' : 'Vectores DCL 3D'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? 'Fg, Centripetal ac, Velocity v, Apparent Fcf' : 'Fg, ac centrípeta, v tangencial, Fcf'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showDcl ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                        {showDcl ? 'ON' : 'OFF'}
-                      </span>
-                    </button>
-
-                    {/* CME Trigger */}
-                    <button
-                      onClick={triggerCME}
-                      disabled={isCmeActive}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        isCmeActive
-                          ? 'bg-amber-950/60 text-amber-200 border-amber-500 animate-pulse'
-                          : 'bg-slate-900/60 text-amber-300 border-amber-900/60 hover:bg-amber-950/40 hover:border-amber-500/60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>🌪️</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? 'Solar Storm (CME Blast)' : 'Tormenta Solar (CME)'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? '1,200 km/s blast compresses Earth bow shock' : 'Onda de choque a 1.200 km/s'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded">
-                        {isCmeActive ? (lang === 'en' ? 'ACTIVE' : 'ACTIVA') : (lang === 'en' ? 'BLAST' : 'DISPARAR')}
-                      </span>
-                    </button>
-
-                    {/* Geomagnetic Polarity Reversal */}
-                    <button
-                      onClick={triggerGeomagneticReversal}
-                      disabled={isReversing}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        isReversing
-                          ? 'bg-rose-950/60 text-rose-200 border-rose-500 animate-pulse'
-                          : 'bg-slate-900/60 text-rose-300 border-rose-900/60 hover:bg-rose-950/40 hover:border-rose-500/60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>🔄</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? 'Geomagnetic Reversal' : 'Inversión Campo Geomagnético'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? 'Dipole collapse, chaotic excursion & N↔S flip' : 'Colapso dipolo, fase caótica y cambio N↔S'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/50 px-2 py-0.5 rounded">
-                        {isReversing ? (lang === 'en' ? 'FLIPPING...' : 'INVIRTIENDO...') : (magneticPolarity === 1 ? 'N (Normal)' : 'S (Invertido)')}
-                      </span>
-                    </button>
-
-                    {/* Earth Magnetosphere Toggle */}
-                    <button
-                      onClick={() => setShowMagnetosphere(!showMagnetosphere)}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        showMagnetosphere
-                          ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
-                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>🛡️</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? 'Earth Magnetosphere & Bow Shock' : 'Magnetosfera & Choque de Proa'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? '16 dipole field lines + day-side shock front' : 'Líneas dipolares + escudo frente al viento solar'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showMagnetosphere ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                        {showMagnetosphere ? 'ON' : 'OFF'}
-                      </span>
-                    </button>
-
-                    {/* Polar Auroras Toggle */}
-                    <button
-                      onClick={() => setShowAuroras(!showAuroras)}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        showAuroras
-                          ? 'bg-emerald-950/60 text-emerald-200 border-emerald-500/60 shadow-xs'
-                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>🌌</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? 'Polar Auroral Ovals' : 'Óvalos Aurorales Boreales'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? 'Birkeland ionospheric precipitation rings' : 'Excitación atómica O I 557.7nm y N2+'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showAuroras ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                        {showAuroras ? 'ON' : 'OFF'}
-                      </span>
-                    </button>
-
-                    {/* Parker Spiral IMF Toggle */}
-                    <button
-                      onClick={() => setShowParkerSpiral(!showParkerSpiral)}
-                      className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
-                        showParkerSpiral
-                          ? 'bg-amber-950/60 text-amber-200 border-amber-500/60 shadow-xs'
-                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>🌀</span>
-                        <div>
-                          <div className="font-semibold">{lang === 'en' ? 'Parker Spiral (IMF)' : 'Espiral de Parker (Campo IMF)'}</div>
-                          <div className="text-[10px] text-slate-400 font-sans">
-                            {lang === 'en' ? 'Archimedean interplanetary magnetic field' : 'Líneas magnéticas solares en rotación'}
-                          </div>
-                        </div>
-                      </div>
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showParkerSpiral ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                        {showParkerSpiral ? 'ON' : 'OFF'}
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* COLLAPSIBLE CONTROLS TOGGLE */}
+          {/* COLLAPSIBLE CONTROLS TOGGLE: OPTIONS */}
           <button
             onClick={() => setShowControls(!showControls)}
             className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-850 border border-slate-700/80 text-[11px] font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
           >
-            <span>{showControls ? '▲ Opciones' : '⚙️ Opciones ▾'}</span>
+            <span>{showControls ? '▲ Options' : '⚙️ Options ▾'}</span>
           </button>
 
         </div>
 
-        {/* EXPANDABLE TECHNICAL DRAWER */}
+        {/* EXPANDABLE TECHNICAL DRAWER: OPTIONS */}
         {showControls && (
           <div className="mt-3 pt-3 border-t border-slate-800/80 space-y-3">
+            {/* Primary Controls Row */}
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => {
@@ -3685,24 +3489,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                 {isRealScale ? '✕ Salir Escala Real' : '🔭 Escala Real 1:1'}
               </button>
 
-              <button
-                onClick={() => {
-                  const nextVal = !visualPhysicMode;
-                  setVisualPhysicMode(nextVal);
-                  setShowDcl(nextVal);
-                  animStateRef.current.visualPhysicMode = nextVal;
-                  animStateRef.current.showDcl = nextVal;
-                  if (nextVal) setActivePhysicsTab('dcl');
-                }}
-                className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all ${
-                  visualPhysicMode
-                    ? 'bg-sky-600 text-white border-sky-400'
-                    : 'bg-slate-900 text-slate-400 border-slate-850 hover:text-white'
-                }`}
-              >
-                {visualPhysicMode ? '✓ Visual Physic: ON' : '⚛️ Visual Physic mode'}
-              </button>
-
+              {/* Magnetic Field mode (Inside options as requested) */}
               <button
                 onClick={() => {
                   const nextVal = !magneticFieldMode;
@@ -3712,13 +3499,15 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                   animStateRef.current.showMagnetosphere = nextVal;
                   if (nextVal) setActivePhysicsTab('magnetism');
                 }}
-                className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all ${
+                className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all flex items-center gap-1.5 ${
                   magneticFieldMode
-                    ? 'bg-amber-600 text-white border-amber-400'
-                    : 'bg-slate-900 text-slate-400 border-slate-850 hover:text-white'
+                    ? 'bg-amber-600 text-white border-amber-400 shadow-xs'
+                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
                 }`}
+                title="Magnetic Field mode: Visualiza los campos magnéticos activos del Sol y la Tierra"
               >
-                {magneticFieldMode ? '✓ Magnetic Field: ON' : '🧲 Magnetic Field mode'}
+                <span className={`w-2 h-2 rounded-full ${magneticFieldMode ? 'bg-amber-300 animate-pulse' : 'bg-slate-500'}`} />
+                <span>🧲 Magnetic Field mode</span>
               </button>
 
               <button
@@ -3749,6 +3538,160 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
               >
                 {speedMultiplier > 1 ? '⚡ 2.5x Warp' : '1.0x Real'}
               </button>
+            </div>
+
+            {/* PHYSICS SECTION (Inside options as requested) */}
+            <div className="pt-2.5 border-t border-slate-800/60 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>⚡</span> Physics
+                </span>
+                <span className="text-[10px] text-slate-500 font-mono">
+                  {lang === 'en' ? 'MHD, Solar Storms & Relativistic Simulations' : 'MHD, Tormentas Solares & Simulaciones Físicas'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                {/* CME Trigger */}
+                <button
+                  onClick={triggerCME}
+                  disabled={isCmeActive}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    isCmeActive
+                      ? 'bg-amber-950/60 text-amber-200 border-amber-500 animate-pulse'
+                      : 'bg-slate-900/60 text-amber-300 border-amber-900/60 hover:bg-amber-950/40 hover:border-amber-500/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>🌪️</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? 'Solar Storm (CME)' : 'Tormenta Solar (CME)'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? '1,200 km/s blast compresses Bow Shock' : 'Onda choque 1.200 km/s'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/50 px-2 py-0.5 rounded">
+                    {isCmeActive ? (lang === 'en' ? 'ACTIVE' : 'ACTIVA') : (lang === 'en' ? 'BLAST' : 'DISPARAR')}
+                  </span>
+                </button>
+
+                {/* Geomagnetic Polarity Reversal */}
+                <button
+                  onClick={triggerGeomagneticReversal}
+                  disabled={isReversing}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    isReversing
+                      ? 'bg-rose-950/60 text-rose-200 border-rose-500 animate-pulse'
+                      : 'bg-slate-900/60 text-rose-300 border-rose-900/60 hover:bg-rose-950/40 hover:border-rose-500/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>🔄</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? 'Field Reversal' : 'Inversión Geomagnética'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? 'Dipole collapse & N↔S flip' : 'Colapso dipolar y cambio N↔S'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/50 px-2 py-0.5 rounded">
+                    {isReversing ? (lang === 'en' ? 'FLIPPING...' : 'INVIRTIENDO...') : (magneticPolarity === 1 ? 'N (Normal)' : 'S (Invertido)')}
+                  </span>
+                </button>
+
+                {/* Parker Spiral IMF */}
+                <button
+                  onClick={() => setShowParkerSpiral(!showParkerSpiral)}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    showParkerSpiral
+                      ? 'bg-amber-950/60 text-amber-200 border-amber-500/60 shadow-xs'
+                      : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>🌀</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? 'Parker Spiral (IMF)' : 'Espiral de Parker (IMF)'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? 'Interplanetary magnetic field' : 'Líneas magnéticas solares en rotación'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showParkerSpiral ? 'bg-amber-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                    {showParkerSpiral ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+
+                {/* Polar Auroras */}
+                <button
+                  onClick={() => setShowAuroras(!showAuroras)}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    showAuroras
+                      ? 'bg-emerald-950/60 text-emerald-200 border-emerald-500/60 shadow-xs'
+                      : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>🌌</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? 'Polar Auroras' : 'Óvalos Aurorales'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? 'Ionospheric emission rings' : 'Excitación atómica en polos'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showAuroras ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                    {showAuroras ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+
+                {/* Earth Magnetosphere & Bow Shock */}
+                <button
+                  onClick={() => setShowMagnetosphere(!showMagnetosphere)}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    showMagnetosphere
+                      ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
+                      : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>🛡️</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? 'Earth Shield' : 'Magnetosfera Terrestre'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? 'Dipole lines & Bow Shock' : 'Escudo y choque de proa'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showMagnetosphere ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                    {showMagnetosphere ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+
+                {/* 3D DCL Vectors */}
+                <button
+                  onClick={() => setShowDcl(!showDcl)}
+                  className={`px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${
+                    showDcl
+                      ? 'bg-sky-950/60 text-sky-200 border-sky-500/60 shadow-xs'
+                      : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>📐</span>
+                    <div>
+                      <div className="font-semibold text-xs">{lang === 'en' ? '3D DCL Vectors' : 'Vectores DCL 3D'}</div>
+                      <div className="text-[10px] text-slate-400 font-sans">
+                        {lang === 'en' ? 'Fg, ac, v, Fcf, L components' : 'Fg, ac, v, Fcf, L componentes'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${showDcl ? 'bg-sky-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                    {showDcl ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+              </div>
             </div>
 
             {/* Planet Chips */}

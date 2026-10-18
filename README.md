@@ -1,0 +1,102 @@
+# Φ GeoPhysics & STEM Mentorship Web Hub
+
+An interactive, responsive portfolio, teaching sandbox, and booking portal for a **STEM Mentor & Geophysicist based in Germany**.
+
+Built following the **"Galileo Galilei Meets Modern Computational Geophysics"** aesthetic and pedagogical philosophy.
+
+---
+
+## ⚡ Quick Start Options
+
+### Option 1: Instant Standalone Launch (No installation needed)
+You can directly double-click or open the self-contained HTML file in any modern browser:
+- [`index_standalone.html`](./index_standalone.html) or [`dist/standalone.html`](./dist/standalone.html)
+
+### Option 2: Run Live Development Server with Hot-Reloading
+```bash
+npm run dev
+```
+Then open `http://localhost:5173` in your browser.
+
+### Option 3: Production Build & Preview
+```bash
+npm run build
+npm run preview
+```
+To regenerate the single-file bundle anytime:
+```bash
+npm run build:standalone
+```
+
+---
+
+## 🔬 Core Features & Architecture
+
+### 1. Sticky Navigation Bar & Header
+- **Monogram & Logo**: `[Φ] GeoPhysics & STEM Mentorship` with real-time green pulse indicator (*"Open for Semester Exam Sprints & Master Coaching"*).
+- **Navigation Links**: Fast anchor scrolling to `#lab`, `#courses`, `#calculator`, `#mentor`, `#faq`.
+- **Language Switcher (EN | ES)**: Instant pill toggle switching the entire app context between English and Spanish.
+- **CTA**: Highlighted `"Book Intro Call"` button triggering the diagnostic session modal.
+
+### 2. High-Converting Hero Section
+- **Pedigree Badge**: *"Geophysicist & Double M.Sc. Engineer • Based in Germany"*.
+- **Headline**: *"Crack University STEM with an Engineer & Geophysicist."*
+- **Sub-headline**: Targeted for international students at German universities (TUM, RWTH Aachen, TU Berlin, KIT, Uni Stuttgart) and IB candidates.
+- **Trust Badges**:
+  - `[Double M.Sc.]` Science & Engineering
+  - `[German Klausur Focus]` 85%+ First-Attempt Pass Rate
+  - `[Real-World Rigor]` Theory + Python / Differential Calculus Models
+  - `[Official Invoice]` Registered Freiberufler in Germany (§ 19 UStG)
+
+### 3. The "Galileo Lab" Interactive Physics & Calculus Sandbox
+- **Dual Physics Modes**:
+  1. **Galilean Projectile with Atmospheric Drag**: Computes real-time numerical trajectories using velocity-dependent drag.
+  2. **Damped Harmonic Oscillator & Wave Dynamics**: Shows amplitude decay and oscillatory behavior.
+- **Real-Time Sliders**:
+  - Launch Angle ($\theta$)
+  - Initial Velocity ($v_0$)
+  - Gravity ($g$) — from Moon ($1.62\text{ m/s}^2$) to Earth ($9.81\text{ m/s}^2$) to high-gravity ($15.0\text{ m/s}^2$)
+  - Air Drag Coefficient ($\gamma$) — compare vacuum parabola vs. realistic drag trajectory
+- **Live Visual Overlays**:
+  - **Tangent Calculus Derivative Vectors**: Dynamic rendering of $dy/dx$ and instantaneous velocity $\vec{v}(t)$ vectors on the moving particle.
+  - **Underlying Differential Equations**: Displays governing ODE ($m\ddot{\mathbf{r}} = -mg\hat{j} - \gamma \mathbf{v}$).
+  - **Scientific Python Code**: Live NumPy/SciPy `solve_ivp` overlay showing how 4 lines of Python reproduce the simulation.
+- **Real-Time Telemetry**: Instant readouts for Max Altitude ($y_{max}$), Impact Range ($x$), Tangent Slope ($dy/dx$), and Flight Time ($t$).
+
+### 4. 4 Signature Mentorship & Klausur Tracks
+1. **Track 01: German University Klausur Sprint** (€55/h or €390 8h Survival Pack)
+   - Focused on *Höhere Mathematik I-III*, *Lineare Algebra*, *Klassische Mechanik*, Altklausur drills, and partial credit maximization.
+2. **Track 02: Applied Physics & Scientific Python** (€65/h)
+   - Numerical ODE solvers, NumPy, SciPy, Matplotlib, signal processing, and geodata.
+3. **Track 03: IB Diploma Math AA HL & Physics HL** (€50/h or €360 8h Pack)
+   - Internal Assessment (IA) guidance, syllabus mastery, Paper 1, 2 & 3 exam drills.
+4. **Track 04: Master's Thesis & Research Mentoring** (€75/h)
+   - Numerical algorithm debugging, scientific writing, thesis defense rehearsal.
+
+### 5. Interactive Rate & Package Calculator
+- **Inputs**: Academic Level (IB Diploma, University Bachelor, Master/Research), Hours Slider (2 to 20h), Delivery Format (1-on-1 vs Small Group -30%), Intensity (Weekly vs 4-Week Sprint -15% bundle discount).
+- **Outputs**: Instant total investment in Euros (€), effective hourly rate, estimated sessions, and list of included extras (Miro vector export, Altklausur breakdowns, WhatsApp Q&A, German § 19 UStG invoice).
+- **1-Click Sync**: Clicking *"Claim This Study Plan"* pre-fills the booking modal.
+
+### 6. Mentor Authority & "The Galileo Method"
+- **Mentor Profile**: Double Master's holder in Science & Environmental Engineering, Geophysics background, registered German Freiberufler.
+- **3 Core Pillars**:
+  1. *No Rote Memorization: Intuition First*
+  2. *The German Klausur Decoded (Punkte-Maximierung)*
+  3. *Bilingual Advantage (Zero Friction in English or Spanish)*
+
+### 7. Germany-Specific Academic FAQ
+- Accordions answering: Official invoices for German tax/university claims (§ 19 UStG), teaching German exams in English/Spanish, digital whiteboard tools (Miro + Apple Pencil), trial/diagnostic sessions, payment methods, and study groups.
+
+### 8. Diagnostic Request & Booking Modal
+- Accessible modal with backdrop blur and `Esc` key handling.
+- Captures Student Name, Email, University/Institution (TUM, RWTH, etc.), Module, Target Exam Date, Language Preference, Syllabus Bottlenecks, and File Upload placeholder.
+- Instant submission view with confetti celebration and quick-connect WhatsApp link.
+
+---
+
+## 🎨 Design Tokens
+- **Background**: Deep Obsidian `#070A0F` with ambient Galileo Blue & Emerald radial glows.
+- **Cards**: Slate 900 glassmorphism (`rgba(15, 23, 42, 0.75)`) with backdrop blur and slate-800 borders.
+- **Accents**: Electric Cyan / Galileo Blue (`#38BDF8`) & Computation Emerald (`#10B981`).
+- **Typography**: Plus Jakarta Sans for body/headings and JetBrains Mono for equations, stats, tags, and telemetry.

@@ -1,0 +1,7 @@
+node_modules
+dist
+index_standalone.html
+.DS_Store
+*.local
+.env
+

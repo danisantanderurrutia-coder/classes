@@ -436,7 +436,12 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '').replace('#', '');
-      if (['landing', 'courses', 'library', 'mentor', 'calculator', 'contact', 'faq'].includes(hash)) {
+      if (hash === 'faq') {
+        setCurrentPage('contact');
+        setTimeout(() => {
+          document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else if (['landing', 'courses', 'library', 'mentor', 'calculator', 'contact'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
         setCurrentPage('landing');
@@ -447,10 +452,24 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const navigateTo = (page) => {
+  const navigateTo = (page, sectionId) => {
+    if (page === 'faq') {
+      setCurrentPage('contact');
+      window.location.hash = '#/contact';
+      setTimeout(() => {
+        document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+      return;
+    }
     setCurrentPage(page);
     window.location.hash = `#/${page}`;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (sectionId) {
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   // Keyboard Escape listener for Modal
@@ -634,18 +653,7 @@ Sent from Galileo STEM Mentorship Portal`;
               }`}
             >
               <Phone className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{lang === 'en' ? 'Contact' : 'Contacto'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('faq')}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                currentPage === 'faq'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              FAQ
+              <span>{lang === 'en' ? 'Contact & FAQ' : 'Contacto y FAQ'}</span>
             </button>
           </nav>
 
@@ -1717,83 +1725,73 @@ Sent from Galileo STEM Mentorship Portal`;
                 </button>
               </div>
 
-            </div>
-          </div>
-        )}
+              {/* Frequently Asked Questions (FAQ) Embedded in Contact */}
+              <div id="faq-section" className="mt-16 pt-12 border-t border-slate-200">
+                <div className="text-center mb-10">
+                  <span className="text-xs font-mono text-sky-800 uppercase tracking-widest block mb-2 font-bold">
+                    {lang === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
+                    {lang === 'en' ? 'German University & Administrative Logistics' : 'Logística Universitaria en Alemania y Metodología'}
+                  </h2>
+                  <p className="text-slate-600 text-sm max-w-2xl mx-auto font-sans">
+                    {lang === 'en'
+                      ? 'Clear answers regarding German exams, in-person sessions in Hannover, digital tools, and scheduling.'
+                      : 'Respuestas claras sobre exámenes alemanes, clases presenciales en Hannover, herramientas digitales y reservas.'}
+                  </p>
+                </div>
 
-        {/* ========================================================= */}
-        {/* PAGE 7: GERMAN UNIVERSITY FAQ                            */}
-        {/* ========================================================= */}
-        {currentPage === 'faq' && (
-          <div className="py-12">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
-                <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
-                <span>/</span>
-                <span className="text-slate-900 font-bold">FAQ</span>
-              </div>
-
-              <div className="text-center mb-10">
-                <span className="text-xs font-mono text-sky-800 uppercase tracking-widest block mb-2 font-bold">Frequently Asked Questions</span>
-                <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-                  German University &amp; Administrative Logistics
-                </h1>
-                <p className="text-slate-600 text-sm">
-                  Clear answers regarding German exams, in-person sessions in Hannover, digital tools, and scheduling.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                {[
-                  {
-                    qEn: "Can sessions be conducted in English or Spanish if my exam is officially in German?",
-                    qEs: "¿Se pueden impartir las clases en inglés o español si mi examen oficial es en alemán?",
-                    aEn: "Yes, this is precisely my specialty. We explain every concept in English or Spanish so you understand the physical and mathematical intuition without language fatigue. Simultaneously, we map every formula directly to your German professor's lecture notes (Skripte) so you master the required German vocabulary (e.g., 'Satz von Stokes', 'Eigenwert', 'Trägheitstensor').",
-                    aEs: "Sí, es exactamente mi especialidad. Explicamos cada demostración en español o inglés para que comprendas la intuición física sin fatiga idiomática. Al mismo tiempo, vinculamos cada desarrollo con los términos en alemán de tu Skript universitario oficial para que domines el léxico exacto que evaluará el profesor."
-                  },
-                  {
-                    qEn: "Can we focus directly on past exams (Altklausuren) and exercise problem sets?",
-                    qEs: "¿Podemos enfocarnos directamente en resolver exámenes anteriores (Altklausuren) y ejercicios?",
-                    aEn: "Yes, absolutely. Solving official past exams (Altklausuren) from your chair is the single highest-yield strategy. We dissect actual exam problems step-by-step, identifying grading rubrics, common traps, and time-saving derivation methods.",
-                    aEs: "Sí, totalmente. Resolver Altklausuren oficiales de tu cátedra es la estrategia más eficaz para aprobar. Desglosamos exámenes reales paso a paso, identificando los criterios del examinador, trampas frecuentes y métodos directos de resolución."
-                  },
-                  {
-                    qEn: "Can classes be taken in-person in Hannover, Germany?",
-                    qEs: "¿Se pueden tomar clases presenciales en Hannover, Alemania?",
-                    aEn: "Yes. In-person 1-on-1 sessions are available in Hannover, Germany for local students (e.g. from Leibniz Universität Hannover / LUH or nearby universities). Sessions can be held in university library study rooms (e.g. TIB) or quiet learning spaces.",
-                    aEs: "Sí. Ofrezco sesiones presenciales individuales en Hannover, Alemania para estudiantes locales (ej. de la Leibniz Universität Hannover / LUH o alrededores), coordinadas en salas de estudio de bibliotecas universitarias (como la TIB) o espacios de estudio tranquilos."
-                  },
-                  {
-                    qEn: "How does the 20-minute diagnostic session work?",
-                    qEs: "¿En qué consiste la sesión diagnóstica inicial de 20 minutos?",
-                    aEn: "We meet via Zoom/Google Meet, review your module syllabus, inspect previous exams (Altklausuren) from your chair, identify where you are losing partial points, and design a concrete schedule to ensure you pass.",
-                    aEs: "Nos conectamos por Zoom o Google Meet, revisamos el temario de tu cátedra, examinamos Altklausuren reales, identificamos tus puntos débiles y diseñamos un plan estructurado para asegurar tu aprobado."
-                  },
-                  {
-                    qEn: "What digital equipment and software are used in remote sessions?",
-                    qEs: "¿Qué herramientas digitales y equipos utilizas en las clases online?",
-                    aEn: "Sessions are conducted on high-resolution Miro interactive whiteboards with an Apple Pencil. We execute live scientific Python code when relevant and export high-resolution vector PDFs of every calculation right after the call.",
-                    aEs: "Utilizamos pizarras interactivas Miro en alta resolución combinadas con Apple Pencil. Ejecutamos código Python en vivo cuando la materia lo requiere y enviamos un PDF vectorial de todas las demostraciones al terminar la sesión."
-                  }
-                ].map((faq, idx) => (
-                  <div key={idx} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-                    <button
-                      onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
-                      className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
-                    >
-                      <span className="font-semibold text-slate-900 text-sm">
-                        {lang === 'en' ? faq.qEn : faq.qEs}
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-sky-700 shrink-0 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openFaq === idx && (
-                      <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed font-sans">
-                        {lang === 'en' ? faq.aEn : faq.aEs}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                <div className="space-y-3 max-w-4xl mx-auto">
+                  {[
+                    {
+                      qEn: "Can sessions be conducted in English or Spanish if my exam is officially in German?",
+                      qEs: "¿Se pueden impartir las clases en inglés o español si mi examen oficial es en alemán?",
+                      aEn: "Yes, this is precisely my specialty. We explain every concept in English or Spanish so you understand the physical and mathematical intuition without language fatigue. Simultaneously, we map every formula directly to your German professor's lecture notes (Skripte) so you master the required German vocabulary (e.g., 'Satz von Stokes', 'Eigenwert', 'Trägheitstensor').",
+                      aEs: "Sí, es exactamente mi especialidad. Explicamos cada demostración en español o inglés para que comprendas la intuición física sin fatiga idiomática. Al mismo tiempo, vinculamos cada desarrollo con los términos en alemán de tu Skript universitario oficial para que domines el léxico exacto que evaluará el profesor."
+                    },
+                    {
+                      qEn: "Can we focus directly on past exams (Altklausuren) and exercise problem sets?",
+                      qEs: "¿Podemos enfocarnos directamente en resolver exámenes anteriores (Altklausuren) y ejercicios?",
+                      aEn: "Yes, absolutely. Solving official past exams (Altklausuren) from your chair is the single highest-yield strategy. We dissect actual exam problems step-by-step, identifying grading rubrics, common traps, and time-saving derivation methods.",
+                      aEs: "Sí, totalmente. Resolver Altklausuren oficiales de tu cátedra es la estrategia más eficaz para aprobar. Desglosamos exámenes reales paso a paso, identificando los criterios del examinador, trampas frecuentes y métodos directos de resolución."
+                    },
+                    {
+                      qEn: "Can classes be taken in-person in Hannover, Germany?",
+                      qEs: "¿Se pueden tomar clases presenciales en Hannover, Alemania?",
+                      aEn: "Yes. In-person 1-on-1 sessions are available in Hannover, Germany for local students (e.g. from Leibniz Universität Hannover / LUH or nearby universities). Sessions can be held in university library study rooms (e.g. TIB) or quiet learning spaces.",
+                      aEs: "Sí. Ofrezco sesiones presenciales individuales en Hannover, Alemania para estudiantes locales (ej. de la Leibniz Universität Hannover / LUH o alrededores), coordinadas en salas de estudio de bibliotecas universitarias (como la TIB) o espacios de estudio tranquilos."
+                    },
+                    {
+                      qEn: "How does the 20-minute diagnostic session work?",
+                      qEs: "¿En qué consiste la sesión diagnóstica inicial de 20 minutos?",
+                      aEn: "We meet via Zoom/Google Meet, review your module syllabus, inspect previous exams (Altklausuren) from your chair, identify where you are losing partial points, and design a concrete schedule to ensure you pass.",
+                      aEs: "Nos conectamos por Zoom o Google Meet, revisamos el temario de tu cátedra, examinamos Altklausuren reales, identificamos tus puntos débiles y diseñamos un plan estructurado para asegurar tu aprobado."
+                    },
+                    {
+                      qEn: "What digital equipment and software are used in remote sessions?",
+                      qEs: "¿Qué herramientas digitales y equipos utilizas en las clases online?",
+                      aEn: "Sessions are conducted on high-resolution Miro interactive whiteboards with an Apple Pencil. We execute live scientific Python code when relevant and export high-resolution vector PDFs of every calculation right after the call.",
+                      aEs: "Utilizamos pizarras interactivas Miro en alta resolución combinadas con Apple Pencil. Ejecutamos código Python en vivo cuando la materia lo requiere y enviamos un PDF vectorial de todas las demostraciones al terminar la sesión."
+                    }
+                  ].map((faq, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                      <button
+                        onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
+                        className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                      >
+                        <span className="font-semibold text-slate-900 text-sm">
+                          {lang === 'en' ? faq.qEn : faq.qEs}
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-sky-700 shrink-0 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
+                      </button>
+                      {openFaq === idx && (
+                        <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed font-sans">
+                          {lang === 'en' ? faq.aEn : faq.aEs}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
             </div>

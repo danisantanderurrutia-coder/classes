@@ -52,3 +52,16 @@
   box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.08), 0 8px 10px -6px rgba(2, 132, 199, 0.04);
   transform: translateY(-2px);
 }
+
+/* ===== Cinematic observatory overlays ===== */
+@keyframes cineIntro {
+  0%   { opacity: 1; }
+  55%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes cineCaption {
+  0%   { opacity: 0; transform: translateY(8px); letter-spacing: 0.1em; }
+  18%  { opacity: 1; transform: translateY(0); }
+  78%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-4px); }
+}

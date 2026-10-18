@@ -44,7 +44,7 @@ npm run build:standalone
 - **Sub-headline**: Targeted for international students at German universities (TUM, RWTH Aachen, TU Berlin, KIT, Uni Stuttgart) and IB candidates.
 - **Trust Badges**:
   - `[Double M.Sc.]` Science & Engineering
-  - `[German Klausur Focus]` 85%+ First-Attempt Pass Rate
+  - `[Altklausur Focus]` Past-exam focused preparation
   - `[Real-World Rigor]` Theory + Python / Differential Calculus Models
   - `[Official Invoice]` Registered Freiberufler in Germany (§ 19 UStG)
 
@@ -83,7 +83,7 @@ npm run build:standalone
 - **3 Core Pillars**:
   1. *No Rote Memorization: Intuition First*
   2. *The German Klausur Decoded (Punkte-Maximierung)*
-  3. *Bilingual Advantage (Zero Friction in English or Spanish)*
+  3. *Classes in English or Spanish (not German)*
 
 ### 7. Germany-Specific Academic FAQ
 - Accordions answering: Official invoices for German tax/university claims (§ 19 UStG), teaching German exams in English/Spanish, digital whiteboard tools (Miro + Apple Pencil), trial/diagnostic sessions, payment methods, and study groups.
@@ -92,6 +92,11 @@ npm run build:standalone
 - Accessible modal with backdrop blur and `Esc` key handling.
 - Captures Student Name, Email, University/Institution (TUM, RWTH, etc.), Module, Target Exam Date, Language Preference, Syllabus Bottlenecks, and File Upload placeholder.
 - Instant submission view with confetti celebration and quick-connect WhatsApp link.
+
+---
+
+## 🛠️ Admin Panel (Marketing)
+Open `#/admin` (e.g. `http://localhost:5173/#/admin`). Spanish-language panel with: dashboard (leads, diagnostics, students, revenue per channel), week-1 checklist (**eBay Kleinanzeigen + street only**), copy-ready ads/flyer/web pitch, street-spot tracker with tagged QR links, and a lead pipeline. Data is stored in the browser (`localStorage`); use Export/Import for backups. No authentication.
 
 ---
 

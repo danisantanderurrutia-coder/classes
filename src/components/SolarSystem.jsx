@@ -528,6 +528,65 @@ export function calculateAstrodynamics(planet, currentR_AU = 1.0, currentSpeedKm
   };
 }
 
+/**
+ * Creates high-DPI 3D billboard sprites for physical vector components (Fg, ac, v, Fcf, L)
+ */
+function createVectorLabelSprite(text, borderColor = '#38BDF8', textColor = '#FFFFFF') {
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 110;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  // Background rounded box
+  ctx.fillStyle = 'rgba(2, 6, 23, 0.92)';
+  ctx.strokeStyle = borderColor;
+  ctx.lineWidth = 5;
+
+  const r = 20;
+  const x = 6, y = 6, w = 512 - 12, h = 110 - 12;
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Subtle glow
+  ctx.shadowColor = borderColor;
+  ctx.shadowBlur = 12;
+
+  // Typography
+  ctx.fillStyle = textColor;
+  ctx.font = 'bold 30px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, 256, 55);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.minFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
+
+  const mat = new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+  });
+
+  const sprite = new THREE.Sprite(mat);
+  sprite.renderOrder = 999;
+  return sprite;
+}
+
 // ============================================================================
 // 2. ULTRA-FAST FRACTAL VALUE & PERLIN NOISE ENGINE
 // ============================================================================
@@ -1389,10 +1448,12 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
   const [showControls, setShowControls] = useState(false);
   const [showPlanetDetails, setShowPlanetDetails] = useState(false);
   
-  // Physics & Magnetism States
+  // Physics & Magnetism States (Visual Physic mode & Magnetic Field mode)
+  const [visualPhysicMode, setVisualPhysicMode] = useState(false); // Naturally deactivated by default
+  const [magneticFieldMode, setMagneticFieldMode] = useState(false); // Naturally deactivated by default
   const [showMagnetMenu, setShowMagnetMenu] = useState(false);
-  const [showDcl, setShowDcl] = useState(true);
-  const [showMagnetosphere, setShowMagnetosphere] = useState(true);
+  const [showDcl, setShowDcl] = useState(false);
+  const [showMagnetosphere, setShowMagnetosphere] = useState(false);
   const [showAuroras, setShowAuroras] = useState(true);
   const [showParkerSpiral, setShowParkerSpiral] = useState(false);
   const [isCmeActive, setIsCmeActive] = useState(false);
@@ -1415,8 +1476,10 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     cinemaMode: true,
     shot: null,
     autoOrbit: false,
-    showDcl: true,
-    showMagnetosphere: true,
+    visualPhysicMode: false,
+    magneticFieldMode: false,
+    showDcl: false,
+    showMagnetosphere: false,
     showAuroras: true,
     showParkerSpiral: false,
     isCmeActive: false,
@@ -1429,6 +1492,16 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
   useEffect(() => {
     animStateRef.current.cinemaMode = cinemaMode;
   }, [cinemaMode]);
+
+  useEffect(() => {
+    animStateRef.current.visualPhysicMode = visualPhysicMode;
+    animStateRef.current.showDcl = visualPhysicMode;
+  }, [visualPhysicMode]);
+
+  useEffect(() => {
+    animStateRef.current.magneticFieldMode = magneticFieldMode;
+    animStateRef.current.showMagnetosphere = magneticFieldMode;
+  }, [magneticFieldMode]);
 
   useEffect(() => {
     animStateRef.current.showDcl = showDcl;
@@ -1995,6 +2068,104 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
     solarSystemGroup.add(parkerGroup);
 
     // ========================================================================
+    // 1E. SOLAR GLOBAL MAGNETIC FIELD (DIPOLE LOOPS, OPEN POLAR LINES & STREAMERS)
+    // ========================================================================
+    const solarMagneticGroup = new THREE.Group();
+    solarMagneticGroup.visible = false;
+
+    // A. Global Poloidal Dipole Magnetic Field Lines: r = L * sin^2(theta)
+    const solarDipoleL = [5.2, 8.2, 12.0, 16.5, 22.0];
+    const solarPlanesCount = 10;
+    const solarDipoleLines = [];
+    solarDipoleL.forEach((L) => {
+      for (let pl = 0; pl < solarPlanesCount; pl++) {
+        const phi = (pl / solarPlanesCount) * Math.PI * 2;
+        const pts = [];
+        for (let st = 0; st <= 48; st++) {
+          const theta = 0.18 + (st / 48) * (Math.PI - 0.36);
+          const rL = L * Math.sin(theta) * Math.sin(theta);
+          const xL = rL * Math.sin(theta) * Math.cos(phi);
+          const yL = rL * Math.cos(theta); // Magnetic axis
+          const zL = rL * Math.sin(theta) * Math.sin(phi);
+          pts.push(new THREE.Vector3(xL, yL, zL));
+        }
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0xF59E0B, // Solar Magnetic Amber
+          transparent: true,
+          opacity: 0.45,
+          blending: THREE.AdditiveBlending,
+        });
+        const dLine = new THREE.Line(lineGeo, lineMat);
+        solarDipoleLines.push(dLine);
+        solarMagneticGroup.add(dLine);
+      }
+    });
+
+    // B. Open Polar Magnetic Field Lines (Polar Coronal Holes)
+    const polarOpenCount = 16;
+    for (let p = 0; p < polarOpenCount; p++) {
+      const phi = (p / polarOpenCount) * Math.PI * 2;
+      // North polar open funnel
+      const ptsN = [];
+      for (let s = 0; s <= 30; s++) {
+        const t = s / 30;
+        const rH = 0.8 + t * 4.5;
+        const yH = 2.8 + t * 24.0;
+        ptsN.push(new THREE.Vector3(rH * Math.cos(phi), yH, rH * Math.sin(phi)));
+      }
+      const geoN = new THREE.BufferGeometry().setFromPoints(ptsN);
+      const matN = new THREE.LineBasicMaterial({
+        color: 0xFBBF24,
+        transparent: true,
+        opacity: 0.35,
+        blending: THREE.AdditiveBlending,
+      });
+      solarMagneticGroup.add(new THREE.Line(geoN, matN));
+
+      // South polar open funnel
+      const ptsS = [];
+      for (let s = 0; s <= 30; s++) {
+        const t = s / 30;
+        const rH = 0.8 + t * 4.5;
+        const yH = -2.8 - t * 24.0;
+        ptsS.push(new THREE.Vector3(rH * Math.cos(phi), yH, rH * Math.sin(phi)));
+      }
+      const geoS = new THREE.BufferGeometry().setFromPoints(ptsS);
+      solarMagneticGroup.add(new THREE.Line(geoS, matN));
+    }
+
+    // C. Solar Wind Outflowing Charged Particles
+    const solarWindCount = 260;
+    const solarWindGeo = new THREE.BufferGeometry();
+    const solarWindPos = new Float32Array(solarWindCount * 3);
+    const solarWindVels = [];
+    for (let i = 0; i < solarWindCount; i++) {
+      const dir = new THREE.Vector3(
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 1.5,
+        (Math.random() - 0.5) * 2
+      ).normalize();
+      const r = 3.2 + Math.random() * 35.0;
+      solarWindPos[i * 3] = dir.x * r;
+      solarWindPos[i * 3 + 1] = dir.y * r;
+      solarWindPos[i * 3 + 2] = dir.z * r;
+      solarWindVels.push({ dir, speed: 0.18 + Math.random() * 0.22 });
+    }
+    solarWindGeo.setAttribute('position', new THREE.BufferAttribute(solarWindPos, 3));
+    const solarWindMat = new THREE.PointsMaterial({
+      color: 0xFDE047,
+      size: 0.26,
+      transparent: true,
+      opacity: 0.65,
+      blending: THREE.AdditiveBlending,
+    });
+    const solarWindPoints = new THREE.Points(solarWindGeo, solarWindMat);
+    solarMagneticGroup.add(solarWindPoints);
+
+    solarSystemGroup.add(solarMagneticGroup);
+
+    // ========================================================================
     // PLANETARY OBJECTS & ORBITAL MESHES
     // ========================================================================
     const planetObjects = [];
@@ -2209,7 +2380,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       // 3D DCL (FREE BODY DIAGRAM) VECTORS FOR PLANETARY ORBITAL MECHANICS
       // ----------------------------------------------------------------------
       const dclGroup = new THREE.Group();
-      dclGroup.visible = true;
+      dclGroup.visible = false; // Naturally deactivated by default until Visual Physic mode is toggled
 
       // Fg: Gravitational attraction (Red, pointing toward Sol)
       const arrowFg = new THREE.ArrowHelper(
@@ -2266,6 +2437,40 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       );
       dclGroup.add(arrowL);
 
+      // Dynamic Component Badges / Labels beside each vector in 3D
+      const pAstro = calculateAstrodynamics(pData, pData.semiMajorAxisAU || 1.0, pData.orbitalSpeedKms || 29.8);
+      const labelScale = Math.max(0.65, pData.size * 0.85);
+
+      const labelFg = createVectorLabelSprite(`Fg = ${pAstro.F_gravityScientific} N`, '#EF4444', '#FCA5A5');
+      if (labelFg) {
+        labelFg.scale.set(labelScale * 2.7, labelScale * 0.65, 1);
+        dclGroup.add(labelFg);
+      }
+
+      const labelV = createVectorLabelSprite(`v = ${pData.orbitalSpeedKms || '29.8 km/s'}`, '#10B981', '#A7F3D0');
+      if (labelV) {
+        labelV.scale.set(labelScale * 2.3, labelScale * 0.65, 1);
+        dclGroup.add(labelV);
+      }
+
+      const labelAc = createVectorLabelSprite(`ac = ${pAstro.a_centripetalScientific} m/s²`, '#06B6D4', '#BAE6FD');
+      if (labelAc) {
+        labelAc.scale.set(labelScale * 2.6, labelScale * 0.65, 1);
+        dclGroup.add(labelAc);
+      }
+
+      const labelFcf = createVectorLabelSprite(`Fcf = ${pAstro.F_gravityScientific} N`, '#F59E0B', '#FDE68A');
+      if (labelFcf) {
+        labelFcf.scale.set(labelScale * 2.7, labelScale * 0.65, 1);
+        dclGroup.add(labelFcf);
+      }
+
+      const labelL = createVectorLabelSprite(`L = ${pAstro.L_angularScientific} kg·m²/s`, '#A855F7', '#E9D5FF');
+      if (labelL) {
+        labelL.scale.set(labelScale * 3.0, labelScale * 0.65, 1);
+        dclGroup.add(labelL);
+      }
+
       planetAnchor.add(dclGroup);
 
       // ----------------------------------------------------------------------
@@ -2279,7 +2484,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
 
       if (pData.id === 'earth') {
         magnetosphereGroup = new THREE.Group();
-        magnetosphereGroup.visible = true;
+        magnetosphereGroup.visible = false; // Naturally deactivated by default until Magnetic Field mode is toggled
 
         // Dipole field lines: r = L * sin^2(theta)
         const lShells = [2.0, 3.0, 4.2, 5.6];
@@ -2307,6 +2512,31 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
             magnetosphereGroup.add(dLine);
           }
         });
+
+        // Van Allen Radiation Belts (Inner Proton Belt & Outer Electron Belt)
+        const innerBeltGeo = new THREE.TorusGeometry(1.65, 0.38, 16, 48);
+        const innerBeltMat = new THREE.MeshBasicMaterial({
+          color: 0x818CF8, // Violet-blue (Inner proton belt)
+          transparent: true,
+          opacity: 0.32,
+          wireframe: true,
+          blending: THREE.AdditiveBlending,
+        });
+        const innerBeltMesh = new THREE.Mesh(innerBeltGeo, innerBeltMat);
+        innerBeltMesh.rotation.x = Math.PI / 2;
+        magnetosphereGroup.add(innerBeltMesh);
+
+        const outerBeltGeo = new THREE.TorusGeometry(2.9, 0.72, 16, 48);
+        const outerBeltMat = new THREE.MeshBasicMaterial({
+          color: 0x38BDF8, // Cyan (Outer electron belt)
+          transparent: true,
+          opacity: 0.20,
+          wireframe: true,
+          blending: THREE.AdditiveBlending,
+        });
+        const outerBeltMesh = new THREE.Mesh(outerBeltGeo, outerBeltMat);
+        outerBeltMesh.rotation.x = Math.PI / 2;
+        magnetosphereGroup.add(outerBeltMesh);
 
         // Bow Shock Parabolic Shield facing Sun
         const bowGeo = new THREE.CylinderGeometry(3.6, 1.3, 4.4, 32, 1, true, -Math.PI / 2, Math.PI);
@@ -2368,6 +2598,11 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         arrowAc,
         arrowFcf,
         arrowL,
+        labelFg,
+        labelV,
+        labelAc,
+        labelFcf,
+        labelL,
         magnetosphereGroup,
         dipoleLines,
         bowShockMesh,
@@ -2578,8 +2813,31 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
       // Rotate 3D Coronal Magnetic Loops with solar photosphere
       coronalLoopsGroup.rotation.y = sunMesh.rotation.y;
 
+      // Update Solar Global Magnetic Field & Plasma Streamers
+      const isMagFieldOn = !!animStateRef.current.magneticFieldMode;
+      solarMagneticGroup.visible = isMagFieldOn;
+      if (isMagFieldOn) {
+        solarMagneticGroup.rotation.y = sunMesh.rotation.y;
+        // Animate outflowing solar wind charged particles
+        const posAttr = solarWindGeo.attributes.position;
+        const arr = posAttr.array;
+        for (let i = 0; i < solarWindCount; i++) {
+          const v = solarWindVels[i];
+          arr[i * 3] += v.dir.x * v.speed;
+          arr[i * 3 + 1] += v.dir.y * v.speed;
+          arr[i * 3 + 2] += v.dir.z * v.speed;
+          const distSq = arr[i * 3] * arr[i * 3] + arr[i * 3 + 1] * arr[i * 3 + 1] + arr[i * 3 + 2] * arr[i * 3 + 2];
+          if (distSq > 45.0 * 45.0) {
+            arr[i * 3] = v.dir.x * 3.2;
+            arr[i * 3 + 1] = v.dir.y * 3.2;
+            arr[i * 3 + 2] = v.dir.z * 3.2;
+          }
+        }
+        posAttr.needsUpdate = true;
+      }
+
       // Update Parker Spiral IMF
-      parkerGroup.visible = !!animStateRef.current.showParkerSpiral;
+      parkerGroup.visible = isMagFieldOn || !!animStateRef.current.showParkerSpiral;
       parkerGroup.rotation.y = sunMesh.rotation.y;
 
       // Update CME (Coronal Mass Ejection) shockwave & high-energy particles
@@ -2717,19 +2975,45 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         }
 
         // --------------------------------------------------------------------
-        // DCL (FREE BODY DIAGRAM) VECTORS UPDATE
+        // DCL (FREE BODY DIAGRAM) VECTORS & COMPONENT LABELS UPDATE
         // --------------------------------------------------------------------
         if (pObj.dclGroup) {
           const isFocalOrSolar = (currentLevel === 'solar' || pObj.data.id === currentActive.id);
-          pObj.dclGroup.visible = !!animStateRef.current.showDcl && isFocalOrSolar;
+          pObj.dclGroup.visible = (!!animStateRef.current.visualPhysicMode || !!animStateRef.current.showDcl) && isFocalOrSolar;
           if (pObj.dclGroup.visible) {
             const toSunLocal = new THREE.Vector3(-x, -y, -zTilted).normalize();
             const tanVLocal = new THREE.Vector3(-zTilted, 0, x).normalize();
+            const outward = toSunLocal.clone().negate();
+            const upNorm = new THREE.Vector3(0, 1, 0);
+
             pObj.arrowFg.setDirection(toSunLocal);
             pObj.arrowV.setDirection(tanVLocal);
             pObj.arrowAc.setDirection(toSunLocal);
-            pObj.arrowFcf.setDirection(toSunLocal.clone().negate());
-            pObj.arrowL.setDirection(new THREE.Vector3(0, 1, 0));
+            pObj.arrowFcf.setDirection(outward);
+            pObj.arrowL.setDirection(upNorm);
+
+            // Position 3D component labels at the tips of vector arrows
+            const fgLen = pObj.data.size * 2.8;
+            const vLen = pObj.data.size * 2.5;
+            const acLen = pObj.data.size * 2.2;
+            const fcfLen = pObj.data.size * 2.2;
+            const lLen = pObj.data.size * 2.6;
+
+            if (pObj.labelFg) {
+              pObj.labelFg.position.copy(toSunLocal).multiplyScalar(fgLen + 0.65);
+            }
+            if (pObj.labelV) {
+              pObj.labelV.position.copy(tanVLocal).multiplyScalar(vLen + 0.65);
+            }
+            if (pObj.labelAc) {
+              pObj.labelAc.position.copy(toSunLocal).multiplyScalar(acLen * 0.55).add(new THREE.Vector3(0, 0.45, 0));
+            }
+            if (pObj.labelFcf) {
+              pObj.labelFcf.position.copy(outward).multiplyScalar(fcfLen + 0.65);
+            }
+            if (pObj.labelL) {
+              pObj.labelL.position.copy(upNorm).multiplyScalar(lLen + 0.65);
+            }
           }
         }
 
@@ -2737,7 +3021,7 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         // EARTH MAGNETOSPHERE, REVERSAL & AURORAS UPDATE
         // --------------------------------------------------------------------
         if (pObj.magnetosphereGroup) {
-          pObj.magnetosphereGroup.visible = !!animStateRef.current.showMagnetosphere;
+          pObj.magnetosphereGroup.visible = !!animStateRef.current.magneticFieldMode || !!animStateRef.current.showMagnetosphere || !!animStateRef.current.isCmeActive || !!animStateRef.current.isReversing;
           const isReversingNow = animStateRef.current.isReversing;
           
           if (isReversingNow) {
@@ -3020,6 +3304,13 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) obj.material.dispose();
       });
+      solarMagneticGroup.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) {
+          if (obj.material.map) obj.material.map.dispose();
+          obj.material.dispose();
+        }
+      });
       rockGeo.dispose();
       rockMat.dispose();
 
@@ -3040,7 +3331,10 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
         if (pObj.dclGroup) {
           pObj.dclGroup.traverse((child) => {
             if (child.geometry) child.geometry.dispose();
-            if (child.material) child.material.dispose();
+            if (child.material) {
+              if (child.material.map) child.material.map.dispose();
+              child.material.dispose();
+            }
           });
         }
         if (pObj.magnetosphereGroup) {
@@ -3141,6 +3435,48 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                 🌌 {lang === 'en' ? 'Galaxy' : 'Galaxia'}
               </button>
             </div>
+
+            {/* VISUAL PHYSIC MODE TOGGLE BUTTON */}
+            <button
+              onClick={() => {
+                const nextVal = !visualPhysicMode;
+                setVisualPhysicMode(nextVal);
+                setShowDcl(nextVal);
+                animStateRef.current.visualPhysicMode = nextVal;
+                animStateRef.current.showDcl = nextVal;
+                if (nextVal) setActivePhysicsTab('dcl');
+              }}
+              className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
+                visualPhysicMode
+                  ? 'bg-sky-600 text-white border-sky-400 shadow-sky-500/30'
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
+              }`}
+              title="Visual Physic mode: Muestra fuerzas, aceleraciones y componentes Fg, ac, v, Fcf, L en 3D"
+            >
+              <span className={`w-2 h-2 rounded-full ${visualPhysicMode ? 'bg-cyan-300 animate-pulse' : 'bg-slate-500'}`} />
+              <span>⚛️ Visual Physic mode</span>
+            </button>
+
+            {/* MAGNETIC FIELD MODE TOGGLE BUTTON */}
+            <button
+              onClick={() => {
+                const nextVal = !magneticFieldMode;
+                setMagneticFieldMode(nextVal);
+                setShowMagnetosphere(nextVal);
+                animStateRef.current.magneticFieldMode = nextVal;
+                animStateRef.current.showMagnetosphere = nextVal;
+                if (nextVal) setActivePhysicsTab('magnetism');
+              }}
+              className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
+                magneticFieldMode
+                  ? 'bg-amber-600 text-white border-amber-400 shadow-amber-500/30'
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
+              }`}
+              title="Magnetic Field mode: Visualiza los campos magnéticos activos del Sol y la Tierra"
+            >
+              <span className={`w-2 h-2 rounded-full ${magneticFieldMode ? 'bg-amber-300 animate-pulse' : 'bg-slate-500'}`} />
+              <span>🧲 Magnetic Field mode</span>
+            </button>
 
             {/* MAGNETISM & ASTROPHYSICS DROPDOWN BUTTON */}
             <div className="relative">
@@ -3347,6 +3683,42 @@ export default function SolarSystem({ onSelectSubject, selectedSubjectId, lang =
                 }`}
               >
                 {isRealScale ? '✕ Salir Escala Real' : '🔭 Escala Real 1:1'}
+              </button>
+
+              <button
+                onClick={() => {
+                  const nextVal = !visualPhysicMode;
+                  setVisualPhysicMode(nextVal);
+                  setShowDcl(nextVal);
+                  animStateRef.current.visualPhysicMode = nextVal;
+                  animStateRef.current.showDcl = nextVal;
+                  if (nextVal) setActivePhysicsTab('dcl');
+                }}
+                className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all ${
+                  visualPhysicMode
+                    ? 'bg-sky-600 text-white border-sky-400'
+                    : 'bg-slate-900 text-slate-400 border-slate-850 hover:text-white'
+                }`}
+              >
+                {visualPhysicMode ? '✓ Visual Physic: ON' : '⚛️ Visual Physic mode'}
+              </button>
+
+              <button
+                onClick={() => {
+                  const nextVal = !magneticFieldMode;
+                  setMagneticFieldMode(nextVal);
+                  setShowMagnetosphere(nextVal);
+                  animStateRef.current.magneticFieldMode = nextVal;
+                  animStateRef.current.showMagnetosphere = nextVal;
+                  if (nextVal) setActivePhysicsTab('magnetism');
+                }}
+                className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all ${
+                  magneticFieldMode
+                    ? 'bg-amber-600 text-white border-amber-400'
+                    : 'bg-slate-900 text-slate-400 border-slate-850 hover:text-white'
+                }`}
+              >
+                {magneticFieldMode ? '✓ Magnetic Field: ON' : '🧲 Magnetic Field mode'}
               </button>
 
               <button

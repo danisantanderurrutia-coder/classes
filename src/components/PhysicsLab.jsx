@@ -1146,33 +1146,46 @@ export const LAB_PROBLEMS = [
         values: { strike: 80, dip: 35, rake: 90, magnitude: 7.5 }
       }
     ],
-    theory: {
-      formula: 'M_{ij} = M_0 (u_i n_j + u_j n_i) \\quad , \\quad \\frac{v_P}{v_S} = \\sqrt{\\frac{\\lambda + 2\\mu}{\\mu}} \\approx \\sqrt{3}',
-      descriptionEs:
-        'Un terremoto es una dislocación por cizalle en una falla geológica caracterizada por tres ángulos: Rumbo (Strike φ, dirección respecto al Norte), Buzamiento (Dip δ, inclinación respecto a la horizontal) y Deslizamiento (Rake λ, dirección del movimiento relativo del bloque techo). La pelota de playa (beachball) es la proyección estereográfica del hemisferio inferior de la esfera focal: los cuadrantes oscuros representan compresión (primer arribo de onda P hacia arriba) y los blancos dilatación (primer arribo hacia abajo).',
-      descriptionEn:
-        'An earthquake is a shear dislocation on a fault plane defined by three angles: Strike (φ, orientation from North), Dip (δ, angle from horizontal), and Rake (λ, slip direction of hanging wall). The beachball represents the lower-hemisphere stereographic projection: shaded quadrants are compressional (P-wave upward first motion) and white quadrants are dilatational (downward first motion).'
+    algebraSection: {
+      titleEs: 'Tensor de Momento Sísmico M_ij y Proyección Estereográfica',
+      titleEn: 'Seismic Moment Tensor M_ij & Stereographic Projection',
+      formulas: [
+        {
+          labelEs: '1. Tensor de Momento Sísmico de Doble Par (Double Couple):',
+          labelEn: '1. Double Couple Seismic Moment Tensor:',
+          eq: 'M_ij = M₀ (u_i n_j + u_j n_i)   donde u⃗ = slip, n̂ = normal de falla, Tr(M) = 0'
+        },
+        {
+          labelEs: '2. Relación de Kanamori para Magnitud de Momento (Mw):',
+          labelEn: '2. Kanamori Relation for Moment Magnitude (Mw):',
+          eq: 'M_w = ⅔ (log₁₀ M₀ - 9.1)     ;     M₀ = μ · A · D  (N·m)'
+        },
+        {
+          labelEs: '3. Descomposición Espectral en Ejes Principales (P, T, B):',
+          labelEn: '3. Spectral Decomposition into Principal Axes (P, T, B):',
+          eq: 'P⃗ = (n̂ - u⃗)/√2 (Compresión Máxima)   ;   T⃗ = (n̂ + u⃗)/√2 (Tracción Máxima)'
+        }
+      ]
     },
-    klausurProblem: {
-      titleEs: 'Problema Klausur: Momento Sísmico y Clasificación Tectónica de Falla',
-      titleEn: 'Klausur Exam Problem: Seismic Moment & Fault Tectonic Classification',
-      statementEs:
-        'En la zona de subducción de Chile central ocurre un megaterremoto de magnitud Mw = 8.8 sobre un plano de falla con rumbo φ = 15°, buzamiento δ = 18° y ángulo de deslizamiento λ = 90°. (a) Calcule el momento sísmico escalar M₀ en N·m usando la escala de Kanamori (log₁₀ M₀ = 1.5 Mw + 9.1). (b) Clasifique el régimen cinemático de la falla y determine las orientaciones relativas de los ejes de presión (P) y tensión (T). (c) Si la rigidez cortical es μ = 3.5×10¹⁰ Pa y el área de ruptura es A = 400 km × 150 km, calcule el desplazamiento medio de deslizamiento D en metros.',
-      statementEn:
-        'In the central Chile subduction zone, a megathrust earthquake of magnitude Mw = 8.8 occurs on a fault plane with strike φ = 15°, dip δ = 18°, and rake λ = 90°. (a) Compute scalar seismic moment M₀ in N·m via Kanamori formula (log₁₀ M₀ = 1.5 Mw + 9.1). (b) Classify the kinematic fault regime and identify orientations of pressure (P) and tension (T) axes. (c) Given crustal shear modulus μ = 3.5×10¹⁰ Pa and rupture area A = 400 km × 150 km, compute mean fault slip D in meters.',
-      hintEs: 'Aplica log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.3, luego M₀ = 10²²·³. Para el deslizamiento, despeja D = M₀ / (μ · A).',
-      hintEn: 'Compute log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.3, so M₀ = 10²²·³. For slip, isolate D = M₀ / (μ · A).',
-      solutionStepsEs: [
-        '1. Momento sísmico: log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 13.2 + 9.1 = 22.30 ⇒ M₀ = 10²²·³⁰ ≈ 1.995 × 10²² N·m.',
-        '2. Clasificación: Rake λ = 90° corresponde a una falla inversa pura (thrust faulting). El eje P (compresión máxima) es horizontal subhorizontal en dirección E-W (perpendicular a la fosa), mientras que el eje T es casi vertical.',
-        '3. Área: A = 400×10³ m × 150×10³ m = 6.0 × 10¹⁰ m².',
-        '4. Deslizamiento medio: D = M₀ / (μ · A) = (1.995 × 10²² N·m) / (3.5 × 10¹⁰ Pa × 6.0 × 10¹⁰ m²) ≈ 9.50 metros de desplazamiento cosísmico.'
-      ],
-      solutionStepsEn: [
-        '1. Seismic moment: log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.30 ⇒ M₀ = 10²²·³⁰ ≈ 1.995 × 10²² N·m.',
-        '2. Classification: Rake λ = 90° corresponds to pure reverse/thrust faulting. The P-axis (maximum compression) is subhorizontal E-W perpendicular to trench, while T-axis is nearly vertical.',
-        '3. Area: A = 400×10³ m × 150×10³ m = 6.0 × 10¹⁰ m².',
-        '4. Mean fault slip: D = M₀ / (μ · A) = (1.995 × 10²² N·m) / (3.5 × 10¹⁰ Pa × 6.0 × 10¹⁰ m²) ≈ 9.50 meters of coseismic displacement.'
+    calculusSection: {
+      titleEs: 'Ecuación Elastodinámica de Navier-Cauchy y Ondas P/S',
+      titleEn: 'Navier-Cauchy Elastodynamic PDE & P/S Wave Separation',
+      formulas: [
+        {
+          labelEs: '1. Ecuación de Navier-Cauchy en medios continuos elásticos:',
+          labelEn: '1. Navier-Cauchy elastodynamic continuous medium equation:',
+          eq: 'ρ ∂²u⃗/∂t² = (λ + μ) ∇(∇·u⃗) + μ ∇²u⃗ + f⃗'
+        },
+        {
+          labelEs: '2. Descomposición de Helmholtz en potencial escalar y vectorial:',
+          labelEn: '2. Helmholtz decomposition into scalar & vector potentials:',
+          eq: 'u⃗ = ∇φ + ∇ × ψ⃗   ⇒   ∂²φ/∂t² = v_P² ∇²φ   ;   ∂²ψ⃗/∂t² = v_S² ∇²ψ⃗'
+        },
+        {
+          labelEs: '3. Velocidades elásticas de ondas de cuerpo y razón teórica:',
+          labelEn: '3. Elastic body wave velocities & theoretical ratio:',
+          eq: 'v_P = √((λ + 2μ)/ρ)   ;   v_S = √(μ/ρ)   ⇒   v_P / v_S = √((λ+2μ)/μ) ≈ √3 ≈ 1.73'
+        }
       ]
     },
     exercise: {
@@ -1241,35 +1254,46 @@ export const LAB_PROBLEMS = [
         values: { mountainHeight: 5500, crustDensity: 2500, mantleDensity: 3300, crustThickness: 40 }
       }
     ],
-    theory: {
-      formula: '\\nabla^2 U = 4\\pi G \\rho \\quad , \\quad b = h\\frac{\\rho_c}{\\rho_m - \\rho_c} \\quad , \\quad \\Delta g_B = g_{\\text{obs}} - g_0 + 0.3086 h - 2\\pi G \\rho_c h',
-      descriptionEs:
-        'En gravimetría, la ley de gravitación de Newton se expresa mediante la Ecuación de Poisson para el potencial gravitacional U. La anomalía de Bouguer elimina la atracción de la placa topográfica sobre el nivel del mar (+2πGρ_c h). En cordilleras jóvenes en equilibrio isostático de Airy, el exceso de masa superficial está compensado por una raíz cortical de baja densidad (ρ_c ≈ 2670 kg/m³) que penetra en el manto denso (ρ_m ≈ 3300 kg/m³). Como el sensor en superficie está más cerca de la corteza que de la raíz, pero la corrección de Bouguer resta la montaña, la anomalía de Bouguer resultante es fuertemente negativa.',
-      descriptionEn:
-        'In gravimetry, Newton gravitational law becomes Poissons PDE ∇²U = 4πGρ. The Bouguer correction removes the gravitational pull of the elevated terrain slab (+2πGρ_c h). In mountain belts under Airy isostatic equilibrium, topographic load is compensated by a low-density crustal root displacing dense mantle. Subtracting the topographic slab reveals the negative gravitational deficit of the deep root.'
+    algebraSection: {
+      titleEs: 'Balance Isostático de Airy y Correcciones Gravimétricas',
+      titleEn: 'Airy Isostatic Balance & Gravimetric Reductions',
+      formulas: [
+        {
+          labelEs: '1. Condición de Compensación Isostática de Airy (Presión Litostática):',
+          labelEn: '1. Airy Isostatic Compensation (Lithostatic Pressure Balance):',
+          eq: 'ρ_c (h + H₀ + b) = ρ_c H₀ + ρ_m b   ⇒   b = h · ρ_c / (ρ_m - ρ_c)'
+        },
+        {
+          labelEs: '2. Corrección de Placa de Bouguer (Atracción de Masa Topográfica):',
+          labelEn: '2. Bouguer Slab Reduction (Topographic Mass Attraction):',
+          eq: 'δg_BS = -2π G ρ_c h ≈ -0.04193 · 10⁻³ · ρ_c · h  (mGal)'
+        },
+        {
+          labelEs: '3. Anomalía Completa de Bouguer en Cordillera:',
+          labelEn: '3. Complete Bouguer Anomaly across Mountain Ranges:',
+          eq: 'Δg_B = g_obs - g₀ + 0.3086 h - 2πG ρ_c h + δg_root  (Valores fuertemente negativos en Andes)'
+        }
+      ]
     },
-    klausurProblem: {
-      titleEs: 'Problema Klausur: Raíz Isostática y Anomalía de Bouguer en los Andes',
-      titleEn: 'Klausur Exam Problem: Isostatic Root & Bouguer Anomaly in the Andes',
-      statementEs:
-        'En un perfil transversal de los Andes Centrales a 22°S, la altitud media del Altiplano es h = 4000 m. Suponiendo equilibrio isostático de Airy con densidad de corteza ρ_c = 2670 kg/m³ y densidad de manto ρ_m = 3300 kg/m³: (a) Deduzca el espesor de la raíz cortical b que penetra en el manto. (b) Calcule el espesor total de corteza bajo el Altiplano si la corteza de referencia en la costa es H₀ = 35 km. (c) Calcule la corrección de placa de Bouguer Δg_BP producida por la topografía superficial.',
-      statementEn:
-        'Across an Andean transect at 22°S, average Altiplano elevation is h = 4000 m. Under Airy isostasy with crustal density ρ_c = 2670 kg/m³ and mantle density ρ_m = 3300 kg/m³: (a) Derive depth b of the crustal root penetrating the mantle. (b) Calculate total crustal thickness beneath the Altiplano given reference normal crust H₀ = 35 km. (c) Calculate the Bouguer plate correction Δg_BP produced by the surface topography.',
-      hintEs: 'Iguala la presión litostática a la profundidad de compensación: ρ_c · (h + H₀ + b) = ρ_c · H₀ + ρ_m · b. Luego despeja b = h · ρ_c / (ρ_m - ρ_c).',
-      hintEn: 'Equate lithostatic pressure at the compensation level: ρ_c · (h + H₀ + b) = ρ_c · H₀ + ρ_m · b. Then b = h · ρ_c / (ρ_m - ρ_c).',
-      solutionStepsEs: [
-        '1. Balance isostático de Airy: b = h · ρ_c / (ρ_m - ρ_c).',
-        '2. Sustitución de densidades: Contraste Δρ = 3300 - 2670 = 630 kg/m³.',
-        '3. Espesor de la raíz: b = 4000 m · (2670 / 630) ≈ 16,952 metros (≈ 17.0 km de raíz cortical en el manto).',
-        '4. Espesor total de corteza: H_total = H₀ + h + b = 35 km + 4.0 km + 17.0 km ≈ 56.0 km de corteza engrosada.',
-        '5. Corrección de Bouguer: Δg_BP = 2π G ρ_c h = 0.04193 · 10⁻³ · 2670 · 4000 ≈ 447.8 mGal de masa topográfica eliminada.'
-      ],
-      solutionStepsEn: [
-        '1. Airy isostatic balance: b = h · ρ_c / (ρ_m - ρ_c).',
-        '2. Density contrast: Δρ = 3300 - 2670 = 630 kg/m³.',
-        '3. Root thickness: b = 4000 m · (2670 / 630) ≈ 16,952 meters (≈ 17.0 km crustal root in mantle).',
-        '4. Total crustal thickness: H_total = H₀ + h + b = 35 km + 4.0 km + 17.0 km ≈ 56.0 km thickened crust.',
-        '5. Bouguer slab correction: Δg_BP = 2π G ρ_c h = 0.04193 · 10⁻³ · 2670 · 4000 ≈ 447.8 mGal of topographic mass subtracted.'
+    calculusSection: {
+      titleEs: 'Ecuación de Poisson para el Potencial Gravitacional',
+      titleEn: 'Poisson PDE for Gravitational Potential Fields',
+      formulas: [
+        {
+          labelEs: '1. Ecuación diferencial parcial de Poisson (Ley de Gauss gravitatoria):',
+          labelEn: '1. Poisson Partial Differential Equation (Gravitational Gauss Law):',
+          eq: '∇² U = 4π G ρ(x⃗)   ⇒   g⃗ = -∇U'
+        },
+        {
+          labelEs: '2. Solución integral por función de Green en semiespacio 3D:',
+          labelEn: '2. Green function integral solution in 3D half-space:',
+          eq: 'U(x⃗) = -G ∭ (ρ(x⃗\') / |x⃗ - x⃗\'|) dV\''
+        },
+        {
+          labelEs: '3. Tensor de Gradiente Gravimétrico (Segundas Derivadas Cruzadas):',
+          labelEn: '3. Gravity Gradient Tensor (Cross Second Derivatives):',
+          eq: 'Γ_ij = ∂²U / ∂x_i ∂x_j   con   Tr(Γ) = ∇²U = 4π G ρ (Ecuación diferencial local)'
+        }
       ]
     },
     exercise: {
@@ -1337,35 +1361,46 @@ export const LAB_PROBLEMS = [
         values: { windSpeed: 8, latitude: 5, eddyViscosity: 0.05 }
       }
     ],
-    theory: {
-      formula: 'A_z \\frac{\\partial^2 V}{\\partial z^2} - i f V = 0 \\quad \\implies \\quad V(z) = V_0 e^{-(1+i)z/D_E} \\quad , \\quad \\vec{M}_E = \\frac{\\vec{\\tau}_0 \\times \\hat{k}}{\\rho f}',
-      descriptionEs:
-        'Vagn Walfrid Ekman resolvió en 1905 la interacción entre el viento y el océano. En la columna de agua, la fricción turbulenta transmite momento hacia abajo, mientras que la rotación terrestre introduce la aceleración de Coriolis. El sistema de EDOs acopladas se unifica elegantemente en variable compleja con la velocidad compleja V(z) = u(z) + i v(z). En superficie, la corriente se desvía 45° de la dirección del viento (a la izquierda en Chile / Hemisferio Sur). Al integrar en toda la columna, el Transporte Neto de Ekman es exactamente ortogonal (90°) al viento. Cuando vientos soplan hacia el norte a lo largo de la costa de Chile, el agua superficial es empujada mar adentro (hacia el oeste), obligando a aguas abisales frías y ricas en fosfatos y nitratos a emerger (surgencia costera).',
-      descriptionEn:
-        'Ekman solved the wind-ocean interface in 1905. Turbulent friction transfers wind stress downward while Earth rotation imparts Coriolis acceleration. The coupled system unifies in complex variables V(z) = u + iv. Surface currents deflect 45° (to the left in the Southern Hemisphere / Chile). Integrating vertically yields a net Ekman Transport exactly 90° to the wind. Northerly winds along Chiles coast transport surface water westward offshore, forcing cold, nutrient-rich deep waters to upwell.'
+    algebraSection: {
+      titleEs: 'Velocidad Compleja V(z) y Transporte Neto de Ekman a 90°',
+      titleEn: 'Complex Velocity V(z) & 90° Net Ekman Transport',
+      formulas: [
+        {
+          labelEs: '1. Desviación superficial a 45° de la corriente inducida por viento:',
+          labelEn: '1. Surface current 45° deflection under wind stress:',
+          eq: 'V₀ = τ₀ / (ρ √( |f| A_z ))   con   θ_sup = ±45° (Izquierda en Chile, Derecha en Hem. Norte)'
+        },
+        {
+          labelEs: '2. Transporte Neto Integrado de Masa de Ekman (M_E):',
+          labelEn: '2. Net Depth-Integrated Ekman Transport (M_E):',
+          eq: 'M⃗_E = (τ⃗₀ × k̂) / (ρ f)   ⇒   Dirección exactamente ortogonal (90°) al viento'
+        },
+        {
+          labelEs: '3. Parámetro de Coriolis y Profundidad de Ekman:',
+          labelEn: '3. Coriolis Parameter & Ekman Boundary Layer Depth:',
+          eq: 'f = 2Ω sin(φ)     ;     D_E = π √( 2 A_z / |f| )'
+        }
+      ]
     },
-    klausurProblem: {
-      titleEs: 'Problema Klausur: Profundidad de Ekman y Transporte de Surgencia en Valparaíso',
-      titleEn: 'Klausur Exam Problem: Ekman Depth & Coastal Upwelling Transport in Valparaíso',
-      statementEs:
-        'Frente a las costas de Valparaíso (latitud φ = -33°S), un viento del sur sopla paralelo a la costa con velocidad W = 12 m/s. La viscosidad turbulenta vertical del agua es A_z = 0.05 m²/s y la densidad del agua de mar es ρ = 1025 kg/m³. El coeficiente de arrastre del viento es C_D = 1.3×10⁻³ con densidad del aire ρ_a = 1.22 kg/m³. (a) Calcule el parámetro de Coriolis f y la profundidad de la capa de Ekman D_E. (b) Calcule la tensión superficial del viento τ₀ en Pa. (c) Calcule la magnitud del Transporte neto de Ekman M_E por unidad de ancho de costa y determine su dirección geográfica.',
-      statementEn:
-        'Off the coast of Valparaíso (latitude φ = -33°S), a southerly wind blows parallel to the coast at W = 12 m/s. Vertical eddy viscosity is A_z = 0.05 m²/s, seawater density is ρ = 1025 kg/m³, drag coefficient C_D = 1.3×10⁻³, and air density ρ_a = 1.22 kg/m³. (a) Calculate Coriolis parameter f and Ekman depth D_E. (b) Compute surface wind stress τ₀ in Pa. (c) Compute the magnitude of net Ekman transport M_E per unit coastline width and identify its geographic direction.',
-      hintEs: 'Usa f = 2 · Ω · sin(φ) con Ω = 7.292×10⁻⁵ rad/s. D_E = π · √(2 A_z / |f|). M_E = τ₀ / (ρ · |f|).',
-      hintEn: 'Use f = 2 · Ω · sin(φ) with Ω = 7.292×10⁻⁵ rad/s. D_E = π · √(2 A_z / |f|). M_E = τ₀ / (ρ · |f|).',
-      solutionStepsEs: [
-        '1. Parámetro de Coriolis: f = 2 · 7.292×10⁻⁵ · sin(-33°) ≈ -7.943 × 10⁻⁵ s⁻¹ (|f| = 7.943×10⁻⁵ s⁻¹).',
-        '2. Profundidad de Ekman: D_E = π · √(2 · 0.05 / 7.943×10⁻⁵) = π · √(1258.9) ≈ π · 35.48 ≈ 111.5 metros.',
-        '3. Tensión del viento: τ₀ = ρ_a · C_D · W² = 1.22 · 1.3×10⁻³ · 12² = 1.22 · 0.0013 · 144 ≈ 0.228 Pa (N/m²).',
-        '4. Transporte de Ekman: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) = 0.228 / 0.0814 ≈ 2.80 m² / s (toneladas de agua por segundo por cada metro de costa).',
-        '5. Dirección: En el Hemisferio Sur, el transporte neto es a 90° a la IZQUIERDA del viento. Si el viento va hacia el Norte, el agua se desplaza hacia el OESTE (mar adentro), activando la surgencia costera.'
-      ],
-      solutionStepsEn: [
-        '1. Coriolis parameter: f = 2 · 7.292×10⁻⁵ · sin(-33°) ≈ -7.943 × 10⁻⁵ s⁻¹ (|f| = 7.943×10⁻⁵ s⁻¹).',
-        '2. Ekman depth: D_E = π · √(2 · 0.05 / 7.943×10⁻⁵) = π · √(1258.9) ≈ 111.5 meters.',
-        '3. Wind stress: τ₀ = ρ_a · C_D · W² = 1.22 · 1.3×10⁻³ · 12² ≈ 0.228 Pa (N/m²).',
-        '4. Ekman transport: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) ≈ 2.80 m²/s per meter of coastline.',
-        '5. Direction: In the Southern Hemisphere, transport is 90° to the LEFT of wind. With a northward wind, transport is directed WESTWARD (offshore), triggering coastal upwelling.'
+    calculusSection: {
+      titleEs: 'EDO Compleja de Viscosidad y Bombeo de Surgencia Costera',
+      titleEn: 'Complex Viscous ODE & Coastal Upwelling Ekman Pumping',
+      formulas: [
+        {
+          labelEs: '1. Sistema de EDOs acopladas unificadas en variable compleja V = u + iv:',
+          labelEn: '1. Coupled viscous ODE system unified via complex velocity V = u + iv:',
+          eq: 'A_z d²V/dz² - i f V = 0   con condición de borde   A_z dV/dz|_{z=0} = τ₀/ρ'
+        },
+        {
+          labelEs: '2. Solución analítica exponencial amortiguada (Espiral):',
+          labelEn: '2. Damped exponential analytical solution (Spiral):',
+          eq: 'V(z) = V₀ · exp( -(1 ± i) z / D_E )'
+        },
+        {
+          labelEs: '3. Velocidad vertical de surgencia por divergencia (Bombeo de Ekman):',
+          labelEn: '3. Vertical upwelling velocity via transport divergence (Ekman Pumping):',
+          eq: 'w_E = (1 / (ρ f)) (∇ × τ⃗₀)_z   (Ascenso de aguas frías ricas en nutrientes)'
+        }
       ]
     },
     exercise: {
@@ -1434,33 +1469,46 @@ export const LAB_PROBLEMS = [
         values: { frequency: 150, resTop: 25, resBottom: 800, layerThickness: 80 }
       }
     ],
-    theory: {
-      formula: '\\nabla^2 \\vec{E} = \\mu_0 \\sigma \\frac{\\partial \\vec{E}}{\\partial t} \\quad \\implies \\quad \\delta \\approx 503 \\sqrt{\\frac{\\rho}{f}} \\quad , \\quad \\rho_a(\\omega) = \\frac{1}{\\omega \\mu_0} \\left| \\frac{E_x}{H_y} \\right|^2',
-      descriptionEs:
-        'En medios conductores como la Tierra, las ecuaciones de Maxwell para bajas frecuencias desprecian la corriente de desplazamiento (∂D/∂t ≈ 0), convirtiéndose en la Ecuación de Difusión electromagnética. Las ondas EM planas incidentes verticalmente se atenúan exponencialmente con la profundidad z como exp(-z / δ), donde δ es el Skin Depth (profundidad donde la amplitud cae a 1/e ≈ 37%). A menor frecuencia f, mayor es la profundidad sondeada. La impedancia de superficie Z = Ex / Hy permite calcular la resistividad aparente ρ_a(T) y la fase φ(T), permitiendo reconstruir la estratigrafía y acuíferos del subsuelo sin perforar.',
-      descriptionEn:
-        'In conducting media like the Earth, Maxwell equations at low frequencies neglect displacement currents (∂D/∂t ≈ 0), reducing to an EM diffusion equation. Plane EM waves decay exponentially as exp(-z / δ), where skin depth δ ≈ 503 √(ρ/f). Lower frequencies penetrate deeper into the Earth. Measuring surface impedance Z = Ex / Hy yields apparent resistivity ρ_a(T) and phase φ(T), imaging deep subsurface geology and geothermal reservoirs non-invasively.'
+    algebraSection: {
+      titleEs: 'Impedancia de Superficie y Resistividad Aparente de Cagniard',
+      titleEn: 'Surface Wave Impedance & Cagniard Apparent Resistivity',
+      formulas: [
+        {
+          labelEs: '1. Módulo de impedancia de onda electromagnética en superficie:',
+          labelEn: '1. Surface electromagnetic wave impedance modulus:',
+          eq: 'Z(ω) = E_x / H_y = √( i ω μ₀ ρ )   (Ω, Volts/Ampere)'
+        },
+        {
+          labelEs: '2. Fórmula de resistividad aparente de Cagniard:',
+          labelEn: '2. Cagniard apparent resistivity formula:',
+          eq: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (con T = 1/f)'
+        },
+        {
+          labelEs: '3. Fórmula práctica de profundidad de penetración (Skin Depth):',
+          labelEn: '3. Practical Skin Depth penetration formula:',
+          eq: 'δ ≈ √( 2 / (ω μ₀ σ) ) ≈ 503 √( ρ / f )   (metros)'
+        }
+      ]
     },
-    klausurProblem: {
-      titleEs: 'Problema Klausur: Skin Depth e Impedancia Magnetotelúrica en Campo Geotérmico',
-      titleEn: 'Klausur Exam Problem: Skin Depth & MT Surface Impedance in Geothermal Field',
-      statementEs:
-        'En una campaña magnetotelúrica en el campo geotérmico de El Tatio (Antofagasta, Chile), se mide una onda EM de frecuencia f = 4 Hz sobre una capa arcillosa hidrotermal de resistividad ρ₁ = 16 Ω·m. (a) Calcule la profundidad de penetración (Skin Depth) δ en metros. (b) Calcule el módulo de la impedancia de onda superficial |Z| = |Ex / Hy| en Ohms si μ₀ = 4π×10⁻⁷ H/m. (c) Si se desea investigar la cámara magmática situada a z = 8000 m en una roca de resistividad media ρ = 100 Ω·m, ¿cuál es la frecuencia máxima f_max que puede emplearse?',
-      statementEn:
-        'In a magnetotelluric survey at El Tatio geothermal field (Antofagasta, Chile), an EM wave with frequency f = 4 Hz is recorded over a hydrothermal clay cap of resistivity ρ₁ = 16 Ω·m. (a) Calculate skin depth δ in meters. (b) Compute surface wave impedance |Z| = |Ex / Hy| in Ohms with μ₀ = 4π×10⁻⁷ H/m. (c) To image a magma chamber at depth z = 8000 m through host rock of average resistivity ρ = 100 Ω·m, what maximum frequency f_max must be used?',
-      hintEs: 'Aplica δ ≈ 503 · √(ρ / f). Para la impedancia, |Z| = √(ω · μ₀ · ρ) con ω = 2π f. Para la frecuencia, iguala δ = z y despeja f.',
-      hintEn: 'Apply δ ≈ 503 · √(ρ / f). For impedance, |Z| = √(ω · μ₀ · ρ) with ω = 2π f. For frequency, set δ = z and solve for f.',
-      solutionStepsEs: [
-        '1. Skin depth en capa geotérmica: δ₁ = 503 · √(16 / 4) = 503 · √4 = 503 · 2 = 1006 metros.',
-        '2. Frecuencia angular: ω = 2π · 4 = 8π ≈ 25.13 rad/s.',
-        '3. Módulo de impedancia Cagniard: |Z| = √(ω · μ₀ · ρ₁) = √(25.13 · 4π×10⁻⁷ · 16) = √(5.053×10⁻⁴) ≈ 0.0225 Ω (V/A).',
-        '4. Frecuencia para investigar z = 8000 m: Despejamos f de δ = 503 · √(ρ / f) ⇒ √f = 503 · √ρ / z ⇒ f = (503 · √100 / 8000)² = (5030 / 8000)² = (0.62875)² ≈ 0.395 Hz (período T ≈ 2.53 segundos).'
-      ],
-      solutionStepsEn: [
-        '1. Geothermal skin depth: δ₁ = 503 · √(16 / 4) = 503 · 2 = 1006 meters.',
-        '2. Angular frequency: ω = 2π · 4 ≈ 25.13 rad/s.',
-        '3. Cagniard surface impedance: |Z| = √(ω · μ₀ · ρ₁) = √(25.13 · 4π×10⁻⁷ · 16) ≈ 0.0225 Ω.',
-        '4. Maximum frequency for z = 8000 m: δ = 503 · √(ρ / f) ⇒ √f = 503 · √100 / 8000 ⇒ f = (5030 / 8000)² ≈ 0.395 Hz (period T ≈ 2.53 seconds).'
+    calculusSection: {
+      titleEs: 'Ecuación de Difusión de Maxwell y Función de Impedancia de Riccati',
+      titleEn: 'Maxwell Diffusion PDE & Riccati Multilayer Impedance',
+      formulas: [
+        {
+          labelEs: '1. Ecuación de difusión electromagnética cuasi-estacionaria en la Tierra:',
+          labelEn: '1. Quasi-stationary electromagnetic diffusion PDE in conductive Earth:',
+          eq: '∇² E⃗ = μ₀ σ ∂E⃗/∂t   (Corriente de desplazamiento ∂D/∂t despreciable)'
+        },
+        {
+          labelEs: '2. Solución armónica en profundidad para semiespacio homogéneo:',
+          labelEn: '2. Harmonic depth solution in homogeneous half-space:',
+          eq: 'E_x(z, t) = E₀ · e^{-z/δ} · cos(ω t - z/δ)'
+        },
+        {
+          labelEs: '3. Ecuación diferencial no lineal de Riccati para subsuelo estratificado:',
+          labelEn: '3. Nonlinear Riccati differential equation for stratified ground:',
+          eq: 'dZ/dz - (σ / μ₀) Z² = i ω   (Recursión de capas para inversión tomográfica)'
+        }
       ]
     },
     exercise: {

@@ -1496,11 +1496,12 @@ const EarthDayNightShader = {
 
       float isOcean = step(dayColor.r, 0.14) * (1.0 - step(dayColor.b, 0.25));
       vec3 halfVector = normalize(sunDir + viewDir);
-      float spec = pow(max(0.0, dot(normal, halfVector)), 24.0) * isOcean * dayFactor;
+      float spec = pow(max(0.0, dot(normal, halfVector)), 28.0) * isOcean * dayFactor;
 
-      vec3 litDay = dayColor.rgb * (dayFactor * 4.4 + 0.42) + spec * vec3(1.0, 0.95, 0.85);
-      vec3 nightSilhouette = dayColor.rgb * 0.35;
-      vec3 litNight = nightSilhouette + nightLights.rgb * nightFactor * 2.8;
+      float diffuse = clamp(nDotL, 0.0, 1.0);
+      vec3 litDay = dayColor.rgb * (diffuse * 0.92 + 0.10) + spec * 0.35 * vec3(0.85, 0.95, 1.0);
+      vec3 nightSilhouette = dayColor.rgb * 0.04;
+      vec3 litNight = nightSilhouette + nightLights.rgb * nightFactor * 1.5;
 
       vec3 finalColor = mix(litNight, litDay, dayFactor);
       gl_FragColor = vec4(finalColor, 1.0);
@@ -1513,7 +1514,7 @@ const GargantuaDiskShader = {
   uniforms: {
     uTime: { value: 0 },
     uExposure: { value: 1.0 },
-    uInnerRadius: { value: 9.0 },
+    uInnerRadius: { value: 8.6 },
     uOuterRadius: { value: 34.0 },
   },
   vertexShader: `
@@ -1521,12 +1522,15 @@ const GargantuaDiskShader = {
     varying vec3 vPosition;
     varying vec3 vWorldPosition;
     varying vec2 vUv;
+    varying vec3 vWorldTangent;
     void main() {
       vUv = uv;
       vNormal = normalize(normalMatrix * normal);
       vPosition = position;
       vec4 worldPos = modelMatrix * vec4(position, 1.0);
       vWorldPosition = worldPos.xyz;
+      vec3 localTangent = normalize(vec3(-position.y, position.x, 0.0));
+      vWorldTangent = normalize(mat3(modelMatrix) * localTangent);
       gl_Position = projectionMatrix * viewMatrix * worldPos;
     }
   `,
@@ -1539,13 +1543,17 @@ const GargantuaDiskShader = {
     varying vec3 vPosition;
     varying vec3 vWorldPosition;
     varying vec2 vUv;
+    varying vec3 vWorldTangent;
 
     void main() {
-      float r = length(vPosition.xz);
-      float angle = atan(vPosition.z, vPosition.x);
+      float r = length(vPosition.xy);
+      if (r < uInnerRadius) {
+        discard;
+      }
+      float angle = atan(vPosition.y, vPosition.x);
 
       // Relativistic Keplerian differential flow (inner plasma orbits much faster)
-      float omega = 3.8 / pow(max(1.0, r * 0.15), 1.4);
+      float omega = 3.6 / pow(max(1.0, r * 0.15), 1.35);
       float flowAngle = angle - uTime * omega;
 
       // Turbulent plasma spiral streamers (MRI instability)
@@ -1554,31 +1562,30 @@ const GargantuaDiskShader = {
       float plasma = 0.5 + 0.32 * spiral + 0.18 * filament;
 
       // Temperature gradient:
-      // Inner edge (ISCO) is blistering hot white-cyan (> 10^7 K)
-      // Mid-disk is golden-white and amber
-      // Outer disk cools down to deep crimson/terracotta
+      // Inner edge (ISCO) is brilliant golden-white (~10^7 K)
+      // Mid-disk is vibrant amber and solar orange
+      // Outer disk cools down to deep cosmic crimson/terracotta
       float rNorm = clamp((r - uInnerRadius) / (uOuterRadius - uInnerRadius), 0.0, 1.0);
-      vec3 cHot = vec3(1.0, 0.98, 0.94);
-      vec3 cMid = vec3(1.0, 0.58, 0.08);
-      vec3 cCool = vec3(0.68, 0.12, 0.01);
-      vec3 diskColor = mix(cHot, cMid, pow(rNorm, 0.65));
-      diskColor = mix(diskColor, cCool, pow(rNorm, 2.2));
+      vec3 cHot = vec3(1.0, 0.94, 0.82);
+      vec3 cMid = vec3(0.98, 0.50, 0.06);
+      vec3 cCool = vec3(0.52, 0.08, 0.01);
+      vec3 diskColor = mix(cHot, cMid, pow(rNorm, 0.70));
+      diskColor = mix(diskColor, cCool, pow(rNorm, 2.0));
 
       // Relativistic Doppler Beaming (Kip Thorne effect):
-      // Approaching side is Doppler boosted (intensely brightened and blue-shifted)
+      // Approaching plasma is brightened; receding side is dimmed
       vec3 viewDir = normalize(cameraPosition - vWorldPosition);
-      vec3 tangent = normalize(vec3(-vPosition.z, 0.0, vPosition.x));
-      float dopplerFactor = dot(tangent, -viewDir);
-      float beaming = exp(clamp(dopplerFactor * 0.82, -1.8, 1.25));
+      float dopplerFactor = dot(normalize(vWorldTangent), -viewDir);
+      float beaming = 1.0 + 0.50 * clamp(dopplerFactor, -1.0, 1.0);
       diskColor *= beaming;
 
       // Soft ISCO edge cutoff and outer fade
-      float alpha = smoothstep(uInnerRadius - 0.4, uInnerRadius + 1.2, r) *
-                    smoothstep(uOuterRadius, uOuterRadius - 6.0, r) *
-                    (0.85 + 0.15 * plasma);
+      float innerCut = smoothstep(uInnerRadius, uInnerRadius + 0.7, r);
+      float outerFade = smoothstep(uOuterRadius, uOuterRadius - 4.5, r);
+      float alpha = innerCut * outerFade * (0.80 + 0.20 * plasma);
 
-      vec3 finalCol = diskColor * (1.12 * uExposure);
-      gl_FragColor = vec4(finalCol, alpha * 0.96);
+      vec3 finalCol = diskColor * (0.88 * uExposure);
+      gl_FragColor = vec4(finalCol, alpha * 0.94);
     }
   `
 };
@@ -1611,14 +1618,14 @@ const GravitationalLensingShader = {
     void main() {
       vec3 viewDir = normalize(cameraPosition - vWorldPosition);
       float rim = 1.0 - abs(dot(normalize(vNormal), viewDir));
-      float intensity = pow(rim, 2.2);
+      float intensity = pow(rim, 2.5);
 
       // Relativistic Doppler asymmetry across the Einstein halo arch
-      float doppler = 1.0 + 0.50 * dot(normalize(vPosition), vec3(1.0, 0.0, 0.0));
+      float doppler = 1.0 + 0.32 * dot(normalize(vPosition), vec3(1.0, 0.0, 0.0));
 
-      vec3 haloColor = mix(vec3(1.0, 0.55, 0.08), vec3(1.0, 0.96, 0.85), rim);
-      vec3 finalHalo = haloColor * doppler * (1.18 * uExposure);
-      gl_FragColor = vec4(finalHalo, intensity * 0.92);
+      vec3 haloColor = mix(vec3(0.95, 0.42, 0.05), vec3(1.0, 0.86, 0.62), rim);
+      vec3 finalHalo = haloColor * doppler * (0.82 * uExposure);
+      gl_FragColor = vec4(finalHalo, intensity * 0.82);
     }
   `
 };
@@ -2032,14 +2039,15 @@ export default function SolarSystem({
     const sgrGeo = new THREE.SphereGeometry(7.0, 64, 64);
     const sgrMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
     const sgrMesh = new THREE.Mesh(sgrGeo, sgrMat);
+    sgrMesh.renderOrder = 2;
     blackHoleGroup.add(sgrMesh);
 
     // 1.2 Relativistic Photon Ring (Thin brilliant filament at edge of shadow)
-    const photonRingGeo = new THREE.TorusGeometry(7.22, 0.09, 32, 128);
+    const photonRingGeo = new THREE.TorusGeometry(7.22, 0.08, 32, 128);
     const photonRingMat = new THREE.MeshBasicMaterial({
-      color: 0xFFF9E8,
+      color: 0xFFAA44,
       transparent: true,
-      opacity: 0.98,
+      opacity: 0.85,
       blending: THREE.AdditiveBlending,
     });
     const photonRing = new THREE.Mesh(photonRingGeo, photonRingMat);
@@ -2574,7 +2582,7 @@ export default function SolarSystem({
         const cloudMat = new THREE.MeshStandardMaterial({
           map: cloudTex,
           transparent: true,
-          opacity: 0.72,
+          opacity: 0.30,
           roughness: 0.85,
           depthWrite: false,
         });

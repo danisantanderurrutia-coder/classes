@@ -485,6 +485,269 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
         </div>
       );
 
+    case 'coupled_oscillators':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-indigo-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid-coupled" width="16" height="16" patternUnits="userSpaceOnUse">
+                <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(99, 102, 241, 0.05)" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="360" height="160" fill="url(#grid-coupled)" />
+
+            {/* Walls & Ground */}
+            <line x1="20" y1="125" x2="340" y2="125" stroke="#334155" strokeWidth="1.5" />
+            <rect x="25" y="45" width="12" height="80" fill="#1E293B" stroke="#475569" strokeWidth="1.5" />
+            <rect x="323" y="45" width="12" height="80" fill="#1E293B" stroke="#475569" strokeWidth="1.5" />
+
+            {/* Spring 1 */}
+            <path d="M 37,85 L 50,85 L 55,75 L 65,95 L 75,75 L 85,95 L 95,75 L 105,95 L 110,85 L 120,85" fill="none" stroke="#38BDF8" strokeWidth="1.8" />
+            {/* Mass 1 */}
+            <rect x="120" y="65" width="38" height="40" rx="4" fill="#0284C7" stroke="#38BDF8" strokeWidth="1.5" />
+            <text x="139" y="89" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontFamily="JetBrains Mono" fontWeight="bold">m₁</text>
+
+            {/* Coupling Spring 12 */}
+            <path d="M 158,85 L 168,85 L 173,75 L 183,95 L 193,75 L 203,95 L 213,75 L 223,95 L 228,85 L 238,85" fill="none" stroke="#C084FC" strokeWidth="2" />
+
+            {/* Mass 2 */}
+            <rect x="238" y="65" width="38" height="40" rx="4" fill="#059669" stroke="#34D399" strokeWidth="1.5" />
+            <text x="257" y="89" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontFamily="JetBrains Mono" fontWeight="bold">m₂</text>
+
+            {/* Spring 2 */}
+            <path d="M 276,85 L 285,85 L 290,75 L 298,95 L 305,75 L 312,95 L 318,85 L 323,85" fill="none" stroke="#34D399" strokeWidth="1.8" />
+
+            {/* Normal mode vibration arrows */}
+            <line x1="130" y1="52" x2="148" y2="52" stroke="#38BDF8" strokeWidth="2" />
+            <polygon points="152,52 145,49 145,55" fill="#38BDF8" />
+            <line x1="266" y1="52" x2="248" y2="52" stroke="#34D399" strokeWidth="2" />
+            <polygon points="244,52 251,49 251,55" fill="#34D399" />
+            <text x="198" y="55" textAnchor="middle" fill="#C084FC" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">Modo Antifase</text>
+
+            {/* Exercise Callout */}
+            <rect x="8" y="8" width="215" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(192, 132, 252, 0.4)" strokeWidth="1" />
+            <text x="14" y="23" fill="#C084FC" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'EXAM: k=18, k₁₂=10 → ω₂=?' : 'EXAMEN: k=18, k₁₂=10 → ω₂=?'}
+            </text>
+            <text x="260" y="24" fill="#10B981" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              ω₂ = 4.36 rad/s
+            </text>
+          </svg>
+        </div>
+      );
+
+    case 'geostrophic_wind':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-teal-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid-geo" width="16" height="16" patternUnits="userSpaceOnUse">
+                <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(13, 148, 136, 0.05)" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="360" height="160" fill="url(#grid-geo)" />
+
+            {/* Isobars */}
+            <line x1="20" y1="42" x2="340" y2="42" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1.5" />
+            <text x="25" y="38" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1004 hPa (Baja - L)</text>
+            <line x1="20" y1="85" x2="340" y2="85" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1.5" strokeDasharray="3,3" />
+            <text x="25" y="81" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1012 hPa</text>
+            <line x1="20" y1="128" x2="340" y2="128" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1.5" />
+            <text x="25" y="124" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1020 hPa (Alta - H)</text>
+
+            {/* Air parcel */}
+            <circle cx="180" cy="85" r="10" fill="rgba(251, 191, 36, 0.3)" stroke="#FBBF24" strokeWidth="2" />
+            
+            {/* Pressure Gradient Force UP */}
+            <line x1="180" y1="85" x2="180" y2="50" stroke="#EF4444" strokeWidth="2.2" />
+            <polygon points="180,45 176,53 184,53" fill="#EF4444" />
+            <text x="187" y="55" fill="#EF4444" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">F⃗_P</text>
+
+            {/* Coriolis Force DOWN */}
+            <line x1="180" y1="85" x2="180" y2="120" stroke="#38BDF8" strokeWidth="2.2" />
+            <polygon points="180,125 176,117 184,117" fill="#38BDF8" />
+            <text x="187" y="118" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">F⃗_Cor</text>
+
+            {/* Geostrophic Wind Vector RIGHT */}
+            <line x1="180" y1="85" x2="245" y2="85" stroke="#34D399" strokeWidth="2.5" />
+            <polygon points="250,85 242,81 242,89" fill="#34D399" />
+            <text x="215" y="78" fill="#34D399" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">v⃗_g</text>
+
+            {/* Exercise Callout */}
+            <rect x="8" y="8" width="220" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(13, 148, 136, 0.4)" strokeWidth="1" />
+            <text x="14" y="23" fill="#2DD4BF" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'EXAM: ΔP=16hPa, φ=45° → vg=?' : 'EXAMEN: ΔP=16hPa, φ=45° → vg=?'}
+            </text>
+            <text x="260" y="24" fill="#10B981" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              v_g = 129 m/s
+            </text>
+          </svg>
+        </div>
+      );
+
+    case 'seismology_beachball':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-rose-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="bb-clip">
+                <circle cx="85" cy="85" r="42" />
+              </clipPath>
+            </defs>
+            <rect width="360" height="160" fill="#070D18" />
+
+            {/* Stereographic Beachball on the Left */}
+            <g clipPath="url(#bb-clip)">
+              {/* White dilatational background */}
+              <circle cx="85" cy="85" r="42" fill="#F8FAFC" />
+              {/* Red compressional center for thrust/subduction */}
+              <circle cx="85" cy="85" r="42" fill="#EF4444" />
+              <ellipse cx="85" cy="55" rx="38" ry="24" fill="#F8FAFC" />
+              <ellipse cx="85" cy="118" rx="34" ry="18" fill="#F8FAFC" />
+            </g>
+            <circle cx="85" cy="85" r="42" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+            <text x="85" y="89" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">P</text>
+            <text x="85" y="142" textAnchor="middle" fill="#94A3B8" fontSize="9" fontFamily="JetBrains Mono">Mecanismo Focal</text>
+
+            {/* Expanding P and S Wavefronts on Right */}
+            <circle cx="245" cy="85" r="5" fill="#EF4444" />
+            <text x="245" y="74" textAnchor="middle" fill="#EF4444" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Hipocentro</text>
+
+            <circle cx="245" cy="85" r="32" fill="none" stroke="#FBBF24" strokeWidth="2" />
+            <text x="282" y="80" fill="#FBBF24" fontSize="9" fontFamily="JetBrains Mono">Onda S</text>
+
+            <circle cx="245" cy="85" r="54" fill="none" stroke="#38BDF8" strokeWidth="1.8" strokeDasharray="4,4" />
+            <text x="303" y="72" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">Onda P</text>
+
+            {/* Exercise Callout */}
+            <rect x="8" y="8" width="220" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(244, 63, 94, 0.4)" strokeWidth="1" />
+            <text x="14" y="23" fill="#FB7185" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'EXAM: Subduction Mw=8.8 → M₀=?' : 'EXAMEN: Subducción Mw=8.8 → M₀=?'}
+            </text>
+            <text x="245" y="24" fill="#10B981" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              M₀ = 2.0×10²² N·m
+            </text>
+          </svg>
+        </div>
+      );
+
+    case 'bouguer_gravity':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-amber-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="160" fill="#070D18" />
+
+            {/* Topography and Airy Root */}
+            {/* Mantle */}
+            <rect x="20" y="85" width="320" height="60" fill="#1E1B4B" />
+            <text x="25" y="140" fill="#818CF8" fontSize="9" fontFamily="JetBrains Mono">Manto (ρ_m=3300)</text>
+
+            {/* Crust with mountain and root */}
+            <path d="M 20,85 L 120,85 Q 180,48 240,85 L 340,85 L 340,115 L 240,115 Q 180,140 120,115 L 20,115 Z" fill="#334155" stroke="#64748B" strokeWidth="1.5" />
+            <text x="155" y="62" fill="#FFFFFF" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">Andes (+4000m)</text>
+            <text x="155" y="125" fill="#F59E0B" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Raíz b=17km</text>
+
+            {/* Bouguer Anomaly Curve (Negative Trough) */}
+            <path d="M 30,36 Q 180,48 330,36" fill="none" stroke="#38BDF8" strokeWidth="2" />
+            <path d="M 30,36 Q 180,48 180,48" fill="none" stroke="#FBBF24" strokeWidth="1.5" strokeDasharray="2,2" />
+            <path d="M 30,32 L 120,32 Q 180,46 240,32 L 330,32" fill="none" stroke="#38BDF8" strokeWidth="2" />
+            <text x="25" y="28" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">Δg_Bouguer (-300 mGal)</text>
+
+            {/* Exercise Callout */}
+            <rect x="180" y="8" width="170" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="1" />
+            <text x="188" y="23" fill="#FBBF24" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'Airy: b = 17.0 km' : 'Isostasia: b = 17.0 km'}
+            </text>
+          </svg>
+        </div>
+      );
+
+    case 'ekman_spiral':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-cyan-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="160" fill="#070D18" />
+
+            {/* Water Column Ellipses */}
+            <ellipse cx="110" cy="55" rx="55" ry="14" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1" />
+            <ellipse cx="110" cy="80" rx="55" ry="14" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1" />
+            <ellipse cx="110" cy="105" rx="55" ry="14" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1" />
+            <ellipse cx="110" cy="130" rx="55" ry="14" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1" />
+
+            {/* Wind Vector */}
+            <line x1="110" y1="55" x2="110" y2="35" stroke="#34D399" strokeWidth="2.5" />
+            <polygon points="110,30 106,38 114,38" fill="#34D399" />
+            <text x="118" y="38" fill="#34D399" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Viento</text>
+
+            {/* Current Spiral Vectors */}
+            <line x1="110" y1="55" x2="75" y2="46" stroke="#0284C7" strokeWidth="2.5" />
+            <line x1="110" y1="80" x2="85" y2="76" stroke="#38BDF8" strokeWidth="2" />
+            <line x1="110" y1="105" x2="100" y2="108" stroke="#38BDF8" strokeWidth="1.5" />
+            <text x="35" y="55" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">45° V₀</text>
+
+            {/* Net Transport Vector 90° */}
+            <line x1="110" y1="90" x2="45" y2="90" stroke="#C084FC" strokeWidth="3" />
+            <polygon points="40,90 48,86 48,94" fill="#C084FC" />
+            <text x="40" y="104" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Transporte 90°</text>
+
+            {/* Upwelling schematic on the Right */}
+            <path d="M 240,45 L 330,45 L 330,145 L 290,145 Q 260,110 240,45 Z" fill="#334155" stroke="#64748B" strokeWidth="1.5" />
+            <text x="270" y="70" fill="#FFFFFF" fontSize="9" fontFamily="JetBrains Mono">Costa Chile</text>
+            
+            {/* Upwelling Arrow */}
+            <path d="M 230,135 Q 240,95 210,65" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
+            <polygon points="208,60 216,66 211,71" fill="#06B6D4" />
+            <text x="175" y="125" fill="#06B6D4" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Surgencia</text>
+
+            {/* Exercise Callout */}
+            <rect x="8" y="8" width="205" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(6, 182, 212, 0.4)" strokeWidth="1" />
+            <text x="14" y="23" fill="#22D3EE" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'EXAM: W=12m/s → M_E=?' : 'EXAMEN: W=12m/s → M_E=?'}
+            </text>
+            <text x="235" y="24" fill="#10B981" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              M_E = 2.80 m²/s
+            </text>
+          </svg>
+        </div>
+      );
+
+    case 'magnetotellurics':
+      return (
+        <div className="relative w-full h-36 bg-[#070D18] rounded-xl overflow-hidden border border-purple-500/20 flex items-center justify-center">
+          <svg viewBox="0 0 360 160" className="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="160" fill="#070D18" />
+
+            {/* Subsurface Layers */}
+            <rect x="25" y="45" width="200" height="42" fill="#1E293B" stroke="#475569" strokeWidth="1.2" />
+            <text x="32" y="60" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">Capa 1: ρ₁=20 Ω·m</text>
+            <rect x="25" y="87" width="200" height="55" fill="#0F172A" stroke="#475569" strokeWidth="1.2" />
+            <text x="32" y="105" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono">Basamento: ρ₂=500 Ω·m</text>
+
+            {/* Attenuating EM Wave */}
+            <path d="M 125,45 Q 155,55 125,65 Q 105,75 125,85 Q 138,95 125,105 Q 118,115 125,125 Q 128,135 125,142" fill="none" stroke="#F59E0B" strokeWidth="2.2" />
+            {/* Skin depth line */}
+            <line x1="25" y1="80" x2="225" y2="80" stroke="#EF4444" strokeWidth="1.5" strokeDasharray="3,3" />
+            <text x="135" y="78" fill="#EF4444" fontSize="8" fontFamily="JetBrains Mono" fontWeight="bold">Skin Depth δ=1006m</text>
+
+            {/* Apparent Resistivity Sounding Plot on Right */}
+            <rect x="240" y="45" width="100" height="95" fill="#1E293B" stroke="#475569" strokeWidth="1" />
+            <text x="245" y="58" fill="#94A3B8" fontSize="8" fontFamily="JetBrains Mono">ρ_a (Ω·m)</text>
+            {/* S-curve transition */}
+            <path d="M 250,118 C 275,118 285,75 330,75" fill="none" stroke="#10B981" strokeWidth="2.2" />
+            <circle cx="285" cy="95" r="4" fill="#F59E0B" stroke="#FFFFFF" strokeWidth="1" />
+
+            {/* Exercise Callout */}
+            <rect x="8" y="8" width="205" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(168, 85, 247, 0.4)" strokeWidth="1" />
+            <text x="14" y="23" fill="#C084FC" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              {isEn ? 'EXAM: f=4Hz, ρ₁=16 → δ₁=?' : 'EXAMEN: f=4Hz, ρ₁=16 → δ₁=?'}
+            </text>
+            <text x="240" y="24" fill="#10B981" fontSize="10" fontFamily="JetBrains Mono, monospace" fontWeight="bold">
+              δ₁ = 1006 m
+            </text>
+          </svg>
+        </div>
+      );
+
     default:
       return null;
   }

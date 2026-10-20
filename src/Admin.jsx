@@ -273,7 +273,7 @@ const AD_TEMPLATES = [
     priceNote: 'Alemania: 25 €/h (Cálculo/Física/IB), 29 €/h (Álgebra/EDOs), 35 €/h (Fluidos/Python) | Suiza: 42–55 CHF/h',
     body: `Steht deine Klausur in Höherer Mathematik (Analysis / Lineare Algebra), Technischer Mechanik, Physik, Fluiddynamik oder Python bevor?
 
-Ich bin Daniel Santander, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
+Ich bin Daniel S. Santander Urrutia, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
 
 ⚠️ WICHTIGER HINWEIS ZUR SPRACHE:
 Der Unterricht findet auf ENGLISCH oder SPANISCH statt (ich spreche kein Deutsch). 
@@ -301,7 +301,7 @@ ABER: Du kannst mir problemlos deine deutschen Vorlesungsfolien (Skripte), Übun
     priceNote: 'Chile: $20.000 CLP/h (Cálculo/Física I), $23.000 (Álgebra/EDOs), $26.000 (Fluidos/Python) | España: €25–€35/h',
     body: `¿Se acerca tu control, certamen o examen de Cálculo I–III, Física Mecánica, Álgebra Lineal, Ecuaciones Diferenciales, Mecánica de Fluidos o Python?
 
-Soy Daniel Santander, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Hago clases particulares 1-a-1 y a grupos pequeños con una plataforma interactiva propia.
+Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Hago clases particulares 1-a-1 y a grupos pequeños con una plataforma interactiva propia.
 
 🚀 ¿POR QUÉ APRENDERÁS MÁS RÁPIDO CONMIGO? (MÉTODO PIAD™):
 • Laboratorio Interactivo Propio (14 Simuladores + DCL en vivo): En mi web puedes practicar gratis con problemas reales de controles de la U. de Chile (Beauchef) y universidades europeas, viendo los vectores de fuerza y el paso a paso entre Álgebra y Cálculo.
@@ -325,7 +325,7 @@ Soy Daniel Santander, Geofísico de la Universidad de Chile (FCFM - Beauchef) e 
     priceNote: 'Tier 1 (Calculus/Physics/IB): €25 / £24 / $28 | Tier 2: €29 / £28 | Tier 3 (Fluids/Python): €35 / £34',
     body: `Struggling with IB Physics/Math HL, University Calculus, Linear Algebra, Fluid Mechanics, or Scientific Python?
 
-Hi! I’m Daniel Santander, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I help university students (B.Sc. / M.Sc.) and IB Diploma students master STEM subjects through visual intuition rather than rote memorization.
+Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I help university students (B.Sc. / M.Sc.) and IB Diploma students master STEM subjects through visual intuition rather than rote memorization.
 
 🚀 WHY LEARN WITH ME? (THE PIAD™ METHOD):
 1. Free Body Diagrams (DCL) & Visual Intuition First: Before touching any integral, we sketch the physical system and force vectors so you never get stuck on a blank exam page.
@@ -694,14 +694,14 @@ export default function Admin({ onBack }) {
   if (waIntent === 'barter') {
     generatedWhatsAppMessage =
       waLang === 'es'
-        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander (Geofísico U. de Chile y Doble M.Sc. en Alemania).
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel S. Santander Urrutia (Geofísico U. de Chile y Doble M.Sc. en Alemania).
 
 ¡Me parece una excelente iniciativa! En mi plataforma tengo un espacio dedicado al trueque porque creo firmemente en el intercambio directo de habilidades y talentos.
 
 Acepto con gusto música, producción o instrumentos, videojuegos, sesiones de psicología, diseño u otros talentos creativos.
 
 🔬 Cuéntame qué materia o examen estás preparando (puedes ver mis simuladores interactivos aquí: ${selectedWaSubject.simUrl}) y qué propuesta de trueque tienes en mente. ¿Te tinca que coordinemos una videollamada breve de 10 minutos por Meet para acordar un intercambio justo para ambos?`
-        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander (Geophysicist & Double M.Sc. Engineer).
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel S. Santander Urrutia (Geophysicist & Double M.Sc. Engineer).
 
 I love this initiative! On my platform I actively welcome barter and skill exchanges because scientific education should be flexible and human.
 
@@ -711,14 +711,14 @@ I gladly accept music production/instruments, video games, psychology sessions, 
   } else if (waIntent === 'solidarity') {
     generatedWhatsAppMessage =
       waLang === 'es'
-        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander. Primero que todo, te agradezco mucho la honestidad y confianza al escribirme.
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel S. Santander Urrutia. Primero que todo, te agradezco mucho la honestidad y confianza al escribirme.
 
 Quiero decirte con total claridad: la falta de dinero nunca debe ser una barrera para que aprendas física o matemáticas con rigor ni para que apruebes tu universidad. Totalmente podemos trabajar en ello y encontrar una solución juntos.
 
 Cuéntame qué materia estás cursando, qué control o examen tienes cerca y cuál es tu situación actual: podemos coordinar un acuerdo solidario o una beca parcial adaptada a lo que realmente puedas aportar.
 
 ¿Qué horario te acomoda hoy o mañana para conversar 10 minutos con calma por Google Meet?`
-        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander. First of all, thank you for your honesty and trust in reaching out.
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel S. Santander Urrutia. First of all, thank you for your honesty and trust in reaching out.
 
 I want to be crystal clear: running short on funds should never stop you from mastering physics and calculus, nor from passing your exams. We can definitely work something out together.
 
@@ -728,7 +728,7 @@ What time works best for a calm 10-minute chat on Google Meet today or tomorrow?
   } else {
     generatedWhatsAppMessage =
       waLang === 'es'
-        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander (Geofísico U. de Chile y Doble M.Sc. en Ingeniería en Europa).
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel S. Santander Urrutia (Geofísico U. de Chile y Doble M.Sc. en Ingeniería en Europa).
 
 Para *${selectedWaSubject.nameEs}*, trabajamos directo con tus guías y controles/exámenes anteriores usando pizarra vectorial Miro (te llevas el PDF en alta resolución al terminar cada clase) y mi método PIAD™.
 
@@ -744,7 +744,7 @@ ${selectedWaSubject.simUrl}
 *(Nota: También acepto trueques de música/psicología/juegos o acuerdos solidarios si estás en una situación económica difícil).*
 
 Si quieres, conectemos *15 minutos gratis* hoy o mañana por Google Meet para ver tu temario y armar el plan. ¿Qué horario te acomoda?`
-        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander (Geophysicist & Double M.Sc. Engineer).
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel S. Santander Urrutia (Geophysicist & Double M.Sc. Engineer).
 
 For *${selectedWaSubject.nameEn}*, we work directly with your lecture notes (Skripte) and past exams on a collaborative Miro whiteboard (you receive the full vector PDF notes right after every session).
 
@@ -788,7 +788,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
-                  Mission Control • Daniel Santander
+                  Mission Control • Daniel S. Santander Urrutia
                 </span>
                 <span className="font-mono text-[10px] text-slate-400 hidden sm:inline">
                   $20.000 CLP / €25 Base • 3 Escalones por Materia

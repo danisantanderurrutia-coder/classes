@@ -4687,7 +4687,7 @@ export default function PhysicsLab({
                 {/* Footer Brand */}
                 <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-500">
                   <span>
-                    Daniel Santander Urrutia • M.Sc. RWTH Aachen • Clases &amp; Mentoría Universitaria
+                    Daniel S. Santander Urrutia • M.Sc. RWTH Aachen • Clases &amp; Mentoría Universitaria
                   </span>
                   <span>
                     classes-danielsantander.com

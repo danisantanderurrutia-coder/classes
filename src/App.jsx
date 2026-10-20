@@ -965,7 +965,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 MATH &amp; PHYSICS CLASSES
               </span>
               <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-tight">
-                Daniel Santander • Double M.Sc. &amp; Geophysicist
+                Daniel S. Santander Urrutia • Double M.Sc. &amp; Geophysicist
               </span>
             </div>
           </button>
@@ -1169,8 +1169,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>
                       {lang === 'en'
-                        ? 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL SANTANDER • DOUBLE M.SC. & GEOPHYSICIST'
-                        : 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL SANTANDER • DOBLE M.SC. Y GEOFÍSICO'}
+                        ? 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL S. SANTANDER URRUTIA • DOUBLE M.SC. & GEOPHYSICIST'
+                        : 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL S. SANTANDER URRUTIA • DOBLE M.SC. Y GEOFÍSICO'}
                     </span>
                   </div>
 
@@ -1491,8 +1491,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   </span>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
                     {lang === 'en'
-                      ? 'Why study with Daniel Santander?'
-                      : '¿Por qué tomar clases con Daniel Santander?'}
+                      ? 'Why study with Daniel S. Santander Urrutia?'
+                      : '¿Por qué tomar clases con Daniel S. Santander Urrutia?'}
                   </h2>
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                     {lang === 'en'
@@ -1579,13 +1579,13 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             <section id="mentor-and-method" className="py-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
                 
-                {/* 3A. Profile Presentation: First presents Daniel Santander */}
+                {/* 3A. Profile Presentation: First presents Daniel S. Santander Urrutia */}
                 <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xs">
                   <div className="lg:col-span-4 flex justify-center">
                     <div className="relative">
                       <img
                         src="./profile.jpg"
-                        alt="Daniel Santander"
+                        alt="Daniel S. Santander Urrutia"
                         className="w-48 h-48 sm:w-56 sm:h-56 object-cover rounded-2xl border-4 border-white shadow-lg"
                       />
                       <div className="absolute -bottom-3 -right-3 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-mono font-bold shadow-md">
@@ -1599,7 +1599,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       {lang === 'en' ? 'Academic Pedigree & Research Grounding' : 'Trayectoria Académica e Investigación'}
                     </span>
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                      Daniel Santander Urrutia
+                      Daniel S. Santander Urrutia
                     </h3>
                     <p className="text-xs sm:text-sm font-mono text-slate-600">
                       Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany &amp; AMU Poznań, Poland)
@@ -1633,7 +1633,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="lg:col-span-8 space-y-4">
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-mono text-xs font-bold">
                         <Compass className="w-3.5 h-3.5" />
-                        <span>{lang === 'en' ? 'Pedagogical Framework by Daniel Santander' : 'Metodología Pedagógica Desarrollada por Daniel'}</span>
+                        <span>{lang === 'en' ? 'Pedagogical Framework by Daniel S. Santander Urrutia' : 'Metodología Pedagógica Desarrollada por Daniel S. Santander Urrutia'}</span>
                       </div>
                       <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                         {lang === 'en'
@@ -2218,8 +2218,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </h1>
                 <p className="text-slate-600 text-sm max-w-2xl mx-auto font-sans leading-relaxed">
                   {lang === 'en'
-                    ? 'Calculate your customized investment, explore fixed intensive exam sprint bundles, and inspect Daniel Santander’s verified engineering and geophysics background.'
-                    : 'Calcula tu inversión a medida, explora los planes de sprint intensivo para exámenes universitarios y conoce la formación y metodología de Daniel Santander.'}
+                    ? 'Calculate your customized investment, explore fixed intensive exam sprint bundles, and inspect Daniel S. Santander Urrutia’s verified engineering and geophysics background.'
+                    : 'Calcula tu inversión a medida, explora los planes de sprint intensivo para exámenes universitarios y conoce la formación y metodología de Daniel S. Santander Urrutia.'}
                 </p>
               </div>
 
@@ -2691,7 +2691,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     {lang === 'en' ? 'Academic Background & Methodology' : 'Trayectoria Académica & Metodología'}
                   </span>
                   <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {lang === 'en' ? 'Meet Your Mentor: Daniel Santander' : 'Conoce al Mentor: Daniel Santander'}
+                    {lang === 'en' ? 'Meet Your Mentor: Daniel S. Santander Urrutia' : 'Conoce al Mentor: Daniel S. Santander Urrutia'}
                   </h2>
                   <p className="text-slate-600 text-xs sm:text-sm mt-1">
                     {lang === 'en' ? 'Geophysicist & Double Master of Science Engineer based in Germany.' : 'Geofísico e Ingeniero Doble Máster radicado en Alemania.'}
@@ -2706,11 +2706,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="flex items-center gap-4">
                       <img
                         src="./profile.jpg"
-                        alt="Daniel Santander"
+                        alt="Daniel S. Santander Urrutia"
                         className="w-20 h-20 rounded-2xl object-cover border-2 border-slate-300 shadow-sm"
                       />
                       <div>
-                        <h3 className="text-xl font-bold text-slate-900">Daniel Santander Urrutia</h3>
+                        <h3 className="text-xl font-bold text-slate-900">Daniel S. Santander Urrutia</h3>
                         <p className="text-xs font-mono text-sky-700 font-semibold">
                           {lang === 'en' ? 'Geophysicist & Double M.Sc. Engineer' : 'Geofísico e Ingeniero Doble M.Sc.'}
                         </p>
@@ -2914,7 +2914,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   <div className="relative">
                     <img
                       src="./profile.jpg"
-                      alt="Daniel Santander"
+                      alt="Daniel S. Santander Urrutia"
                       className="w-44 h-44 sm:w-52 sm:h-52 object-cover rounded-2xl border-4 border-white shadow-lg"
                     />
                     <div className="absolute -bottom-3 -right-2 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-mono font-bold shadow-md">
@@ -2928,7 +2928,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     {lang === 'en' ? 'Academic Pedigree & Research Grounding' : 'Trayectoria Académica e Investigación'}
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    Daniel Santander Urrutia
+                    Daniel S. Santander Urrutia
                   </h2>
                   <p className="text-xs sm:text-sm font-mono text-slate-600">
                     Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany &amp; AMU Poznań, Poland)
@@ -3188,7 +3188,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       <footer className="border-t border-slate-200 bg-white py-12 text-xs font-mono text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700 cursor-pointer">[Φ] DANIEL SANTANDER</button>
+            <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700 cursor-pointer">[Φ] DANIEL S. SANTANDER URRUTIA</button>
             <span>•</span>
             <span>Geophysicist &amp; Double M.Sc.</span>
             <span>•</span>
@@ -3196,7 +3196,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
           </div>
           <div className="flex items-center gap-2 text-center sm:text-right">
             <p>
-              © 2026 Daniel Santander • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}
+              © 2026 Daniel S. Santander Urrutia • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}
             </p>
             <button
               type="button"
@@ -3276,7 +3276,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               <div>
                 <div className="mb-6">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
-                    {bookingData.sessionType} • Direct to Daniel Santander
+                    {bookingData.sessionType} • Direct to Daniel S. Santander Urrutia
                   </span>
                   <h3 className="text-xl font-bold text-slate-900">
                     {bookingData.sessionType.includes('Spontaneous') 

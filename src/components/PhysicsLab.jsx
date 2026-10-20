@@ -29,12 +29,15 @@ import {
   Orbit,
   Wind,
   Wrench,
-  Globe
+  Globe,
+  Mountain,
+  Waves,
+  Radio
 } from 'lucide-react';
 import PhysicsToolkit from './PhysicsToolkit';
 
 // ============================================================================
-// CATALOG OF 10 CLASSICAL PHYSICS & ENGINEERING LAB PROBLEMS
+// CATALOG OF 14 CLASSICAL PHYSICS, ENGINEERING & GEOPHYSICS LAB PROBLEMS
 // ============================================================================
 export const LAB_PROBLEMS = [
   {
@@ -1102,6 +1105,289 @@ export const LAB_PROBLEMS = [
         '3. Geostrophic speed: v_g = 0.016 / (1.2372×10⁻⁴) ≈ 129.3 m/s (≈ 465.5 km/h).'
       ]
     }
+  },
+  {
+    id: 'seismology_beachball',
+    courseId: 'geophysics',
+    badgeEs: 'Sismología Teórica (GF-401 FCFM)',
+    badgeEn: 'Theoretical Seismology (GF-401)',
+    titleEs: 'Mecanismo Focal, Pelota de Playa y Frentes P/S en Zonas de Falla Mundiales',
+    titleEn: 'Focal Mechanism, Beachball & P/S Wavefronts in Global Fault Zones',
+    subtitleEs: 'El estándar de la sismología moderna: orientación espacial de la falla (rumbo, buzamiento, deslizamiento), tensor de momento Mij y comparación entre la subducción chilena, Islandia, Turquía y los Alpes.',
+    subtitleEn: 'The modern seismology standard: fault orientation (strike, dip, rake), moment tensor Mij, and comparison of Chilean subduction, Iceland rift, Turkey strike-slip, and Alpine collision.',
+    color: '#EF4444',
+    icon: Globe,
+    defaults: { strike: 15, dip: 20, rake: 90, magnitude: 8.8 },
+    sliders: [
+      { key: 'strike', labelEs: 'Rumbo / Strike (φ)', labelEn: 'Strike Angle (φ)', min: 0, max: 360, step: 5, unit: '°' },
+      { key: 'dip', labelEs: 'Buzamiento / Dip (δ)', labelEn: 'Dip Angle (δ)', min: 10, max: 90, step: 1, unit: '°' },
+      { key: 'rake', labelEs: 'Deslizamiento / Rake (λ)', labelEn: 'Rake Angle (λ)', min: -180, max: 180, step: 5, unit: '°' },
+      { key: 'magnitude', labelEs: 'Magnitud de Momento (Mw)', labelEn: 'Moment Magnitude (Mw)', min: 5.0, max: 9.5, step: 0.1, unit: '' }
+    ],
+    presets: [
+      {
+        labelEs: '🇨🇱 Subducción Chilena (Megaterremoto Maule 2010 / Valdivia 1960)',
+        labelEn: '🇨🇱 Chilean Subduction Megathrust (Maule 2010 / Valdivia 1960)',
+        values: { strike: 15, dip: 18, rake: 90, magnitude: 8.8 }
+      },
+      {
+        labelEs: '🇮🇸 Dorsal / Rift en Islandia (Falla Normal Tensional en Thingvellir)',
+        labelEn: '🇮🇸 Iceland Rift Zone (Extensional Normal Faulting in Thingvellir)',
+        values: { strike: 30, dip: 60, rake: -90, magnitude: 6.5 }
+      },
+      {
+        labelEs: '🇹🇷 Falla de Anatolia / San Andrés (Falla de Rumbo / Strike-Slip Kahramanmaraş)',
+        labelEn: '🇹🇷 Anatolian Fault / San Andreas (Pure Strike-Slip Kahramanmaraş 2023)',
+        values: { strike: 75, dip: 90, rake: 0, magnitude: 7.8 }
+      },
+      {
+        labelEs: '🏔️ Colisión Orogénica en los Alpes / Himalaya (Cabalgamiento Cortical)',
+        labelEn: '🏔️ Alpine / Himalayan Continental Collision (Deep Crustal Thrusting)',
+        values: { strike: 80, dip: 35, rake: 90, magnitude: 7.5 }
+      }
+    ],
+    theory: {
+      formula: 'M_{ij} = M_0 (u_i n_j + u_j n_i) \\quad , \\quad \\frac{v_P}{v_S} = \\sqrt{\\frac{\\lambda + 2\\mu}{\\mu}} \\approx \\sqrt{3}',
+      descriptionEs:
+        'Un terremoto es una dislocación por cizalle en una falla geológica caracterizada por tres ángulos: Rumbo (Strike φ, dirección respecto al Norte), Buzamiento (Dip δ, inclinación respecto a la horizontal) y Deslizamiento (Rake λ, dirección del movimiento relativo del bloque techo). La pelota de playa (beachball) es la proyección estereográfica del hemisferio inferior de la esfera focal: los cuadrantes oscuros representan compresión (primer arribo de onda P hacia arriba) y los blancos dilatación (primer arribo hacia abajo).',
+      descriptionEn:
+        'An earthquake is a shear dislocation on a fault plane defined by three angles: Strike (φ, orientation from North), Dip (δ, angle from horizontal), and Rake (λ, slip direction of hanging wall). The beachball represents the lower-hemisphere stereographic projection: shaded quadrants are compressional (P-wave upward first motion) and white quadrants are dilatational (downward first motion).'
+    },
+    klausurProblem: {
+      titleEs: 'Problema Klausur: Momento Sísmico y Clasificación Tectónica de Falla',
+      titleEn: 'Klausur Exam Problem: Seismic Moment & Fault Tectonic Classification',
+      statementEs:
+        'En la zona de subducción de Chile central ocurre un megaterremoto de magnitud Mw = 8.8 sobre un plano de falla con rumbo φ = 15°, buzamiento δ = 18° y ángulo de deslizamiento λ = 90°. (a) Calcule el momento sísmico escalar M₀ en N·m usando la escala de Kanamori (log₁₀ M₀ = 1.5 Mw + 9.1). (b) Clasifique el régimen cinemático de la falla y determine las orientaciones relativas de los ejes de presión (P) y tensión (T). (c) Si la rigidez cortical es μ = 3.5×10¹⁰ Pa y el área de ruptura es A = 400 km × 150 km, calcule el desplazamiento medio de deslizamiento D en metros.',
+      statementEn:
+        'In the central Chile subduction zone, a megathrust earthquake of magnitude Mw = 8.8 occurs on a fault plane with strike φ = 15°, dip δ = 18°, and rake λ = 90°. (a) Compute scalar seismic moment M₀ in N·m via Kanamori formula (log₁₀ M₀ = 1.5 Mw + 9.1). (b) Classify the kinematic fault regime and identify orientations of pressure (P) and tension (T) axes. (c) Given crustal shear modulus μ = 3.5×10¹⁰ Pa and rupture area A = 400 km × 150 km, compute mean fault slip D in meters.',
+      hintEs: 'Aplica log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.3, luego M₀ = 10²²·³. Para el deslizamiento, despeja D = M₀ / (μ · A).',
+      hintEn: 'Compute log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.3, so M₀ = 10²²·³. For slip, isolate D = M₀ / (μ · A).',
+      solutionStepsEs: [
+        '1. Momento sísmico: log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 13.2 + 9.1 = 22.30 ⇒ M₀ = 10²²·³⁰ ≈ 1.995 × 10²² N·m.',
+        '2. Clasificación: Rake λ = 90° corresponde a una falla inversa pura (thrust faulting). El eje P (compresión máxima) es horizontal subhorizontal en dirección E-W (perpendicular a la fosa), mientras que el eje T es casi vertical.',
+        '3. Área: A = 400×10³ m × 150×10³ m = 6.0 × 10¹⁰ m².',
+        '4. Deslizamiento medio: D = M₀ / (μ · A) = (1.995 × 10²² N·m) / (3.5 × 10¹⁰ Pa × 6.0 × 10¹⁰ m²) ≈ 9.50 metros de desplazamiento cosísmico.'
+      ],
+      solutionStepsEn: [
+        '1. Seismic moment: log₁₀ M₀ = 1.5 · 8.8 + 9.1 = 22.30 ⇒ M₀ = 10²²·³⁰ ≈ 1.995 × 10²² N·m.',
+        '2. Classification: Rake λ = 90° corresponds to pure reverse/thrust faulting. The P-axis (maximum compression) is subhorizontal E-W perpendicular to trench, while T-axis is nearly vertical.',
+        '3. Area: A = 400×10³ m × 150×10³ m = 6.0 × 10¹⁰ m².',
+        '4. Mean fault slip: D = M₀ / (μ · A) = (1.995 × 10²² N·m) / (3.5 × 10¹⁰ Pa × 6.0 × 10¹⁰ m²) ≈ 9.50 meters of coseismic displacement.'
+      ]
+    }
+  },
+  {
+    id: 'bouguer_gravity',
+    courseId: 'geophysics',
+    badgeEs: 'Campos Potenciales & Gravimetría (GF-402 FCFM)',
+    badgeEn: 'Potential Fields & Gravimetry (GF-402)',
+    titleEs: 'Campos Potenciales: Gravimetría, Ecuación de Poisson e Isostasia de Airy en los Andes',
+    titleEn: 'Potential Fields: Gravimetry, Poisson Equation & Airy Isostasy in the Andes',
+    subtitleEs: 'El problema fundacional de corteza y prospección: por qué los Andes presentan una anomalía de Bouguer fuertemente negativa (-300 mGal) debido a la raíz cortical de baja densidad que desplaza al manto.',
+    subtitleEn: 'The core crustal & geophysical prospecting benchmark: why the Andes display an intense negative Bouguer anomaly (-300 mGal) due to their low-density crustal root displacing dense mantle.',
+    color: '#F59E0B',
+    icon: Mountain,
+    defaults: { mountainHeight: 4000, crustDensity: 2670, mantleDensity: 3300, crustThickness: 35 },
+    sliders: [
+      { key: 'mountainHeight', labelEs: 'Altura de la Cordillera (h)', labelEn: 'Mountain Elevation (h)', min: 500, max: 6500, step: 250, unit: ' m' },
+      { key: 'crustDensity', labelEs: 'Densidad de Corteza (ρ_c)', labelEn: 'Crustal Density (ρ_c)', min: 2400, max: 2900, step: 20, unit: ' kg/m³' },
+      { key: 'mantleDensity', labelEs: 'Densidad de Manto (ρ_m)', labelEn: 'Mantle Density (ρ_m)', min: 3100, max: 3500, step: 20, unit: ' kg/m³' },
+      { key: 'crustThickness', labelEs: 'Espesor Normal de Corteza (H₀)', labelEn: 'Normal Crust Thickness (H₀)', min: 20, max: 50, step: 1, unit: ' km' }
+    ],
+    presets: [
+      {
+        labelEs: '🏔️ Cordillera de los Andes / Altiplano (h = 4200m, Raíz Profunda ~20km)',
+        labelEn: '🏔️ Andes Range / Altiplano Plateau (h = 4200m, Deep ~20km Root)',
+        values: { mountainHeight: 4200, crustDensity: 2670, mantleDensity: 3300, crustThickness: 35 }
+      },
+      {
+        labelEs: '🛡️ Escudo Continental Estable (h = 300m, Sin Raíz Cortical)',
+        labelEn: '🛡️ Stable Continental Shield (h = 300m, No Significant Root)',
+        values: { mountainHeight: 300, crustDensity: 2670, mantleDensity: 3300, crustThickness: 35 }
+      },
+      {
+        labelEs: '🌊 Fosa de Atacama / Trinchera Oceánica (h = -7000m, Adelgazamiento Cortical)',
+        labelEn: '🌊 Atacama Trench / Deep Ocean (h = -7000m, Thin Oceanic Crust)',
+        values: { mountainHeight: 800, crustDensity: 2850, mantleDensity: 3300, crustThickness: 15 }
+      },
+      {
+        labelEs: '🌋 Edificio Volcánico Descompensado (Carga Topográfica Inelástica)',
+        labelEn: '🌋 Uncompensated Volcanic Edifice (Rigid Plate Topographic Load)',
+        values: { mountainHeight: 5500, crustDensity: 2500, mantleDensity: 3300, crustThickness: 40 }
+      }
+    ],
+    theory: {
+      formula: '\\nabla^2 U = 4\\pi G \\rho \\quad , \\quad b = h\\frac{\\rho_c}{\\rho_m - \\rho_c} \\quad , \\quad \\Delta g_B = g_{\\text{obs}} - g_0 + 0.3086 h - 2\\pi G \\rho_c h',
+      descriptionEs:
+        'En gravimetría, la ley de gravitación de Newton se expresa mediante la Ecuación de Poisson para el potencial gravitacional U. La anomalía de Bouguer elimina la atracción de la placa topográfica sobre el nivel del mar (+2πGρ_c h). En cordilleras jóvenes en equilibrio isostático de Airy, el exceso de masa superficial está compensado por una raíz cortical de baja densidad (ρ_c ≈ 2670 kg/m³) que penetra en el manto denso (ρ_m ≈ 3300 kg/m³). Como el sensor en superficie está más cerca de la corteza que de la raíz, pero la corrección de Bouguer resta la montaña, la anomalía de Bouguer resultante es fuertemente negativa.',
+      descriptionEn:
+        'In gravimetry, Newton gravitational law becomes Poissons PDE ∇²U = 4πGρ. The Bouguer correction removes the gravitational pull of the elevated terrain slab (+2πGρ_c h). In mountain belts under Airy isostatic equilibrium, topographic load is compensated by a low-density crustal root displacing dense mantle. Subtracting the topographic slab reveals the negative gravitational deficit of the deep root.'
+    },
+    klausurProblem: {
+      titleEs: 'Problema Klausur: Raíz Isostática y Anomalía de Bouguer en los Andes',
+      titleEn: 'Klausur Exam Problem: Isostatic Root & Bouguer Anomaly in the Andes',
+      statementEs:
+        'En un perfil transversal de los Andes Centrales a 22°S, la altitud media del Altiplano es h = 4000 m. Suponiendo equilibrio isostático de Airy con densidad de corteza ρ_c = 2670 kg/m³ y densidad de manto ρ_m = 3300 kg/m³: (a) Deduzca el espesor de la raíz cortical b que penetra en el manto. (b) Calcule el espesor total de corteza bajo el Altiplano si la corteza de referencia en la costa es H₀ = 35 km. (c) Calcule la corrección de placa de Bouguer Δg_BP producida por la topografía superficial.',
+      statementEn:
+        'Across an Andean transect at 22°S, average Altiplano elevation is h = 4000 m. Under Airy isostasy with crustal density ρ_c = 2670 kg/m³ and mantle density ρ_m = 3300 kg/m³: (a) Derive depth b of the crustal root penetrating the mantle. (b) Calculate total crustal thickness beneath the Altiplano given reference normal crust H₀ = 35 km. (c) Calculate the Bouguer plate correction Δg_BP produced by the surface topography.',
+      hintEs: 'Iguala la presión litostática a la profundidad de compensación: ρ_c · (h + H₀ + b) = ρ_c · H₀ + ρ_m · b. Luego despeja b = h · ρ_c / (ρ_m - ρ_c).',
+      hintEn: 'Equate lithostatic pressure at the compensation level: ρ_c · (h + H₀ + b) = ρ_c · H₀ + ρ_m · b. Then b = h · ρ_c / (ρ_m - ρ_c).',
+      solutionStepsEs: [
+        '1. Balance isostático de Airy: b = h · ρ_c / (ρ_m - ρ_c).',
+        '2. Sustitución de densidades: Contraste Δρ = 3300 - 2670 = 630 kg/m³.',
+        '3. Espesor de la raíz: b = 4000 m · (2670 / 630) ≈ 16,952 metros (≈ 17.0 km de raíz cortical en el manto).',
+        '4. Espesor total de corteza: H_total = H₀ + h + b = 35 km + 4.0 km + 17.0 km ≈ 56.0 km de corteza engrosada.',
+        '5. Corrección de Bouguer: Δg_BP = 2π G ρ_c h = 0.04193 · 10⁻³ · 2670 · 4000 ≈ 447.8 mGal de masa topográfica eliminada.'
+      ],
+      solutionStepsEn: [
+        '1. Airy isostatic balance: b = h · ρ_c / (ρ_m - ρ_c).',
+        '2. Density contrast: Δρ = 3300 - 2670 = 630 kg/m³.',
+        '3. Root thickness: b = 4000 m · (2670 / 630) ≈ 16,952 meters (≈ 17.0 km crustal root in mantle).',
+        '4. Total crustal thickness: H_total = H₀ + h + b = 35 km + 4.0 km + 17.0 km ≈ 56.0 km thickened crust.',
+        '5. Bouguer slab correction: Δg_BP = 2π G ρ_c h = 0.04193 · 10⁻³ · 2670 · 4000 ≈ 447.8 mGal of topographic mass subtracted.'
+      ]
+    }
+  },
+  {
+    id: 'ekman_spiral',
+    courseId: 'geophysics',
+    badgeEs: 'Oceanografía Dinámica (GF-403 FCFM)',
+    badgeEn: 'Dynamical Oceanography (GF-403)',
+    titleEs: 'Espiral de Ekman y Surgencia Costera en la Corriente de Humboldt (Chile)',
+    titleEn: 'Ekman Spiral & Coastal Upwelling in the Humboldt Current (Chile)',
+    subtitleEs: 'El motor biogeoquímico marino: balance entre tensión del viento, viscosidad turbulenta y Coriolis, provocando transporte a 90° hacia mar abierto y surgencia de aguas profundas frías ricas en nutrientes.',
+    subtitleEn: 'The marine biogeochemical engine: balance between wind stress, turbulent eddy viscosity, and Coriolis, driving 90° offshore transport and cold nutrient-rich deep upwelling.',
+    color: '#06B6D4',
+    icon: Waves,
+    defaults: { windSpeed: 12, latitude: -33, eddyViscosity: 0.05 },
+    sliders: [
+      { key: 'windSpeed', labelEs: 'Velocidad del Viento Superficial (W)', labelEn: 'Surface Wind Speed (W)', min: 2, max: 25, step: 1, unit: ' m/s' },
+      { key: 'latitude', labelEs: 'Latitud Geográfica (φ)', labelEn: 'Latitude (φ, Negative = Chile)', min: -70, max: 70, step: 5, unit: '°' },
+      { key: 'eddyViscosity', labelEs: 'Viscosidad Turbulenta (A_z)', labelEn: 'Turbulent Eddy Viscosity (A_z)', min: 0.01, max: 0.20, step: 0.01, unit: ' m²/s' }
+    ],
+    presets: [
+      {
+        labelEs: '🇨🇱 Costa Central de Chile (Valparaíso -33°S, Viento Sur Fuerte & Surgencia Humboldt)',
+        labelEn: '🇨🇱 Central Chile Coast (Valparaíso -33°S, Southerly Wind & Humboldt Upwelling)',
+        values: { windSpeed: 12, latitude: -33, eddyViscosity: 0.05 }
+      },
+      {
+        labelEs: '🇨🇱 Norte de Chile / Antofagasta (-23°S, Alisios Permanentes)',
+        labelEn: '🇨🇱 Northern Chile / Antofagasta (-23°S, Permanent Trade Wind Upwelling)',
+        values: { windSpeed: 14, latitude: -23, eddyViscosity: 0.04 }
+      },
+      {
+        labelEs: '🇺🇸 Costa de California / Oregón (+38°N, Hemisferio Norte)',
+        labelEn: '🇺🇸 California / Oregon Coast (+38°N, Northern Hemisphere)',
+        values: { windSpeed: 12, latitude: 38, eddyViscosity: 0.05 }
+      },
+      {
+        labelEs: '🌴 Zona Ecuatorial (φ ≈ 0°, Coriolis Nulo, Sin Espiral)',
+        labelEn: '🌴 Equatorial Doldrums (φ ≈ 0°, Zero Coriolis, Collapsed Spiral)',
+        values: { windSpeed: 8, latitude: 5, eddyViscosity: 0.05 }
+      }
+    ],
+    theory: {
+      formula: 'A_z \\frac{\\partial^2 V}{\\partial z^2} - i f V = 0 \\quad \\implies \\quad V(z) = V_0 e^{-(1+i)z/D_E} \\quad , \\quad \\vec{M}_E = \\frac{\\vec{\\tau}_0 \\times \\hat{k}}{\\rho f}',
+      descriptionEs:
+        'Vagn Walfrid Ekman resolvió en 1905 la interacción entre el viento y el océano. En la columna de agua, la fricción turbulenta transmite momento hacia abajo, mientras que la rotación terrestre introduce la aceleración de Coriolis. El sistema de EDOs acopladas se unifica elegantemente en variable compleja con la velocidad compleja V(z) = u(z) + i v(z). En superficie, la corriente se desvía 45° de la dirección del viento (a la izquierda en Chile / Hemisferio Sur). Al integrar en toda la columna, el Transporte Neto de Ekman es exactamente ortogonal (90°) al viento. Cuando vientos soplan hacia el norte a lo largo de la costa de Chile, el agua superficial es empujada mar adentro (hacia el oeste), obligando a aguas abisales frías y ricas en fosfatos y nitratos a emerger (surgencia costera).',
+      descriptionEn:
+        'Ekman solved the wind-ocean interface in 1905. Turbulent friction transfers wind stress downward while Earth rotation imparts Coriolis acceleration. The coupled system unifies in complex variables V(z) = u + iv. Surface currents deflect 45° (to the left in the Southern Hemisphere / Chile). Integrating vertically yields a net Ekman Transport exactly 90° to the wind. Northerly winds along Chiles coast transport surface water westward offshore, forcing cold, nutrient-rich deep waters to upwell.'
+    },
+    klausurProblem: {
+      titleEs: 'Problema Klausur: Profundidad de Ekman y Transporte de Surgencia en Valparaíso',
+      titleEn: 'Klausur Exam Problem: Ekman Depth & Coastal Upwelling Transport in Valparaíso',
+      statementEs:
+        'Frente a las costas de Valparaíso (latitud φ = -33°S), un viento del sur sopla paralelo a la costa con velocidad W = 12 m/s. La viscosidad turbulenta vertical del agua es A_z = 0.05 m²/s y la densidad del agua de mar es ρ = 1025 kg/m³. El coeficiente de arrastre del viento es C_D = 1.3×10⁻³ con densidad del aire ρ_a = 1.22 kg/m³. (a) Calcule el parámetro de Coriolis f y la profundidad de la capa de Ekman D_E. (b) Calcule la tensión superficial del viento τ₀ en Pa. (c) Calcule la magnitud del Transporte neto de Ekman M_E por unidad de ancho de costa y determine su dirección geográfica.',
+      statementEn:
+        'Off the coast of Valparaíso (latitude φ = -33°S), a southerly wind blows parallel to the coast at W = 12 m/s. Vertical eddy viscosity is A_z = 0.05 m²/s, seawater density is ρ = 1025 kg/m³, drag coefficient C_D = 1.3×10⁻³, and air density ρ_a = 1.22 kg/m³. (a) Calculate Coriolis parameter f and Ekman depth D_E. (b) Compute surface wind stress τ₀ in Pa. (c) Compute the magnitude of net Ekman transport M_E per unit coastline width and identify its geographic direction.',
+      hintEs: 'Usa f = 2 · Ω · sin(φ) con Ω = 7.292×10⁻⁵ rad/s. D_E = π · √(2 A_z / |f|). M_E = τ₀ / (ρ · |f|).',
+      hintEn: 'Use f = 2 · Ω · sin(φ) with Ω = 7.292×10⁻⁵ rad/s. D_E = π · √(2 A_z / |f|). M_E = τ₀ / (ρ · |f|).',
+      solutionStepsEs: [
+        '1. Parámetro de Coriolis: f = 2 · 7.292×10⁻⁵ · sin(-33°) ≈ -7.943 × 10⁻⁵ s⁻¹ (|f| = 7.943×10⁻⁵ s⁻¹).',
+        '2. Profundidad de Ekman: D_E = π · √(2 · 0.05 / 7.943×10⁻⁵) = π · √(1258.9) ≈ π · 35.48 ≈ 111.5 metros.',
+        '3. Tensión del viento: τ₀ = ρ_a · C_D · W² = 1.22 · 1.3×10⁻³ · 12² = 1.22 · 0.0013 · 144 ≈ 0.228 Pa (N/m²).',
+        '4. Transporte de Ekman: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) = 0.228 / 0.0814 ≈ 2.80 m² / s (toneladas de agua por segundo por cada metro de costa).',
+        '5. Dirección: En el Hemisferio Sur, el transporte neto es a 90° a la IZQUIERDA del viento. Si el viento va hacia el Norte, el agua se desplaza hacia el OESTE (mar adentro), activando la surgencia costera.'
+      ],
+      solutionStepsEn: [
+        '1. Coriolis parameter: f = 2 · 7.292×10⁻⁵ · sin(-33°) ≈ -7.943 × 10⁻⁵ s⁻¹ (|f| = 7.943×10⁻⁵ s⁻¹).',
+        '2. Ekman depth: D_E = π · √(2 · 0.05 / 7.943×10⁻⁵) = π · √(1258.9) ≈ 111.5 meters.',
+        '3. Wind stress: τ₀ = ρ_a · C_D · W² = 1.22 · 1.3×10⁻³ · 12² ≈ 0.228 Pa (N/m²).',
+        '4. Ekman transport: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) ≈ 2.80 m²/s per meter of coastline.',
+        '5. Direction: In the Southern Hemisphere, transport is 90° to the LEFT of wind. With a northward wind, transport is directed WESTWARD (offshore), triggering coastal upwelling.'
+      ]
+    }
+  },
+  {
+    id: 'magnetotellurics',
+    courseId: 'geophysics',
+    badgeEs: 'Métodos Electromagnéticos (GF-404 FCFM)',
+    badgeEn: 'Electromagnetic Methods (GF-404)',
+    titleEs: 'Magnetotelúrica: Difusión de Maxwell, Efecto Pelicular (Skin Depth) y Resistividad Aparente',
+    titleEn: 'Magnetotellurics: Maxwell Diffusion, Skin Depth & Apparent Resistivity',
+    subtitleEs: 'El sondeo electromagnético profundo de la Tierra: penetración de ondas EM naturales en medios conductores, atenuación exponencial δ y relación de impedancia Z = Ex / Hy.',
+    subtitleEn: 'Deep Earth electromagnetic sounding: natural EM wave penetration into conductive media, exponential skin depth δ, and impedance ratio Z = Ex / Hy.',
+    color: '#8B5CF6',
+    icon: Radio,
+    defaults: { frequency: 10, resTop: 20, resBottom: 500, layerThickness: 300 },
+    sliders: [
+      { key: 'frequency', labelEs: 'Frecuencia de Onda EM (f)', labelEn: 'EM Wave Frequency (f)', min: 0.1, max: 200, step: 1, unit: ' Hz' },
+      { key: 'resTop', labelEs: 'Resistividad Capa 1 (ρ₁)', labelEn: 'Layer 1 Resistivity (ρ₁)', min: 2, max: 150, step: 2, unit: ' Ω·m' },
+      { key: 'resBottom', labelEs: 'Resistividad Capa 2 (ρ₂)', labelEn: 'Layer 2 Resistivity (ρ₂)', min: 50, max: 2000, step: 50, unit: ' Ω·m' },
+      { key: 'layerThickness', labelEs: 'Espesor Capa 1 (h₁)', labelEn: 'Layer 1 Thickness (h₁)', min: 50, max: 1000, step: 25, unit: ' m' }
+    ],
+    presets: [
+      {
+        labelEs: '🌋 Reservorio Geotérmico / Volcánico (Capa Arcillosa Conductora sobre Basamento Resistivo)',
+        labelEn: '🌋 Geothermal / Volcanic Reservoir (Conductive Clay Cap over Resistive Basement)',
+        values: { frequency: 10, resTop: 15, resBottom: 600, layerThickness: 250 }
+      },
+      {
+        labelEs: '🌊 Acuífero Salino / Cuenca de Salar en Atacama (ρ₁ Muy Conductor)',
+        labelEn: '🌊 Saline Aquifer / Atacama Salt Flat Basin (Highly Conductive ρ₁)',
+        values: { frequency: 25, resTop: 4, resBottom: 300, layerThickness: 150 }
+      },
+      {
+        labelEs: '🪨 Basamento Cristalino Homogéneo (Semiespacio Uniforme)',
+        labelEn: '🪨 Homogeneous Crystalline Basement (Uniform Half-Space)',
+        values: { frequency: 5, resTop: 500, resBottom: 500, layerThickness: 500 }
+      },
+      {
+        labelEs: '📡 Sondeo de Alta Frecuencia (Investigación Geotécnica Somera)',
+        labelEn: '📡 High-Frequency Sounding (Shallow Geotechnical Investigation)',
+        values: { frequency: 150, resTop: 25, resBottom: 800, layerThickness: 80 }
+      }
+    ],
+    theory: {
+      formula: '\\nabla^2 \\vec{E} = \\mu_0 \\sigma \\frac{\\partial \\vec{E}}{\\partial t} \\quad \\implies \\quad \\delta \\approx 503 \\sqrt{\\frac{\\rho}{f}} \\quad , \\quad \\rho_a(\\omega) = \\frac{1}{\\omega \\mu_0} \\left| \\frac{E_x}{H_y} \\right|^2',
+      descriptionEs:
+        'En medios conductores como la Tierra, las ecuaciones de Maxwell para bajas frecuencias desprecian la corriente de desplazamiento (∂D/∂t ≈ 0), convirtiéndose en la Ecuación de Difusión electromagnética. Las ondas EM planas incidentes verticalmente se atenúan exponencialmente con la profundidad z como exp(-z / δ), donde δ es el Skin Depth (profundidad donde la amplitud cae a 1/e ≈ 37%). A menor frecuencia f, mayor es la profundidad sondeada. La impedancia de superficie Z = Ex / Hy permite calcular la resistividad aparente ρ_a(T) y la fase φ(T), permitiendo reconstruir la estratigrafía y acuíferos del subsuelo sin perforar.',
+      descriptionEn:
+        'In conducting media like the Earth, Maxwell equations at low frequencies neglect displacement currents (∂D/∂t ≈ 0), reducing to an EM diffusion equation. Plane EM waves decay exponentially as exp(-z / δ), where skin depth δ ≈ 503 √(ρ/f). Lower frequencies penetrate deeper into the Earth. Measuring surface impedance Z = Ex / Hy yields apparent resistivity ρ_a(T) and phase φ(T), imaging deep subsurface geology and geothermal reservoirs non-invasively.'
+    },
+    klausurProblem: {
+      titleEs: 'Problema Klausur: Skin Depth e Impedancia Magnetotelúrica en Campo Geotérmico',
+      titleEn: 'Klausur Exam Problem: Skin Depth & MT Surface Impedance in Geothermal Field',
+      statementEs:
+        'En una campaña magnetotelúrica en el campo geotérmico de El Tatio (Antofagasta, Chile), se mide una onda EM de frecuencia f = 4 Hz sobre una capa arcillosa hidrotermal de resistividad ρ₁ = 16 Ω·m. (a) Calcule la profundidad de penetración (Skin Depth) δ en metros. (b) Calcule el módulo de la impedancia de onda superficial |Z| = |Ex / Hy| en Ohms si μ₀ = 4π×10⁻⁷ H/m. (c) Si se desea investigar la cámara magmática situada a z = 8000 m en una roca de resistividad media ρ = 100 Ω·m, ¿cuál es la frecuencia máxima f_max que puede emplearse?',
+      statementEn:
+        'In a magnetotelluric survey at El Tatio geothermal field (Antofagasta, Chile), an EM wave with frequency f = 4 Hz is recorded over a hydrothermal clay cap of resistivity ρ₁ = 16 Ω·m. (a) Calculate skin depth δ in meters. (b) Compute surface wave impedance |Z| = |Ex / Hy| in Ohms with μ₀ = 4π×10⁻⁷ H/m. (c) To image a magma chamber at depth z = 8000 m through host rock of average resistivity ρ = 100 Ω·m, what maximum frequency f_max must be used?',
+      hintEs: 'Aplica δ ≈ 503 · √(ρ / f). Para la impedancia, |Z| = √(ω · μ₀ · ρ) con ω = 2π f. Para la frecuencia, iguala δ = z y despeja f.',
+      hintEn: 'Apply δ ≈ 503 · √(ρ / f). For impedance, |Z| = √(ω · μ₀ · ρ) with ω = 2π f. For frequency, set δ = z and solve for f.',
+      solutionStepsEs: [
+        '1. Skin depth en capa geotérmica: δ₁ = 503 · √(16 / 4) = 503 · √4 = 503 · 2 = 1006 metros.',
+        '2. Frecuencia angular: ω = 2π · 4 = 8π ≈ 25.13 rad/s.',
+        '3. Módulo de impedancia Cagniard: |Z| = √(ω · μ₀ · ρ₁) = √(25.13 · 4π×10⁻⁷ · 16) = √(5.053×10⁻⁴) ≈ 0.0225 Ω (V/A).',
+        '4. Frecuencia para investigar z = 8000 m: Despejamos f de δ = 503 · √(ρ / f) ⇒ √f = 503 · √ρ / z ⇒ f = (503 · √100 / 8000)² = (5030 / 8000)² = (0.62875)² ≈ 0.395 Hz (período T ≈ 2.53 segundos).'
+      ],
+      solutionStepsEn: [
+        '1. Geothermal skin depth: δ₁ = 503 · √(16 / 4) = 503 · 2 = 1006 meters.',
+        '2. Angular frequency: ω = 2π · 4 ≈ 25.13 rad/s.',
+        '3. Cagniard surface impedance: |Z| = √(ω · μ₀ · ρ₁) = √(25.13 · 4π×10⁻⁷ · 16) ≈ 0.0225 Ω.',
+        '4. Maximum frequency for z = 8000 m: δ = 503 · √(ρ / f) ⇒ √f = 503 · √100 / 8000 ⇒ f = (5030 / 8000)² ≈ 0.395 Hz (period T ≈ 2.53 seconds).'
+      ]
+    }
   }
 ];
 
@@ -1558,6 +1844,122 @@ export default function PhysicsLab({
           ? `Relativistic Precession Active (Δφ = ${deltaPhiDeg.toFixed(1)}°/rev)`
           : `Precesión Relativista Activa (Δφ = ${deltaPhiDeg.toFixed(1)}°/rev)`,
         raw: { mass, eccentricity, grFactor, semiMajor, rMin, rMax, deltaPhiDeg }
+      };
+    }
+
+    if (selectedId === 'seismology_beachball') {
+      const { strike = 15, dip = 20, rake = 90, magnitude = 8.8 } = safeParams;
+      const logM0 = 1.5 * magnitude + 9.1;
+      const m0Exp = Math.floor(logM0);
+      const m0Sci = Math.pow(10, logM0 - m0Exp);
+
+      let regimeEs = 'Inversa / Subducción (Thrust)';
+      let regimeEn = 'Reverse / Subduction (Thrust)';
+      if (rake >= -135 && rake <= -45) {
+        regimeEs = 'Normal / Extensión (Rifting)';
+        regimeEn = 'Normal / Extension (Rifting)';
+      } else if (Math.abs(rake) <= 45 || Math.abs(rake) >= 135) {
+        regimeEs = rake >= 0 ? 'Rumbo Siniestral (Left-Lateral)' : 'Rumbo Dextral (Right-Lateral)';
+        regimeEn = rake >= 0 ? 'Sinistral Strike-Slip' : 'Dextral Strike-Slip';
+      }
+
+      const vP = 6.0;
+      const vS = (vP / Math.sqrt(3)).toFixed(2);
+
+      return {
+        items: [
+          { label: 'Magnitud Mw', value: `${magnitude.toFixed(1)}` },
+          { label: 'Momento M₀', value: `${m0Sci.toFixed(2)}×10^${m0Exp} N·m` },
+          { label: 'Razón v_P / v_S', value: `√3 ≈ 1.73 (${vP} / ${vS} km/s)` },
+          { label: 'Régimen Falla', value: lang === 'en' ? regimeEn : regimeEs }
+        ],
+        status: lang === 'en'
+          ? `Strike φ=${strike}°, Dip δ=${dip}°, Rake λ=${rake}° (${regimeEn})`
+          : `Rumbo φ=${strike}°, Buzamiento δ=${dip}°, Deslizamiento λ=${rake}° (${regimeEs})`,
+        raw: { strike, dip, rake, magnitude, logM0, m0Sci, m0Exp, regimeEs, regimeEn, vP, vS }
+      };
+    }
+
+    if (selectedId === 'bouguer_gravity') {
+      const { mountainHeight = 4000, crustDensity = 2670, mantleDensity = 3300, crustThickness = 35 } = safeParams;
+      const deltaRho = Math.max(100, mantleDensity - crustDensity);
+      const rootMeters = mountainHeight * (crustDensity / deltaRho);
+      const rootKm = rootMeters / 1000;
+      const totalCrustKm = crustThickness + mountainHeight / 1000 + rootKm;
+      const freeAirMgal = 0.3086 * mountainHeight;
+      const bouguerSlabMgal = 0.04193 * (crustDensity / 1000) * mountainHeight;
+      const rootDeficitMgal = -0.04193 * (deltaRho / 1000) * rootMeters * 0.72;
+      const bouguerAnomalyMgal = freeAirMgal - bouguerSlabMgal + rootDeficitMgal;
+
+      return {
+        items: [
+          { label: 'Raíz Cortical (b)', value: `${rootKm.toFixed(1)} km en Manto` },
+          { label: 'Espesor Total Corteza', value: `${totalCrustKm.toFixed(1)} km (Moho)` },
+          { label: 'Anomalía de Bouguer', value: `${bouguerAnomalyMgal.toFixed(0)} mGal` },
+          { label: 'Corrección Bouguer', value: `-${bouguerSlabMgal.toFixed(0)} mGal` }
+        ],
+        status: lang === 'en'
+          ? `Airy Isostasy Active: Mountain +${mountainHeight}m balanced by ${rootKm.toFixed(1)}km root`
+          : `Isostasia de Airy Activa: Montaña +${mountainHeight}m compensada por raíz de ${rootKm.toFixed(1)}km`,
+        raw: { mountainHeight, crustDensity, mantleDensity, crustThickness, deltaRho, rootMeters, rootKm, totalCrustKm, freeAirMgal, bouguerSlabMgal, bouguerAnomalyMgal }
+      };
+    }
+
+    if (selectedId === 'ekman_spiral') {
+      const { windSpeed = 12, latitude = -33, eddyViscosity = 0.05 } = safeParams;
+      const omegaEarth = 7.292e-5;
+      const latRad = (latitude * Math.PI) / 180;
+      const fCoriolis = 2 * omegaEarth * Math.sin(latRad);
+      const absF = Math.max(1e-6, Math.abs(fCoriolis));
+      const ekmanDepth = Math.PI * Math.sqrt((2 * eddyViscosity) / absF);
+
+      const rhoAir = 1.22;
+      const cd = 1.3e-3;
+      const tau0 = rhoAir * cd * windSpeed * windSpeed;
+      const rhoWater = 1025;
+      const v0 = tau0 / (rhoWater * Math.sqrt(absF * eddyViscosity));
+      const ekmanTransport = tau0 / (rhoWater * absF);
+
+      const isSouth = latitude < 0;
+      const dirEs = isSouth ? 'Hacia el OESTE (Mar Adentro / Surgencia Activa)' : 'Hacia el ESTE / Costa';
+      const dirEn = isSouth ? 'WESTWARD (Offshore / Active Upwelling)' : 'EASTWARD / Coastal Downwelling';
+
+      return {
+        items: [
+          { label: 'Profundidad de Ekman (D_E)', value: `${ekmanDepth.toFixed(1)} m` },
+          { label: 'Velocidad Superficie (V₀)', value: `${v0.toFixed(2)} m/s` },
+          { label: 'Transporte Neto Ekman', value: `${ekmanTransport.toFixed(2)} m²/s` },
+          { label: 'Tensión Viento (τ₀)', value: `${tau0.toFixed(3)} Pa` }
+        ],
+        status: lang === 'en'
+          ? `${latitude < 0 ? 'Chile / Southern Hemisphere' : 'Northern Hemisphere'}: Net 90° transport ${dirEn}`
+          : `${latitude < 0 ? 'Chile / Hemisferio Sur' : 'Hemisferio Norte'}: Transporte neto 90° ${dirEs}`,
+        raw: { windSpeed, latitude, eddyViscosity, fCoriolis, absF, ekmanDepth, tau0, v0, ekmanTransport, isSouth }
+      };
+    }
+
+    if (selectedId === 'magnetotellurics') {
+      const { frequency = 10, resTop = 20, resBottom = 500, layerThickness = 300 } = safeParams;
+      const fVal = Math.max(0.01, frequency);
+      const skinDepth1 = 503 * Math.sqrt(resTop / fVal);
+      const skinDepth2 = 503 * Math.sqrt(resBottom / fVal);
+
+      const ratio = skinDepth1 > 0 ? layerThickness / skinDepth1 : 1;
+      const weight = Math.exp(-1.5 * ratio);
+      const appRes = resTop * (1 - weight) + resBottom * weight;
+      const period = 1 / fVal;
+
+      return {
+        items: [
+          { label: 'Skin Depth Capa 1 (δ₁)', value: `${skinDepth1.toFixed(0)} m` },
+          { label: 'Resistividad Aparente (ρ_a)', value: `${appRes.toFixed(1)} Ω·m` },
+          { label: 'Período de Onda (T)', value: `${period >= 1 ? period.toFixed(2) + ' s' : (period * 1000).toFixed(0) + ' ms'}` },
+          { label: 'Penetración Relativa', value: `${skinDepth1 > layerThickness ? 'Penetra al basamento' : 'Confinada en Capa 1'}` }
+        ],
+        status: lang === 'en'
+          ? `f=${fVal.toFixed(1)} Hz: Skin Depth δ=${skinDepth1.toFixed(0)}m in Layer 1 (${skinDepth1 > layerThickness ? 'Penetrating deeper layer' : 'Shallow confinement'})`
+          : `f=${fVal.toFixed(1)} Hz: Profundidad de penetración δ=${skinDepth1.toFixed(0)}m (${skinDepth1 > layerThickness ? 'Alcanza el basamento resistivo' : 'Confinada en estrato somero'})`,
+        raw: { frequency: fVal, resTop, resBottom, layerThickness, skinDepth1, skinDepth2, appRes, period }
       };
     }
 
@@ -2423,69 +2825,6 @@ export default function PhysicsLab({
     // ------------------------------------------------------------------------
     // 8. GENERAL RELATIVITY: SCHWARZSCHILD GEODESIC ROSETTE & PERIHELION SHIFT
     // ------------------------------------------------------------------------
-    if (selectedId === 'coupled_oscillators') {
-      const { m1 = 2.0, m2 = 2.0, kOuter = 18.0, kCoupling = 10.0, mode = 1 } = safeParams;
-      const tr = (kOuter + kCoupling) / m1 + (kOuter + kCoupling) / m2;
-      const detMat = ((kOuter + kCoupling) * (kOuter + kCoupling) - kCoupling * kCoupling) / (m1 * m2);
-      const disc = Math.max(0, tr * tr - 4 * detMat);
-      const w1sq = Math.max(0.1, (tr - Math.sqrt(disc)) / 2);
-      const w2sq = Math.max(0.2, (tr + Math.sqrt(disc)) / 2);
-      const w1 = Math.sqrt(w1sq);
-      const w2 = Math.sqrt(w2sq);
-      const f1 = w1 / (2 * Math.PI);
-      const f2 = w2 / (2 * Math.PI);
-      const beatFreq = Math.abs(w2 - w1) / (2 * Math.PI);
-
-      let modeDescEs = 'Modo 1: En Fase (Mismo sentido, resorte central quieto)';
-      let modeDescEn = 'Mode 1: In-Phase (Same direction, central spring idle)';
-      if (mode === 2) {
-        modeDescEs = 'Modo 2: En Antifase (Sentidos opuestos, máxima compresión)';
-        modeDescEn = 'Mode 2: Anti-Phase (Opposite direction, maximum stretch)';
-      } else if (mode === 3) {
-        modeDescEs = `Superposición / Batimiento (f_bat = ${beatFreq.toFixed(2)} Hz)`;
-        modeDescEn = `Superposition / Energy Beat (f_beat = ${beatFreq.toFixed(2)} Hz)`;
-      }
-
-      return {
-        items: [
-          { label: 'ω₁ (Modo en Fase)', value: `${w1.toFixed(2)} rad/s` },
-          { label: 'ω₂ (Modo en Antifase)', value: `${w2.toFixed(2)} rad/s` },
-          { label: 'f₁ (Frecuencia 1)', value: `${f1.toFixed(2)} Hz` },
-          { label: 'f₂ (Frecuencia 2)', value: `${f2.toFixed(2)} Hz` }
-        ],
-        status: lang === 'en' ? modeDescEn : modeDescEs,
-        raw: { m1, m2, kOuter, kCoupling, mode, w1, w2, f1, f2, beatFreq }
-      };
-    }
-
-    if (selectedId === 'geostrophic_wind') {
-      const { deltaP = 16.0, latitude = 45, hemisphere = 1, rho = 1.20 } = safeParams;
-      const omegaEarth = 7.292e-5;
-      const latRad = (Math.abs(latitude) * Math.PI) / 180;
-      const fCoriolis = 2 * omegaEarth * Math.sin(latRad) * (hemisphere >= 0 ? 1 : -1);
-      const gradP = (deltaP * 100) / 100000; // Pa/m
-      const vg = Math.abs(fCoriolis) > 1e-6 ? gradP / (rho * Math.abs(fCoriolis)) : 999;
-      const vgKmh = vg * 3.6;
-
-      const statusEs = hemisphere >= 0
-        ? `Hemisferio Norte: Desviación a la DERECHA (${vgKmh.toFixed(1)} km/h)`
-        : `Hemisferio Sur: Desviación a la IZQUIERDA (${vgKmh.toFixed(1)} km/h)`;
-      const statusEn = hemisphere >= 0
-        ? `Northern Hemisphere: Deflection to RIGHT (${vgKmh.toFixed(1)} km/h)`
-        : `Southern Hemisphere: Deflection to LEFT (${vgKmh.toFixed(1)} km/h)`;
-
-      return {
-        items: [
-          { label: 'v_g (Viento Geostrófico)', value: `${vg.toFixed(1)} m/s` },
-          { label: 'v_g en km/h', value: `${vgKmh.toFixed(1)} km/h` },
-          { label: 'Parámetro f (Coriolis)', value: `${(Math.abs(fCoriolis) * 1e4).toFixed(2)}×10⁻⁴ s⁻¹` },
-          { label: 'Gradiente ∇P', value: `${(gradP * 1000).toFixed(2)} mPa/m` }
-        ],
-        status: lang === 'en' ? statusEn : statusEs,
-        raw: { deltaP, latitude, hemisphere, rho, fCoriolis, gradP, vg, vgKmh }
-      };
-    }
-
     if (selectedId === 'relativity') {
       const { mass = 1.0, eccentricity = 0.5, grFactor = 1.5, semiMajor = 2.8 } = safeParams;
       const { rMin = 1.4, deltaPhiDeg = 4.5 } = telemetry.raw;
@@ -2836,6 +3175,593 @@ export default function PhysicsLab({
         ctx.fillText('F⃗_P + F⃗_Cor = 0⃗', parcelX + 52, parcelY);
         ctx.fillText(hemisphere >= 0 ? 'Desviación Der. (NH)' : 'Desviación Izq. (SH)', parcelX + 52, parcelY + 16);
       }
+    }
+
+    // ------------------------------------------------------------------------
+    // 11. THEORETICAL SEISMOLOGY: BEACHBALL (FOCAL MECHANISM) & P/S WAVEFRONTS
+    // ------------------------------------------------------------------------
+    if (selectedId === 'seismology_beachball') {
+      const { strike = 15, dip = 20, rake = 90, magnitude = 8.8 } = safeParams;
+      const { regimeEs, regimeEn, logM0, m0Sci, m0Exp } = telemetry.raw;
+
+      const bbCenterX = 135;
+      const bbCenterY = H / 2;
+      const bbRadius = 68;
+
+      ctx.save();
+      ctx.translate(bbCenterX, bbCenterY);
+
+      // Background of focal sphere
+      ctx.fillStyle = '#F8FAFC';
+      ctx.beginPath();
+      ctx.arc(0, 0, bbRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      const strikeRad = ((strike - 90) * Math.PI) / 180;
+      ctx.rotate(strikeRad);
+
+      const dipRatio = Math.sin((dip * Math.PI) / 180);
+
+      ctx.beginPath();
+      ctx.arc(0, 0, bbRadius, 0, Math.PI * 2);
+      ctx.clip();
+
+      if (rake >= 45 && rake <= 135) {
+        // Thrust faulting (Chili / Subduction): Center is compressional
+        ctx.fillStyle = '#EF4444';
+        ctx.beginPath();
+        ctx.arc(0, 0, bbRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        const crescentOffset = bbRadius * (1 - dipRatio * 0.7);
+        ctx.fillStyle = '#F8FAFC';
+        ctx.beginPath();
+        ctx.arc(0, -crescentOffset, bbRadius * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(0, crescentOffset + 15, bbRadius * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (rake >= -135 && rake <= -45) {
+        // Normal faulting (Iceland / Rift): Center is dilatational, sides compressional
+        ctx.fillStyle = '#F8FAFC';
+        ctx.beginPath();
+        ctx.arc(0, 0, bbRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#EF4444';
+        const crescentOffset = bbRadius * (1 - dipRatio * 0.7);
+        ctx.beginPath();
+        ctx.arc(0, -crescentOffset, bbRadius * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(0, crescentOffset + 15, bbRadius * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Strike-slip faulting (Turkey / San Andreas): 4 alternating quadrants
+        ctx.fillStyle = '#EF4444';
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, bbRadius, 0, Math.PI / 2);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, bbRadius, Math.PI, (3 * Math.PI) / 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, bbRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 3]);
+      ctx.beginPath();
+      ctx.moveTo(-bbRadius, 0);
+      ctx.lineTo(bbRadius, 0);
+      ctx.moveTo(0, -bbRadius);
+      ctx.lineTo(0, bbRadius);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (showDCL) {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#0F172A';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#EF4444';
+        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+        ctx.fillText('P', -3, 3);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(0, -bbRadius * 0.65, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#0284C7';
+        ctx.fillText('T', -3, -bbRadius * 0.65 + 3);
+      }
+
+      ctx.restore();
+
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText('N', bbCenterX - 4, bbCenterY - bbRadius - 8);
+      ctx.fillText('S', bbCenterX - 4, bbCenterY + bbRadius + 16);
+      ctx.fillText('W', bbCenterX - bbRadius - 18, bbCenterY + 4);
+      ctx.fillText('E', bbCenterX + bbRadius + 8, bbCenterY + 4);
+
+      ctx.fillStyle = '#EF4444';
+      ctx.font = 'bold 11px "JetBrains Mono", monospace';
+      ctx.fillText('Proyección Estereográfica', bbCenterX - 65, H - 25);
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.fillText(`φ=${strike}°  δ=${dip}°  λ=${rake}°`, bbCenterX - 55, H - 12);
+
+      // Fault Plane Cross-Section & Expanding P/S Wavefronts
+      const faultX = W - 180;
+      const faultY = H / 2 - 10;
+      const dipRad = (dip * Math.PI) / 180;
+
+      ctx.save();
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(faultX - 110, faultY - 90, 230, 180);
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(faultX - 110, faultY - 90, 230, 180);
+
+      const faultLen = 140;
+      const fx1 = faultX - (faultLen / 2) * Math.cos(dipRad);
+      const fy1 = faultY - (faultLen / 2) * Math.sin(dipRad);
+      const fx2 = faultX + (faultLen / 2) * Math.cos(dipRad);
+      const fy2 = faultY + (faultLen / 2) * Math.sin(dipRad);
+
+      ctx.strokeStyle = '#FBBF24';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(fx1, fy1);
+      ctx.lineTo(fx2, fy2);
+      ctx.stroke();
+
+      ctx.fillStyle = '#EF4444';
+      ctx.beginPath();
+      ctx.arc(faultX, faultY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      const pRadius = ((simTime * 48) % 110) + 12;
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(faultX, faultY, pRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const sRadius = pRadius / Math.sqrt(3);
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.9)';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(faultX, faultY, sRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#38BDF8';
+      ctx.fillText(`Onda P (v_P=6.0 km/s)`, faultX + pRadius * 0.7 + 4, faultY - pRadius * 0.7);
+      ctx.fillStyle = '#FBBF24';
+      ctx.fillText(`Onda S (v_S=3.5 km/s)`, faultX + sRadius * 0.7 + 4, faultY + sRadius * 0.7);
+
+      ctx.fillStyle = '#E2E8F0';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('Bloque Techo', faultX - 75, faultY - 55);
+      ctx.fillText('Bloque Piso', faultX + 25, faultY + 65);
+
+      if (showDCL) {
+        const slipSign = rake >= 0 ? -1 : 1;
+        const slipDx = slipSign * 35 * Math.cos(dipRad);
+        const slipDy = slipSign * 35 * Math.sin(dipRad);
+        drawArrow(ctx, faultX - 30, faultY - 30, faultX - 30 + slipDx, faultY - 30 + slipDy, '#34D399', 'u⃗ (Slip)', 2.5);
+
+        const nDx = -35 * Math.sin(dipRad);
+        const nDy = 35 * Math.cos(dipRad);
+        drawArrow(ctx, faultX, faultY, faultX + nDx, faultY + nDy, '#C084FC', 'n̂ (Normal)', 2.5);
+
+        drawArrow(ctx, faultX + 70, faultY, faultX + 20, faultY, '#EF4444', 'P⃗ (Compresión)', 2);
+        drawArrow(ctx, faultX - 70, faultY, faultX - 20, faultY, '#EF4444', 'P⃗', 2);
+      }
+
+      ctx.restore();
+    }
+
+    // ------------------------------------------------------------------------
+    // 12. POTENTIAL FIELDS: GRAVIMETRY, POISSON PDE & AIRY ISOSTASY (ANDES)
+    // ------------------------------------------------------------------------
+    if (selectedId === 'bouguer_gravity') {
+      const { mountainHeight = 4000, crustDensity = 2670, mantleDensity = 3300, crustThickness = 35 } = safeParams;
+      const { rootKm, totalCrustKm, bouguerAnomalyMgal, freeAirMgal } = telemetry.raw;
+
+      const profileW = W - 70;
+      const profileStartX = 35;
+      const midY = 110;
+
+      ctx.save();
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(profileStartX, midY);
+      ctx.lineTo(profileStartX + profileW, midY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('0 mGal', profileStartX - 28, midY + 3);
+      ctx.fillText('+200', profileStartX - 28, midY - 35);
+      ctx.fillText('-300', profileStartX - 28, midY + 45);
+
+      // Curve 1: Free Air Anomaly
+      ctx.strokeStyle = '#FBBF24';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let px = 0; px <= profileW; px += 4) {
+        const xDist = (px - profileW / 2) / 75;
+        const faVal = freeAirMgal * Math.exp(-xDist * xDist);
+        const py = midY - (faVal / 300) * 50;
+        if (px === 0) ctx.moveTo(profileStartX + px, py);
+        else ctx.lineTo(profileStartX + px, py);
+      }
+      ctx.stroke();
+
+      // Curve 2: Bouguer Anomaly
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 0; px <= profileW; px += 4) {
+        const xDist = (px - profileW / 2) / 95;
+        const bVal = bouguerAnomalyMgal * Math.exp(-xDist * xDist);
+        const py = midY - (bVal / 300) * 45;
+        if (px === 0) ctx.moveTo(profileStartX + px, py);
+        else ctx.lineTo(profileStartX + px, py);
+      }
+      ctx.stroke();
+
+      // Legend
+      ctx.fillStyle = '#FBBF24';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText(`Δg_FA (Aire Libre): +${freeAirMgal.toFixed(0)} mGal`, profileStartX + 8, 22);
+      ctx.fillStyle = '#38BDF8';
+      ctx.fillText(`Δg_B (Bouguer): ${bouguerAnomalyMgal.toFixed(0)} mGal (Mínimo Andino)`, profileStartX + 8, 36);
+
+      // Bottom Section: Crustal Cross-Section & Moho Root
+      const groundY = 165;
+      const seaY = groundY + 15;
+      const normalMohoY = seaY + 45;
+      const rootScale = Math.min(65, (rootKm / 30) * 55);
+
+      ctx.fillStyle = '#1E1B4B';
+      ctx.fillRect(profileStartX, seaY, profileW, H - seaY - 15);
+
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.moveTo(profileStartX, seaY);
+
+      for (let px = 0; px <= profileW; px += 4) {
+        const xDist = (px - profileW / 2) / 65;
+        const topoY = seaY - (mountainHeight / 6500) * 35 * Math.exp(-xDist * xDist);
+        ctx.lineTo(profileStartX + px, topoY);
+      }
+      ctx.lineTo(profileStartX + profileW, seaY);
+      ctx.lineTo(profileStartX + profileW, normalMohoY);
+
+      for (let px = profileW; px >= 0; px -= 4) {
+        const xDist = (px - profileW / 2) / 75;
+        const mohoY = normalMohoY + rootScale * Math.exp(-xDist * xDist);
+        ctx.lineTo(profileStartX + px, mohoY);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#94A3B8';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let px = 0; px <= profileW; px += 4) {
+        const xDist = (px - profileW / 2) / 75;
+        const mohoY = normalMohoY + rootScale * Math.exp(-xDist * xDist);
+        if (px === 0) ctx.moveTo(profileStartX + px, mohoY);
+        else ctx.lineTo(profileStartX + px, mohoY);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText(`Cordillera (+${mountainHeight}m)`, W / 2 - 50, seaY - 24);
+      ctx.fillText(`Corteza (ρ_c = ${crustDensity} kg/m³)`, profileStartX + 12, normalMohoY - 12);
+      ctx.fillText(`Manto Superior (ρ_m = ${mantleDensity} kg/m³)`, profileStartX + 12, H - 22);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText(`Discontinuidad de Moho (Raíz b = ${rootKm.toFixed(1)} km)`, W / 2 - 95, normalMohoY + rootScale + 14);
+
+      if (showDCL) {
+        drawArrow(ctx, W / 2, seaY - 25, W / 2, seaY + 15, '#EF4444', 'Peso Topografía', 2.5);
+        drawArrow(ctx, W / 2, normalMohoY + rootScale + 10, W / 2, normalMohoY + 20, '#10B981', 'Empuje Isostático', 2.5);
+      }
+
+      ctx.restore();
+    }
+
+    // ------------------------------------------------------------------------
+    // 13. DYNAMICAL OCEANOGRAPHY: EKMAN SPIRAL & COASTAL UPWELLING (CHILE)
+    // ------------------------------------------------------------------------
+    if (selectedId === 'ekman_spiral') {
+      const { windSpeed = 12, latitude = -33, eddyViscosity = 0.05 } = safeParams;
+      const { ekmanDepth, v0, ekmanTransport, isSouth } = telemetry.raw;
+
+      const oceanCenterX = 150;
+      const oceanCenterY = 70;
+      const depthLevels = 6;
+      const maxVecLen = Math.min(85, Math.max(35, v0 * 65));
+
+      ctx.save();
+      ctx.translate(oceanCenterX, oceanCenterY);
+
+      for (let lvl = 0; lvl <= depthLevels; lvl++) {
+        const ly = lvl * 28;
+        const normZ = lvl / depthLevels;
+
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(0, ly, 75, 22, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748B';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText(`-${(normZ * ekmanDepth).toFixed(0)}m`, 82, ly + 3);
+      }
+
+      drawArrow(ctx, 0, -25, 0, -60, '#34D399', `Viento W=${windSpeed} m/s`, 3);
+
+      const deflAngle = isSouth ? (-Math.PI / 2 - Math.PI / 4) : (-Math.PI / 2 + Math.PI / 4);
+
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let lvl = 0; lvl <= depthLevels; lvl++) {
+        const ly = lvl * 28;
+        const normZ = lvl / depthLevels;
+        const decay = Math.exp(-normZ * Math.PI);
+        const rotAngle = deflAngle + (isSouth ? -1 : 1) * normZ * Math.PI;
+
+        const curLen = maxVecLen * decay;
+        const vx = curLen * Math.cos(rotAngle);
+        const vy = ly + curLen * Math.sin(rotAngle) * 0.35;
+
+        if (lvl === 0) ctx.moveTo(vx, vy);
+        else ctx.lineTo(vx, vy);
+
+        drawArrow(ctx, 0, ly, vx, vy, lvl === 0 ? '#0284C7' : 'rgba(56, 189, 248, 0.7)', lvl === 0 ? `V₀=${v0.toFixed(2)}m/s` : '', 2);
+      }
+      ctx.stroke();
+
+      const transX = isSouth ? -90 : 90;
+      drawArrow(ctx, 0, 50, transX, 50, '#C084FC', `Transporte Neto 90° (${ekmanTransport.toFixed(1)} m²/s)`, 3.5);
+
+      ctx.restore();
+
+      // Right Side: Chilean Coast Upwelling Cross-Section
+      const coastLeft = W - 220;
+      const coastTop = 30;
+      const coastW = 200;
+      const coastH = H - 50;
+
+      ctx.save();
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(coastLeft, coastTop, coastW, coastH);
+      ctx.strokeStyle = '#334155';
+      ctx.strokeRect(coastLeft, coastTop, coastW, coastH);
+
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.moveTo(coastLeft + coastW - 35, coastTop);
+      ctx.lineTo(coastLeft + coastW, coastTop);
+      ctx.lineTo(coastLeft + coastW, coastTop + coastH);
+      ctx.lineTo(coastLeft + coastW - 120, coastTop + coastH);
+      ctx.lineTo(coastLeft + coastW - 65, coastTop + 80);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#64748B';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText(isSouth ? 'Costa de Chile' : 'Costa Continental', coastLeft + coastW - 85, coastTop + 20);
+
+      drawArrow(ctx, coastLeft + coastW - 55, coastTop + 14, coastLeft + 15, coastTop + 14, '#C084FC', 'Mar Adentro (Oeste)', 2.5);
+
+      ctx.strokeStyle = '#06B6D4';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(coastLeft + 25, coastTop + coastH - 25);
+      ctx.quadraticCurveTo(coastLeft + 85, coastTop + coastH - 35, coastLeft + coastW - 75, coastTop + 35);
+      ctx.stroke();
+
+      ctx.fillStyle = '#34D399';
+      for (let b = 0; b < 6; b++) {
+        const bProgress = ((simTime * 0.4 + b * 0.18) % 1);
+        const bx = coastLeft + 35 + bProgress * (coastW - 120);
+        const by = coastTop + coastH - 30 - bProgress * (coastH - 70);
+        ctx.beginPath();
+        ctx.arc(bx, by, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = '#06B6D4';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText('Surgencia Humboldt', coastLeft + 10, coastTop + coastH - 12);
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.fillText('Aguas frías ricas en nutrientes', coastLeft + 10, coastTop + coastH);
+
+      if (showDCL) {
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx.fillRect(coastLeft + 10, coastTop + 35, 125, 48);
+        ctx.strokeStyle = '#06B6D4';
+        ctx.strokeRect(coastLeft + 10, coastTop + 35, 125, 48);
+        ctx.fillStyle = '#06B6D4';
+        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+        ctx.fillText('Balance de Ekman:', coastLeft + 16, coastTop + 48);
+        ctx.fillStyle = '#E2E8F0';
+        ctx.fillText('A_z (∂²V/∂z²) = if V', coastLeft + 16, coastTop + 62);
+        ctx.fillText(`D_E = ${ekmanDepth.toFixed(1)} m`, coastLeft + 16, coastTop + 76);
+      }
+
+      ctx.restore();
+    }
+
+    // ------------------------------------------------------------------------
+    // 14. ELECTROMAGNETIC METHODS: MAGNETOTELLURICS & SKIN DEPTH
+    // ------------------------------------------------------------------------
+    if (selectedId === 'magnetotellurics') {
+      const { frequency = 10, resTop = 20, resBottom = 500, layerThickness = 300 } = safeParams;
+      const { skinDepth1, appRes, period } = telemetry.raw;
+
+      const strataLeft = 35;
+      const strataW = 230;
+      const strataH = H - 50;
+
+      ctx.save();
+      const layer1Height = Math.min(strataH * 0.65, Math.max(35, (layerThickness / 1000) * strataH * 0.7));
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(strataLeft, 25, strataW, layer1Height);
+      ctx.strokeStyle = '#475569';
+      ctx.strokeRect(strataLeft, 25, strataW, layer1Height);
+
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(strataLeft, 25 + layer1Height, strataW, strataH - layer1Height);
+      ctx.strokeRect(strataLeft, 25 + layer1Height, strataW, strataH - layer1Height);
+
+      ctx.fillStyle = '#38BDF8';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText(`Capa 1: ρ₁ = ${resTop} Ω·m (h₁ = ${layerThickness}m)`, strataLeft + 8, 42);
+      ctx.fillStyle = '#C084FC';
+      ctx.fillText(`Basamento: ρ₂ = ${resBottom} Ω·m`, strataLeft + 8, 25 + layer1Height + 20);
+
+      const waveMidX = strataLeft + strataW / 2 + 20;
+      const skinDepthPx = Math.min(strataH - 10, (skinDepth1 / 1000) * strataH * 0.7);
+
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let y = 0; y <= strataH; y += 2) {
+        const depthRatio = skinDepthPx > 0 ? y / skinDepthPx : 1;
+        const amp = 45 * Math.exp(-depthRatio);
+        const wave = amp * Math.cos(simTime * 8 - depthRatio * Math.PI * 2);
+        const wx = waveMidX + wave;
+        const wy = 25 + y;
+        if (y === 0) ctx.moveTo(wx, wy);
+        else ctx.lineTo(wx, wy);
+      }
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      for (let y = 0; y <= strataH; y += 4) {
+        const depthRatio = skinDepthPx > 0 ? y / skinDepthPx : 1;
+        const amp = 45 * Math.exp(-depthRatio);
+        if (y === 0) ctx.moveTo(waveMidX + amp, 25 + y);
+        else ctx.lineTo(waveMidX + amp, 25 + y);
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      for (let y = 0; y <= strataH; y += 4) {
+        const depthRatio = skinDepthPx > 0 ? y / skinDepthPx : 1;
+        const amp = 45 * Math.exp(-depthRatio);
+        if (y === 0) ctx.moveTo(waveMidX - amp, 25 + y);
+        else ctx.lineTo(waveMidX - amp, 25 + y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      const skinMarkerY = 25 + skinDepthPx;
+      if (skinMarkerY < 25 + strataH) {
+        ctx.strokeStyle = '#EF4444';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(strataLeft, skinMarkerY);
+        ctx.lineTo(strataLeft + strataW, skinMarkerY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#EF4444';
+        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+        ctx.fillText(`Skin Depth δ = ${skinDepth1.toFixed(0)}m (1/e ≈ 37%)`, strataLeft + 8, skinMarkerY - 4);
+      }
+
+      // Cagniard Apparent Resistivity Sounding Curve
+      const plotLeft = W - 240;
+      const plotTop = 30;
+      const plotW = 205;
+      const plotH = strataH - 10;
+
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(plotLeft, plotTop, plotW, plotH);
+      ctx.strokeStyle = '#475569';
+      ctx.strokeRect(plotLeft, plotTop, plotW, plotH);
+
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('Curva de Resistividad Aparente', plotLeft + 10, plotTop + 16);
+      ctx.fillText('ρ_a (Ω·m)', plotLeft + 10, plotTop + 30);
+      ctx.fillText('log T (Período) →', plotLeft + plotW - 105, plotTop + plotH - 6);
+
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 0; px <= plotW - 40; px += 3) {
+        const normT = px / (plotW - 40);
+        const curveVal = resTop + (resBottom - resTop) * (1 / (1 + Math.exp(-6 * (normT - 0.5))));
+        const py = plotTop + plotH - 25 - (curveVal / Math.max(resTop, resBottom)) * (plotH - 60);
+        if (px === 0) ctx.moveTo(plotLeft + 20 + px, py);
+        else ctx.lineTo(plotLeft + 20 + px, py);
+      }
+      ctx.stroke();
+
+      const opNormT = Math.min(1, Math.max(0, (Math.log10(period) + 3) / 4));
+      const opX = plotLeft + 20 + opNormT * (plotW - 40);
+      const opY = plotTop + plotH - 25 - (appRes / Math.max(resTop, resBottom)) * (plotH - 60);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.beginPath();
+      ctx.arc(opX, opY, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText(`ρ_a = ${appRes.toFixed(1)} Ω·m`, opX - 35, opY - 10);
+
+      if (showDCL) {
+        drawArrow(ctx, waveMidX - 35, 55, waveMidX + 35, 55, '#38BDF8', 'E_x (V/m)', 2);
+        drawArrow(ctx, waveMidX, 40, waveMidX, 70, '#F59E0B', 'H_y (A/m)', 2);
+      }
+
+      ctx.restore();
     }
   }, [selectedId, safeParams, simTime, showDCL, telemetry.raw]);
 

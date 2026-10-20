@@ -459,7 +459,7 @@ const COURSE_LAB_MAPPING = {
   klausur: 'vector_calculus',
   linear_algebra: 'coupled_oscillators',
   mechanics: 'newtonian',
-  geophysics: 'geostrophic_wind',
+  geophysics: 'seismology_beachball',
   computational: 'intro_physics',
   ib: 'electromagnetism'
 };

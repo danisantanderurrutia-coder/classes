@@ -35,7 +35,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       titleEn: '1. Observation (Sensory Intuition & Sketching)',
       titleEs: '1. Observación (Intuición Sensible y Bocetos)',
       mentorEn: 'Leonardo Da Vinci',
-      image: '/images/method-piad.webp',
+      image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+      simulationImage: '/images/method-piad.webp',
       imageCaptionEn: 'Da Vinci method: analytical sketching and observational geometry before abstract formalisms.',
       imageCaptionEs: 'Método Da Vinci: dibujo analítico y geometría observacional antes del formalismo abstracto.',
       quoteEn: '"Study the science of art. Study the art of science. Develop your senses — especially learn how to see."',
@@ -331,15 +332,33 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
                 </div>
               </div>
 
-              {/* Optional Illustrated Sketch for Step 1 (Da Vinci Notebook Style) */}
+              {/* Optional Illustrated Sketch for Step 1 (Da Vinci Notebook Style with Simulation Crossfade) */}
               {steps[activeStep].image && (
                 <div className="lg:col-span-5 flex flex-col items-center">
-                  <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950 max-w-sm">
-                    <img
-                      src={steps[activeStep].image}
-                      alt="Da Vinci Notebook Sketch"
-                      className="w-full h-56 object-cover opacity-90 hover:opacity-100 transition-opacity"
-                    />
+                  <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950 max-w-sm group">
+                    <div className="relative h-56 overflow-hidden">
+                      {/* Classical Authentic Da Vinci Sketch */}
+                      <img
+                        src={steps[activeStep].image}
+                        alt="Da Vinci Notebook Sketch"
+                        className="w-full h-full object-cover opacity-90 transition-opacity duration-700 ease-in-out group-hover:opacity-0"
+                      />
+                      {/* Modern Analytical / Geometric Overlay */}
+                      {steps[activeStep].simulationImage && (
+                        <img
+                          src={steps[activeStep].simulationImage}
+                          alt="Analytical Model"
+                          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100"
+                        />
+                      )}
+                      {steps[activeStep].simulationImage && (
+                        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                          <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-amber-300 border border-amber-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
+                            <span>{lang === 'en' ? 'Digital Analysis' : 'Análisis Digital'}</span>
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <div className="p-3 text-[11px] font-mono text-slate-400 border-t border-slate-800">
                       {lang === 'en' ? steps[activeStep].imageCaptionEn : steps[activeStep].imageCaptionEs}
                     </div>

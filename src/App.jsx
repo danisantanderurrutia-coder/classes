@@ -54,7 +54,6 @@ import PhysicsToolkit from './components/PhysicsToolkit';
 import { TutorPage } from './components/TutorPage';
 import {
   CURRENCY_TIERS,
-  CURRENCY_LIST,
   SUBJECT_COMPLEXITY_TIERS,
   getCurrencyTiers,
   detectInitialCurrency,
@@ -963,10 +962,10 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap leading-tight">
-                DANIEL SANTANDER
+                MATH &amp; PHYSICS CLASSES
               </span>
               <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-tight">
-                Open Knowledge &amp; Science Mentorship
+                Daniel Santander • Double M.Sc. &amp; Geophysicist
               </span>
             </div>
           </button>
@@ -1058,22 +1057,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </button>
           </nav>
 
-          {/* Currency, Language & Rounded CTA */}
+          {/* Language & Rounded CTA */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            <select
-              aria-label="Currency"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              className="bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 rounded-full px-2.5 py-1 text-[11px] font-mono font-bold focus:outline-none cursor-pointer"
-              title={lang === 'en' ? 'Select your currency' : 'Selecciona tu moneda'}
-            >
-              {CURRENCY_LIST.map((c) => (
-                <option key={c.code} value={c.code} className="bg-slate-900 text-white">
-                  {c.flag} {c.code}
-                </option>
-              ))}
-            </select>
-
             <div className="flex items-center bg-white/10 border border-white/15 rounded-full p-0.5 text-xs font-mono shrink-0">
               <button
                 onClick={() => setLang('en')}

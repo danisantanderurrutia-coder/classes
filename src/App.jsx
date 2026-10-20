@@ -466,6 +466,8 @@ const COURSE_LAB_MAPPING = {
 
 export default function App() {
   const [lang, setLang] = useState('es');
+  // Top Navigation Bar Variant Preview: 'option1' (Obsidian Minimal) | 'option2' (Floating Island) | 'option3' (Minimalist Text Links)
+  const [navbarStyle, setNavbarStyle] = useState('option1');
   // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'library' | 'precios' | 'contact'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
@@ -653,191 +655,462 @@ Sent from STEM Mentorship Portal`;
       {/* Subtle graph paper grid */}
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-60" />
 
-      {/* --- STICKY NAVIGATION BAR WITH DISTINCT PAGE ROUTING --- */}
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl shadow-lg shadow-black/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-          
-          {/* Identity & Seal: Clean Typographic, No Button-on-Button */}
-          <button 
-            onClick={() => navigateTo('landing')}
-            className="flex items-center gap-3 group text-left cursor-pointer shrink-0"
-          >
-            <div className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 text-white flex items-center justify-center font-mono text-base font-bold group-hover:bg-white/10 group-hover:border-white/25 transition-all">
-              Φ
-            </div>
-            <div>
-              <span className="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-slate-200 transition-colors block leading-tight">
-                DANIEL SANTANDER
-              </span>
-              <p className="text-[10px] sm:text-[11px] text-slate-400 font-mono font-medium leading-tight mt-0.5">
-                Double M.Sc. &amp; Geophysicist • Hannover &amp; Online
-              </p>
-            </div>
-          </button>
+      {/* ========================================================= */}
+      {/* DYNAMIC HEADER ARCHITECTURE: OPTION 1, OPTION 2, OPTION 3 */}
+      {/* ========================================================= */}
 
-          {/* Dedicated Page Tabs: Clean Obsidian Nav, No Clashing Rainbow Pill Boxes */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-mono font-medium">
-            <button
-              onClick={() => navigateTo('lab')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'lab'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
+      {/* --- OPTION 1: OBSIDIAN MINIMALIST (FULL-BLEED) --- */}
+      {navbarStyle === 'option1' && (
+        <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-black/95 backdrop-blur-xl shadow-2xl transition-all">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            
+            {/* Identity & Seal */}
+            <button 
+              onClick={() => navigateTo('landing')}
+              className="flex items-center gap-3 group text-left cursor-pointer shrink-0"
             >
-              <Atom className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
+              <div className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 text-white flex items-center justify-center font-mono text-base font-bold group-hover:bg-white/10 group-hover:border-white/25 transition-all shrink-0">
+                Φ
+              </div>
+              <div className="min-w-0">
+                <span className="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-slate-200 transition-colors block leading-tight whitespace-nowrap">
+                  DANIEL SANTANDER
+                </span>
+                <p className="text-[10px] sm:text-[11px] text-slate-400 font-mono font-medium leading-tight mt-0.5 hidden md:block whitespace-nowrap">
+                  Double M.Sc. &amp; Geophysicist • Hannover &amp; Online
+                </p>
+              </div>
             </button>
 
-            <button
-              onClick={() => navigateTo('courses')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'courses'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('piad')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'piad'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <Compass className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'PIAD Method™' : 'Método PIAD™'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('library')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'library'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <Library className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'Library' : 'Librería'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('precios')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'precios'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <Calculator className="w-3.5 h-3.5 text-slate-300" />
-              <span>{lang === 'en' ? 'Pricing & Dossier' : 'Precios & Dossier'}</span>
-            </button>
-
-            <button
-              onClick={() => navigateTo('contact')}
-              className={`px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                currentPage === 'contact'
-                  ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <Phone className="w-3.5 h-3.5 text-slate-300" />
-              <span>Contact &amp; FAQ</span>
-            </button>
-          </nav>
-
-          {/* Language Switcher & Call CTA */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <div className="flex items-center bg-white/[0.06] border border-white/10 rounded-lg p-0.5 text-xs font-mono">
+            {/* Dedicated Page Tabs (Responsive anti-collapse layout) */}
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[11px] xl:text-xs font-mono font-medium">
               <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
-                  lang === 'en' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                onClick={() => navigateTo('lab')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'lab'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                EN
+                <Atom className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span className="hidden xl:inline">{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
+                <span className="xl:hidden">{lang === 'en' ? 'Lab' : 'Lab DCL'}</span>
               </button>
+
               <button
-                onClick={() => setLang('es')}
-                className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
-                  lang === 'es' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                onClick={() => navigateTo('courses')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'courses'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                ES
+                <BookOpen className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('piad')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'piad'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span className="hidden xl:inline">{lang === 'en' ? 'PIAD Method™' : 'Método PIAD™'}</span>
+                <span className="xl:hidden">PIAD™</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('library')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'library'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <Library className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span>{lang === 'en' ? 'Library' : 'Librería'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('precios')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'precios'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span className="hidden xl:inline">{lang === 'en' ? 'Pricing & Dossier' : 'Precios & Dossier'}</span>
+                <span className="xl:hidden">{lang === 'en' ? 'Pricing' : 'Precios'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('contact')}
+                className={`px-2.5 py-1.5 xl:px-3.5 xl:py-2 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'contact'
+                    ? 'bg-white/15 text-white font-bold border border-white/20 shadow-xs'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+              >
+                <Phone className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <span className="hidden xl:inline">Contact &amp; FAQ</span>
+                <span className="xl:hidden">{lang === 'en' ? 'Contact' : 'Contacto'}</span>
+              </button>
+            </nav>
+
+            {/* Language Switcher & Call CTA (Anti-collapse layout) */}
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+              <div className="flex items-center bg-white/[0.06] border border-white/10 rounded-lg p-0.5 text-xs font-mono shrink-0">
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    lang === 'en' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLang('es')}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    lang === 'es' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ES
+                </button>
+              </div>
+
+              <button
+                onClick={() => handleOpenBooking()}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-200 text-slate-950 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <Calendar className="w-3.5 h-3.5 text-slate-950 shrink-0" />
+                <span className="hidden sm:inline">
+                  {lang === 'en' ? 'Book Diagnostic' : 'Reservar Diagnóstico'}
+                </span>
+                <span className="hidden 2xl:inline font-semibold text-slate-700">
+                  {' '}(20 min)
+                </span>
+                <span className="sm:hidden">
+                  {lang === 'en' ? 'Book' : 'Reservar'}
+                </span>
               </button>
             </div>
 
-            <button
-              onClick={() => handleOpenBooking()}
-              className="px-4 py-2 rounded-xl bg-white hover:bg-slate-200 text-slate-950 text-xs font-mono font-bold transition-all flex items-center gap-2 shadow-sm cursor-pointer"
-            >
-              <Calendar className="w-3.5 h-3.5 text-slate-950 shrink-0" />
-              <span>
-                {lang === 'en' ? 'Book Diagnostic (20 min)' : 'Reservar Diagnóstico (20 min)'}
-              </span>
-            </button>
           </div>
 
-        </div>
+          {/* Mobile / Tablet Navigation Bar: Clean Obsidian Row */}
+          <div className="lg:hidden border-t border-white/[0.08] bg-black px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs font-mono">
+            <button
+              onClick={() => navigateTo('lab')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap flex items-center gap-1.5 ${
+                currentPage === 'lab' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Atom className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
+            </button>
+            <button
+              onClick={() => navigateTo('courses')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+                currentPage === 'courses' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {lang === 'en' ? 'Courses' : 'Cursos'}
+            </button>
+            <button
+              onClick={() => navigateTo('piad')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap flex items-center gap-1 ${
+                currentPage === 'piad' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? 'PIAD Method™' : 'Método PIAD™'}</span>
+            </button>
+            <button
+              onClick={() => navigateTo('library')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+                currentPage === 'library' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {lang === 'en' ? 'Library' : 'Librería'}
+            </button>
+            <button
+              onClick={() => navigateTo('precios')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+                currentPage === 'precios' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {lang === 'en' ? 'Pricing' : 'Precios'}
+            </button>
+            <button
+              onClick={() => navigateTo('contact')}
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+                currentPage === 'contact' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Contact
+            </button>
+          </div>
+        </header>
+      )}
 
-        {/* Mobile / Tablet Navigation Bar: Clean Obsidian Row */}
-        <div className="lg:hidden border-t border-white/[0.08] bg-black px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs font-mono">
-          <button
-            onClick={() => navigateTo('lab')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap flex items-center gap-1.5 ${
-              currentPage === 'lab' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Atom className="w-3.5 h-3.5" />
-            <span>{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
-          </button>
-          <button
-            onClick={() => navigateTo('courses')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              currentPage === 'courses' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            {lang === 'en' ? 'Courses' : 'Cursos'}
-          </button>
-          <button
-            onClick={() => navigateTo('piad')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap flex items-center gap-1 ${
-              currentPage === 'piad' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5" />
-            <span>{lang === 'en' ? 'PIAD Method™' : 'Método PIAD™'}</span>
-          </button>
-          <button
-            onClick={() => navigateTo('library')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              currentPage === 'library' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            {lang === 'en' ? 'Library' : 'Librería'}
-          </button>
-          <button
-            onClick={() => navigateTo('precios')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              currentPage === 'precios' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            {lang === 'en' ? 'Pricing' : 'Precios'}
-          </button>
-          <button
-            onClick={() => navigateTo('contact')}
-            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-              currentPage === 'contact' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Contact
-          </button>
-        </div>
-      </header>
+      {/* --- OPTION 2: FLOATING ISLAND / CÁPSULA FLOTANTE (ESTILO RAYCAST / DYNAMIC ISLAND) --- */}
+      {navbarStyle === 'option2' && (
+        <header className="fixed top-3 sm:top-4 left-0 right-0 z-40 px-2 sm:px-6 pointer-events-none transition-all duration-300">
+          <div className="max-w-6xl mx-auto h-16 px-4 sm:px-6 rounded-full bg-black/85 border border-white/20 backdrop-blur-2xl shadow-2xl shadow-black/90 flex items-center justify-between gap-2 sm:gap-4 pointer-events-auto ring-1 ring-white/10">
+            
+            {/* Identity Badge */}
+            <button 
+              onClick={() => navigateTo('landing')}
+              className="flex items-center gap-2.5 group text-left cursor-pointer shrink-0"
+            >
+              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center font-mono text-sm font-bold group-hover:bg-white/20 transition-all shrink-0">
+                Φ
+              </div>
+              <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap">
+                DANIEL SANTANDER
+              </span>
+            </button>
+
+            {/* Pill Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-1 text-xs font-mono font-medium">
+              <button
+                onClick={() => navigateTo('lab')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'lab'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <Atom className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Lab' : 'Lab DCL'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('courses')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'courses'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('piad')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'piad'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 shrink-0" />
+                <span>PIAD™</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('library')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'library'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <Library className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Library' : 'Librería'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('precios')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'precios'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Pricing' : 'Precios'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('contact')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'contact'
+                    ? 'bg-white text-slate-950 font-bold shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <Phone className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Contact' : 'Contacto'}</span>
+              </button>
+            </nav>
+
+            {/* Language & Rounded CTA */}
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <div className="flex items-center bg-white/10 border border-white/15 rounded-full p-0.5 text-xs font-mono shrink-0">
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
+                    lang === 'en' ? 'bg-white text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLang('es')}
+                  className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
+                    lang === 'es' ? 'bg-white text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ES
+                </button>
+              </div>
+
+              <button
+                onClick={() => handleOpenBooking()}
+                className="px-3.5 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-sky-400 to-emerald-400 hover:from-sky-300 hover:to-emerald-300 text-slate-950 text-xs font-mono font-extrabold transition-all flex items-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <Calendar className="w-3.5 h-3.5 text-slate-950 shrink-0" />
+                <span>{lang === 'en' ? 'Book' : 'Reservar'}</span>
+              </button>
+            </div>
+
+          </div>
+        </header>
+      )}
+
+      {/* --- OPTION 3: SCIENTIFIC TEXT LINKS CON SUBRAYADO NEÓN (ESTILO APPLE / MIT JOURNAL) --- */}
+      {navbarStyle === 'option3' && (
+        <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-black/95 backdrop-blur-xl shadow-2xl transition-all">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            
+            {/* Minimalist Typographic Mark */}
+            <button 
+              onClick={() => navigateTo('landing')}
+              className="flex items-center gap-2.5 group text-left cursor-pointer shrink-0"
+            >
+              <span className="font-mono text-sky-400 font-extrabold text-lg group-hover:text-white transition-colors">
+                [Φ]
+              </span>
+              <span className="font-bold text-sm sm:text-base tracking-widest text-white uppercase group-hover:text-slate-200 transition-colors whitespace-nowrap">
+                DANIEL SANTANDER
+              </span>
+            </button>
+
+            {/* Zero-button Text Links with Neon Indicator Underline */}
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs font-mono">
+              <button
+                onClick={() => navigateTo('lab')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'lab'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <Atom className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('courses')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'courses'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('piad')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'piad'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 shrink-0" />
+                <span>PIAD Method™</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('library')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'library'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <Library className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Library' : 'Librería'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('precios')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'precios'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Pricing & Dossier' : 'Precios & Dossier'}</span>
+              </button>
+
+              <button
+                onClick={() => navigateTo('contact')}
+                className={`py-2 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                  currentPage === 'contact'
+                    ? 'text-white font-bold border-b-2 border-sky-400 shadow-[0_2px_8px_rgba(56,189,248,0.5)]'
+                    : 'text-slate-400 hover:text-white border-b-2 border-transparent'
+                }`}
+              >
+                <Phone className="w-3.5 h-3.5 shrink-0" />
+                <span>Contact &amp; FAQ</span>
+              </button>
+            </nav>
+
+            {/* Outlined Wireframe Glass CTA */}
+            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+              <div className="flex items-center border border-white/20 rounded-lg p-0.5 text-xs font-mono shrink-0">
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    lang === 'en' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLang('es')}
+                  className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+                    lang === 'es' ? 'bg-white/20 text-white font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ES
+                </button>
+              </div>
+
+              <button
+                onClick={() => handleOpenBooking()}
+                className="px-3.5 py-2 rounded-xl border border-white/30 hover:border-white text-white hover:bg-white/10 text-xs font-mono font-bold transition-all flex items-center gap-2 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <Calendar className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span className="hidden sm:inline">{lang === 'en' ? 'Book Diagnostic' : 'Reservar Diagnóstico'}</span>
+                <span className="sm:hidden">{lang === 'en' ? 'Book' : 'Reservar'}</span>
+              </button>
+            </div>
+
+          </div>
+        </header>
+      )}
 
       <main className="relative z-10">
 
@@ -2341,6 +2614,44 @@ Sent from STEM Mentorship Portal`;
           <p>© 2026 Daniel Santander • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}</p>
         </div>
       </footer>
+
+      {/* --- LIVE NAVBAR STYLE SWITCHER CONTROLLER (1 CLICK PREVIEW & REJECT/APPROVE) --- */}
+      <div className="fixed bottom-5 right-5 z-50 bg-slate-950/95 border border-white/20 backdrop-blur-2xl p-1.5 rounded-2xl shadow-2xl shadow-black/90 flex items-center gap-1 text-[11px] font-mono text-slate-300 ring-1 ring-white/10">
+        <div className="px-2.5 py-1 text-slate-400 font-bold flex items-center gap-1.5 border-r border-white/10 mr-0.5">
+          <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+          <span className="hidden sm:inline">Nav Preview:</span>
+        </div>
+        <button
+          onClick={() => setNavbarStyle('option1')}
+          className={`px-2.5 py-1.5 rounded-xl transition-all cursor-pointer font-bold flex items-center gap-1 ${
+            navbarStyle === 'option1'
+              ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30'
+              : 'text-slate-400 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          <span>1. Obsidian</span>
+        </button>
+        <button
+          onClick={() => setNavbarStyle('option2')}
+          className={`px-2.5 py-1.5 rounded-xl transition-all cursor-pointer font-bold flex items-center gap-1 ${
+            navbarStyle === 'option2'
+              ? 'bg-emerald-400 text-slate-950 shadow-md shadow-emerald-400/30'
+              : 'text-slate-400 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          <span>2. Cápsula</span>
+        </button>
+        <button
+          onClick={() => setNavbarStyle('option3')}
+          className={`px-2.5 py-1.5 rounded-xl transition-all cursor-pointer font-bold flex items-center gap-1 ${
+            navbarStyle === 'option3'
+              ? 'bg-purple-400 text-slate-950 shadow-md shadow-purple-400/30'
+              : 'text-slate-400 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          <span>3. Minimal Text</span>
+        </button>
+      </div>
 
       {/* --- MODAL: BOOKING & DIAGNOSTIC REQUEST (PROGRAMMED TO EMAIL DANISANTANDER.URRUTIA@GMAIL.COM) --- */}
       {isModalOpen && (

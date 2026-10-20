@@ -13,7 +13,7 @@ export default {
           850: '#0E1420',
           800: '#131B2B',
         },
-        galileo: {
+        stemBlue: {
           50: '#F0F9FF',
           100: '#E0F2FE',
           200: '#BAE6FD',

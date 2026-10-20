@@ -2,7 +2,7 @@
 
 An interactive, responsive portfolio, teaching sandbox, and booking portal for a **STEM Mentor & Geophysicist based in Germany**.
 
-Built following the **"Galileo Galilei Meets Modern Computational Geophysics"** aesthetic and pedagogical philosophy.
+Built following rigorous pedagogical and computational geophysics standards.
 
 ---
 
@@ -48,9 +48,9 @@ npm run build:standalone
   - `[Real-World Rigor]` Theory + Python / Differential Calculus Models
   - `[Official Invoice]` Registered Freiberufler in Germany (§ 19 UStG)
 
-### 3. The "Galileo Lab" Interactive Physics & Calculus Sandbox
+### 3. The Interactive Physics & Calculus Sandbox
 - **Dual Physics Modes**:
-  1. **Galilean Projectile with Atmospheric Drag**: Computes real-time numerical trajectories using velocity-dependent drag.
+  1. **Ballistic Projectile with Atmospheric Drag**: Computes real-time numerical trajectories using velocity-dependent drag.
   2. **Damped Harmonic Oscillator & Wave Dynamics**: Shows amplitude decay and oscillatory behavior.
 - **Real-Time Sliders**:
   - Launch Angle ($\theta$)
@@ -78,15 +78,15 @@ npm run build:standalone
 - **Outputs**: Instant total investment in Euros (€), effective hourly rate, estimated sessions, and list of included extras (Miro vector export, Altklausur breakdowns, WhatsApp Q&A, German § 19 UStG invoice).
 - **1-Click Sync**: Clicking *"Claim This Study Plan"* pre-fills the booking modal.
 
-### 6. Mentor Authority & "The Galileo Method"
+### 6. Mentor Authority & Methodology
 - **Mentor Profile**: Double Master's holder in Science & Environmental Engineering, Geophysics background, registered German Freiberufler.
 - **3 Core Pillars**:
   1. *No Rote Memorization: Intuition First*
-  2. *The German Klausur Decoded (Punkte-Maximierung)*
-  3. *Classes in English or Spanish (not German)*
+  2. *University Exam Decoded (Partial Credit Optimization)*
+  3. *Classes in English or Spanish*
 
-### 7. Germany-Specific Academic FAQ
-- Accordions answering: Official invoices for German tax/university claims (§ 19 UStG), teaching German exams in English/Spanish, digital whiteboard tools (Miro + Apple Pencil), trial/diagnostic sessions, payment methods, and study groups.
+### 7. Academic FAQ
+- Accordions answering: Official invoices for German tax/university claims (§ 19 UStG), teaching exams in English/Spanish, digital whiteboard tools (Miro + Apple Pencil), trial/diagnostic sessions, payment methods, and study groups.
 
 ### 8. Diagnostic Request & Booking Modal
 - Accessible modal with backdrop blur and `Esc` key handling.
@@ -101,7 +101,7 @@ Open `#/admin` (e.g. `http://localhost:5173/#/admin`). Spanish-language panel wi
 ---
 
 ## 🎨 Design Tokens
-- **Background**: Deep Obsidian `#070A0F` with ambient Galileo Blue & Emerald radial glows.
-- **Cards**: Slate 900 glassmorphism (`rgba(15, 23, 42, 0.75)`) with backdrop blur and slate-800 borders.
-- **Accents**: Electric Cyan / Galileo Blue (`#38BDF8`) & Computation Emerald (`#10B981`).
+- **Background**: Clean White `#FFFFFF` with crisp borders and ambient sky/emerald accents.
+- **Cards**: Clean Slate & White surfaces with slate-200 borders.
+- **Accents**: Electric Cyan / Sky (`#38BDF8`) & Computation Emerald (`#10B981`).
 - **Typography**: Plus Jakarta Sans for body/headings and JetBrains Mono for equations, stats, tags, and telemetry.

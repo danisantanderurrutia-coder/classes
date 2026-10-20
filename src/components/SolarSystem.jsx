@@ -6,6 +6,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import ObservatoryChat, { DEFAULT_VIEWER_SETTINGS } from './ObservatoryChat';
 
 // ============================================================================
 // 0. CINEMATIC LAYER: FINAL GRADE SHADER + GENERATIVE AMBIENT AUDIO
@@ -367,8 +368,8 @@ export const PLANET_SUBJECTS = [
     lineupIndex: 2,
     lineupX: -7.0,
     lineupScale: 1.65,
-    descriptionEn: 'Rigorous multivariable calculus, Gauss/Stokes integral theorems, ODEs, and German Klausur preparation (TUM, RWTH, KIT).',
-    descriptionEs: 'Cálculo multivariable riguroso, teoremas integrales de Gauss/Stokes, EDOs y preparación exhaustiva de exámenes alemanes (Klausuren).',
+    descriptionEn: 'Rigorous multivariable calculus, Gauss/Stokes integral theorems, ODEs, and university exam preparation.',
+    descriptionEs: 'Cálculo multivariable riguroso, teoremas integrales de Gauss/Stokes, EDOs y preparación exhaustiva de exámenes universitarios.',
     color: '#38BDF8',
     size: 1.15,
     distance: 15.0,
@@ -486,7 +487,7 @@ export const PLANET_SUBJECTS = [
     lineupIndex: 5,
     lineupX: 14.0,
     lineupScale: 0.70,
-    descriptionEn: 'Vector spaces, spectral decomposition, eigenvalues, Jordan canonical form, SVD, and rigorous German university proofs.',
+    descriptionEn: 'Vector spaces, spectral decomposition, eigenvalues, Jordan canonical form, SVD, and rigorous university proofs.',
     descriptionEs: 'Espacios vectoriales, descomposición espectral, autovalores, forma canónica de Jordan, SVD y demostraciones universitarias.',
     color: '#FDE68A',
     size: 2.15,
@@ -1117,15 +1118,72 @@ function createSaturnTexture() {
   const d = imgData.data;
 
   for (let y = 0; y < 512; y++) {
-    const lat = ((y / 512) - 0.5) * Math.PI;
-    for (let x = 0; x < 1024; x++) {
-      const idx = (y * 1024 + x) * 4;
-      const turb = noise.fbm2D((x / 1024) * 12.0, lat * 8.0, 4, 0.5, 2.0) * 0.08;
-      const band = Math.sin(lat * 22.0 + turb) * 0.5 + 0.5;
+    const vNorm = y / 512;
+    // Map y to latitude: lat in [-PI/2, +PI/2]
+    const lat = (0.5 - vNorm) * Math.PI;
+    const absLat = Math.abs(lat);
 
-      const r = Math.floor(245 - band * 20 + turb * 20);
-      const g = Math.floor(226 - band * 25 + turb * 15);
-      const b = Math.floor(180 - band * 30 + turb * 15);
+    for (let x = 0; x < 1024; x++) {
+      const uNorm = x / 1024;
+      const theta = uNorm * Math.PI * 2;
+      const idx = (y * 1024 + x) * 4;
+
+      // Multi-octave zonal turbulence
+      const turb1 = noise.fbm2D(uNorm * 16.0, lat * 9.0, 4, 0.5, 2.0) * 0.08;
+      const turb2 = noise.fbm2D(uNorm * 32.0 + 3.1, lat * 18.0, 3, 0.45, 2.2) * 0.04;
+      const turb = turb1 + turb2;
+
+      // Zonal harmonic waves
+      const bandFine = Math.sin(lat * 36.0 + turb * 2.2) * 0.5 + 0.5;
+      const bandBroad = Math.cos(lat * 10.0 + turb) * 0.5 + 0.5;
+
+      let r = 185;
+      let g = 160;
+      let b = 115;
+
+      if (lat > 1.26) {
+        // NORTH POLAR HEXAGON & VORTEX
+        // Standing wave of 6 lobes in azimuthal direction
+        const hexWave = Math.cos(6.0 * theta) * 0.038;
+        const hexDist = lat - (1.34 + hexWave);
+        if (lat > 1.45) {
+          // Central cyclonic storm eye
+          r = 75 + Math.floor(turb * 20);
+          g = 98 + Math.floor(turb * 25);
+          b = 114 + Math.floor(turb * 30);
+        } else if (Math.abs(hexDist) < 0.045) {
+          // Hexagonal jet stream perimeter (slate-cyan / olive border)
+          r = 95 + Math.floor(turb * 20);
+          g = 122 + Math.floor(turb * 25);
+          b = 138 + Math.floor(turb * 30);
+        } else {
+          // High-latitude olive-golden collar
+          r = 145 + Math.floor(turb * 25);
+          g = 138 + Math.floor(turb * 20);
+          b = 110 + Math.floor(turb * 15);
+        }
+      } else if (absLat < 0.22) {
+        // EQUATORIAL ZONE: Creamy butterscotch with convective storm plumes
+        const plume = Math.sin(uNorm * 48.0 + turb * 3.5) * 12;
+        r = Math.floor(214 + bandFine * 16 + plume);
+        g = Math.floor(192 + bandFine * 12 + plume * 0.8);
+        b = Math.floor(146 + bandFine * 8 + plume * 0.5);
+      } else if (absLat < 0.52) {
+        // TROPICAL & EQUATORIAL BELTS: Warm amber and terracotta
+        r = Math.floor(174 + bandFine * 24 - bandBroad * 18 + turb * 35);
+        g = Math.floor(144 + bandFine * 18 - bandBroad * 16 + turb * 28);
+        b = Math.floor(96 + bandFine * 12 - bandBroad * 12 + turb * 20);
+      } else if (absLat < 0.95) {
+        // TEMPERATE BELTS: Golden honey and caramel
+        r = Math.floor(188 + bandFine * 20 + bandBroad * 14 + turb * 25);
+        g = Math.floor(160 + bandFine * 16 + bandBroad * 12 + turb * 20);
+        b = Math.floor(116 + bandFine * 10 + bandBroad * 8 + turb * 15);
+      } else {
+        // SOUTH POLAR REGION: Olive-tan
+        r = Math.floor(148 - bandFine * 14 + turb * 20);
+        g = Math.floor(138 - bandFine * 12 + turb * 18);
+        b = Math.floor(112 - bandFine * 8 + turb * 12);
+      }
 
       d[idx] = Math.min(255, Math.max(0, r));
       d[idx + 1] = Math.min(255, Math.max(0, g));
@@ -1150,34 +1208,56 @@ function createSaturnRingTexture() {
     const u = x / 1024;
     let r, g, b, alpha;
 
-    if (u < 0.16) {
-      r = 205; g = 190; b = 160; alpha = Math.floor(u * 2.5 * 140);
-    } else if (u < 0.56) {
-      const ringlet = Math.sin(u * 380.0) * 15 + Math.sin(u * 920.0) * 8;
-      r = Math.min(255, Math.floor(250 + ringlet * 0.4));
-      g = Math.min(255, Math.floor(235 + ringlet * 0.3));
-      b = Math.min(255, Math.floor(195 + ringlet * 0.3));
-      alpha = 250;
-    } else if (u < 0.63) {
-      r = 10; g = 10; b = 10; alpha = 4;
-    } else if (u < 0.94) {
-      const isEncke = u > 0.81 && u < 0.83;
-      if (isEncke) {
-        r = 12; g = 12; b = 12; alpha = 6;
+    if (u < 0.05) {
+      // Innermost D Ring haze
+      r = 145; g = 135; b = 115;
+      alpha = Math.floor(u * 20.0 * 25);
+    } else if (u < 0.28) {
+      // C Ring (Crepe Ring): semi-transparent dusky amber with fine ripples
+      const ripple = Math.sin(u * 420.0) * 12 + Math.sin(u * 1150.0) * 6;
+      r = Math.min(255, Math.floor(172 + ripple));
+      g = Math.min(255, Math.floor(155 + ripple * 0.8));
+      b = Math.min(255, Math.floor(125 + ripple * 0.6));
+      alpha = Math.floor(65 + Math.sin(u * 80.0) * 20);
+    } else if (u < 0.31) {
+      // Maxwell & Colombo gap between C and B
+      r = 18; g = 16; b = 14;
+      alpha = 8;
+    } else if (u < 0.69) {
+      // B Ring (Main, Brightest Ring): dense, creamy ivory with hundreds of ringlets
+      const fineRinglets = Math.sin(u * 580.0) * 16 + Math.sin(u * 1480.0) * 9 + Math.sin(u * 3200.0) * 5;
+      r = Math.min(255, Math.floor(236 + fineRinglets * 0.5));
+      g = Math.min(255, Math.floor(218 + fineRinglets * 0.45));
+      b = Math.min(255, Math.floor(174 + fineRinglets * 0.35));
+      alpha = 248;
+    } else if (u < 0.76) {
+      // CASSINI DIVISION (The prominent dark gap between B and A)
+      r = 12; g = 12; b = 10;
+      alpha = 4; // sharp dark void
+    } else if (u < 0.95) {
+      // A Ring: icy golden ring with Encke and Keeler gaps
+      const isEncke = u > 0.865 && u < 0.884;
+      const isKeeler = u > 0.932 && u < 0.940;
+      if (isEncke || isKeeler) {
+        r = 12; g = 12; b = 10;
+        alpha = 6;
       } else {
-        const ringlet = Math.sin(u * 280.0) * 12;
-        r = Math.min(255, Math.floor(232 + ringlet));
-        g = Math.min(255, Math.floor(215 + ringlet * 0.8));
-        b = Math.min(255, Math.floor(175 + ringlet * 0.6));
-        alpha = 210;
+        const ringlet = Math.sin(u * 460.0) * 14 + Math.sin(u * 1120.0) * 7;
+        r = Math.min(255, Math.floor(214 + ringlet * 0.6));
+        g = Math.min(255, Math.floor(196 + ringlet * 0.5));
+        b = Math.min(255, Math.floor(156 + ringlet * 0.4));
+        alpha = 205;
       }
     } else {
-      r = 210; g = 195; b = 165; alpha = Math.floor((1.0 - u) * 140);
+      // Outer F Ring boundary
+      r = 165; g = 150; b = 125;
+      alpha = Math.floor((1.0 - u) * 20.0 * 28);
     }
 
     for (let y = 0; y < 64; y++) {
       const idx = (y * 1024 + x) * 4;
-      d[idx] = r; d[idx + 1] = g; d[idx + 2] = b; d[idx + 3] = Math.min(255, Math.max(0, alpha));
+      d[idx] = r; d[idx + 1] = g; d[idx + 2] = b;
+      d[idx + 3] = Math.min(255, Math.max(0, alpha));
     }
   }
 
@@ -1423,6 +1503,7 @@ const EarthDayNightShader = {
 const GargantuaDiskShader = {
   uniforms: {
     uTime: { value: 0 },
+    uExposure: { value: 1.0 },
     uInnerRadius: { value: 9.0 },
     uOuterRadius: { value: 34.0 },
   },
@@ -1442,6 +1523,7 @@ const GargantuaDiskShader = {
   `,
   fragmentShader: `
     uniform float uTime;
+    uniform float uExposure;
     uniform float uInnerRadius;
     uniform float uOuterRadius;
     varying vec3 vNormal;
@@ -1478,7 +1560,7 @@ const GargantuaDiskShader = {
       vec3 viewDir = normalize(cameraPosition - vWorldPosition);
       vec3 tangent = normalize(vec3(-vPosition.z, 0.0, vPosition.x));
       float dopplerFactor = dot(tangent, -viewDir);
-      float beaming = exp(dopplerFactor * 0.95);
+      float beaming = exp(clamp(dopplerFactor * 0.82, -1.8, 1.25));
       diskColor *= beaming;
 
       // Soft ISCO edge cutoff and outer fade
@@ -1486,7 +1568,8 @@ const GargantuaDiskShader = {
                     smoothstep(uOuterRadius, uOuterRadius - 6.0, r) *
                     (0.85 + 0.15 * plasma);
 
-      gl_FragColor = vec4(diskColor * 2.2, alpha * 0.96);
+      vec3 finalCol = diskColor * (1.12 * uExposure);
+      gl_FragColor = vec4(finalCol, alpha * 0.96);
     }
   `
 };
@@ -1495,6 +1578,7 @@ const GargantuaDiskShader = {
 const GravitationalLensingShader = {
   uniforms: {
     uTime: { value: 0 },
+    uExposure: { value: 1.0 },
   },
   vertexShader: `
     varying vec3 vNormal;
@@ -1510,6 +1594,7 @@ const GravitationalLensingShader = {
   `,
   fragmentShader: `
     uniform float uTime;
+    uniform float uExposure;
     varying vec3 vNormal;
     varying vec3 vPosition;
     varying vec3 vWorldPosition;
@@ -1520,10 +1605,11 @@ const GravitationalLensingShader = {
       float intensity = pow(rim, 2.2);
 
       // Relativistic Doppler asymmetry across the Einstein halo arch
-      float doppler = 1.0 + 0.65 * dot(normalize(vPosition), vec3(1.0, 0.0, 0.0));
+      float doppler = 1.0 + 0.50 * dot(normalize(vPosition), vec3(1.0, 0.0, 0.0));
 
       vec3 haloColor = mix(vec3(1.0, 0.55, 0.08), vec3(1.0, 0.96, 0.85), rim);
-      gl_FragColor = vec4(haloColor * doppler * 2.5, intensity * 0.92);
+      vec3 finalHalo = haloColor * doppler * (1.18 * uExposure);
+      gl_FragColor = vec4(finalHalo, intensity * 0.92);
     }
   `
 };
@@ -1537,6 +1623,8 @@ export default function SolarSystem({
   onNavigate,
   onOpenBooking,
   courses = [],
+  initialChatOpen = false,
+  triggerOpenChat = false,
 }) {
   const containerRef = useRef(null);
   const lineupLabelsRef = useRef({});
@@ -1558,6 +1646,10 @@ export default function SolarSystem({
   const [caption, setCaption] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [showPlanetDetails, setShowPlanetDetails] = useState(false);
+
+  // Optical Telemetry & Glare Control State (Controls the Sun, Bloom, Ambient and Features)
+  const [viewerSettings, setViewerSettings] = useState(DEFAULT_VIEWER_SETTINGS);
+  const [isChatOpen, setIsChatOpen] = useState(initialChatOpen);
   
   // Physics & Magnetism States (Visual Physic mode & Magnetic Field mode)
   const [visualPhysicMode, setVisualPhysicMode] = useState(false); // Naturally deactivated by default
@@ -1611,7 +1703,18 @@ export default function SolarSystem({
     magneticPolarity: 1,
     isReversing: false,
     reversalProgress: 0.0,
+    viewerSettings: DEFAULT_VIEWER_SETTINGS,
   });
+
+  useEffect(() => {
+    animStateRef.current.viewerSettings = viewerSettings;
+  }, [viewerSettings]);
+
+  useEffect(() => {
+    if (triggerOpenChat) {
+      setIsChatOpen(true);
+    }
+  }, [triggerOpenChat]);
 
   const replayIntroAnimation = () => {
     setIsRealScale(false);
@@ -1910,12 +2013,12 @@ export default function SolarSystem({
     scene.add(starPoints);
 
     // ========================================================================
-    // LIGHTING SYSTEM
+    // LIGHTING SYSTEM (HDR Calibrated Anti-Glare Baseline)
     // ========================================================================
-    const ambientLight = new THREE.AmbientLight(0xDCE8FC, 0.90);
+    const ambientLight = new THREE.AmbientLight(0xDCE8FC, DEFAULT_VIEWER_SETTINGS.ambientIntensity);
     scene.add(ambientLight);
 
-    const hemiLight = new THREE.HemisphereLight(0xFFF8EB, 0x1E293B, 0.65);
+    const hemiLight = new THREE.HemisphereLight(0xFFF8EB, 0x1E293B, DEFAULT_VIEWER_SETTINGS.ambientIntensity * 0.75);
     scene.add(hemiLight);
 
     // ========================================================================
@@ -1948,6 +2051,7 @@ export default function SolarSystem({
     const diskMat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
+        uExposure: { value: DEFAULT_VIEWER_SETTINGS.sgrExposure },
         uInnerRadius: { value: 8.6 },
         uOuterRadius: { value: 34.0 },
       },
@@ -1966,7 +2070,10 @@ export default function SolarSystem({
     // 1.4 Einstein Gravitational Lensing Halo (The Iconic Interstellar Curved Arch)
     const lensingArchGeo = new THREE.TorusGeometry(12.8, 1.25, 32, 128);
     const lensingArchMat = new THREE.ShaderMaterial({
-      uniforms: { uTime: { value: 0 } },
+      uniforms: {
+        uTime: { value: 0 },
+        uExposure: { value: DEFAULT_VIEWER_SETTINGS.sgrExposure },
+      },
       vertexShader: GravitationalLensingShader.vertexShader,
       fragmentShader: GravitationalLensingShader.fragmentShader,
       transparent: true,
@@ -2072,8 +2179,8 @@ export default function SolarSystem({
     const sunAnchor = new THREE.Group();
     solarSystemGroup.add(sunAnchor);
 
-    // Front-angled directional light for the 7-planet side-by-side showcase
-    const showcaseDirLight = new THREE.DirectionalLight(0xFFFBF2, 2.8);
+    // Front-angled directional light for the 7-planet side-by-side showcase (Calibrated HDR)
+    const showcaseDirLight = new THREE.DirectionalLight(0xFFFBF2, 1.4);
     showcaseDirLight.position.set(-14, 22, 42);
     scene.add(showcaseDirLight);
 
@@ -2104,8 +2211,8 @@ export default function SolarSystem({
     const haloOuterMesh = new THREE.Mesh(haloOuterGeo, haloOuterMat);
     selectionHaloGroup.add(haloOuterMesh);
 
-    // Sun Point Light
-    const sunLight = new THREE.PointLight(0xFFFBF0, 5.2, 0, 0);
+    // Sun Point Light (Anti-Glare Calibrated)
+    const sunLight = new THREE.PointLight(0xFFFBF0, DEFAULT_VIEWER_SETTINGS.sunIntensity, 0, 0);
     sunLight.position.set(0, 0, 0);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 2048;
@@ -2443,10 +2550,10 @@ export default function SolarSystem({
 
         const pMat = new THREE.MeshStandardMaterial({
           map: pTex,
-          roughness: 0.52,
+          roughness: 0.62,
           metalness: 0.04,
-          emissive: new THREE.Color(0x1a2638),
-          emissiveIntensity: 0.25,
+          emissive: new THREE.Color(0x060c18),
+          emissiveIntensity: 0.10,
         });
         pMesh = new THREE.Mesh(pGeo, pMat);
       }
@@ -2964,7 +3071,12 @@ export default function SolarSystem({
     composer.setPixelRatio(pr);
     composer.setSize(width, height);
     composer.addPass(new RenderPass(scene, camera));
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.55, 0.65, 0.92);
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(width, height),
+      DEFAULT_VIEWER_SETTINGS.bloomStrength,
+      0.55,
+      DEFAULT_VIEWER_SETTINGS.bloomThreshold
+    );
     composer.addPass(bloomPass);
     const outputPass = new OutputPass();
     composer.addPass(outputPass);
@@ -3182,8 +3294,22 @@ export default function SolarSystem({
       jetMeshSouth.visible = b < 0.25;
       sStarPoints.visible = b < 0.25;
 
-      showcaseDirLight.intensity = 2.8 * b;
-      sunLight.intensity = THREE.MathUtils.lerp(5.2, 1.1, b);
+      const curSettings = animStateRef.current.viewerSettings || DEFAULT_VIEWER_SETTINGS;
+      const targetSunInt = curSettings.sunIntensity;
+      const targetAmbInt = curSettings.ambientIntensity;
+
+      showcaseDirLight.intensity = THREE.MathUtils.lerp(0.45, 1.35, b) * (targetSunInt / 2.2);
+      sunLight.intensity = THREE.MathUtils.lerp(targetSunInt, targetSunInt * 0.42, b);
+      ambientLight.intensity = targetAmbInt;
+      hemiLight.intensity = targetAmbInt * 0.75;
+      bloomPass.strength = curSettings.bloomStrength;
+      bloomPass.threshold = curSettings.bloomThreshold;
+      if (diskMat?.uniforms?.uExposure) {
+        diskMat.uniforms.uExposure.value = curSettings.sgrExposure;
+      }
+      if (lensingArchMat?.uniforms?.uExposure) {
+        lensingArchMat.uniforms.uExposure.value = curSettings.sgrExposure;
+      }
       if (earthShaderMatRef) {
         earthShaderMatRef.uniforms.uUseCustomSunDir.value = b;
         earthShaderMatRef.uniforms.uSunDir.value.set(-0.38, 0.28, 0.88).normalize();
@@ -3734,7 +3860,7 @@ export default function SolarSystem({
     const syllabusList = activeCourse
       ? (lang === 'en' ? activeCourse.syllabusEn : activeCourse.syllabusEs)
       : [];
-    const skriptKeywords = activeCourse?.germanSkriptKeywords || [];
+    const skriptKeywords = activeCourse?.skriptKeywords || activeCourse?.germanSkriptKeywords || [];
     const hourlyRate = activeCourse?.rateHourly || activePlanet.rateHourly || 38;
     const packPrice = activeCourse?.packagePrice || activePlanet.packagePrice || 275;
     const courseCode = activeCourse?.code || activePlanet.courseCode || 'COURSE';
@@ -3891,7 +4017,7 @@ export default function SolarSystem({
                 {skriptKeywords.length > 0 && (
                   <div className="pt-1 flex flex-wrap items-center gap-1.5">
                     <span className="text-[10px] font-mono text-slate-400 uppercase mr-1">
-                      🇩🇪 RWTH / TUM / ETH Skript:
+                      {lang === 'en' ? 'Core Concepts:' : 'Conceptos Clave:'}
                     </span>
                     {skriptKeywords.map((kw, i) => (
                       <span
@@ -3906,7 +4032,7 @@ export default function SolarSystem({
 
                 <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-400 font-sans">
-                    <span>🎯 Modalidad 1-a-1 online (iPad + pizarra LaTeX + código en vivo)</span>
+                    <span>{lang === 'en' ? '🎯 1-on-1 Online Format (iPad + LaTeX whiteboard + live code)' : '🎯 Modalidad 1-a-1 online (iPad + pizarra LaTeX + código en vivo)'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -3956,7 +4082,7 @@ export default function SolarSystem({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-red-400 font-bold">Fuerza Gravitacional (Fg)</span>
+                      <span className="text-red-400 font-bold">{lang === 'en' ? 'Gravitational Force (Fg)' : 'Fuerza Gravitacional (Fg)'}</span>
                       <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-xs" />
                     </div>
                     <div className="text-[10px] text-slate-400">Fg = G · (M☉ · m) / r²</div>
@@ -3965,7 +4091,7 @@ export default function SolarSystem({
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-cyan-400 font-bold">Aceleración Centrípeta (ac)</span>
+                      <span className="text-cyan-400 font-bold">{lang === 'en' ? 'Centripetal Acceleration (ac)' : 'Aceleración Centrípeta (ac)'}</span>
                       <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-xs" />
                     </div>
                     <div className="text-[10px] text-slate-400">ac = v² / r</div>
@@ -3974,7 +4100,7 @@ export default function SolarSystem({
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-amber-400 font-bold">Momento Angular (L)</span>
+                      <span className="text-amber-400 font-bold">{lang === 'en' ? 'Angular Momentum (L)' : 'Momento Angular (L)'}</span>
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-xs" />
                     </div>
                     <div className="text-[10px] text-slate-400">L = r × m·v</div>
@@ -3992,7 +4118,9 @@ export default function SolarSystem({
                     onClick={() => setShowDcl(!showDcl)}
                     className="px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] transition-all cursor-pointer"
                   >
-                    {showDcl ? 'Ocultar Vectores 3D' : 'Mostrar Vectores 3D'}
+                    {showDcl
+                      ? (lang === 'en' ? 'Hide 3D Vectors' : 'Ocultar Vectores 3D')
+                      : (lang === 'en' ? 'Show 3D Vectors' : 'Mostrar Vectores 3D')}
                   </button>
                 </div>
               </div>
@@ -4003,21 +4131,25 @@ export default function SolarSystem({
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-amber-400 font-bold block">Campo Dipolar Superficial (B)</span>
+                    <span className="text-amber-400 font-bold block">{lang === 'en' ? 'Surface Dipole Field (B)' : 'Campo Dipolar Superficial (B)'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">
-                      {activePlanet.magneticFieldTesla || 'Inapreciable (< 10⁻⁹ T)'}
+                      {activePlanet.magneticFieldTesla || (lang === 'en' ? 'Negligible (< 10⁻⁹ T)' : 'Inapreciable (< 10⁻⁹ T)')}
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-sky-400 font-bold block">Choque de Proa (Bow Shock)</span>
+                    <span className="text-sky-400 font-bold block">{lang === 'en' ? 'Bow Shock' : 'Choque de Proa (Bow Shock)'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">
-                      {isCmeActive ? '5.8 R_E (Sub-geoestacionario)' : '10 - 12 R_E (Nominal)'}
+                      {isCmeActive
+                        ? (lang === 'en' ? '5.8 R_E (Sub-geostationary)' : '5.8 R_E (Sub-geoestacionario)')
+                        : (lang === 'en' ? '10 - 12 R_E (Nominal)' : '10 - 12 R_E (Nominal)')}
                     </div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-rose-400 font-bold block">Polaridad Geomagnética</span>
+                    <span className="text-rose-400 font-bold block">{lang === 'en' ? 'Geomagnetic Polarity' : 'Polaridad Geomagnética'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">
-                      {magneticPolarity === 1 ? 'Normal (Norte en Sur geo)' : 'Invertida (Fase Reversa)'}
+                      {magneticPolarity === 1
+                        ? (lang === 'en' ? 'Normal (North in South geo)' : 'Normal (Norte en Sur geo)')
+                        : (lang === 'en' ? 'Reversed (Reversal Phase)' : 'Invertida (Fase Reversa)')}
                     </div>
                   </div>
                 </div>
@@ -4029,15 +4161,15 @@ export default function SolarSystem({
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-amber-400 font-bold block">Equilibrio Hidrostático</span>
+                    <span className="text-amber-400 font-bold block">{lang === 'en' ? 'Hydrostatic Equilibrium' : 'Equilibrio Hidrostático'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">∇P = -ρ · g</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-rose-400 font-bold block">Cadena Protón-Protón (p-p)</span>
+                    <span className="text-rose-400 font-bold block">{lang === 'en' ? 'Proton-Proton Chain (p-p)' : 'Cadena Protón-Protón (p-p)'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">Q = +26.73 MeV</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-                    <span className="text-sky-400 font-bold block">Conversión Materia a Energía</span>
+                    <span className="text-sky-400 font-bold block">{lang === 'en' ? 'Matter to Energy Conversion' : 'Conversión Materia a Energía'}</span>
                     <div className="text-sm font-bold text-white tracking-wide">4.26 × 10⁹ kg / s</div>
                   </div>
                 </div>
@@ -4054,7 +4186,7 @@ export default function SolarSystem({
       className={
         isRealScale
           ? 'fixed inset-0 z-50 w-screen h-screen bg-[#010204] flex flex-col overflow-hidden select-none'
-          : 'w-full flex flex-col bg-black rounded-3xl border border-white/10 shadow-2xl overflow-hidden selection:bg-galileo-500/30'
+          : 'w-full flex flex-col bg-black overflow-hidden border-y border-slate-800 shadow-2xl selection:bg-sky-500/30'
       }
     >
       {/* ==================================================================== */}
@@ -4083,8 +4215,22 @@ export default function SolarSystem({
             </div>
           </div>
 
-          {/* Right Action Controls: Toggle Planetario / Clases & Intro Replay */}
+          {/* Right Action Controls: Toggle Planetario / Clases, Chat Asistente & Intro Replay */}
           <div className="flex flex-wrap items-center gap-2">
+            {/* Toggle Asistente de Ajustes Chat */}
+            <button
+              onClick={() => setIsChatOpen(!isChatOpen)}
+              className={`px-3 py-1.5 rounded-xl border font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md ${
+                isChatOpen
+                  ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-sky-300 shadow-sky-500/30 ring-1 ring-sky-300/40'
+                  : 'bg-slate-900/90 hover:bg-slate-800 text-sky-300 border-sky-500/50 hover:border-sky-400 shadow-sky-950/40'
+              }`}
+              title="Abrir Chat de Ajustes de Visor (Control de Misión IA)"
+            >
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+              <span>💬 Chat de Ajustes ⭐</span>
+            </button>
+
             {/* Replay Intro Animation button */}
             <button
               onClick={replayIntroAnimation}
@@ -4307,8 +4453,8 @@ export default function SolarSystem({
             isRealScale
               ? 'flex-1'
               : viewVariant === 'option3'
-                ? 'h-[520px] sm:h-[580px] md:h-[620px]'
-                : 'h-[500px] sm:h-[580px] md:h-[620px]'
+                ? 'h-[560px] sm:h-[660px] md:h-[740px] lg:h-[820px]'
+                : 'h-[540px] sm:h-[640px] md:h-[720px] lg:h-[800px]'
           }`}
           style={{ containerType: 'size' }}
         >
@@ -4541,6 +4687,51 @@ export default function SolarSystem({
             </>
           )}
 
+          {/* FLOATING CHAT / OPTICAL TUNING PILL LAUNCHER */}
+          {!isChatOpen && (
+            <button
+              onClick={() => setIsChatOpen(true)}
+              className="absolute bottom-3.5 left-3.5 z-40 px-3.5 py-2 rounded-2xl bg-slate-950/90 hover:bg-slate-900 border border-sky-400/60 hover:border-sky-300 text-white font-mono text-xs font-bold shadow-xl shadow-sky-500/25 backdrop-blur-md flex items-center gap-2 transition-all hover:scale-105 cursor-pointer ring-1 ring-white/10"
+              title="Abrir Chat de Ajustes del Visor 3D"
+            >
+              <span className="text-base">🛰️</span>
+              <span>{lang === 'en' ? 'Optical AI Chat ⭐' : 'Chat Ajustes del Visor ⭐'}</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            </button>
+          )}
+
+          {/* OBSERVATORY AI CHAT & OPTICAL CALIBRATION PANEL */}
+          <ObservatoryChat
+            isOpen={isChatOpen}
+            onClose={() => setIsChatOpen(false)}
+            viewerSettings={viewerSettings}
+            onUpdateSettings={setViewerSettings}
+            activePlanet={activePlanet}
+            onSelectPlanet={(planet, zoom = true) => handleSelectPlanet(planet, zoom)}
+            allPlanets={PLANET_SUBJECTS}
+            archLevel={archLevel}
+            onSetArchLevel={(lvl) => {
+              setArchLevel(lvl);
+              animStateRef.current.isTransitioning = true;
+            }}
+            viewVariant={viewVariant}
+            onSetViewVariant={(v) => {
+              setViewVariant(v);
+              if (v === 'option3') {
+                setLineupZoomed(false);
+                animStateRef.current.lineupZoomed = false;
+              }
+            }}
+            isRealScale={isRealScale}
+            onToggleRealScale={() => {
+              const nextState = !isRealScale;
+              setIsRealScale(nextState);
+              animStateRef.current.isTransitioning = true;
+              setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
+            }}
+            lang={lang}
+          />
+
           {/* Intro: fade from absolute black */}
           {!introDone && (
             <div
@@ -4548,7 +4739,9 @@ export default function SolarSystem({
               style={{ animation: 'cineIntro 5.2s ease-in-out forwards', fontFamily: CINE_FONT }}
               onAnimationEnd={() => setIntroDone(true)}
             >
-              <span className="text-white/90 text-xs sm:text-sm tracking-[0.6em] uppercase">Galileo</span>
+              <span className="text-white/90 text-xs sm:text-sm tracking-[0.6em] uppercase">
+                {lang === 'en' ? 'OBSERVATORY' : 'OBSERVATORIO'}
+              </span>
               <span className="mt-3 text-sky-200/50 text-[9px] sm:text-[10px] tracking-[0.4em] uppercase">
                 {lang === 'en' ? 'Observatory of the Cosmos' : 'Observatorio del Cosmos'}
               </span>

@@ -57,7 +57,7 @@ const WEEK1_TASKS = [
     items: [
       { id: 'e1', text: 'Publicar anuncio A (Universidad: Mathe & Physik, clase en español o inglés)' },
       { id: 'e2', text: 'Publicar anuncio B (IB Math AA HL & Physik HL)' },
-      { id: 'e3', text: 'Añadir fotos (perfil profesional + captura del Galileo Lab) y QR/enlace a la web' },
+      { id: 'e3', text: 'Añadir fotos (perfil profesional + captura del Physics Lab) y QR/enlace a la web' },
       { id: 'e4', text: 'Incluir ciudad y universidad en el título (Hannover, LUH…)' },
       { id: 'e5', text: 'Renovar los anuncios cada 2-3 días para mantenerlos arriba' },
       { id: 'e6', text: 'Responder todos los mensajes en menos de 1 hora y ofrecer sesión diagnóstica gratis' },
@@ -102,7 +102,7 @@ Du hast bald eine Klausur in Höhere Mathematik, Lineare Algebra oder Mechanik? 
 Altklausuren, Punkte-Strategie, Python-Anwendungen. Ab 55 €/h, 8h-Paket 390 €. Erstes Diagnosegespräch kostenlos. Offizielle Rechnung (§ 19 UStG).
 Online oder vor Ort in Hannover.
 
-EN/ES: Classes are taught in English or Spanish, not German. / Las clases son en español o inglés, no en alemán. First diagnostic session free / Primera sesión diagnóstica gratis.
+EN/ES: Classes are taught in English or Spanish. / Las clases son en español o inglés. First diagnostic session free / Primera sesión diagnóstica gratis.
 Link/QR: [web]`,
   },
   {
@@ -139,7 +139,7 @@ Clases 1-a-1 con un ingeniero y geofísico para estudiantes de universidades ale
 ¿Por qué tomar clases conmigo?
 1. Clases en tu idioma: explico en español o inglés, para que te concentres en la materia y no en traducir.
 2. Conozco el contexto: ingeniero y geofísico (doble M.Sc.) con experiencia en el nivel que piden las universidades alemanas.
-3. Intuición primero: cada concepto se explica con un fenómeno real y lo compruebas en el Galileo Lab interactivo.
+3. Intuición primero: cada concepto se explica con un fenómeno real y lo compruebas en el Physics Lab interactivo.
 4. Preparación con Altklausuren: practicamos con exámenes anteriores, estructura de respuesta y puntos parciales.
 5. Ciencia aplicada: del cálculo a Python (NumPy/SciPy).
 6. Claro y profesional: precios desde 50 €/h, paquetes de 8 h y factura oficial (§ 19 UStG).
@@ -151,7 +151,7 @@ Empieza con una sesión diagnóstica gratuita de 20 minutos: me cuentas tu módu
     title: 'Pitch web · EN',
     text: `STEM mentoring for your German university exams, taught in English or Spanish.
 
-1-on-1 classes with an engineer and geophysicist for university and IB students. Classes are taught in English or Spanish, not German. Altklausur drills, intuition-first teaching, Python for real-world insight, official invoice.
+1-on-1 classes with an engineer and geophysicist for university and IB students. Classes are taught in English or Spanish. Exam drills, intuition-first teaching, Python for real-world insight, official invoice.
 
 Book a free 20-minute diagnostic session.`,
   },

@@ -26,11 +26,15 @@ import {
   FileText,
   X,
   Download,
-  Orbit
+  Orbit,
+  Wind,
+  Wrench,
+  Globe
 } from 'lucide-react';
+import PhysicsToolkit from './PhysicsToolkit';
 
 // ============================================================================
-// CATALOG OF 8 CLASSICAL PHYSICS & ENGINEERING LAB PROBLEMS
+// CATALOG OF 10 CLASSICAL PHYSICS & ENGINEERING LAB PROBLEMS
 // ============================================================================
 export const LAB_PROBLEMS = [
   {
@@ -152,8 +156,8 @@ export const LAB_PROBLEMS = [
     badgeEn: 'Intro to Physics & Kinematics',
     titleEs: 'Tiro Parabólico y Balística con Arrastre Atmosférico',
     titleEn: 'Projectile Motion & Ballistics with Atmospheric Drag',
-    subtitleEs: 'Compara en vivo la parábola ideal de Galileo en el vacío contra la ecuación diferencial real con resistencia del aire.',
-    subtitleEn: 'Compare Galileo’s ideal vacuum parabola against the real differential equation with air drag.',
+    subtitleEs: 'Compara en vivo la parábola ideal en el vacío contra la ecuación diferencial real con resistencia del aire.',
+    subtitleEn: 'Compare the ideal vacuum parabola against the real differential equation with air drag.',
     color: '#059669',
     icon: Target,
     defaults: { v0: 28, angle: 45, g: 9.81, drag: 0.12 },
@@ -165,8 +169,8 @@ export const LAB_PROBLEMS = [
     ],
     presets: [
       {
-        labelEs: 'Vacío Ideal de Galileo (Alcance Máximo 45°)',
-        labelEn: 'Galileo Ideal Vacuum (Max Range 45°)',
+        labelEs: 'Vacío Ideal (Alcance Máximo 45°)',
+        labelEn: 'Ideal Vacuum (Max Range 45°)',
         values: { v0: 30, angle: 45, g: 9.81, drag: 0.0 }
       },
       {
@@ -883,8 +887,257 @@ export const LAB_PROBLEMS = [
         '4. Precession ratio: Δφ₂ / Δφ₁ = (1 - e₁²) / (1 - e₂²) = 0.96 / 0.64 = 1.50 (increases by 50%).'
       ]
     }
+  },
+  {
+    id: 'coupled_oscillators',
+    courseId: 'mechanics',
+    badgeEs: 'Vibraciones & Osciladores Acoplados',
+    badgeEn: 'Vibrations & Coupled Oscillators',
+    titleEs: 'Osciladores Acoplados (2 Masas, 3 Resortes) y Modos Normales',
+    titleEn: 'Coupled Oscillators (2 Masses, 3 Springs) & Normal Modes',
+    subtitleEs: 'El puente supremo entre el Álgebra Lineal y la Física: autovalores de la matriz dinámica M⁻¹K, desacoplamiento en coordenadas normales y batimiento.',
+    subtitleEn: 'The ultimate bridge between Linear Algebra and Physics: eigenvalues of dynamic matrix M⁻¹K, normal coordinate decoupling, and energy beats.',
+    color: '#8B5CF6',
+    icon: Activity,
+    defaults: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 10.0, mode: 1 },
+    sliders: [
+      { key: 'm1', labelEs: 'Masa 1 (m₁)', labelEn: 'Mass 1 (m₁)', min: 1.0, max: 6.0, step: 0.5, unit: ' kg' },
+      { key: 'm2', labelEs: 'Masa 2 (m₂)', labelEn: 'Mass 2 (m₂)', min: 1.0, max: 6.0, step: 0.5, unit: ' kg' },
+      { key: 'kOuter', labelEs: 'Rigidez resortes externos (k)', labelEn: 'Outer Springs Stiffness (k)', min: 5, max: 35, step: 1, unit: ' N/m' },
+      { key: 'kCoupling', labelEs: 'Rigidez acoplamiento (k₁₂)', labelEn: 'Coupling Stiffness (k₁₂)', min: 2, max: 30, step: 1, unit: ' N/m' }
+    ],
+    presets: [
+      {
+        labelEs: 'Modo Normal 1: En Fase (Mismo Sentido, ω₁ baja, resorte central quieto)',
+        labelEn: 'Mode 1: In-Phase (Same Direction, Low ω₁, Central Spring Idle)',
+        values: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 10.0, mode: 1 }
+      },
+      {
+        labelEs: 'Modo Normal 2: En Antifase (Sentidos Opuestos, ω₂ alta, máxima compresión)',
+        labelEn: 'Mode 2: Anti-Phase (Opposite Direction, High ω₂, Max Central Stretch)',
+        values: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 10.0, mode: 2 }
+      },
+      {
+        labelEs: 'Batimiento / Transferencia de Energía (m₁ arranca quieta, m₂ a tope)',
+        labelEn: 'Energy Beat / Resonance Transfer (m₁ starts at rest, m₂ at peak)',
+        values: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 4.0, mode: 3 }
+      }
+    ],
+    algebraSection: {
+      titleEs: 'Formulación Matricial y Problema de Autovalores (M⁻¹K)',
+      titleEn: 'Matrix Formulation & Eigenvalue Problem (M⁻¹K)',
+      formulas: [
+        {
+          labelEs: '1. Sistema matricial acoplado de 2º orden:',
+          labelEn: '1. Coupled 2nd-order matrix system:',
+          eq: '[ M ] d²x⃗/dt² + [ K ] x⃗ = 0⃗   con   K = [  k+k₁₂   -k₁₂  ]\n                                          [  -k₁₂    k+k₁₂ ]'
+        },
+        {
+          labelEs: '2. Ecuación secular característica: det(K - ω²M) = 0:',
+          labelEn: '2. Characteristic secular equation: det(K - ω²M) = 0:',
+          eq: 'ω₁² = k / m     ;     ω₂² = (k + 2k₁₂) / m   (para masas idénticas m₁ = m₂ = m)'
+        },
+        {
+          labelEs: '3. Autovectores modales ortogonales normalizados:',
+          labelEn: '3. Normalized orthogonal modal eigenvectors:',
+          eq: 'v⃗₁ = (1/√2) [ 1,  1 ]ᵀ  (Modo en Fase)  ;  v⃗₂ = (1/√2) [ 1, -1 ]ᵀ  (Modo en Antifase)'
+        }
+      ]
+    },
+    calculusSection: {
+      titleEs: 'Desacoplamiento en Coordenadas Normales y Batimiento',
+      titleEn: 'Normal Coordinates Decoupling & Energy Beat ODEs',
+      formulas: [
+        {
+          labelEs: '1. Sistema de Ecuaciones Diferenciales Ordinarias (EDOs) acopladas:',
+          labelEn: '1. Coupled Ordinary Differential Equations (ODEs):',
+          eq: 'm₁ d²x₁/dt² = -k x₁ + k₁₂(x₂ - x₁)     ;     m₂ d²x₂/dt² = -k x₂ - k₁₂(x₂ - x₁)'
+        },
+        {
+          labelEs: '2. Cambio de base a coordenadas normales desacopladas q₁ y q₂:',
+          labelEn: '2. Change of basis to decoupled normal coordinates q₁ & q₂:',
+          eq: 'q₁ = (x₁ + x₂)/√2  ⇒  d²q₁/dt² + ω₁² q₁ = 0     ;     q₂ = (x₁ - x₂)/√2  ⇒  d²q₂/dt² + ω₂² q₂ = 0'
+        },
+        {
+          labelEs: '3. Frecuencia de batimiento (Beats) y modulación periódica de energía:',
+          labelEn: '3. Beat frequency and periodic energy envelope modulation:',
+          eq: 'x₁(t) = 2A · cos(½(ω₂ - ω₁)t) · sin(½(ω₁ + ω₂)t)   ⇒   ω_batimiento = ω₂ - ω₁'
+        }
+      ]
+    },
+    exercise: {
+      questionEs:
+        'Dos masas idénticas m₁ = m₂ = 2.0 kg oscilan sin roce conectadas a paredes fijas con resortes exteriores de rigidez k = 18.0 N/m y un resorte central de acoplamiento k₁₂ = 10.0 N/m. ¿Cuál es el valor de la frecuencia angular del modo en antifase (ω₂) y del modo en fase (ω₁)?',
+      questionEn:
+        'Two identical masses m₁ = m₂ = 2.0 kg oscillate frictionlessly connected to fixed walls with outer springs k = 18.0 N/m and a central coupling spring k₁₂ = 10.0 N/m. What is the angular frequency of the anti-phase mode (ω₂) and in-phase mode (ω₁)?',
+      presetValues: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 10.0, mode: 2 },
+      options: [
+        { id: 'a', text: 'ω₁ = 3.00 rad/s  y  ω₂ = 4.36 rad/s', correct: true },
+        { id: 'b', text: 'ω₁ = 3.00 rad/s  y  ω₂ = 3.00 rad/s', correct: false },
+        { id: 'c', text: 'ω₁ = 2.50 rad/s  y  ω₂ = 5.00 rad/s', correct: false },
+        { id: 'd', text: 'ω₁ = 4.36 rad/s  y  ω₂ = 3.00 rad/s', correct: false }
+      ],
+      hintEs:
+        'Para masas iguales, el modo en fase no estira el resorte central: ω₁ = √(k/m). El modo en antifase estira el resorte central el doble: ω₂ = √((k + 2k₁₂)/m).',
+      hintEn:
+        'For equal masses, the in-phase mode does not stretch the central spring: ω₁ = √(k/m). The anti-phase mode stretches it doubly: ω₂ = √((k + 2k₁₂)/m).',
+      solutionStepsEs: [
+        '1. Calculamos la frecuencia del modo en fase: ω₁ = √(k/m) = √(18.0 / 2.0) = √9.0 = 3.00 rad/s.',
+        '2. Calculamos la frecuencia del modo en antifase: ω₂ = √((k + 2k₁₂)/m) = √((18.0 + 2·10.0) / 2.0) = √(38.0 / 2.0) = √19.0 ≈ 4.3589 rad/s.',
+        '3. Conclusión: ω₁ = 3.00 rad/s y ω₂ = 4.36 rad/s.'
+      ],
+      solutionStepsEn: [
+        '1. Compute in-phase frequency: ω₁ = √(k/m) = √(18.0 / 2.0) = √9.0 = 3.00 rad/s.',
+        '2. Compute anti-phase frequency: ω₂ = √((k + 2k₁₂)/m) = √((18.0 + 2·10.0) / 2.0) = √(38.0 / 2.0) = √19.0 ≈ 4.3589 rad/s.',
+        '3. Conclusion: ω₁ = 3.00 rad/s and ω₂ = 4.36 rad/s.'
+      ]
+    }
+  },
+  {
+    id: 'geostrophic_wind',
+    courseId: 'geophysics',
+    badgeEs: 'Geofísica de Atmósfera & Océano',
+    badgeEn: 'Atmospheric & Oceanic Geophysics',
+    titleEs: 'Viento Geostrófico, Gradiente de Presión y Fuerza de Coriolis',
+    titleEn: 'Geostrophic Wind, Pressure Gradient & Coriolis Force',
+    subtitleEs: 'El equilibrio rey de la meteorología y oceanografía dinámica: por qué el viento fluye paralelo a las isobaras y los huracanes giran al revés en cada hemisferio.',
+    subtitleEn: 'The fundamental balance of meteorology & physical oceanography: why wind blows parallel to isobars and hurricanes rotate oppositely in each hemisphere.',
+    color: '#0D9488',
+    icon: Compass,
+    defaults: { deltaP: 16.0, latitude: 45, hemisphere: 1, rho: 1.20 },
+    sliders: [
+      { key: 'deltaP', labelEs: 'Gradiente de Presión (ΔP / 100km)', labelEn: 'Pressure Gradient (ΔP / 100km)', min: 4, max: 32, step: 2, unit: ' hPa' },
+      { key: 'latitude', labelEs: 'Latitud Geográfica (φ)', labelEn: 'Geographic Latitude (φ)', min: 10, max: 80, step: 5, unit: '°' },
+      { key: 'hemisphere', labelEs: 'Hemisferio (+1 Norte, -1 Sur)', labelEn: 'Hemisphere (+1 North, -1 South)', min: -1, max: 1, step: 2, unit: '' },
+      { key: 'rho', labelEs: 'Densidad del Aire (ρ)', labelEn: 'Air Density (ρ)', min: 1.05, max: 1.35, step: 0.05, unit: ' kg/m³' }
+    ],
+    presets: [
+      {
+        labelEs: 'Borrasca Hemisferio Norte (Desviación Derecha, Giro Antihorario)',
+        labelEn: 'Northern Hemisphere Low (Right Deflection, Cyclonic Counter-Clockwise)',
+        values: { deltaP: 16.0, latitude: 45, hemisphere: 1, rho: 1.20 }
+      },
+      {
+        labelEs: 'Borrasca Hemisferio Sur (Desviación Izquierda, Giro Horario)',
+        labelEn: 'Southern Hemisphere Low (Left Deflection, Cyclonic Clockwise)',
+        values: { deltaP: 16.0, latitude: 45, hemisphere: -1, rho: 1.20 }
+      },
+      {
+        labelEs: 'Corriente en Chorro (Jet Stream) Polar (Fuerte Gradiente de Altura)',
+        labelEn: 'Polar Jet Stream (Intense Upper-Air Gradient, Fast Wind)',
+        values: { deltaP: 28.0, latitude: 55, hemisphere: 1, rho: 1.10 }
+      },
+      {
+        labelEs: 'Zona Ecuatorial / Calmas (f ≈ 0, El Viento Fluye Directo a la Baja)',
+        labelEn: 'Equatorial Zone (f ≈ 0, Direct Flow Down-Gradient)',
+        values: { deltaP: 10.0, latitude: 10, hemisphere: 1, rho: 1.20 }
+      }
+    ],
+    algebraSection: {
+      titleEs: 'Álgebra del Equilibrio Geostrófico en Marco Rotante',
+      titleEn: 'Algebraic Geostrophic Balance in Rotating Frame',
+      formulas: [
+        {
+          labelEs: '1. Parámetro de Coriolis f en función de la latitud φ:',
+          labelEn: '1. Coriolis parameter f as a function of latitude φ:',
+          eq: 'f = 2 · Ω_Tierra · sin(φ)   con   Ω_Tierra = 7.292 × 10⁻⁵ rad/s'
+        },
+        {
+          labelEs: '2. Sistema lineal 2×2 del equilibrio horizontal (Fuerza P + Coriolis = 0):',
+          labelEn: '2. 2×2 horizontal balance system (Pressure Gradient + Coriolis = 0):',
+          eq: '[  0   -f ] [ u_g ] = - (1/ρ) [ ∂P/∂x ]\n[  f    0 ] [ v_g ]          [ ∂P/∂y ]'
+        },
+        {
+          labelEs: '3. Solución explícita del vector viento geostrófico (v⃗_g ⟂ ∇P):',
+          labelEn: '3. Explicit solution of geostrophic wind vector (v⃗_g ⟂ ∇P):',
+          eq: 'u_g = - (1 / (ρ · f)) · (∂P / ∂y)     ;     v_g = (1 / (ρ · f)) · (∂P / ∂x)'
+        }
+      ]
+    },
+    calculusSection: {
+      titleEs: 'Ecuaciones de Navier-Stokes Geofísicas y Número de Rossby',
+      titleEn: 'Geophysical Navier-Stokes Equations & Rossby Number',
+      formulas: [
+        {
+          labelEs: '1. Ecuación de Navier-Stokes en sistema no inercial rotante:',
+          labelEn: '1. Navier-Stokes in rotating non-inertial frame:',
+          eq: 'D v⃗ / Dt = ∂v⃗/∂t + (v⃗·∇)v⃗ = - (1/ρ) ∇P - 2 (Ω⃗ × v⃗) + g⃗ + ν ∇²v⃗'
+        },
+        {
+          labelEs: '2. Escalamiento sinóptico y Número de Rossby (Ro ≪ 1):',
+          labelEn: '2. Synoptic scaling and Rossby Number (Ro ≪ 1):',
+          eq: 'Ro = U / (f · L) ≈ 0.1 ≪ 1   ⇒   La aceleración inercial D v⃗ / Dt ≈ 0 es despreciable'
+        },
+        {
+          labelEs: '3. Ley de Buys Ballot (Geofísica Meteorológica):',
+          labelEn: '3. Buys Ballot’s Law (Meteorological Geophysics):',
+          eq: 'Hemisferio Norte: Si te paras de espaldas al viento, la BAJA presión queda a tu IZQUIERDA.'
+        }
+      ]
+    },
+    exercise: {
+      questionEs:
+        'A una latitud de φ = 45° N en el Hemisferio Norte (f = 2 · 7.292×10⁻⁵ · sin(45°) = 1.031×10⁻⁴ s⁻¹), un frente meteorológico presenta una caída de presión de ΔP = 16.0 hPa a lo largo de una distancia horizontal de Δn = 100 km en aire con densidad ρ = 1.20 kg/m³. ¿Cuál es la magnitud de la velocidad del viento geostrófico resultante v_g?',
+      questionEn:
+        'At latitude φ = 45° N in the Northern Hemisphere (f = 1.031×10⁻⁴ s⁻¹), a weather front has a pressure drop of ΔP = 16.0 hPa across a horizontal distance Δn = 100 km in air of density ρ = 1.20 kg/m³. What is the resulting geostrophic wind speed v_g?',
+      presetValues: { deltaP: 16.0, latitude: 45, hemisphere: 1, rho: 1.20 },
+      options: [
+        { id: 'a', text: 'v_g ≈ 129.3 m/s (≈ 465 km/h, Corriente en Chorro / Jet Stream)', correct: true },
+        { id: 'b', text: 'v_g ≈ 12.9 m/s (Brisa moderada)', correct: false },
+        { id: 'c', text: 'v_g ≈ 0.0 m/s (El viento se detiene por Coriolis)', correct: false },
+        { id: 'd', text: 'v_g ≈ 550.0 m/s (Supersónico)', correct: false }
+      ],
+      hintEs:
+        'Convierte ΔP a Pascales (16.0 hPa = 1600 Pa) y Δn a metros (100 km = 100,000 m). Aplica la fórmula v_g = (1 / (ρ · f)) · (ΔP / Δn).',
+      hintEn:
+        'Convert ΔP to Pascals (16.0 hPa = 1600 Pa) and Δn to meters (100 km = 100,000 m). Apply v_g = (1 / (ρ · f)) · (ΔP / Δn).',
+      solutionStepsEs: [
+        '1. Gradiente de presión: ∂P/∂n = 1600 Pa / 100,000 m = 0.016 Pa/m.',
+        '2. Denominador: ρ · f = 1.20 kg/m³ · 1.031×10⁻⁴ s⁻¹ = 1.2372×10⁻⁴ kg/(m²·s).',
+        '3. Velocidad geostrófica: v_g = 0.016 / (1.2372×10⁻⁴) ≈ 129.3 m/s (≈ 465.5 km/h).'
+      ],
+      solutionStepsEn: [
+        '1. Pressure gradient: ∂P/∂n = 1600 Pa / 100,000 m = 0.016 Pa/m.',
+        '2. Denominator: ρ · f = 1.20 kg/m³ · 1.031×10⁻⁴ s⁻¹ = 1.2372×10⁻⁴ kg/(m²·s).',
+        '3. Geostrophic speed: v_g = 0.016 / (1.2372×10⁻⁴) ≈ 129.3 m/s (≈ 465.5 km/h).'
+      ]
+    }
   }
 ];
+
+// ============================================================================
+// HELPER: DRAW COILED SPRING ON CANVAS
+// ============================================================================
+function drawCoiledSpring(ctx, x1, y1, x2, y2, coils = 7, color = '#94A3B8') {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const dist = Math.hypot(dx, dy);
+  const angle = Math.atan2(dy, dx);
+
+  ctx.save();
+  ctx.translate(x1, y1);
+  ctx.rotate(angle);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+
+  const leadIn = 10;
+  const leadOut = 10;
+  const springLen = Math.max(10, dist - leadIn - leadOut);
+  ctx.lineTo(leadIn, 0);
+
+  const numZigs = coils * 2;
+  const step = springLen / numZigs;
+  for (let i = 1; i <= numZigs; i++) {
+    const sx = leadIn + i * step;
+    const sy = (i % 2 === 1 ? -1 : 1) * 7.5;
+    ctx.lineTo(sx, i === numZigs ? 0 : sy);
+  }
+  ctx.lineTo(dist, 0);
+  ctx.stroke();
+  ctx.restore();
+}
 
 // ============================================================================
 // HELPER: DRAW VECTOR ARROW WITH LABEL ON CANVAS
@@ -951,12 +1204,14 @@ export default function PhysicsLab({
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [showStudySheet, setShowStudySheet] = useState(false);
+  const [viewMode, setViewMode] = useState('benchmarks'); // 'benchmarks' | 'toolkit'
 
   const canvasRef = useRef(null);
   const animRef = useRef(null);
   const lastTimeRef = useRef(performance.now());
 
   const handleSelectProblem = (probId) => {
+    setViewMode('benchmarks');
     const prob = LAB_PROBLEMS.find((p) => p.id === probId) || LAB_PROBLEMS[0];
     setSelectedId(prob.id);
     setParams(prob.defaults);
@@ -1083,8 +1338,8 @@ export default function PhysicsLab({
               ? 'With Atmospheric Drag (Non-parabolic ODE)'
               : 'Con Arrastre Atmosférico (EDO no parabólica)'
             : lang === 'en'
-            ? 'Galilean Vacuum (Exact Parabola)'
-            : 'Vacío de Galileo (Parábola Exacta)',
+            ? 'Ideal Vacuum (Exact Parabola)'
+            : 'Vacío Ideal (Parábola Exacta)',
         raw: { vx, vy, x, y, dydx, idealRange, idealPeak, tFlightIdeal }
       };
     }
@@ -1216,6 +1471,69 @@ export default function PhysicsLab({
           ? `Vortex Active (Circulation = ${circulation.toFixed(1)} J)`
           : `Vórtice Activo (Circulación = ${circulation.toFixed(1)} J)`,
         raw: { omega, kDiv, radius, curlVal, divVal, circulation, area }
+      };
+    }
+
+    if (selectedId === 'coupled_oscillators') {
+      const { m1 = 2.0, m2 = 2.0, kOuter = 18.0, kCoupling = 10.0, mode = 1 } = safeParams;
+      const tr = (kOuter + kCoupling) / m1 + (kOuter + kCoupling) / m2;
+      const detMat = ((kOuter + kCoupling) * (kOuter + kCoupling) - kCoupling * kCoupling) / (m1 * m2);
+      const disc = Math.max(0, tr * tr - 4 * detMat);
+      const w1sq = Math.max(0.1, (tr - Math.sqrt(disc)) / 2);
+      const w2sq = Math.max(0.2, (tr + Math.sqrt(disc)) / 2);
+      const w1 = Math.sqrt(w1sq);
+      const w2 = Math.sqrt(w2sq);
+      const f1 = w1 / (2 * Math.PI);
+      const f2 = w2 / (2 * Math.PI);
+      const beatFreq = Math.abs(w2 - w1) / (2 * Math.PI);
+
+      let modeDescEs = 'Modo 1: En Fase (Mismo sentido, resorte central quieto)';
+      let modeDescEn = 'Mode 1: In-Phase (Same direction, central spring idle)';
+      if (mode === 2) {
+        modeDescEs = 'Modo 2: En Antifase (Sentidos opuestos, máxima compresión)';
+        modeDescEn = 'Mode 2: Anti-Phase (Opposite direction, maximum stretch)';
+      } else if (mode === 3) {
+        modeDescEs = `Superposición / Batimiento (f_bat = ${beatFreq.toFixed(2)} Hz)`;
+        modeDescEn = `Superposition / Energy Beat (f_beat = ${beatFreq.toFixed(2)} Hz)`;
+      }
+
+      return {
+        items: [
+          { label: 'ω₁ (Modo en Fase)', value: `${w1.toFixed(2)} rad/s` },
+          { label: 'ω₂ (Modo en Antifase)', value: `${w2.toFixed(2)} rad/s` },
+          { label: 'f₁ (Frecuencia 1)', value: `${f1.toFixed(2)} Hz` },
+          { label: 'f₂ (Frecuencia 2)', value: `${f2.toFixed(2)} Hz` }
+        ],
+        status: lang === 'en' ? modeDescEn : modeDescEs,
+        raw: { m1, m2, kOuter, kCoupling, mode, w1, w2, f1, f2, beatFreq }
+      };
+    }
+
+    if (selectedId === 'geostrophic_wind') {
+      const { deltaP = 16.0, latitude = 45, hemisphere = 1, rho = 1.20 } = safeParams;
+      const omegaEarth = 7.292e-5;
+      const latRad = (Math.abs(latitude) * Math.PI) / 180;
+      const fCoriolis = 2 * omegaEarth * Math.sin(latRad) * (hemisphere >= 0 ? 1 : -1);
+      const gradP = (deltaP * 100) / 100000; // Pa/m
+      const vg = Math.abs(fCoriolis) > 1e-6 ? gradP / (rho * Math.abs(fCoriolis)) : 999;
+      const vgKmh = vg * 3.6;
+
+      const statusEs = hemisphere >= 0
+        ? `Hemisferio Norte: Desviación a la DERECHA (${vgKmh.toFixed(1)} km/h)`
+        : `Hemisferio Sur: Desviación a la IZQUIERDA (${vgKmh.toFixed(1)} km/h)`;
+      const statusEn = hemisphere >= 0
+        ? `Northern Hemisphere: Deflection to RIGHT (${vgKmh.toFixed(1)} km/h)`
+        : `Southern Hemisphere: Deflection to LEFT (${vgKmh.toFixed(1)} km/h)`;
+
+      return {
+        items: [
+          { label: 'v_g (Viento Geostrófico)', value: `${vg.toFixed(1)} m/s` },
+          { label: 'v_g en km/h', value: `${vgKmh.toFixed(1)} km/h` },
+          { label: 'Parámetro f (Coriolis)', value: `${(Math.abs(fCoriolis) * 1e4).toFixed(2)}×10⁻⁴ s⁻¹` },
+          { label: 'Gradiente ∇P', value: `${(gradP * 1000).toFixed(2)} mPa/m` }
+        ],
+        status: lang === 'en' ? statusEn : statusEs,
+        raw: { deltaP, latitude, hemisphere, rho, fCoriolis, gradP, vg, vgKmh }
       };
     }
 
@@ -2105,6 +2423,69 @@ export default function PhysicsLab({
     // ------------------------------------------------------------------------
     // 8. GENERAL RELATIVITY: SCHWARZSCHILD GEODESIC ROSETTE & PERIHELION SHIFT
     // ------------------------------------------------------------------------
+    if (selectedId === 'coupled_oscillators') {
+      const { m1 = 2.0, m2 = 2.0, kOuter = 18.0, kCoupling = 10.0, mode = 1 } = safeParams;
+      const tr = (kOuter + kCoupling) / m1 + (kOuter + kCoupling) / m2;
+      const detMat = ((kOuter + kCoupling) * (kOuter + kCoupling) - kCoupling * kCoupling) / (m1 * m2);
+      const disc = Math.max(0, tr * tr - 4 * detMat);
+      const w1sq = Math.max(0.1, (tr - Math.sqrt(disc)) / 2);
+      const w2sq = Math.max(0.2, (tr + Math.sqrt(disc)) / 2);
+      const w1 = Math.sqrt(w1sq);
+      const w2 = Math.sqrt(w2sq);
+      const f1 = w1 / (2 * Math.PI);
+      const f2 = w2 / (2 * Math.PI);
+      const beatFreq = Math.abs(w2 - w1) / (2 * Math.PI);
+
+      let modeDescEs = 'Modo 1: En Fase (Mismo sentido, resorte central quieto)';
+      let modeDescEn = 'Mode 1: In-Phase (Same direction, central spring idle)';
+      if (mode === 2) {
+        modeDescEs = 'Modo 2: En Antifase (Sentidos opuestos, máxima compresión)';
+        modeDescEn = 'Mode 2: Anti-Phase (Opposite direction, maximum stretch)';
+      } else if (mode === 3) {
+        modeDescEs = `Superposición / Batimiento (f_bat = ${beatFreq.toFixed(2)} Hz)`;
+        modeDescEn = `Superposition / Energy Beat (f_beat = ${beatFreq.toFixed(2)} Hz)`;
+      }
+
+      return {
+        items: [
+          { label: 'ω₁ (Modo en Fase)', value: `${w1.toFixed(2)} rad/s` },
+          { label: 'ω₂ (Modo en Antifase)', value: `${w2.toFixed(2)} rad/s` },
+          { label: 'f₁ (Frecuencia 1)', value: `${f1.toFixed(2)} Hz` },
+          { label: 'f₂ (Frecuencia 2)', value: `${f2.toFixed(2)} Hz` }
+        ],
+        status: lang === 'en' ? modeDescEn : modeDescEs,
+        raw: { m1, m2, kOuter, kCoupling, mode, w1, w2, f1, f2, beatFreq }
+      };
+    }
+
+    if (selectedId === 'geostrophic_wind') {
+      const { deltaP = 16.0, latitude = 45, hemisphere = 1, rho = 1.20 } = safeParams;
+      const omegaEarth = 7.292e-5;
+      const latRad = (Math.abs(latitude) * Math.PI) / 180;
+      const fCoriolis = 2 * omegaEarth * Math.sin(latRad) * (hemisphere >= 0 ? 1 : -1);
+      const gradP = (deltaP * 100) / 100000; // Pa/m
+      const vg = Math.abs(fCoriolis) > 1e-6 ? gradP / (rho * Math.abs(fCoriolis)) : 999;
+      const vgKmh = vg * 3.6;
+
+      const statusEs = hemisphere >= 0
+        ? `Hemisferio Norte: Desviación a la DERECHA (${vgKmh.toFixed(1)} km/h)`
+        : `Hemisferio Sur: Desviación a la IZQUIERDA (${vgKmh.toFixed(1)} km/h)`;
+      const statusEn = hemisphere >= 0
+        ? `Northern Hemisphere: Deflection to RIGHT (${vgKmh.toFixed(1)} km/h)`
+        : `Southern Hemisphere: Deflection to LEFT (${vgKmh.toFixed(1)} km/h)`;
+
+      return {
+        items: [
+          { label: 'v_g (Viento Geostrófico)', value: `${vg.toFixed(1)} m/s` },
+          { label: 'v_g en km/h', value: `${vgKmh.toFixed(1)} km/h` },
+          { label: 'Parámetro f (Coriolis)', value: `${(Math.abs(fCoriolis) * 1e4).toFixed(2)}×10⁻⁴ s⁻¹` },
+          { label: 'Gradiente ∇P', value: `${(gradP * 1000).toFixed(2)} mPa/m` }
+        ],
+        status: lang === 'en' ? statusEn : statusEs,
+        raw: { deltaP, latitude, hemisphere, rho, fCoriolis, gradP, vg, vgKmh }
+      };
+    }
+
     if (selectedId === 'relativity') {
       const { mass = 1.0, eccentricity = 0.5, grFactor = 1.5, semiMajor = 2.8 } = safeParams;
       const { rMin = 1.4, deltaPhiDeg = 4.5 } = telemetry.raw;
@@ -2243,6 +2624,219 @@ export default function PhysicsLab({
       ctx.arc(potX + normCurR * potW, potY - (curVVal + 1.2) * 28, 4, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // ------------------------------------------------------------------------
+    // 9. COUPLED OSCILLATORS: 2 MASSES, 3 SPRINGS & NORMAL MODES
+    // ------------------------------------------------------------------------
+    if (selectedId === 'coupled_oscillators') {
+      const { m1 = 2.0, m2 = 2.0, kOuter = 18.0, kCoupling = 10.0, mode = 1 } = safeParams;
+      const { w1 = 3.0, w2 = 4.36 } = telemetry.raw;
+
+      const groundY = H / 2 + 35;
+      const wallLeft = 50;
+      const wallRight = W - 50;
+      const blockW = 54;
+      const blockH = 40;
+
+      // Draw Walls & Ground
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(wallLeft - 18, groundY - 80, 18, 90);
+      ctx.fillRect(wallRight, groundY - 80, 18, 90);
+      ctx.strokeStyle = '#64748B';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(wallLeft - 18, groundY - 80, 18, 90);
+      ctx.strokeRect(wallRight, groundY - 80, 18, 90);
+
+      ctx.beginPath();
+      ctx.moveTo(wallLeft - 18, groundY);
+      ctx.lineTo(wallRight + 18, groundY);
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      for (let hx = wallLeft - 10; hx < wallRight + 10; hx += 16) {
+        ctx.beginPath();
+        ctx.moveTo(hx, groundY);
+        ctx.lineTo(hx - 8, groundY + 8);
+        ctx.stroke();
+      }
+
+      // Rest equilibrium centers
+      const eq1 = W / 2 - 85;
+      const eq2 = W / 2 + 85;
+
+      const amp = 32;
+      let x1Disp = 0;
+      let x2Disp = 0;
+
+      if (mode === 1) {
+        x1Disp = amp * Math.cos(simTime * w1);
+        x2Disp = amp * Math.cos(simTime * w1);
+      } else if (mode === 2) {
+        x1Disp = amp * Math.cos(simTime * w2);
+        x2Disp = -amp * Math.cos(simTime * w2);
+      } else {
+        const wMean = (w1 + w2) / 2;
+        const wMod = Math.abs(w2 - w1) / 2;
+        x1Disp = amp * Math.cos(simTime * wMod) * Math.cos(simTime * wMean);
+        x2Disp = amp * Math.sin(simTime * wMod) * Math.sin(simTime * wMean);
+      }
+
+      const b1Center = eq1 + x1Disp;
+      const b2Center = eq2 + x2Disp;
+
+      const b1Left = b1Center - blockW / 2;
+      const b1Right = b1Center + blockW / 2;
+      const b2Left = b2Center - blockW / 2;
+      const b2Right = b2Center + blockW / 2;
+      const blockY = groundY - blockH;
+
+      // Draw Springs
+      drawCoiledSpring(ctx, wallLeft, groundY - blockH / 2, b1Left, groundY - blockH / 2, 7, '#38BDF8');
+      drawCoiledSpring(ctx, b1Right, groundY - blockH / 2, b2Left, groundY - blockH / 2, 7, '#A78BFA');
+      drawCoiledSpring(ctx, b2Right, groundY - blockH / 2, wallRight, groundY - blockH / 2, 7, '#34D399');
+
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#38BDF8';
+      ctx.fillText(`k=${kOuter}`, (wallLeft + b1Left) / 2 - 16, groundY - blockH - 4);
+      ctx.fillStyle = '#C084FC';
+      ctx.fillText(`k₁₂=${kCoupling}`, (b1Right + b2Left) / 2 - 18, groundY - blockH - 4);
+      ctx.fillStyle = '#34D399';
+      ctx.fillText(`k=${kOuter}`, (b2Right + wallRight) / 2 - 16, groundY - blockH - 4);
+
+      // Block 1
+      ctx.fillStyle = showDCL ? 'rgba(56, 189, 248, 0.35)' : '#0284C7';
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 2;
+      ctx.fillRect(b1Left, blockY, blockW, blockH);
+      ctx.strokeRect(b1Left, blockY, blockW, blockH);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(`m₁=${m1}k`, b1Left + 6, blockY + 24);
+
+      // Block 2
+      ctx.fillStyle = showDCL ? 'rgba(16, 185, 129, 0.35)' : '#059669';
+      ctx.strokeStyle = '#34D399';
+      ctx.lineWidth = 2;
+      ctx.fillRect(b2Left, blockY, blockW, blockH);
+      ctx.strokeRect(b2Left, blockY, blockW, blockH);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(`m₂=${m2}k`, b2Left + 6, blockY + 24);
+
+      // Equilibrium marks
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.setLineDash([2, 4]);
+      ctx.beginPath();
+      ctx.moveTo(eq1, groundY - 55);
+      ctx.lineTo(eq1, groundY + 10);
+      ctx.moveTo(eq2, groundY - 55);
+      ctx.lineTo(eq2, groundY + 10);
+      ctx.stroke();
+      ctx.restore();
+
+      if (showDCL) {
+        const f1Outer = -kOuter * (b1Center - eq1);
+        const f1Coupl = kCoupling * ((b2Center - eq2) - (b1Center - eq1));
+        drawArrow(ctx, b1Center, blockY + 12, b1Center + f1Outer * 1.4, blockY + 12, '#38BDF8', 'F_k1', 2);
+        drawArrow(ctx, b1Center, blockY + 28, b1Center + f1Coupl * 1.4, blockY + 28, '#C084FC', 'F_k12', 2);
+
+        const f2Outer = -kOuter * (b2Center - eq2);
+        const f2Coupl = -f1Coupl;
+        drawArrow(ctx, b2Center, blockY + 12, b2Center + f2Outer * 1.4, blockY + 12, '#34D399', 'F_k2', 2);
+        drawArrow(ctx, b2Center, blockY + 28, b2Center + f2Coupl * 1.4, blockY + 28, '#C084FC', '-F_k12', 2);
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // 10. GEOSTROPHIC WIND: PRESSURE GRADIENT & CORIOLIS BALANCE
+    // ------------------------------------------------------------------------
+    if (selectedId === 'geostrophic_wind') {
+      const { deltaP = 16.0, latitude = 45, hemisphere = 1, rho = 1.20 } = safeParams;
+      const { vg = 129.3, vgKmh = 465.5 } = telemetry.raw;
+
+      const numIsobars = 5;
+      const isobarSpacing = H / (numIsobars + 1);
+
+      ctx.save();
+      for (let i = 1; i <= numIsobars; i++) {
+        const iy = i * isobarSpacing;
+        const pVal = 1000 + (numIsobars - i + 1) * (deltaP / 2);
+
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(35, iy);
+        ctx.lineTo(W - 35, iy);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94A3B8';
+        ctx.font = 'bold 10px "JetBrains Mono", monospace';
+        ctx.fillText(`${pVal.toFixed(0)} hPa`, 40, iy - 6);
+      }
+      ctx.restore();
+
+      ctx.font = 'bold 13px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#EF4444';
+      ctx.fillText('L (Baja Presión - Ciclón)', W / 2 - 80, isobarSpacing - 8);
+      ctx.fillStyle = '#38BDF8';
+      ctx.fillText('H (Alta Presión - Anticiclón)', W / 2 - 85, H - 15);
+
+      const windDir = hemisphere >= 0 ? 1 : -1;
+      const speedNorm = Math.min(6, Math.max(0.8, (vg / 35)));
+
+      ctx.fillStyle = '#34D399';
+      for (let p = 0; p < 24; p++) {
+        const row = 1 + (p % numIsobars);
+        const py = row * isobarSpacing;
+        const progress = ((simTime * speedNorm * 0.25 + p * 0.14) % 1);
+        const px = windDir > 0
+          ? 35 + progress * (W - 70)
+          : (W - 35) - progress * (W - 70);
+
+        ctx.beginPath();
+        ctx.arc(px, py, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const parcelX = W / 2;
+      const parcelY = H / 2;
+
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.25)';
+      ctx.strokeStyle = '#FBBF24';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(parcelX, parcelY, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 10px "JetBrains Mono", monospace';
+      ctx.fillText('Parcela Aire', parcelX - 35, parcelY - 18);
+
+      const vVecLen = Math.min(85, Math.max(30, speedNorm * 32));
+      drawArrow(ctx, parcelX, parcelY, parcelX + windDir * vVecLen, parcelY, '#34D399', `v⃗_g (${vgKmh.toFixed(0)} km/h)`, 3);
+
+      if (showDCL) {
+        const fPLen = 55;
+        drawArrow(ctx, parcelX, parcelY, parcelX, parcelY - fPLen, '#EF4444', 'F⃗_P = -(1/ρ)∇P', 2.5);
+
+        const fCorLen = 55;
+        drawArrow(ctx, parcelX, parcelY, parcelX, parcelY + fCorLen, '#38BDF8', 'F⃗_Cor = -2(Ω⃗×v⃗)', 2.5);
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx.fillRect(parcelX + 45, parcelY - 32, 160, 64);
+        ctx.strokeStyle = '#10B981';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(parcelX + 45, parcelY - 32, 160, 64);
+
+        ctx.fillStyle = '#10B981';
+        ctx.font = 'bold 10px "JetBrains Mono", monospace';
+        ctx.fillText('Equilibrio Geostrófico:', parcelX + 52, parcelY - 16);
+        ctx.fillStyle = '#E2E8F0';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText('F⃗_P + F⃗_Cor = 0⃗', parcelX + 52, parcelY);
+        ctx.fillText(hemisphere >= 0 ? 'Desviación Der. (NH)' : 'Desviación Izq. (SH)', parcelX + 52, parcelY + 16);
+      }
+    }
   }, [selectedId, safeParams, simTime, showDCL, telemetry.raw]);
 
   const linkedCourse = courses.find((c) => c.id === currentProblem.courseId) || courses[0];
@@ -2291,8 +2885,53 @@ export default function PhysicsLab({
           </div>
         </div>
 
-        {/* 8-Course Problem Selector Pills */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 mb-8">
+        {/* Dual Mode Switcher: 10 Benchmarks vs Compendium Toolkit */}
+        <div className="flex flex-wrap items-center gap-3 mb-8 pb-4 border-b border-slate-200">
+          <button
+            onClick={() => setViewMode('benchmarks')}
+            className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
+              viewMode === 'benchmarks'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-sky-500/30'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+            }`}
+          >
+            <Compass className="w-4 h-4 text-sky-400" />
+            <span>
+              {lang === 'en'
+                ? '10 Benchmark Lab Simulations & FBDs'
+                : 'Laboratorio de 10 Problemas Clásicos & DCL'}
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold ml-1">
+              10
+            </span>
+          </button>
+
+          <button
+            onClick={() => setViewMode('toolkit')}
+            className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
+              viewMode === 'toolkit'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-emerald-500/30'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+            }`}
+          >
+            <Wrench className="w-4 h-4 text-emerald-400" />
+            <span>
+              {lang === 'en'
+                ? 'Compendium of Laws & Tools (Physics • Algebra • Calculus)'
+                : 'Compendio de Leyes & Herramientas (Física • Álgebra • Cálculo)'}
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold ml-1">
+              ✨ {lang === 'en' ? 'Toolkit' : 'Herramientas'}
+            </span>
+          </button>
+        </div>
+
+        {viewMode === 'toolkit' ? (
+          <PhysicsToolkit lang={lang} onOpenBooking={onOpenBooking} />
+        ) : (
+          <>
+            {/* 10-Course Problem Selector Pills */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2 mb-8">
           {LAB_PROBLEMS.map((prob) => {
             const Icon = prob.icon;
             const active = prob.id === selectedId;
@@ -2739,6 +3378,8 @@ export default function PhysicsLab({
             )}
           </div>
         </div>
+        </>
+        )}
 
         {/* ================================================================= */}
         {/* MODAL: EXPORTAR FICHA DE ESTUDIO / IMPRIMIR RESUMEN OFICIAL       */}

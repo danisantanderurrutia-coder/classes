@@ -43,6 +43,7 @@ import {
 } from 'lucide-react';
 import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
 import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
+import { ProblemThumbnail } from './components/LabThumbnails';
 
 // Custom crisp GitHub SVG icon component
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -62,8 +63,8 @@ const ACADEMIC_COURSES = [
     titleEs: "Höhere Mathematik I, II y III (Cálculo y Análisis para Ingenieros)",
     facultyEn: "Faculty of Mathematics & Mechanical Engineering (TU9 Standards)",
     facultyEs: "Facultad de Matemáticas e Ingeniería Mecánica (Estándar TU9)",
-    targetEn: "International students at TUM, RWTH Aachen, TU Berlin, KIT, Uni Stuttgart facing rigorous Klausur phases.",
-    targetEs: "Estudiantes en TUM, RWTH Aachen, TU Berlin, KIT o Uni Stuttgart preparando su fase de exámenes (Klausurphase).",
+    targetEn: "Engineering and science students preparing rigorous multivariable calculus and differential equations exams.",
+    targetEs: "Estudiantes de ingeniería y ciencias que preparan exámenes exigentes de cálculo multivariable y ecuaciones diferenciales.",
     rateHourly: 55,
     packagePrice: 390,
     packageHours: 8,
@@ -73,14 +74,14 @@ const ACADEMIC_COURSES = [
       "Integral theorems of vector analysis: Green's, Gauss's (Divergence), and Stokes' theorems",
       "Ordinary Differential Equations (ODEs): Separation of variables, integrating factors, Wronskian",
       "Complex numbers, power series, Taylor expansions, and Cauchy-Riemann conditions",
-      "Official German Altklausuren breakdown with examiner partial-point rubrics"
+      "Official past-exam (Altklausuren) breakdown with examiner partial-point rubrics"
     ],
     syllabusEs: [
       "Cálculo diferencial multivariable y campos vectoriales: gradiente, divergencia y rotacional",
       "Teoremas integrales del análisis vectorial: Green, Gauss (Divergencia) y Stokes",
       "Ecuaciones Diferenciales Ordinarias (EDOs): Separación de variables, Wronskiano, sistemas lineales",
       "Números complejos, series de Taylor, criterios de convergencia y condiciones de Cauchy-Riemann",
-      "Resolución exhaustiva de Altklausuren oficiales para asegurar el máximo de puntos parciales"
+      "Resolución exhaustiva de exámenes anteriores oficiales para asegurar el máximo de puntos parciales"
     ],
     skriptKeywords: ["Zwischenwertsatz", "Rotationskörper", "Satz von Stokes", "Divergenzsatz", "Homogene DGL"],
     badgeEn: "Core TU9 Klausur",
@@ -233,8 +234,8 @@ const ACADEMIC_COURSES = [
     titleEs: "Bachillerato Internacional: Math AA HL y Física HL",
     facultyEn: "International Baccalaureate High School Senior Cohort",
     facultyEs: "Bachillerato Internacional (Alumnos de Último Año)",
-    targetEn: "International School students in Germany & Switzerland aiming for grade 7s.",
-    targetEs: "Alumnos de Colegios Internacionales en Alemania y Suiza que buscan obtener la máxima nota (7).",
+    targetEn: "International School students aiming for grade 7s in higher-level Mathematics and Physics.",
+    targetEs: "Alumnos de Colegios Internacionales que buscan obtener la máxima calificación (7) en Matemáticas y Física HL.",
     rateHourly: 50,
     packagePrice: 360,
     packageHours: 8,
@@ -407,16 +408,16 @@ const WHY_ME_REASONS = [
     icon: GraduationCap,
     titleEn: 'I know the context',
     titleEs: 'Conozco el contexto',
-    textEn: 'Engineer and geophysicist (double M.Sc.) with experience at the level German universities demand.',
-    textEs: 'Ingeniero y geofísico (doble M.Sc.) con experiencia en el nivel que piden las universidades alemanas.',
+    textEn: 'Engineer and geophysicist (double M.Sc.) with proven experience preparing rigorous university examinations.',
+    textEs: 'Ingeniero y geofísico (doble M.Sc.) con experiencia en el nivel de máxima exigencia universitaria.',
   },
   {
     id: 'intuition',
     icon: Orbit,
     titleEn: 'Intuition first',
     titleEs: 'Intuición primero',
-    textEn: 'Every concept is explained with a real phenomenon, and you can test it in the interactive Galileo Lab.',
-    textEs: 'Cada concepto se explica con un fenómeno real y lo compruebas en el Galileo Lab interactivo.',
+    textEn: 'Every concept is explained with a real phenomenon, and you can test it in the interactive Physics Lab.',
+    textEs: 'Cada concepto se explica con un fenómeno real y lo compruebas en el Laboratorio interactivo de Física.',
   },
   {
     id: 'altklausur',
@@ -447,9 +448,9 @@ const WHY_ME_REASONS = [
 // Mapping of academic courses to matching interactive Physics Lab benchmark problems
 const COURSE_LAB_MAPPING = {
   klausur: 'vector_calculus',
-  linear_algebra: 'engineering',
+  linear_algebra: 'coupled_oscillators',
   mechanics: 'newtonian',
-  geophysics: 'waves_geophysics',
+  geophysics: 'geostrophic_wind',
   computational: 'intro_physics',
   ib: 'electromagnetism'
 };
@@ -461,6 +462,7 @@ export default function App() {
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
   const [courseFilter, setCourseFilter] = useState('all');
+  const [triggerOpenViewerChat, setTriggerOpenViewerChat] = useState(false);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -608,7 +610,7 @@ Target Exam Date / Deadline: ${bookingData.targetDate || 'Not specified'}
 --- QUESTIONS / BOTTLENECKS ---
 ${bookingData.notes || 'None provided'}
 
-Sent from Galileo STEM Mentorship Portal`;
+Sent from STEM Mentorship Portal`;
 
     const mailto = `mailto:danisantander.urrutia@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
     setLastMailtoUrl(mailto);
@@ -638,7 +640,7 @@ Sent from Galileo STEM Mentorship Portal`;
     : ACADEMIC_COURSES.filter(c => c.category === courseFilter);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFB] text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900">
       
       {/* Subtle graph paper grid */}
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-60" />
@@ -663,7 +665,7 @@ Sent from Galileo STEM Mentorship Portal`;
                 Double M.Sc. &amp; Geophysicist
               </p>
               <p className="text-[10px] text-slate-400 font-mono leading-tight">
-                Online &amp; In-Person (Hannover, DE)
+                Online &amp; In-Person (Hannover)
               </p>
             </div>
           </button>
@@ -730,6 +732,22 @@ Sent from Galileo STEM Mentorship Portal`;
               <span>Contact &amp; FAQ</span>
             </button>
           </nav>
+
+          {/* Visor 3D & Chat IA Star Feature Quick Link */}
+          <button
+            onClick={() => {
+              if (currentPage !== 'landing') navigateTo('landing');
+              setTimeout(() => {
+                document.getElementById('planetarium-viewport')?.scrollIntoView({ behavior: 'smooth' });
+                setTriggerOpenViewerChat((prev) => !prev);
+              }, 120);
+            }}
+            className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-950/80 to-purple-950/80 border border-sky-400/50 hover:border-sky-300 text-sky-200 hover:text-white text-xs font-mono font-bold transition-all shadow-xs cursor-pointer"
+            title="Abrir Asistente IA y Calibrador del Visor 3D"
+          >
+            <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+            <span>Visor 3D &amp; Chat IA ⭐</span>
+          </button>
 
           {/* Language Switcher & Call CTA */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
@@ -823,11 +841,11 @@ Sent from Galileo STEM Mentorship Portal`;
         {currentPage === 'landing' && (
           <div>
             {/* Landing Hero */}
-            <section className="pt-8 pb-16 bg-black border-b border-white/10">
+            <section className="pt-8 pb-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div className="max-w-4xl mx-auto text-center mb-8">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-slate-300 font-mono text-xs mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-mono text-xs mb-4">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span>
                       {lang === 'en'
@@ -836,102 +854,117 @@ Sent from Galileo STEM Mentorship Portal`;
                     </span>
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-                    STEM Mentoring for your university exams
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+                    {lang === 'en'
+                      ? 'STEM Mentoring for your university exams'
+                      : 'Mentoría STEM para tus exámenes universitarios'}
                   </h1>
 
-                  <p className="text-base sm:text-lg text-slate-300 font-medium max-w-3xl mx-auto mb-6 leading-relaxed font-sans">
+                  <p className="text-base sm:text-lg text-slate-600 font-medium max-w-3xl mx-auto mb-6 leading-relaxed font-sans">
                     {lang === 'en'
                       ? 'Significantly improve your grades through 1-on-1 or group classes with a Double Master in Science & Geophysicist, for university and IB students.'
-                      : 'Mejora considerablemente tus notas mediante 1-on-1 or groupal classes with a double master in science and geophysicist, for university and IB Students.'}
+                      : 'Mejora considerablemente tus calificaciones mediante clases individuales o grupales con un Doble Máster en Ciencias y Geofísico, para estudiantes universitarios y de Bachillerato Internacional (IB).'}
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center gap-3">
+                    {/* Star Flagship Feature: 3D Observatory Settings Chat */}
+                    <button
+                      onClick={() => {
+                        document.getElementById('planetarium-viewport')?.scrollIntoView({ behavior: 'smooth' });
+                        setTriggerOpenViewerChat((prev) => !prev);
+                      }}
+                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 hover:from-sky-500 hover:to-purple-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-sky-600/30 hover:shadow-sky-600/50 hover:scale-105 cursor-pointer ring-2 ring-sky-400/40"
+                    >
+                      <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+                      <span>{lang === 'en' ? '⭐ 3D Planetarium AI Settings Chat' : '⭐ Chat Ajustes del Visor 3D'}</span>
+                    </button>
                     <button
                       onClick={() => openLabProblem('newtonian')}
-                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-sky-500/20 cursor-pointer"
+                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-600 to-emerald-600 hover:from-sky-500 hover:to-emerald-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-sky-600/20 cursor-pointer"
                     >
                       <Atom className="w-4 h-4" />
                       <span>{lang === 'en' ? 'Interactive Physics Lab (DCL) →' : 'Laboratorio Interactivo (DCL) →'}</span>
                     </button>
                     <button
                       onClick={() => navigateTo('courses')}
-                      className="px-5 py-2.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
+                      className="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
                     >
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>{lang === 'en' ? 'Open Course Catalog →' : 'Abrir Catálogo de Clases →'}</span>
                     </button>
                     <button
                       onClick={() => handleOpenBooking(null, true)}
-                      className="px-5 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-amber-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
+                      className="px-5 py-2.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <Zap className="w-3.5 h-3.5 text-amber-400" />
+                      <Zap className="w-3.5 h-3.5 text-amber-600" />
                       <span>{lang === 'en' ? 'Spontaneous 1-on-1 Class' : 'Clase Espontánea Urgente'}</span>
                     </button>
                     <button
                       onClick={() => navigateTo('contact')}
-                      className="px-5 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
+                      className="px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
                     >
-                      <Phone className="w-3.5 h-3.5 text-emerald-400" />
+                      <Phone className="w-3.5 h-3.5 text-emerald-600" />
                       <span>{lang === 'en' ? 'Direct Contact & WhatsApp' : 'Contacto Directo & WhatsApp'}</span>
                     </button>
                   </div>
                 </div>
+              </div>
 
-                {/* 3D Realistic Planetary Observatory Viewport */}
-                <div className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
-                  <SolarSystem
-                    onSelectSubject={handleSelectPlanetSubject}
-                    selectedSubjectId={selectedSubjectId}
-                    lang={lang}
-                    onNavigate={navigateTo}
-                    onOpenBooking={handleOpenBooking}
-                    courses={ACADEMIC_COURSES}
-                  />
-                </div>
+              {/* Full-bleed 3D Planetary Observatory Viewport stretching to page edges */}
+              <div id="planetarium-viewport" className="w-full relative left-0 right-0 border-y border-slate-800 bg-black shadow-2xl">
+                <SolarSystem
+                  onSelectSubject={handleSelectPlanetSubject}
+                  selectedSubjectId={selectedSubjectId}
+                  lang={lang}
+                  onNavigate={navigateTo}
+                  onOpenBooking={handleOpenBooking}
+                  courses={ACADEMIC_COURSES}
+                  triggerOpenChat={triggerOpenViewerChat}
+                />
+              </div>
 
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Minimalist Trust Indicator Bar */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-white/10 text-xs font-mono text-slate-400">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-200 text-xs font-mono text-slate-600">
                   <div className="flex items-center gap-2.5">
-                    <GraduationCap className="w-4 h-4 text-sky-400 shrink-0" />
-                    <span>CAU Kiel (DE) &amp; AMU (PL) Double M.Sc.</span>
+                    <GraduationCap className="w-4 h-4 text-sky-600 shrink-0" />
+                    <span>Double M.Sc. (CAU Kiel &amp; AMU Poznań)</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <Award className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>{lang === 'en' ? 'Past-Exam (Altklausur) Focused Prep' : 'Preparación con Altklausuren'}</span>
+                    <Award className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{lang === 'en' ? 'Past-Exam Focused Preparation' : 'Preparación Enfocada en Exámenes'}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <MapPin className="w-4 h-4 text-slate-300 shrink-0" />
-                    <span>In-Person in Hannover &amp; Online Worldwide</span>
+                    <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
+                    <span>{lang === 'en' ? 'In-Person in Hannover & Online Worldwide' : 'Presencial en Hannover y Online en todo el mundo'}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <Globe className="w-4 h-4 text-sky-400 shrink-0" />
-                    <span>{lang === 'en' ? 'Classes in English & Español' : 'Clases en inglés y español'}</span>
+                    <Globe className="w-4 h-4 text-sky-600 shrink-0" />
+                    <span>{lang === 'en' ? 'Classes in English & Spanish' : 'Clases en inglés y español'}</span>
                   </div>
                 </div>
-
               </div>
             </section>
 
             {/* Interactive Classical Physics Lab Preview Section on Landing */}
-            <section className="py-16 bg-slate-950 text-white border-b border-slate-800">
+            <section className="py-16 bg-white text-slate-900 border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
                   <div>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold mb-2">
-                      <Sparkles className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold mb-2">
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                       <span>
                         {lang === 'en'
                           ? 'Interactive Sandbox • Free Body Diagrams (FBD) • Calculus Bridge'
                           : 'Laboratorio Tipo Juego • Botón de DCL • Puente Álgebra ↔ Cálculo'}
                       </span>
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                    <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
                       {lang === 'en'
                         ? 'Explore the Classical Physics & Engineering Problems'
                         : 'Explora los Problemas Clásicos de la Física y la Ingeniería'}
                     </h2>
-                    <p className="text-sm text-slate-300 max-w-2xl mt-2 leading-relaxed">
+                    <p className="text-sm text-slate-600 max-w-2xl mt-2 leading-relaxed">
                       {lang === 'en'
                         ? 'Test each phenomenon experimentally: toggle Free Body Diagrams (DCL), see how linear algebra and trigonometry turn into differential equations, and solve a classic exam exercise.'
                         : 'Experimenta cada caso clásico como un mini-laboratorio: activa los Diagramas de Cuerpo Libre (DCL), conecta las ecuaciones de álgebra y cálculo, y resuelve un ejercicio real de examen.'}
@@ -940,7 +973,7 @@ Sent from Galileo STEM Mentorship Portal`;
 
                   <button
                     onClick={() => openLabProblem('newtonian')}
-                    className="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 shrink-0 cursor-pointer shadow-lg shadow-sky-500/20"
+                    className="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-emerald-600 hover:from-sky-500 hover:to-emerald-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 shrink-0 cursor-pointer shadow-lg shadow-sky-600/20"
                   >
                     <Atom className="w-4 h-4" />
                     <span>{lang === 'en' ? 'Launch Full Physics Lab →' : 'Abrir Laboratorio Completo →'}</span>
@@ -954,27 +987,44 @@ Sent from Galileo STEM Mentorship Portal`;
                       <div
                         key={prob.id}
                         onClick={() => openLabProblem(prob.id)}
-                        className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500/60 transition-all cursor-pointer flex flex-col justify-between group"
+                        className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-sky-500/70 hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between group shadow-xs"
                       >
                         <div>
+                          {/* Top Badges & Icon */}
                           <div className="flex items-center justify-between mb-3">
-                            <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-800 text-sky-300 font-bold">
+                            <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 text-sky-800 font-bold border border-slate-200">
                               {lang === 'en' ? prob.badgeEn : prob.badgeEs}
                             </span>
-                            <span className="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-slate-950 transition-colors">
+                            <span className="w-8 h-8 rounded-xl bg-slate-100 text-emerald-700 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-colors border border-slate-200">
                               <Icon className="w-4 h-4" />
                             </span>
                           </div>
-                          <h3 className="text-base font-bold text-white group-hover:text-sky-300 transition-colors mb-2 leading-snug">
+
+                          {/* Exercise Vector Diagram Thumbnail */}
+                          <div className="mb-4 rounded-xl overflow-hidden shadow-inner border border-slate-200 group-hover:border-sky-400 transition-colors">
+                            <ProblemThumbnail problemId={prob.id} lang={lang} />
+                          </div>
+
+                          <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition-colors mb-1.5 leading-snug">
                             {lang === 'en' ? prob.titleEn : prob.titleEs}
                           </h3>
-                          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                          <p className="text-xs text-slate-600 leading-relaxed mb-3">
                             {lang === 'en' ? prob.subtitleEn : prob.subtitleEs}
                           </p>
+
+                          {/* Exercise prompt teaser snippet */}
+                          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] font-mono text-slate-700 mb-4 line-clamp-2">
+                            <span className="text-emerald-700 font-bold mr-1">
+                              {lang === 'en' ? 'Target:' : 'Objetivo:'}
+                            </span>
+                            <span>
+                              {lang === 'en' ? prob.exercise.questionEn : prob.exercise.questionEs}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-emerald-400 font-bold">
-                          <span>{lang === 'en' ? 'DCL + Algebra/Calculus + 1 Exercise' : 'Botón DCL + Ecuaciones + 1 Ejercicio'}</span>
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-sky-700 font-bold">
+                          <span>{lang === 'en' ? 'Open Interactive Lab & DCL →' : 'Abrir Simulador y DCL →'}</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
@@ -1032,7 +1082,7 @@ Sent from Galileo STEM Mentorship Portal`;
             </section>
 
             {/* Quick Teaser: Featured Modules Grid on Landing */}
-            <section className="py-16 bg-[#FAFAFB] border-b border-slate-200">
+            <section className="py-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -1041,7 +1091,7 @@ Sent from Galileo STEM Mentorship Portal`;
                       {lang === 'en' ? 'Curriculum Spotlight' : 'Módulos Más Solicitados'}
                     </span>
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                      {lang === 'en' ? 'High-Demand Klausur Preparation Modules' : 'Materias Críticas en Universidades Alemanas'}
+                      {lang === 'en' ? 'High-Demand University Exam Preparation Tracks' : 'Materias Críticas Universitarias'}
                     </h2>
                   </div>
                   <button
@@ -1189,8 +1239,8 @@ Sent from Galileo STEM Mentorship Portal`;
                 </h1>
                 <p className="text-slate-600 text-base max-w-3xl leading-relaxed">
                   {lang === 'en'
-                    ? 'Every course is synchronized with German university lecture scripts (Skripte) and examiner mark schemes (TUM, RWTH Aachen, KIT, TU Berlin).'
-                    : 'Cada asignatura está sincronizada con los Skripte universitarios y los criterios oficiales de corrección de los catedráticos alemanes.'}
+                    ? 'Every course is synchronized with university lecture notes and official examiner grading rubrics.'
+                    : 'Cada asignatura está sincronizada con los apuntes universitarios y los criterios oficiales de corrección.'}
                 </p>
               </div>
 
@@ -1210,9 +1260,13 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="w-8 h-8 rounded-lg bg-sky-950 text-sky-400 flex items-center justify-center font-bold">
                       <FileText className="w-4 h-4" />
                     </div>
-                    <span className="font-bold text-white block text-sm">Vector PDF (Miro Export)</span>
+                    <span className="font-bold text-white block text-sm">
+                      {lang === 'en' ? 'Vector PDF (Miro Export)' : 'PDF Vectorial (Export Miro)'}
+                    </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
-                      Complete step-by-step mathematical derivations exported in crisp 4K vector format with color-coded algebraic stages.
+                      {lang === 'en'
+                        ? 'Complete step-by-step mathematical derivations exported in crisp 4K vector format with color-coded algebraic stages.'
+                        : 'Demostraciones matemáticas paso a paso exportadas en formato vectorial 4K nítido con fases algebraicas en color.'}
                     </p>
                   </div>
 
@@ -1220,9 +1274,13 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="w-8 h-8 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold">
                       <BookmarkCheck className="w-4 h-4" />
                     </div>
-                    <span className="font-bold text-white block text-sm">Formula Cheat-Sheets</span>
+                    <span className="font-bold text-white block text-sm">
+                      {lang === 'en' ? 'Formula Cheat-Sheets' : 'Formularios Resumen'}
+                    </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
-                      Condensed 1-page formula summaries and conversion rules formatted specifically for quick review before the Klausur.
+                      {lang === 'en'
+                        ? 'Condensed 1-page formula summaries and conversion rules formatted specifically for quick review before exams.'
+                        : 'Resúmenes condensados de fórmulas y reglas de cálculo en 1 página, optimizados para repasar antes del examen.'}
                     </p>
                   </div>
 
@@ -1230,9 +1288,13 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="w-8 h-8 rounded-lg bg-amber-950 text-amber-400 flex items-center justify-center font-bold">
                       <Terminal className="w-4 h-4" />
                     </div>
-                    <span className="font-bold text-white block text-sm">Python Verification Code</span>
+                    <span className="font-bold text-white block text-sm">
+                      {lang === 'en' ? 'Python Verification Code' : 'Código Python de Verificación'}
+                    </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
-                      Executable NumPy/SciPy script confirming numerical roots, matrix eigenvalues, or ODE stability whenever applicable.
+                      {lang === 'en'
+                        ? 'Executable NumPy/SciPy script confirming numerical roots, matrix eigenvalues, or ODE stability whenever applicable.'
+                        : 'Scripts ejecutables en NumPy/SciPy que verifican raíces numéricas, autovalores matriciales o estabilidad de EDOs.'}
                     </p>
                   </div>
 
@@ -1240,9 +1302,13 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="w-8 h-8 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center font-bold">
                       <MessageSquare className="w-4 h-4" />
                     </div>
-                    <span className="font-bold text-white block text-sm">Async WhatsApp Q&amp;A</span>
+                    <span className="font-bold text-white block text-sm">
+                      {lang === 'en' ? 'Async WhatsApp Q&A' : 'Dudas por WhatsApp'}
+                    </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
-                      Send photos of exercise bottlenecks directly on WhatsApp/Telegram; get fast voice-note or audio guidance between sessions.
+                      {lang === 'en'
+                        ? 'Send photos of exercise bottlenecks directly on WhatsApp/Telegram; get fast voice-note or audio guidance between sessions.'
+                        : 'Envía fotos de tus dudas directamente por WhatsApp y recibe orientación rápida por audio o notas entre sesiones.'}
                     </p>
                   </div>
                 </div>
@@ -1264,24 +1330,42 @@ Sent from Galileo STEM Mentorship Portal`;
                       <div className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-mono flex items-center justify-center font-bold shrink-0">1</span>
                         <div>
-                          <strong className="text-slate-900 block">Send Your Skript &amp; Altklausuren</strong>
-                          <span className="text-slate-500">Upload your professor's lecture notes and target past exam papers.</span>
+                          <strong className="text-slate-900 block">
+                            {lang === 'en' ? 'Send Your Syllabus & Problem Sets' : 'Envía tus apuntes y exámenes anteriores'}
+                          </strong>
+                          <span className="text-slate-500">
+                            {lang === 'en'
+                              ? "Upload your professor's lecture notes and target past exam papers."
+                              : 'Comparte las guías de ejercicios, temarios y exámenes pasados de tu cátedra.'}
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-mono flex items-center justify-center font-bold shrink-0">2</span>
                         <div>
-                          <strong className="text-slate-900 block">20-Min Free Strategy Call</strong>
-                          <span className="text-slate-500">We isolate your 3 primary conceptual bottlenecks and score traps.</span>
+                          <strong className="text-slate-900 block">
+                            {lang === 'en' ? '20-Min Free Strategy Call' : 'Llamada estratégica gratis (20 min)'}
+                          </strong>
+                          <span className="text-slate-500">
+                            {lang === 'en'
+                              ? 'We isolate your 3 primary conceptual bottlenecks and score traps.'
+                              : 'Identificamos tus 3 bloqueos conceptuales principales y dónde pierdes puntos.'}
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-mono flex items-center justify-center font-bold shrink-0">3</span>
                         <div>
-                          <strong className="text-slate-900 block">Intensive Sprint or Spontaneous Drill</strong>
-                          <span className="text-slate-500">Lock in your calendar slots (Online worldwide or in-person in Hannover, Germany).</span>
+                          <strong className="text-slate-900 block">
+                            {lang === 'en' ? 'Intensive Sprint or Spontaneous Drill' : 'Sprint intensivo o clase puntual'}
+                          </strong>
+                          <span className="text-slate-500">
+                            {lang === 'en'
+                              ? 'Lock in your schedule slots (Online worldwide or in-person in Hannover).'
+                              : 'Fijamos tus sesiones en el calendario (Online en todo el mundo o presencial en Hannover).'}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1378,13 +1462,17 @@ Sent from Galileo STEM Mentorship Portal`;
                               <span className="text-2xl font-mono font-bold text-slate-900">€{course.rateHourly}</span>
                               <span className="text-xs font-mono text-slate-500">/ hour</span>
                             </div>
-                            <span className="text-[10px] font-mono text-slate-500 block">1-on-1 Individual Session</span>
+                            <span className="text-[10px] font-mono text-slate-500 block">
+                              {lang === 'en' ? '1-on-1 Individual Session' : 'Sesión Individual 1-a-1'}
+                            </span>
                           </div>
                           <div className="text-right">
                             <span className="text-xs font-mono font-bold text-emerald-700 block">
                               €{course.packagePrice} / {course.packageHours}h Pack
                             </span>
-                            <span className="text-[10px] font-mono text-slate-500">Klausur Survival Sprint</span>
+                            <span className="text-[10px] font-mono text-slate-500">
+                              {lang === 'en' ? 'Exam Sprint Pack' : 'Pack Sprint de Examen'}
+                            </span>
                           </div>
                         </div>
 
@@ -1404,7 +1492,7 @@ Sent from Galileo STEM Mentorship Portal`;
 
                         <div className="mb-6 pt-3 border-t border-slate-100">
                           <span className="font-mono text-[10px] text-slate-500 block mb-1.5 font-semibold">
-                            German Skript Keywords:
+                            {lang === 'en' ? 'Course Key Concepts:' : 'Conceptos Clave del Curso:'}
                           </span>
                           <div className="flex flex-wrap gap-1">
                             {course.skriptKeywords.map((kw, i) => (
@@ -1573,13 +1661,13 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="md:col-span-7 space-y-6">
                       <div>
                         <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                          Academic Level / Study Cohort
+                          {lang === 'en' ? 'Academic Level / Study Track' : 'Nivel Académico / Plan de Estudio'}
                         </label>
                         <div className="grid grid-cols-3 gap-2 font-mono text-xs">
                           {[
-                            { id: 'ib', label: 'IB Diploma' },
-                            { id: 'bachelor', label: 'Bachelor (TU9)' },
-                            { id: 'master', label: 'Master & Thesis' }
+                            { id: 'ib', labelEn: 'IB Diploma', labelEs: 'Bachillerato IB' },
+                            { id: 'bachelor', labelEn: 'Bachelor', labelEs: 'Grado Univ.' },
+                            { id: 'master', labelEn: 'Master & Thesis', labelEs: 'Máster & Tesis' }
                           ].map((lvl) => (
                             <button
                               key={lvl.id}
@@ -1590,7 +1678,7 @@ Sent from Galileo STEM Mentorship Portal`;
                                   : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
                               }`}
                             >
-                              {lvl.label}
+                              {lang === 'en' ? lvl.labelEn : lvl.labelEs}
                             </button>
                           ))}
                         </div>
@@ -1598,8 +1686,12 @@ Sent from Galileo STEM Mentorship Portal`;
 
                       <div>
                         <div className="flex justify-between items-center mb-2 font-mono text-xs">
-                          <span className="text-slate-500 uppercase font-semibold">Mentorship Volume</span>
-                          <span className="text-sky-800 font-bold text-lg">{calcHours} hours</span>
+                          <span className="text-slate-500 uppercase font-semibold">
+                            {lang === 'en' ? 'Mentorship Volume' : 'Horas de Mentoría'}
+                          </span>
+                          <span className="text-sky-800 font-bold text-lg">
+                            {calcHours} {lang === 'en' ? 'hours' : 'horas'}
+                          </span>
                         </div>
                         <input
                           type="range"
@@ -1611,15 +1703,15 @@ Sent from Galileo STEM Mentorship Portal`;
                           className="w-full accent-sky-700 bg-slate-200 rounded-lg cursor-pointer h-2"
                         />
                         <div className="flex justify-between font-mono text-[10px] text-slate-400 mt-1">
-                          <span>2h (Drill urgente)</span>
-                          <span>8h (Klausur Sprint)</span>
-                          <span>20h (Acompañamiento continuo)</span>
+                          <span>{lang === 'en' ? '2h (Urgent drill)' : '2h (Repaso urgente)'}</span>
+                          <span>{lang === 'en' ? '8h (Exam sprint)' : '8h (Sprint de examen)'}</span>
+                          <span>{lang === 'en' ? '20h (Continuous prep)' : '20h (Acompañamiento continuo)'}</span>
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                          Delivery Format
+                          {lang === 'en' ? 'Delivery Format' : 'Modalidad de Clase'}
                         </label>
                         <div className="grid grid-cols-2 gap-3 font-mono text-xs">
                           <button
@@ -1630,8 +1722,12 @@ Sent from Galileo STEM Mentorship Portal`;
                                 : 'bg-white border-slate-200 text-slate-600'
                             }`}
                           >
-                            <div className="font-bold text-slate-900">1-on-1 Individual</div>
-                            <div className="text-[11px] text-slate-500">Online &amp; In-Person in Hannover</div>
+                            <div className="font-bold text-slate-900">
+                              {lang === 'en' ? '1-on-1 Individual' : 'Individual 1-a-1'}
+                            </div>
+                            <div className="text-[11px] text-slate-500">
+                              {lang === 'en' ? 'Online & In-Person in Hannover' : 'Online y presencial en Hannover'}
+                            </div>
                           </button>
 
                           <button
@@ -1642,8 +1738,12 @@ Sent from Galileo STEM Mentorship Portal`;
                                 : 'bg-white border-slate-200 text-slate-600'
                             }`}
                           >
-                            <div className="font-bold text-emerald-800">Study Group (Max 3)</div>
-                            <div className="text-[11px] text-emerald-700">-30% discount per student</div>
+                            <div className="font-bold text-emerald-800">
+                              {lang === 'en' ? 'Study Group (Max 3)' : 'Grupo de Estudio (Máx 3)'}
+                            </div>
+                            <div className="text-[11px] text-emerald-700">
+                              {lang === 'en' ? '-30% discount per student' : '-30% descuento por alumno'}
+                            </div>
                           </button>
                         </div>
                       </div>
@@ -1656,7 +1756,9 @@ Sent from Galileo STEM Mentorship Portal`;
                           className="rounded border-slate-300 text-sky-700 focus:ring-sky-600"
                         />
                         <span className="text-slate-700 font-semibold">
-                          Apply 4-Week Klausur Sprint Bundle (-15% discount)
+                          {lang === 'en'
+                            ? 'Apply 4-Week Exam Sprint Bundle (-15% discount)'
+                            : 'Aplicar Paquete Sprint de Exámenes (-15% de descuento)'}
                         </span>
                       </label>
 
@@ -1665,33 +1767,33 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="md:col-span-5 bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 flex flex-col justify-between shadow-md">
                       <div>
                         <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-2 font-semibold">
-                          Estimated Investment
+                          {lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada'}
                         </span>
                         <div className="flex items-baseline gap-2 mb-2">
                           <span className="text-5xl font-mono font-extrabold text-white">€{totalCost}</span>
-                          <span className="text-xs font-mono text-slate-400">total</span>
+                          <span className="text-xs font-mono text-slate-400">{lang === 'en' ? 'total' : 'total'}</span>
                         </div>
 
                         <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800">
-                          <span>Effective Rate: <strong className="text-emerald-400">€{effectiveRate}/hr</strong></span>
+                          <span>{lang === 'en' ? 'Effective Rate: ' : 'Tarifa Efectiva: '}<strong className="text-emerald-400">€{effectiveRate}/hr</strong></span>
                         </div>
 
                         <ul className="space-y-2 text-xs text-slate-300 font-mono mb-6">
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Miro Whiteboard Vector PDF Export</span>
+                            <span>{lang === 'en' ? 'Miro Whiteboard Vector PDF Export' : 'Exportación en PDF Vectorial (Pizarra Miro)'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Step-by-step Altklausuren Solutions</span>
+                            <span>{lang === 'en' ? 'Step-by-step Exam Problem Solutions' : 'Resolución Paso a Paso de Exámenes Anteriores'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Structured Formula Sheets &amp; Exam Summaries</span>
+                            <span>{lang === 'en' ? 'Structured Formula Sheets & Exam Summaries' : 'Formularios Estructurados y Resúmenes de Examen'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Direct Async WhatsApp Q&amp;A Access</span>
+                            <span>{lang === 'en' ? 'Direct Async WhatsApp Q&A Access' : 'Consultas Asíncronas Directas por WhatsApp'}</span>
                           </li>
                         </ul>
                       </div>
@@ -1713,7 +1815,7 @@ Sent from Galileo STEM Mentorship Portal`;
               <div id="mentor-dossier" className="pt-8 border-t border-slate-200">
                 <div className="text-center max-w-2xl mx-auto mb-10">
                   <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
-                    Academic Background &amp; Methodology
+                    {lang === 'en' ? 'Academic Background & Methodology' : 'Trayectoria Académica & Metodología'}
                   </span>
                   <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                     {lang === 'en' ? 'Meet Your Mentor: Daniel Santander' : 'Conoce al Mentor: Daniel Santander'}
@@ -1736,10 +1838,14 @@ Sent from Galileo STEM Mentorship Portal`;
                       />
                       <div>
                         <h3 className="text-xl font-bold text-slate-900">Daniel Santander Urrutia</h3>
-                        <p className="text-xs font-mono text-sky-700 font-semibold">Geophysicist &amp; Double M.Sc. Engineer</p>
+                        <p className="text-xs font-mono text-sky-700 font-semibold">
+                          {lang === 'en' ? 'Geophysicist & Double M.Sc. Engineer' : 'Geofísico e Ingeniero Doble M.Sc.'}
+                        </p>
                         <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500 font-mono">
                           <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                          <span>Hannover, Germany • Online Worldwide</span>
+                          <span>
+                            {lang === 'en' ? 'Hannover, Germany • Online Worldwide' : 'Hannover, Alemania • Online en todo el mundo'}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1748,8 +1854,8 @@ Sent from Galileo STEM Mentorship Portal`;
                     <div className="space-y-3 font-mono text-xs">
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                         <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                          <span>Germany (CAU Kiel)</span>
-                          <span>Double Master Degree</span>
+                          <span>{lang === 'en' ? 'Germany (CAU Kiel)' : 'Alemania (CAU Kiel)'}</span>
+                          <span>{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                         </div>
                         <span className="text-slate-900 font-bold block">M.Sc. Environmental Management</span>
                         <span className="text-slate-500 text-[11px]">Christian-Albrechts-Universität zu Kiel</span>
@@ -1757,8 +1863,8 @@ Sent from Galileo STEM Mentorship Portal`;
 
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                         <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                          <span>Poland (AMU Poznań)</span>
-                          <span>Double Master Degree</span>
+                          <span>{lang === 'en' ? 'Poland (AMU Poznań)' : 'Polonia (AMU Poznań)'}</span>
+                          <span>{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                         </div>
                         <span className="text-slate-900 font-bold block">M.Sc. Integrated Catchment Management</span>
                         <span className="text-slate-500 text-[11px]">Adam Mickiewicz University</span>
@@ -1766,8 +1872,8 @@ Sent from Galileo STEM Mentorship Portal`;
 
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                         <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                          <span>Chile (FCFM)</span>
-                          <span>Engineering Degree</span>
+                          <span>{lang === 'en' ? 'Chile (FCFM)' : 'Chile (FCFM)'}</span>
+                          <span>{lang === 'en' ? 'Engineering Degree' : 'Título de Ingeniero'}</span>
                         </div>
                         <span className="text-slate-900 font-bold block">Engineering Geophysics (Geofísica)</span>
                         <span className="text-slate-500 text-[11px]">Universidad de Chile (Facultad de Cs. Físicas y Matemáticas)</span>
@@ -1804,7 +1910,7 @@ Sent from Galileo STEM Mentorship Portal`;
                         className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
                       >
                         <GithubIcon className="w-3.5 h-3.5" />
-                        <span>Daniel's GitHub Portfolio</span>
+                        <span>{lang === 'en' ? "Daniel's GitHub Portfolio" : 'Portafolio GitHub de Daniel'}</span>
                       </a>
                     </div>
 
@@ -1815,52 +1921,72 @@ Sent from Galileo STEM Mentorship Portal`;
                     
                     <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm">
                       <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block">
-                        The Mentorship Method
+                        {lang === 'en' ? 'The Mentorship Method' : 'El Método de Mentoría'}
                       </span>
                       <h3 className="text-2xl font-bold text-slate-900">
-                        Rigorous physics intuition, exam-focused scoring, and zero linguistic friction.
+                        {lang === 'en'
+                          ? 'Rigorous physics intuition, exam-focused scoring, and zero linguistic friction.'
+                          : 'Intuición física rigurosa, resolución enfocada al examen y cero fricción lingüística.'}
                       </h3>
                       <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                        Most university students do not fail exams due to a lack of talent. They fail because university lectures present proofs as abstract formalisms without grounding the physical meaning, while professors in Germany demand precise, step-by-step justification to award partial points.
+                        {lang === 'en'
+                          ? 'Most university students do not fail exams due to a lack of talent. They fail because university lectures present proofs as abstract formalisms without grounding the physical meaning, while professors demand precise, step-by-step justification to award partial points.'
+                          : 'La mayoría de los estudiantes universitarios no reprueban por falta de talento. Se atascan cuando las clases presentan las demostraciones como formalismos abstractos sin explicar el sentido físico, mientras que en los exámenes se exige una justificación rigurosa paso a paso para otorgar puntos parciales.'}
                       </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
                         <span className="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center mb-3">01</span>
-                        <h4 className="text-sm font-bold text-slate-900 mb-1">Intuición Física Primero</h4>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">
+                          {lang === 'en' ? 'Physical Intuition First' : 'Intuición Física Primero'}
+                        </h4>
                         <p className="text-xs text-slate-600 leading-relaxed">
-                          Visualizar el fenómeno físico antes de escribir la ecuación diferencial.
+                          {lang === 'en'
+                            ? 'Visualizing the physical phenomenon before writing down differential equations.'
+                            : 'Visualizar el fenómeno físico antes de escribir la ecuación diferencial.'}
                         </p>
                       </div>
 
                       <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
                         <span className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center mb-3">02</span>
-                        <h4 className="text-sm font-bold text-slate-900 mb-1">Criterios de Examen Alemán</h4>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">
+                          {lang === 'en' ? 'University Exam Rubrics' : 'Criterios de Examen Universitario'}
+                        </h4>
                         <p className="text-xs text-slate-600 leading-relaxed">
-                          Estructura de respuesta para maximizar puntos parciales en cada pregunta.
+                          {lang === 'en'
+                            ? 'Structuring solutions step-by-step to earn every available partial point.'
+                            : 'Estructura de respuesta para maximizar puntos parciales en cada pregunta.'}
                         </p>
                       </div>
 
                       <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs">
                         <span className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold flex items-center justify-center mb-3">03</span>
-                        <h4 className="text-sm font-bold text-slate-900 mb-1">Clases en Español o Inglés</h4>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">
+                          {lang === 'en' ? 'Classes in English or Spanish' : 'Clases en Español o Inglés'}
+                        </h4>
                         <p className="text-xs text-slate-600 leading-relaxed">
-                          Cero fatiga lingüística, trabajando con tus Skripte y Altklausuren oficiales.
+                          {lang === 'en'
+                            ? 'Zero language fatigue, working directly with your lecture notes and exam problem sheets.'
+                            : 'Cero fatiga lingüística, trabajando con tus apuntes y exámenes anteriores oficiales.'}
                         </p>
                       </div>
                     </div>
 
                     <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div>
-                        <h4 className="text-sm font-bold text-slate-900">¿Quieres revisar tu temario con Daniel?</h4>
-                        <p className="text-xs text-slate-600">Agenda una llamada diagnóstica de 20 minutos sin compromiso.</p>
+                        <h4 className="text-sm font-bold text-slate-900">
+                          {lang === 'en' ? 'Want to review your syllabus with Daniel?' : '¿Quieres revisar tu temario con Daniel?'}
+                        </h4>
+                        <p className="text-xs text-slate-600">
+                          {lang === 'en' ? 'Book a free 20-minute diagnostic session with no obligation.' : 'Agenda una llamada diagnóstica de 20 minutos sin compromiso.'}
+                        </p>
                       </div>
                       <button
                         onClick={() => handleOpenBooking()}
                         className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold whitespace-nowrap cursor-pointer shadow-xs"
                       >
-                        Reservar Diagnóstico →
+                        {lang === 'en' ? 'Book Diagnostic Call →' : 'Reservar Diagnóstico →'}
                       </button>
                     </div>
 
@@ -1888,13 +2014,15 @@ Sent from Galileo STEM Mentorship Portal`;
 
               <div className="text-center max-w-2xl mx-auto mb-10">
                 <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
-                  Direct Communication Channels
+                  {lang === 'en' ? 'Direct Communication Channels' : 'Canales de Comunicación Directa'}
                 </span>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                  Get in Direct Touch with Daniel
+                  {lang === 'en' ? 'Get in Direct Touch with Daniel' : 'Contacta Directamente con Daniel'}
                 </h1>
                 <p className="text-slate-600 text-sm">
-                  Write directly via WhatsApp, send an email, or schedule your 20-minute diagnostic session.
+                  {lang === 'en'
+                    ? 'Write directly via WhatsApp, send an email, or schedule your 20-minute diagnostic session.'
+                    : 'Escribe directamente por WhatsApp, envía un correo o agenda tu sesión diagnóstica de 20 minutos.'}
                 </p>
               </div>
 
@@ -1907,13 +2035,15 @@ Sent from Galileo STEM Mentorship Portal`;
                       <Phone className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-mono text-slate-400 uppercase tracking-wider font-semibold block mb-1">
-                      Phone &amp; WhatsApp
+                      {lang === 'en' ? 'Phone & WhatsApp' : 'Teléfono & WhatsApp'}
                     </span>
                     <h3 className="text-lg font-bold text-slate-900 mb-1">
                       +49 176 7649 7440
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans mb-4">
-                      Direct WhatsApp messaging for fast inquiries, exercise photos, and appointment scheduling.
+                      {lang === 'en'
+                        ? 'Direct WhatsApp messaging for fast inquiries, exercise photos, and appointment scheduling.'
+                        : 'Mensajería directa por WhatsApp para consultas rápidas, fotos de ejercicios y coordinación de horarios.'}
                     </p>
                   </div>
                   <a
@@ -1922,7 +2052,7 @@ Sent from Galileo STEM Mentorship Portal`;
                     rel="noreferrer"
                     className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold text-center block transition-colors shadow-xs"
                   >
-                    Open WhatsApp Chat →
+                    {lang === 'en' ? 'Open WhatsApp Chat →' : 'Abrir Chat de WhatsApp →'}
                   </a>
                 </div>
 
@@ -1933,20 +2063,22 @@ Sent from Galileo STEM Mentorship Portal`;
                       <Mail className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-mono text-slate-400 uppercase tracking-wider font-semibold block mb-1">
-                      Direct Email
+                      {lang === 'en' ? 'Direct Email' : 'Correo Electrónico'}
                     </span>
                     <h3 className="text-sm font-bold font-mono text-slate-900 mb-1 break-all">
                       danisantander.urrutia@gmail.com
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans mb-4">
-                      Send syllabi PDFs, Altklausur documents, and general inquiries. Reply guaranteed within 12 hours.
+                      {lang === 'en'
+                        ? 'Send syllabi PDFs, exercise problem sets, and general inquiries. Reply guaranteed within 12 hours.'
+                        : 'Envía PDFs de temarios, guías de ejercicios y consultas generales. Respuesta garantizada en menos de 12 horas.'}
                     </p>
                   </div>
                   <a
                     href="mailto:danisantander.urrutia@gmail.com?subject=STEM%20Mentorship%20Inquiry"
                     className="w-full py-2.5 px-3 rounded-xl bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold text-center block transition-colors shadow-xs"
                   >
-                    Send Email →
+                    {lang === 'en' ? 'Send Email →' : 'Enviar Correo →'}
                   </a>
                 </div>
 
@@ -1957,13 +2089,15 @@ Sent from Galileo STEM Mentorship Portal`;
                       <GithubIcon className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-mono text-slate-400 uppercase tracking-wider font-semibold block mb-1">
-                      GitHub Repositories
+                      {lang === 'en' ? 'GitHub Repositories' : 'Repositorios GitHub'}
                     </span>
                     <h3 className="text-base font-bold text-slate-900 mb-1">
                       @danisantanderurrutia-coder
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans mb-4">
-                      Explore Daniel's open-source repositories, geophysics scripts, digital twin tools, and web applications.
+                      {lang === 'en'
+                        ? "Explore Daniel's open-source repositories, geophysics scripts, digital twin tools, and web applications."
+                        : 'Explora los repositorios de código abierto de Daniel, scripts de geofísica, gemelos digitales y aplicaciones web.'}
                     </p>
                   </div>
                   <div className="space-y-2">
@@ -1995,20 +2129,22 @@ Sent from Galileo STEM Mentorship Portal`;
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-slate-900 font-mono text-xs font-bold uppercase">
                     <MapPin className="w-4 h-4 text-emerald-600" />
-                    <span>In-Person Mentorship in Hannover, Germany</span>
+                    <span>{lang === 'en' ? 'In-Person Mentorship in Hannover' : 'Mentoría Presencial en Hannover'}</span>
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">
-                    Are you studying in Hannover or Niedersachsen?
+                    {lang === 'en' ? 'Are you studying in Hannover or Niedersachsen?' : '¿Estudias en Hannover o en la región?'}
                   </h3>
                   <p className="text-xs text-slate-600 max-w-xl font-sans leading-relaxed">
-                    In-person sessions take place in university library study rooms (such as the TIB - Leibniz Information Centre for Science and Technology at Leibniz Universität Hannover) or quiet learning centers.
+                    {lang === 'en'
+                      ? 'In-person sessions take place in university library study rooms (such as the TIB - Leibniz Information Centre for Science and Technology at Leibniz Universität Hannover) or quiet learning centers.'
+                      : 'Las sesiones presenciales se coordinan en salas de estudio de bibliotecas universitarias (como la TIB de la Leibniz Universität Hannover) o espacios de estudio tranquilos.'}
                   </p>
                 </div>
                 <button
                   onClick={() => handleOpenBooking(null, false)}
                   className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold whitespace-nowrap"
                 >
-                  Schedule Hannover Session →
+                  {lang === 'en' ? 'Schedule Hannover Session →' : 'Agendar Sesión en Hannover →'}
                 </button>
               </div>
 
@@ -2019,40 +2155,40 @@ Sent from Galileo STEM Mentorship Portal`;
                     {lang === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-                    {lang === 'en' ? 'German University & Administrative Logistics' : 'Logística Universitaria en Alemania y Metodología'}
+                    {lang === 'en' ? 'University Exams & Session Logistics' : 'Logística de Exámenes Universitarios y Metodología'}
                   </h2>
                   <p className="text-slate-600 text-sm max-w-2xl mx-auto font-sans">
                     {lang === 'en'
-                      ? 'Clear answers regarding German exams, in-person sessions in Hannover, digital tools, and scheduling.'
-                      : 'Respuestas claras sobre exámenes alemanes, clases presenciales en Hannover, herramientas digitales y reservas.'}
+                      ? 'Clear answers regarding university exams, in-person sessions in Hannover, digital tools, and scheduling.'
+                      : 'Respuestas claras sobre exámenes universitarios, clases presenciales en Hannover, herramientas digitales y reservas.'}
                   </p>
                 </div>
 
                 <div className="space-y-3 max-w-4xl mx-auto">
                   {[
                     {
-                      qEn: "Can sessions be conducted in English or Spanish if my exam is officially in German?",
-                      qEs: "¿Se pueden impartir las clases en inglés o español si mi examen oficial es en alemán?",
-                      aEn: "Yes. All sessions are taught in English or Spanish (not in German), so you can focus on understanding the physical and mathematical intuition without language fatigue. We work from your own lecture notes (Skripte) and past exams, so you can see how the concepts appear in your German-language exam.",
-                      aEs: "Sí. Todas las clases se imparten en español o inglés (no en alemán), para que te concentres en comprender la intuición física y matemática sin fatiga idiomática. Trabajamos con tus propios apuntes (Skripte) y exámenes anteriores, para que veas cómo aparecen los conceptos en tu examen en alemán."
+                      qEn: "Can sessions be conducted 100% in English or 100% in Spanish?",
+                      qEs: "¿Se pueden impartir las clases 100% en español o 100% en inglés?",
+                      aEn: "Yes. All sessions are taught completely in English or in Spanish according to your preference, allowing you to master complex physical and mathematical intuition without language fatigue. We work directly with your university lecture notes, exercise problem sets, and past exams.",
+                      aEs: "Sí. Todas las clases se imparten completamente en español o en inglés según tu preferencia, para que te concentres en comprender la intuición física y matemática sin fatiga lingüística. Trabajamos directamente con los apuntes, guías de ejercicios y exámenes oficiales de tu universidad."
                     },
                     {
-                      qEn: "Can we focus directly on past exams (Altklausuren) and exercise problem sets?",
-                      qEs: "¿Podemos enfocarnos directamente en resolver exámenes anteriores (Altklausuren) y ejercicios?",
-                      aEn: "Yes, absolutely. Solving official past exams (Altklausuren) from your chair is the single highest-yield strategy. We dissect actual exam problems step-by-step, identifying grading rubrics, common traps, and time-saving derivation methods.",
-                      aEs: "Sí, totalmente. Resolver Altklausuren oficiales de tu cátedra es la estrategia más eficaz para aprobar. Desglosamos exámenes reales paso a paso, identificando los criterios del examinador, trampas frecuentes y métodos directos de resolución."
+                      qEn: "Can we focus directly on past exams and exercise problem sets?",
+                      qEs: "¿Podemos enfocarnos directamente en resolver exámenes anteriores y guías de ejercicios?",
+                      aEn: "Yes, absolutely. Solving official past exams from your university is the single highest-yield strategy to pass. We dissect actual exam problems step-by-step, identifying grading rubrics, common traps, and time-saving derivation methods.",
+                      aEs: "Sí, totalmente. Resolver exámenes oficiales anteriores de tu universidad es la estrategia más eficaz para aprobar. Desglosamos problemas de examen reales paso a paso, identificando los criterios de corrección, trampas frecuentes y métodos directos de resolución."
                     },
                     {
-                      qEn: "Can classes be taken in-person in Hannover, Germany?",
-                      qEs: "¿Se pueden tomar clases presenciales en Hannover, Alemania?",
-                      aEn: "Yes. In-person 1-on-1 sessions are available in Hannover, Germany for local students (e.g. from Leibniz Universität Hannover / LUH or nearby universities). Sessions can be held in university library study rooms (e.g. TIB) or quiet learning spaces.",
-                      aEs: "Sí. Ofrezco sesiones presenciales individuales en Hannover, Alemania para estudiantes locales (ej. de la Leibniz Universität Hannover / LUH o alrededores), coordinadas en salas de estudio de bibliotecas universitarias (como la TIB) o espacios de estudio tranquilos."
+                      qEn: "Can classes be taken in-person in Hannover?",
+                      qEs: "¿Se pueden tomar clases presenciales en Hannover?",
+                      aEn: "Yes. In-person 1-on-1 sessions are available in Hannover for local students (e.g. from Leibniz Universität Hannover / LUH or nearby universities), coordinated in university library study rooms (such as TIB) or quiet learning spaces.",
+                      aEs: "Sí. Ofrezco sesiones presenciales individuales en Hannover para estudiantes locales (ej. de la Leibniz Universität Hannover / LUH o alrededores), coordinadas en salas de estudio de bibliotecas universitarias (como la TIB) o espacios de estudio tranquilos."
                     },
                     {
                       qEn: "How does the 20-minute diagnostic session work?",
                       qEs: "¿En qué consiste la sesión diagnóstica inicial de 20 minutos?",
-                      aEn: "We meet via Zoom/Google Meet, review your module syllabus, inspect previous exams (Altklausuren) from your chair, identify where you are losing partial points, and design a concrete schedule to ensure you pass.",
-                      aEs: "Nos conectamos por Zoom o Google Meet, revisamos el temario de tu cátedra, examinamos Altklausuren reales, identificamos tus puntos débiles y diseñamos un plan estructurado para asegurar tu aprobado."
+                      aEn: "We connect via Zoom or Google Meet, review your module syllabus, inspect past exams from your university, identify where you are losing points, and design a concrete schedule to ensure you pass.",
+                      aEs: "Nos conectamos por Zoom o Google Meet, revisamos el temario de tu asignatura, examinamos exámenes anteriores, identificamos tus puntos débiles y diseñamos un plan estructurado para asegurar tu aprobado."
                     },
                     {
                       qEn: "What digital equipment and software are used in remote sessions?",
@@ -2097,7 +2233,7 @@ Sent from Galileo STEM Mentorship Portal`;
             <span>•</span>
             <a href="tel:+4917676497440" className="hover:text-emerald-700">+49 176 7649 7440</a>
           </div>
-          <p>© 2026 Daniel Santander • STEM Mentorship &amp; Applied Geophysics • Hannover, Germany &amp; Online</p>
+          <p>© 2026 Daniel Santander • STEM Mentorship &amp; Applied Geophysics • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}</p>
         </div>
       </footer>
 
@@ -2123,7 +2259,7 @@ Sent from Galileo STEM Mentorship Portal`;
                   <h3 className="text-xl font-bold text-slate-900">
                     {bookingData.sessionType.includes('Spontaneous') 
                       ? (lang === 'en' ? 'Request a Spontaneous 1-on-1 Class' : 'Solicitar Clase Espontánea Urgente')
-                      : (lang === 'en' ? 'Schedule Klausur Strategy Session' : 'Agendar Sesión de Estrategia para Klausur')}
+                      : (lang === 'en' ? 'Schedule University Exam Strategy Session' : 'Agendar Sesión de Estrategia para Examen')}
                   </h3>
                   <p className="text-xs text-slate-500 mt-1">
                     {lang === 'en'
@@ -2134,37 +2270,43 @@ Sent from Galileo STEM Mentorship Portal`;
 
                 {modalCourse && (
                   <div className="mb-4 p-3 rounded-xl bg-slate-50 border border-sky-300 text-xs font-mono text-sky-900">
-                    Selected Subject: <strong>{modalCourse.code} — {modalCourse.titleEn}</strong>
+                    {lang === 'en' ? 'Selected Subject:' : 'Materia Seleccionada:'} <strong>{modalCourse.code} — {lang === 'en' ? modalCourse.titleEn : modalCourse.titleEs}</strong>
                   </div>
                 )}
 
                 <form onSubmit={handleBookingSubmit} className="space-y-3.5 font-mono text-xs">
                   <div>
-                    <label className="block text-slate-700 mb-1 font-semibold">Full Name *</label>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'Full Name *' : 'Nombre Completo *'}
+                    </label>
                     <input
                       type="text"
                       required
                       value={bookingData.name}
                       onChange={(e) => setBookingData({ ...bookingData, name: e.target.value })}
-                      placeholder="e.g. Mateo Becker"
+                      placeholder={lang === 'en' ? 'e.g. Mateo Becker' : 'ej. Mateo Becker'}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-sky-600"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-slate-700 mb-1 font-semibold">Email *</label>
+                      <label className="block text-slate-700 mb-1 font-semibold">
+                        {lang === 'en' ? 'Email *' : 'Correo Electrónico *'}
+                      </label>
                       <input
                         type="email"
                         required
                         value={bookingData.email}
                         onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
-                        placeholder="student@tum.de"
+                        placeholder="student@university.edu"
                         className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-sky-600"
                       />
                     </div>
                     <div>
-                      <label className="block text-slate-700 mb-1 font-semibold">Phone / WhatsApp</label>
+                      <label className="block text-slate-700 mb-1 font-semibold">
+                        {lang === 'en' ? 'Phone / WhatsApp' : 'Teléfono / WhatsApp'}
+                      </label>
                       <input
                         type="tel"
                         value={bookingData.phone}
@@ -2176,20 +2318,24 @@ Sent from Galileo STEM Mentorship Portal`;
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 mb-1 font-semibold">University / School *</label>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'University / School *' : 'Universidad o Colegio *'}
+                    </label>
                     <input
                       type="text"
                       required
                       value={bookingData.university}
                       onChange={(e) => setBookingData({ ...bookingData, university: e.target.value })}
-                      placeholder="e.g. LUH Hannover, TUM, RWTH, TU Berlin"
+                      placeholder={lang === 'en' ? 'e.g. LUH Hannover, TUM, RWTH, TU Berlin' : 'ej. LUH Hannover, TUM, RWTH, TU Berlin'}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-sky-600"
                     />
                   </div>
 
-                  {/* Delivery Location Preference: Online vs Presencial en Hannover */}
+                  {/* Delivery Location Preference */}
                   <div>
-                    <label className="block text-slate-700 mb-1 font-semibold">Format &amp; Location Preference</label>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'Format & Location Preference' : 'Preferencia de Formato y Ubicación'}
+                    </label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
@@ -2200,49 +2346,61 @@ Sent from Galileo STEM Mentorship Portal`;
                             : 'bg-slate-50 border-slate-300 text-slate-600'
                         }`}
                       >
-                        🌐 Online (Miro + Stylus)
+                        🌐 {lang === 'en' ? 'Online (Miro + Stylus)' : 'Online (Miro + Stylus)'}
                       </button>
                       <button
                         type="button"
-                        onClick={() => setBookingData({ ...bookingData, deliveryMode: 'In-Person (Hannover, Germany)' })}
+                        onClick={() => setBookingData({ ...bookingData, deliveryMode: 'In-Person (Hannover)' })}
                         className={`py-2 px-3 rounded-lg border text-center transition-all ${
                           bookingData.deliveryMode.includes('Hannover')
                             ? 'bg-slate-900 border-slate-900 text-white font-bold'
                             : 'bg-slate-50 border-slate-300 text-slate-600'
                         }`}
                       >
-                        📍 In-Person (Hannover, DE)
+                        📍 {lang === 'en' ? 'In-Person (Hannover)' : 'Presencial (Hannover)'}
                       </button>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 mb-1 font-semibold">Language Preference</label>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'Class Language' : 'Idioma de la Clase'}
+                    </label>
                     <div className="flex gap-2">
-                      {['English', 'Español', 'Mixed'].map((lng) => (
+                      {[
+                        { id: 'English', labelEn: 'English', labelEs: 'Inglés' },
+                        { id: 'Español', labelEn: 'Spanish', labelEs: 'Español' },
+                        { id: 'Mixed', labelEn: 'Mixed (EN/ES)', labelEs: 'Mixto (ES/EN)' }
+                      ].map((lng) => (
                         <button
-                          key={lng}
+                          key={lng.id}
                           type="button"
-                          onClick={() => setBookingData({ ...bookingData, languagePref: lng })}
+                          onClick={() => setBookingData({ ...bookingData, languagePref: lng.id })}
                           className={`flex-1 py-2 rounded-lg border text-center transition-all ${
-                            bookingData.languagePref === lng
+                            bookingData.languagePref === lng.id
                               ? 'bg-slate-900 border-slate-900 text-white font-bold'
                               : 'bg-slate-50 border-slate-300 text-slate-600'
                           }`}
                         >
-                          {lng}
+                          {lang === 'en' ? lng.labelEn : lng.labelEs}
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 mb-1 font-semibold">Bottleneck / Urgent Problem / Target Date</label>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'Bottleneck / Urgent Topic / Target Date' : 'Dificultad Principal / Tema Urgente / Fecha de Examen'}
+                    </label>
                     <textarea
                       rows={2}
                       value={bookingData.notes}
                       onChange={(e) => setBookingData({ ...bookingData, notes: e.target.value })}
-                      placeholder="e.g. Exam in 4 weeks, need help with multivariable line integrals and Green's theorem proofs..."
+                      placeholder={
+                        lang === 'en'
+                          ? "e.g. Exam in 4 weeks, need help with line integrals and Green's theorem proofs..."
+                          : 'ej. Examen en 4 semanas, necesito ayuda con integrales de línea y teorema de Green...'
+                      }
                       className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-sans text-xs focus:outline-none focus:border-sky-600"
                     />
                   </div>
@@ -2252,7 +2410,7 @@ Sent from Galileo STEM Mentorship Portal`;
                     className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold font-mono text-xs uppercase tracking-wider transition-colors shadow-sm mt-2 flex items-center justify-center gap-2"
                   >
                     <Send className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Send Request to danisantander.urrutia@gmail.com →</span>
+                    <span>{lang === 'en' ? 'Send Request to danisantander.urrutia@gmail.com →' : 'Enviar Solicitud a danisantander.urrutia@gmail.com →'}</span>
                   </button>
                 </form>
               </div>
@@ -2261,9 +2419,13 @@ Sent from Galileo STEM Mentorship Portal`;
                 <div className="w-14 h-14 rounded-2xl bg-emerald-100 border border-emerald-500 flex items-center justify-center mx-auto text-emerald-800">
                   <Check className="w-8 h-8 stroke-[3]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">Email Draft Generated &amp; Prepared!</h3>
+                <h3 className="text-xl font-bold text-slate-900">
+                  {lang === 'en' ? 'Email Draft Generated & Prepared!' : '¡Borrador de Correo Generado y Listo!'}
+                </h3>
                 <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed font-sans">
-                  Your request has been formulated to <strong>danisantander.urrutia@gmail.com</strong>. If your email client did not open automatically, click below:
+                  {lang === 'en'
+                    ? 'Your request has been formulated to danisantander.urrutia@gmail.com. If your email client did not open automatically, click below:'
+                    : 'Tu solicitud ha sido formulada para danisantander.urrutia@gmail.com. Si tu cliente de correo no se abrió automáticamente, haz clic abajo:'}
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
@@ -2273,7 +2435,7 @@ Sent from Galileo STEM Mentorship Portal`;
                       className="px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-xs font-mono font-bold flex items-center gap-1.5"
                     >
                       <Mail className="w-3.5 h-3.5" />
-                      <span>Open in Mail Client</span>
+                      <span>{lang === 'en' ? 'Open in Mail Client' : 'Abrir en Cliente de Correo'}</span>
                     </a>
                   )}
 
@@ -2284,16 +2446,16 @@ Sent from Galileo STEM Mentorship Portal`;
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Send on WhatsApp</span>
+                    <span>{lang === 'en' ? 'Send on WhatsApp' : 'Enviar por WhatsApp'}</span>
                   </a>
                 </div>
 
                 <div className="pt-2">
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="px-6 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-mono"
+                    className="px-6 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-mono cursor-pointer"
                   >
-                    Close Window
+                    {lang === 'en' ? 'Close Window' : 'Cerrar Ventana'}
                   </button>
                 </div>
               </div>

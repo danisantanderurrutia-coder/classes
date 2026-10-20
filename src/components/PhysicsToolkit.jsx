@@ -1339,401 +1339,537 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       )}
 
       {/* ==================================================================== */}
-      {/* TAB 2: LINEAR ALGEBRA, SVD & INVERSE THEORY (GEOPHYSICS)              */}
+      {/* TAB 2: LINEAR ALGEBRA, AXIOMATIC SPACES & SPECTRAL SVD               */}
       {/* ==================================================================== */}
       {activeTab === 'algebra' && (
         <div className="p-6 sm:p-8 space-y-8">
           <div>
             <span className="text-xs font-mono uppercase tracking-wider text-indigo-400 font-bold block">
-              {isEn ? 'Applied Spectral Theory & Inverse Problems' : 'Teoría Espectral Aplicada e Inversión Geofísica'}
+              {isEn ? 'Linear Algebra, Axiomatic Vector Spaces & Spectral Inversion' : 'Álgebra Lineal, Espacios Axiomáticos e Inversión Espectral'}
             </span>
             <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-              {isEn ? 'Matrix Diagonalization, SVD & Tikhonov Regularization' : 'Diagonalización de Matrices, SVD y Regularización de Tikhonov'}
+              {isEn ? 'Vector Space Axioms, Transformations, Matrices & SVD' : 'Axiomas de Espacios Vectoriales, Transformaciones, Matrices y SVD'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
               {isEn
-                ? 'From decoupling coupled harmonic oscillators into normal vibration modes to solving ill-posed inverse problems in seismic tomography and gravity inversion.'
-                : 'Desde el desacoplamiento de osciladores armónicos en modos normales hasta la resolución de problemas inversos mal condicionados en tomografía sísmica y gravimetría.'}
+                ? 'The complete structural pipeline of university linear algebra: from the 8 formal axioms over a field 𝕂 and subspace criteria to linear transformations, Gram-Schmidt orthonormalization, and 2x2 matrix SVD / Tikhonov regularization.'
+                : 'La columna vertebral del álgebra lineal universitaria: desde los 8 axiomas formales sobre un cuerpo 𝕂 y criterios de subespacio hasta transformaciones lineales, ortogonalización de Gram-Schmidt y regularización SVD / Tikhonov.'}
             </p>
           </div>
 
-          {/* Matrix Sandbox & SVD Controls */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-5 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-5">
-              <span className="text-xs font-mono uppercase text-slate-400 font-bold block">
-                {isEn ? 'Configure Symmetric Matrix A:' : 'Configurar Matriz Simétrica A:'}
-              </span>
-
-              <div className="flex items-center justify-center p-4 bg-slate-950 rounded-xl border border-slate-800 font-mono text-sm text-white">
-                <div className="text-2xl font-bold mr-3 text-indigo-400">A = </div>
-                <div className="border-l-2 border-r-2 border-white px-3 py-1 grid grid-cols-2 gap-4 text-center font-bold">
-                  <span className="text-sky-400">{matA}</span>
-                  <span className="text-indigo-400">{matB}</span>
-                  <span className="text-indigo-400">{matB}</span>
-                  <span className="text-emerald-400">{matD}</span>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div>
-                  <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Matrix Element a₁₁:' : 'Elemento a₁₁:'}</span>
-                    <strong className="text-sky-400">{matA}</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="1"
-                    max="8"
-                    step="1"
-                    value={matA}
-                    onChange={(e) => setMatA(Number(e.target.value))}
-                    className="w-full accent-sky-400 cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Element a₁₂ = a₂₁ (Coupling):' : 'Elemento a₁₂ = a₂₁ (Acoplamiento):'}</span>
-                    <strong className="text-indigo-400">{matB}</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="6"
-                    step="1"
-                    value={matB}
-                    onChange={(e) => setMatB(Number(e.target.value))}
-                    className="w-full accent-indigo-400 cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Matrix Element a₂₂:' : 'Elemento a₂₂:'}</span>
-                    <strong className="text-emerald-400">{matD}</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="1"
-                    max="8"
-                    step="1"
-                    value={matD}
-                    onChange={(e) => setMatD(Number(e.target.value))}
-                    className="w-full accent-emerald-400 cursor-pointer"
-                  />
-                </div>
-
-                <div className="pt-2 border-t border-slate-800">
-                  <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Tikhonov Damping Parameter (ε²):' : 'Amortiguamiento Tikhonov (ε²):'}</span>
-                    <strong className="text-amber-400">{tikhonovEps.toFixed(2)}</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="0.00"
-                    max="2.00"
-                    step="0.05"
-                    value={tikhonovEps}
-                    onChange={(e) => setTikhonovEps(Number(e.target.value))}
-                    className="w-full accent-amber-400 cursor-pointer"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Results: Characteristic Polynomial, Eigenvalues & SVD Inverse */}
-            <div className="lg:col-span-7 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 font-mono text-xs">
-              <span className="text-xs font-mono uppercase text-indigo-400 font-bold block">
-                {isEn ? 'Real-Time Spectral & Inverse Decomposition:' : 'Descomposición Espectral e Inversión en Vivo:'}
-              </span>
-
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                <span className="text-slate-400 text-[10px] uppercase">
-                  {isEn ? '1. Characteristic Polynomial: det(A - λI) = 0' : '1. Polinomio Característico: det(A - λI) = 0'}
+          {/* Sub-Category Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: 'all', count: ALL_ALGEBRA_LAWS.length, labelEn: 'All Formulations', labelEs: 'Todas las Formulaciones' },
+              { id: 'axioms', count: 3, labelEn: 'Vector Space Axioms & Bases', labelEs: 'Axiomas & Bases' },
+              { id: 'transformations', count: 2, labelEn: 'Linear Maps & Rank-Nullity', labelEs: 'Transformaciones & Rango' },
+              { id: 'matrices', count: 2, labelEn: 'Matrices & Determinants', labelEs: 'Matrices & Determinantes' },
+              { id: 'inner_product', count: 2, labelEn: 'Inner Product & Gram-Schmidt', labelEs: 'Producto Interno & Ortonormalidad' },
+              { id: 'spectral', count: 4, labelEn: 'Spectral, SVD & Inversion', labelEs: 'Teoría Espectral & SVD' }
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setAlgebraCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  algebraCategory === cat.id
+                    ? 'bg-indigo-500 text-slate-950 shadow-md font-bold'
+                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <span>{isEn ? cat.labelEn : cat.labelEs}</span>
+                <span className={`px-1.5 py-0.2 rounded text-[10px] ${
+                  algebraCategory === cat.id ? 'bg-indigo-600/40 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'
+                }`}>
+                  {cat.count}
                 </span>
-                <div className="text-sm font-bold text-amber-300">
-                  <MathFormula math={`\\lambda^2 - (${tr})\\lambda + (${det}) = 0`} display={true} />
-                </div>
-                <span className="text-slate-500 text-[10px]">
-                  {isEn ? `Trace(A) = ${tr} | Det(A) = ${det}` : `Traza(A) = ${tr} | Det(A) = ${det}`}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                  <span className="text-sky-400 text-[10px] uppercase block font-bold">
-                    {isEn ? 'Eigenvalue λ₁' : 'Autovalor λ₁'}
-                  </span>
-                  <span className="text-base font-bold text-white block mt-1">{lambda1.toFixed(3)}</span>
-                  <span className="text-[10px] text-slate-400">
-                    <MathFormula math={`\\mathbf{v}_1 = [${v1x.toFixed(2)}, \\; ${v1y.toFixed(2)}]^T`} />
-                  </span>
-                </div>
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400 text-[10px] uppercase block font-bold">
-                    {isEn ? 'Eigenvalue λ₂' : 'Autovalor λ₂'}
-                  </span>
-                  <span className="text-base font-bold text-white block mt-1">{lambda2.toFixed(3)}</span>
-                  <span className="text-[10px] text-slate-400">
-                    <MathFormula math={`\\mathbf{v}_2 = [${v2x.toFixed(2)}, \\; ${v2y.toFixed(2)}]^T`} />
-                  </span>
-                </div>
-              </div>
-
-              {/* SVD and Condition Number */}
-              <div className="p-3.5 bg-slate-950 rounded-xl border border-indigo-950/60 space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-indigo-400 text-[10px] uppercase font-bold">
-                    {isEn ? 'SVD Decomposition (A = U Σ Vᵀ)' : 'Descomposición SVD (A = U Σ Vᵀ)'}
-                  </span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${condNumber > 15 ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
-                    κ(A) = {condNumber > 100 ? (isEn ? '>100 (Ill-Conditioned)' : '>100 (Mal Condicionado)') : condNumber.toFixed(2)}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-300">
-                  {isEn
-                    ? `Singular values: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`
-                    : `Valores singulares: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`}
-                </p>
-                <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 flex justify-between items-center">
-                  <span>{isEn ? 'Tikhonov Inverse Solution m̂ for d=[6, 2]ᵀ:' : 'Solución Inversa Tikhonov m̂ para d=[6, 2]ᵀ:'}</span>
-                  <strong className="text-amber-400">[{mEst1.toFixed(2)}, {mEst2.toFixed(2)}]ᵀ</strong>
-                </div>
-              </div>
-            </div>
+              </button>
+            ))}
           </div>
 
-          {/* Linear Algebra Core Theorems Cards */}
-          <div className="pt-4 border-t border-slate-800">
-            <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider mb-4">
-              {isEn ? 'Foundational Theorems of Linear Algebra & Matrix Analysis:' : 'Teoremas Fundamentales del Álgebra Lineal y Análisis Matricial:'}
-            </h4>
+          {/* Interactive 2x2 Matrix Sandbox (Shown when All or Spectral is active) */}
+          {(algebraCategory === 'all' || algebraCategory === 'spectral') && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+              <div className="lg:col-span-5 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono uppercase text-slate-400 font-bold block">
+                    {isEn ? 'Interactive Matrix Sandbox A:' : 'Sandbox de Matriz Simétrica A:'}
+                  </span>
+                  <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                    A = Aᵀ
+                  </span>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  titleEn: 'Rank-Nullity Theorem',
-                  titleEs: 'Teorema del Rango y Nulidad',
-                  latex: '\\dim(\\operatorname{im} A) + \\dim(\\ker A) = n',
-                  descEn: 'Relates column space and nullspace dimensions for any m×n matrix, crucial for underdetermined and overdetermined systems.',
-                  descEs: 'Relaciona la dimensión de la imagen y el núcleo para cualquier matriz m×n, esencial en sistemas sobre y subdeterminados.'
-                },
-                {
-                  titleEn: 'Spectral Theorem',
-                  titleEs: 'Teorema Espectral',
-                  latex: 'A = Q \\Lambda Q^T \\quad (Q^T Q = I)',
-                  descEn: 'Any real symmetric matrix can be diagonalized by an orthogonal matrix of eigenvectors, with strictly real eigenvalues.',
-                  descEs: 'Toda matriz simétrica real puede ser diagonalizada mediante una base ortonormal de autovectores con autovalores reales.'
-                },
-                {
-                  titleEn: 'Singular Value Decomposition (SVD)',
-                  titleEs: 'Descomposición en Valores Singulares',
-                  latex: 'A = U \\Sigma V^T = \\sum_{i=1}^r \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T',
-                  descEn: 'Factorizes any rectangular matrix into orthogonal rotations and non-negative singular values, the core of pseudoinverses and PCA.',
-                  descEs: 'Factoriza cualquier matriz rectangular en rotaciones ortogonales y valores singulares no negativos, base de la pseudoinversa y PCA.'
-                },
-                {
-                  titleEn: 'Tikhonov Regularized Inverse',
-                  titleEs: 'Inversión Regularizada de Tikhonov',
-                  latex: '\\hat{\\mathbf{m}} = (A^T A + \\varepsilon^2 I)^{-1} A^T \\mathbf{d}',
-                  descEn: 'Stabilizes ill-posed rank-deficient inversion problems by penalizing solution model norm, essential in seismic tomography.',
-                  descEs: 'Estabiliza problemas inversos mal condicionados penalizando la norma del modelo, vital en tomografía sísmica y gravimetría.'
-                }
-              ].map((thm, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 flex flex-col justify-between">
+                <div className="flex items-center justify-center p-4 bg-slate-950 rounded-xl border border-slate-800 font-mono text-sm text-white">
+                  <div className="text-2xl font-bold mr-3 text-indigo-400">A = </div>
+                  <div className="border-l-2 border-r-2 border-white px-3 py-1 grid grid-cols-2 gap-4 text-center font-bold">
+                    <span className="text-sky-400">{matA}</span>
+                    <span className="text-indigo-400">{matB}</span>
+                    <span className="text-indigo-400">{matB}</span>
+                    <span className="text-emerald-400">{matD}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
                   <div>
-                    <span className="text-xs font-mono text-indigo-400 font-bold block mb-1">{isEn ? thm.titleEn : thm.titleEs}</span>
-                    <div className="p-2.5 bg-slate-950 rounded-xl text-amber-300 text-xs text-center border border-slate-800/80">
-                      <MathFormula math={thm.latex} display={true} />
+                    <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                      <span>{isEn ? 'Matrix Element a₁₁:' : 'Elemento a₁₁:'}</span>
+                      <strong className="text-sky-400">{matA}</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="8"
+                      step="1"
+                      value={matA}
+                      onChange={(e) => setMatA(Number(e.target.value))}
+                      className="w-full accent-sky-400 cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                      <span>{isEn ? 'Element a₁₂ = a₂₁ (Coupling):' : 'Elemento a₁₂ = a₂₁ (Acoplamiento):'}</span>
+                      <strong className="text-indigo-400">{matB}</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="6"
+                      step="1"
+                      value={matB}
+                      onChange={(e) => setMatB(Number(e.target.value))}
+                      className="w-full accent-indigo-400 cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                      <span>{isEn ? 'Matrix Element a₂₂:' : 'Elemento a₂₂:'}</span>
+                      <strong className="text-emerald-400">{matD}</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="8"
+                      step="1"
+                      value={matD}
+                      onChange={(e) => setMatD(Number(e.target.value))}
+                      className="w-full accent-emerald-400 cursor-pointer"
+                    />
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800">
+                    <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                      <span>{isEn ? 'Tikhonov Damping Parameter (ε²):' : 'Amortiguamiento Tikhonov (ε²):'}</span>
+                      <strong className="text-amber-400">{tikhonovEps.toFixed(2)}</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.00"
+                      max="2.00"
+                      step="0.05"
+                      value={tikhonovEps}
+                      onChange={(e) => setTikhonovEps(Number(e.target.value))}
+                      className="w-full accent-amber-400 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Results: Characteristic Polynomial, Eigenvalues & SVD Inverse */}
+              <div className="lg:col-span-7 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 font-mono text-xs">
+                <span className="text-xs font-mono uppercase text-indigo-400 font-bold block">
+                  {isEn ? 'Real-Time Spectral & Inverse Decomposition:' : 'Descomposición Espectral e Inversión en Vivo:'}
+                </span>
+
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                  <span className="text-slate-400 text-[10px] uppercase">
+                    {isEn ? '1. Characteristic Polynomial: det(A - λI) = 0' : '1. Polinomio Característico: det(A - λI) = 0'}
+                  </span>
+                  <div className="text-sm font-bold text-amber-300">
+                    <MathFormula math={`\\lambda^2 - (${tr})\\lambda + (${det}) = 0`} display={true} />
+                  </div>
+                  <span className="text-slate-500 text-[10px]">
+                    {isEn ? `Trace(A) = ${tr} | Det(A) = ${det}` : `Traza(A) = ${tr} | Det(A) = ${det}`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span className="text-sky-400 text-[10px] uppercase block font-bold">
+                      {isEn ? 'Eigenvalue λ₁' : 'Autovalor λ₁'}
+                    </span>
+                    <span className="text-base font-bold text-white block mt-1">{lambda1.toFixed(3)}</span>
+                    <span className="text-[10px] text-slate-400">
+                      <MathFormula math={`\\mathbf{v}_1 = [${v1x.toFixed(2)}, \\; ${v1y.toFixed(2)}]^T`} />
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                    <span className="text-emerald-400 text-[10px] uppercase block font-bold">
+                      {isEn ? 'Eigenvalue λ₂' : 'Autovalor λ₂'}
+                    </span>
+                    <span className="text-base font-bold text-white block mt-1">{lambda2.toFixed(3)}</span>
+                    <span className="text-[10px] text-slate-400">
+                      <MathFormula math={`\\mathbf{v}_2 = [${v2x.toFixed(2)}, \\; ${v2y.toFixed(2)}]^T`} />
+                    </span>
+                  </div>
+                </div>
+
+                {/* SVD and Condition Number */}
+                <div className="p-3.5 bg-slate-950 rounded-xl border border-indigo-950/60 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-indigo-400 text-[10px] uppercase font-bold">
+                      {isEn ? 'SVD Decomposition (A = U Σ Vᵀ)' : 'Descomposición SVD (A = U Σ Vᵀ)'}
+                    </span>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${condNumber > 15 ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
+                      κ(A) = {condNumber > 100 ? (isEn ? '>100 (Ill-Conditioned)' : '>100 (Mal Condicionado)') : condNumber.toFixed(2)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300">
+                    {isEn
+                      ? `Singular values: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`
+                      : `Valores singulares: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`}
+                  </p>
+                  <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 flex justify-between items-center">
+                    <span>{isEn ? 'Tikhonov Inverse Solution m̂ for d=[6, 2]ᵀ:' : 'Solución Inversa Tikhonov m̂ para d=[6, 2]ᵀ:'}</span>
+                    <strong className="text-amber-400">[{mEst1.toFixed(2)}, {mEst2.toFixed(2)}]ᵀ</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Master Linear Algebra Laws & Axioms Grid */}
+          <div className="pt-2 border-t border-slate-800/80">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+                {isEn ? 'Foundational Theorems, Axioms & Formulations:' : 'Teoremas Fundamentales, Axiomas y Formulaciones:'}
+              </h4>
+              <span className="text-xs font-mono text-slate-400">
+                {filteredAlgebraLaws.length} {isEn ? 'items' : 'leyes'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {filteredAlgebraLaws.map((law) => {
+                const catBadge = law.category === 'axioms'
+                  ? 'text-violet-400 bg-violet-500/10 border-violet-500/30'
+                  : law.category === 'transformations'
+                  ? 'text-indigo-400 bg-indigo-500/10 border-indigo-500/30'
+                  : law.category === 'matrices'
+                  ? 'text-sky-400 bg-sky-500/10 border-sky-500/30'
+                  : law.category === 'inner_product'
+                  ? 'text-teal-400 bg-teal-500/10 border-teal-500/30'
+                  : 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+
+                return (
+                  <div
+                    key={law.id}
+                    className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-slate-700 transition-all shadow-md"
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300 font-bold border border-slate-700">
+                          {law.courseCode}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${catBadge}`}>
+                          {law.category}
+                        </span>
+                      </div>
+                      <h5 className="text-sm font-bold text-white leading-snug">
+                        {isEn ? law.titleEn : law.titleEs}
+                      </h5>
+                      <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800/80 overflow-x-auto shadow-inner">
+                        <MathFormula math={law.latex} display={true} />
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                        {isEn ? law.descEn : law.descEs}
+                      </p>
+                    </div>
+
+                    <div className="pt-2.5 border-t border-slate-800/70 text-[11px] text-indigo-300 font-mono leading-relaxed bg-indigo-950/20 p-2 rounded-lg">
+                      💡 {isEn ? law.relevanceEn : law.relevanceEs}
                     </div>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed font-sans">{isEn ? thm.descEn : thm.descEs}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       )}
 
       {/* ==================================================================== */}
-      {/* TAB 3: MULTIVARIABLE CALCULUS & THE 3 CANONICAL PDES                  */}
+      {/* TAB 3: CALCULUS, REAL ANALYSIS & PARTIAL DIFFERENTIAL EQUATIONS       */}
       {/* ==================================================================== */}
       {activeTab === 'calculus' && (
         <div className="p-6 sm:p-8 space-y-8">
           <div>
             <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold block">
-              {isEn ? 'Multivariable Calculus & Partial Differential Equations' : 'Cálculo Multivariable y Ecuaciones Diferenciales Parciales'}
+              {isEn ? 'Single & Multivariable Calculus, Real Analysis & PDEs' : 'Cálculo Diferencial e Integral, Análisis Real y EDPs'}
             </span>
             <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-              {isEn ? 'The Nabla (∇) Dictionary & The 3 Canonical PDEs' : 'El Diccionario del Operador Nabla (∇) y las 3 EDPs Canónicas'}
+              {isEn ? 'Limits, Differential Laws, FTC & Vector Calculus' : 'Límites, Cálculo Diferencial, TFC y Cálculo Vectorial'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
               {isEn
-                ? 'The universal mathematical foundation for fluid dynamics, potential fields, and elastic wave equations in engineering and physical science.'
-                : 'La base matemática rigurosa para fluidodinámica, campos potenciales gravimétricos y elastodinámica sísmica.'}
+                ? 'From formal ε-δ limit definitions, mean value theorems and differentiation rules to Riemann integration, the Fundamental Theorem of Calculus, the Nabla dictionary, and the 3 canonical PDEs.'
+                : 'Desde la definición rigurosa de límites con ε-δ, teorema del valor medio y reglas operativas hasta integrales de Riemann, el Teorema Fundamental del Cálculo, operador Nabla y las 3 EDPs canónicas.'}
             </p>
           </div>
 
-          {/* The Nabla Operator Grid with KaTeX */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Sub-Category Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
             {[
-              {
-                latex: '\\nabla f',
-                nameEs: 'Gradiente',
-                nameEn: 'Gradient',
-                inOutEn: 'Scalar → Vector',
-                inOutEs: 'Escalar → Vector',
-                color: 'text-sky-400',
-                meaningEn: 'Vector pointing along the maximum spatial rate of increase (e.g., -∇P drives atmospheric winds towards low pressure).',
-                meaningEs: 'Vector en la dirección de máxima tasa de crecimiento espacial (ej. -∇P empuja el viento hacia la baja presión).'
-              },
-              {
-                latex: '\\nabla \\cdot \\mathbf{F}',
-                nameEs: 'Divergencia',
-                nameEn: 'Divergence',
-                inOutEn: 'Vector → Scalar',
-                inOutEs: 'Vector → Escalar',
-                color: 'text-emerald-400',
-                meaningEn: 'Measures net outward flux per unit volume. Positive = Source; Negative = Sink; Zero = Incompressible flow.',
-                meaningEs: 'Mide la tasa neta de flujo que sale de un punto. Positiva = Fuente; Negativa = Sumidero; Cero = Incompresible.'
-              },
-              {
-                latex: '\\nabla \\times \\mathbf{F}',
-                nameEs: 'Rotacional (Curl)',
-                nameEn: 'Curl',
-                inOutEn: 'Vector → Vector',
-                inOutEs: 'Vector → Vector',
-                color: 'text-amber-400',
-                meaningEn: 'Measures local microscopic vorticity or circulation density. Governs magnetic field circulation and shear S-waves.',
-                meaningEs: 'Mide la rotación local o vorticidad en un fluido. Rige la generación de ondas S por cizalle y ondas electromagnéticas.'
-              },
-              {
-                latex: '\\nabla^2 f',
-                nameEs: 'Laplaciano',
-                nameEn: 'Laplacian',
-                inOutEn: 'Scalar → Scalar',
-                inOutEs: 'Escalar → Escalar',
-                color: 'text-purple-400',
-                meaningEn: 'Measures the difference between a field at a point and its local average curvature. Drives thermal diffusion and waves.',
-                meaningEs: 'Mide la curvatura promedio de un campo. Gobierna difusión térmica, campos potenciales y propagación ondulatoria.'
-              }
-            ].map((op, idx) => (
-              <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className={`text-lg font-bold ${op.color}`}>
-                    <MathFormula math={op.latex} />
-                  </div>
-                  <span className="text-[10px] font-mono text-slate-500 uppercase">{isEn ? op.inOutEn : op.inOutEs}</span>
-                </div>
-                <h4 className="text-sm font-bold text-white font-mono">{isEn ? op.nameEn : op.nameEs}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed font-sans">{isEn ? op.meaningEn : op.meaningEs}</p>
-              </div>
+              { id: 'all', count: ALL_CALCULUS_LAWS.length, labelEn: 'All Calculus & Analysis', labelEs: 'Todo Cálculo & Análisis' },
+              { id: 'limits', count: 2, labelEn: 'Limits & Continuity (ε-δ)', labelEs: 'Límites & Continuidad (ε-δ)' },
+              { id: 'differential', count: 6, labelEn: 'Differential Calculus & MVT', labelEs: 'Cálculo Diferencial & MVT' },
+              { id: 'integral', count: 3, labelEn: 'Integral Calculus & FTC', labelEs: 'Cálculo Integral & TFC' },
+              { id: 'multivariable', count: 3, labelEn: 'Multivariable, PDEs & Theorems', labelEs: 'Multivariable & EDPs' }
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setCalculusCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  calculusCategory === cat.id
+                    ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
+                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                }`}
+              >
+                <span>{isEn ? cat.labelEn : cat.labelEs}</span>
+                <span className={`px-1.5 py-0.2 rounded text-[10px] ${
+                  calculusCategory === cat.id ? 'bg-emerald-600/40 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'
+                }`}>
+                  {cat.count}
+                </span>
+              </button>
             ))}
           </div>
 
-          {/* The 3 Canonical PDEs of Mathematical Physics */}
-          <div className="space-y-4">
-            <h4 className="text-base font-bold text-white font-mono uppercase tracking-wider text-slate-200">
-              {isEn
-                ? 'The 3 Canonical PDEs of Mathematical Physics in Science & Geophysics:'
-                : 'Las 3 Grandes Ecuaciones Diferenciales Parciales en Geofísica:'}
-            </h4>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
-                <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
-                  {isEn ? '1. Elliptic (Laplace / Poisson)' : '1. Elíptica (Laplace / Poisson)'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-sky-300 text-xs sm:text-sm text-center">
-                  <MathFormula math="\nabla^2 u = 4\pi G \rho \quad (\text{or } \nabla^2 u = 0)" display={true} />
+          {/* Multivariable Specialized Modules (Shown when All or Multivariable is active) */}
+          {(calculusCategory === 'all' || calculusCategory === 'multivariable') && (
+            <div className="space-y-6 pt-2">
+              {/* The Nabla Operator Grid with KaTeX */}
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold mb-3">
+                  {isEn ? 'Spatial Differential Operators (Nabla ∇):' : 'Operadores Diferenciales Espaciales (Nabla ∇):'}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    {
+                      latex: '\\nabla f',
+                      nameEs: 'Gradiente',
+                      nameEn: 'Gradient',
+                      inOutEn: 'Scalar → Vector',
+                      inOutEs: 'Escalar → Vector',
+                      color: 'text-sky-400',
+                      meaningEn: 'Vector pointing along the maximum spatial rate of increase (e.g., -∇P drives atmospheric winds towards low pressure).',
+                      meaningEs: 'Vector en la dirección de máxima tasa de crecimiento espacial (ej. -∇P empuja el viento hacia la baja presión).'
+                    },
+                    {
+                      latex: '\\nabla \\cdot \\mathbf{F}',
+                      nameEs: 'Divergencia',
+                      nameEn: 'Divergence',
+                      inOutEn: 'Vector → Scalar',
+                      inOutEs: 'Vector → Escalar',
+                      color: 'text-emerald-400',
+                      meaningEn: 'Measures net outward flux per unit volume. Positive = Source; Negative = Sink; Zero = Incompressible flow.',
+                      meaningEs: 'Mide la tasa neta de flujo que sale de un punto. Positiva = Fuente; Negativa = Sumidero; Cero = Incompresible.'
+                    },
+                    {
+                      latex: '\\nabla \\times \\mathbf{F}',
+                      nameEs: 'Rotacional (Curl)',
+                      nameEn: 'Curl',
+                      inOutEn: 'Vector → Vector',
+                      inOutEs: 'Vector → Vector',
+                      color: 'text-amber-400',
+                      meaningEn: 'Measures local microscopic vorticity or circulation density. Governs magnetic field circulation and shear S-waves.',
+                      meaningEs: 'Mide la rotación local o vorticidad en un fluido. Rige la generación de ondas S por cizalle y ondas electromagnéticas.'
+                    },
+                    {
+                      latex: '\\nabla^2 f',
+                      nameEs: 'Laplaciano',
+                      nameEn: 'Laplacian',
+                      inOutEn: 'Scalar → Scalar',
+                      inOutEs: 'Escalar → Escalar',
+                      color: 'text-purple-400',
+                      meaningEn: 'Measures the difference between a field at a point and its local average curvature. Drives thermal diffusion and waves.',
+                      meaningEs: 'Mide la curvatura promedio de un campo. Gobierna difusión térmica, campos potenciales y propagación ondulatoria.'
+                    }
+                  ].map((op, idx) => (
+                    <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <div className={`text-lg font-bold ${op.color}`}>
+                          <MathFormula math={op.latex} />
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-500 uppercase">{isEn ? op.inOutEn : op.inOutEs}</span>
+                      </div>
+                      <h5 className="text-sm font-bold text-white font-mono">{isEn ? op.nameEn : op.nameEs}</h5>
+                      <p className="text-xs text-slate-400 leading-relaxed font-sans">{isEn ? op.meaningEn : op.meaningEs}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  {isEn
-                    ? 'Time-independent steady states. Governs gravitational potential fields U, electrostatics, Bouguer gravity anomalies, and steady groundwater aquifer flow.'
-                    : 'Estados estacionarios independientes del tiempo. Gobierna el potencial gravitacional U, la gravimetría de Bouguer y el flujo freático subterráneo permanente.'}
-                </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
-                <span className="text-xs font-mono text-amber-400 uppercase font-bold block">
-                  {isEn ? '2. Parabolic (Heat / Diffusion)' : '2. Parabólica (Difusión / Calor)'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 text-xs sm:text-sm text-center">
-                  <MathFormula math="\frac{\partial u}{\partial t} = \alpha \nabla^2 u" display={true} />
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+              {/* The 3 Canonical PDEs of Mathematical Physics */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
                   {isEn
-                    ? 'Irreversible in time. Models thermal cooling of tectonic plates, geothermal heat dissipation in continental crust, and electromagnetic diffusion in magnetotellurics.'
-                    : 'Irreversible en el tiempo. Modela el enfriamiento térmico de la placa oceánica de Nazca, disipación de calor geotérmico y difusión electromagnética en magnetotelúrica.'}
-                </p>
+                    ? 'The 3 Canonical PDEs in Physics & Geophysics:'
+                    : 'Las 3 Grandes Ecuaciones Diferenciales Parciales en Geofísica:'}
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
+                    <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
+                      {isEn ? '1. Elliptic (Laplace / Poisson)' : '1. Elíptica (Laplace / Poisson)'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-sky-300 text-xs sm:text-sm text-center">
+                      <MathFormula math="\nabla^2 u = 4\pi G \rho \quad (\text{or } \nabla^2 u = 0)" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      {isEn
+                        ? 'Time-independent steady states. Governs gravitational potential fields U, electrostatics, Bouguer gravity anomalies, and steady groundwater aquifer flow.'
+                        : 'Estados estacionarios independientes del tiempo. Gobierna el potencial gravitacional U, la gravimetría de Bouguer y el flujo freático subterráneo permanente.'}
+                    </p>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
+                    <span className="text-xs font-mono text-amber-400 uppercase font-bold block">
+                      {isEn ? '2. Parabolic (Heat / Diffusion)' : '2. Parabólica (Difusión / Calor)'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 text-xs sm:text-sm text-center">
+                      <MathFormula math="\frac{\partial u}{\partial t} = \alpha \nabla^2 u" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      {isEn
+                        ? 'Irreversible in time. Models thermal cooling of tectonic plates, geothermal heat dissipation in continental crust, and electromagnetic diffusion in magnetotellurics.'
+                        : 'Irreversible en el tiempo. Modela el enfriamiento térmico de la placa oceánica de Nazca, disipación de calor geotérmico y difusión electromagnética en magnetotelúrica.'}
+                    </p>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
+                    <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
+                      {isEn ? '3. Hyperbolic (Elastodynamic Wave Equation)' : '3. Hiperbólica (Onda Elastodinámica)'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-emerald-300 text-xs sm:text-sm text-center">
+                      <MathFormula math="\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      {isEn
+                        ? 'Reversible in time with finite propagation velocity c. Fundamental equation of seismology and acoustics: elastic P and S waves traveling across Earth mantle and core.'
+                        : 'Reversible en el tiempo con velocidad finita c. Ecuación fundamental de la sismología: propagación de ondas elásticas P y S a través del manto y núcleo terrestre.'}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
-                <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
-                  {isEn ? '3. Hyperbolic (Elastodynamic Wave Equation)' : '3. Hiperbólica (Onda Elastodinámica)'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-emerald-300 text-xs sm:text-sm text-center">
-                  <MathFormula math="\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u" display={true} />
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+              {/* The 3 Fundamental Integral Theorems of Vector Analysis with KaTeX */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
                   {isEn
-                    ? 'Reversible in time with finite propagation velocity c. Fundamental equation of seismology and acoustics: elastic P and S waves traveling across Earth mantle and core.'
-                    : 'Reversible en el tiempo con velocidad finita c. Ecuación fundamental de la sismología: propagación de ondas elásticas P y S a través del manto y núcleo terrestre.'}
-                </p>
+                    ? 'The 3 Pillar Integral Theorems of Vector Calculus:'
+                    : 'Los 3 Teoremas Integrales del Análisis Vectorial (Green, Gauss y Stokes):'}
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
+                      {isEn ? "Green's Theorem in the Plane" : 'Teorema de Green en el Plano'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                      <MathFormula math="\oint_{\partial D} (L \, dx + M \, dy) = \iint_D \left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right) dA" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                      {isEn
+                        ? 'Converts a 1D boundary circulation line integral into a 2D surface integral of microscopic curl, foundational for work and fluid circulation.'
+                        : 'Convierte una integral de línea sobre la frontera en una integral de área del rotacional, base del trabajo y circulación en 2D.'}
+                    </p>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
+                      {isEn ? "Gauss's Divergence Theorem" : 'Teorema de la Divergencia de Gauss'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                      <MathFormula math="\oiint_{\partial V} \mathbf{F} \cdot \hat{\mathbf{n}} \, dS = \iiint_V (\nabla \cdot \mathbf{F}) \, dV" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                      {isEn
+                        ? 'The outward flux of a vector field through a closed boundary surface equals the volume integral of divergence inside, proving Gauss electric/magnetic laws.'
+                        : 'El flujo neto a través de una superficie cerrada equivale a la integral de volumen de su divergencia, demostrando las leyes de Gauss.'}
+                    </p>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                    <span className="text-xs font-mono text-purple-400 uppercase font-bold block">
+                      {isEn ? "Stokes's Curl Theorem" : 'Teorema del Rotacional de Stokes'}
+                    </span>
+                    <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                      <MathFormula math="\oint_{\partial S} \mathbf{F} \cdot d\mathbf{r} = \iint_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}" display={true} />
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                      {isEn
+                        ? 'Line integral of a vector field around a closed curve equals the flux of its curl through any spanning open surface, crucial for Faraday and Ampère laws.'
+                        : 'La circulación de un campo vectorial por una curva cerrada equivale al flujo de su rotacional a través de cualquier superficie que la encierra.'}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* The 3 Fundamental Integral Theorems of Vector Analysis with KaTeX */}
-          <div className="space-y-4 pt-4 border-t border-slate-800">
-            <h4 className="text-base font-bold text-white font-mono uppercase tracking-wider text-slate-200">
-              {isEn
-                ? 'The 3 Pillar Integral Theorems of Vector Calculus (Green, Gauss & Stokes):'
-                : 'Los 3 Teoremas Integrales del Análisis Vectorial (Green, Gauss y Stokes):'}
-            </h4>
+          {/* Master Calculus Formulations & Theorems Grid */}
+          <div className="pt-2 border-t border-slate-800/80">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+                {isEn ? 'Foundational Calculus Theorems & Analytical Laws:' : 'Teoremas Fundamentales del Cálculo y Leyes Analíticas:'}
+              </h4>
+              <span className="text-xs font-mono text-slate-400">
+                {filteredCalculusLaws.length} {isEn ? 'items' : 'leyes'}
+              </span>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
-                  {isEn ? "Green's Theorem in the Plane" : 'Teorema de Green en el Plano'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
-                  <MathFormula math="\oint_{\partial D} (L \, dx + M \, dy) = \iint_D \left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right) dA" display={true} />
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  {isEn
-                    ? 'Converts a 1D boundary circulation line integral into a 2D surface integral of microscopic curl, foundational for work and fluid circulation.'
-                    : 'Convierte una integral de línea sobre la frontera en una integral de área del rotacional, base del trabajo y circulación en 2D.'}
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {filteredCalculusLaws.map((law) => {
+                const catBadge = law.category === 'limits'
+                  ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30'
+                  : law.category === 'differential'
+                  ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                  : law.category === 'integral'
+                  ? 'text-amber-400 bg-amber-500/10 border-amber-500/30'
+                  : 'text-purple-400 bg-purple-500/10 border-purple-500/30';
 
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
-                  {isEn ? "Gauss's Divergence Theorem" : 'Teorema de la Divergencia de Gauss'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
-                  <MathFormula math="\oiint_{\partial V} \mathbf{F} \cdot \hat{\mathbf{n}} \, dS = \iiint_V (\nabla \cdot \mathbf{F}) \, dV" display={true} />
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  {isEn
-                    ? 'The outward flux of a vector field through a closed boundary surface equals the volume integral of divergence inside, proving Gauss electric/magnetic laws.'
-                    : 'El flujo neto a través de una superficie cerrada equivale a la integral de volumen de su divergencia, demostrando las leyes de Gauss.'}
-                </p>
-              </div>
+                return (
+                  <div
+                    key={law.id}
+                    className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-slate-700 transition-all shadow-md"
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300 font-bold border border-slate-700">
+                          {law.courseCode}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border ${catBadge}`}>
+                          {law.category}
+                        </span>
+                      </div>
+                      <h5 className="text-sm font-bold text-white leading-snug">
+                        {isEn ? law.titleEn : law.titleEs}
+                      </h5>
+                      <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800/80 overflow-x-auto shadow-inner">
+                        <MathFormula math={law.latex} display={true} />
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                        {isEn ? law.descEn : law.descEs}
+                      </p>
+                    </div>
 
-              <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                <span className="text-xs font-mono text-purple-400 uppercase font-bold block">
-                  {isEn ? "Stokes's Curl Theorem" : 'Teorema del Rotacional de Stokes'}
-                </span>
-                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
-                  <MathFormula math="\oint_{\partial S} \mathbf{F} \cdot d\mathbf{r} = \iint_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}" display={true} />
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  {isEn
-                    ? 'Line integral of a vector field around a closed curve equals the flux of its curl through any spanning open surface, crucial for Faraday and Ampère laws.'
-                    : 'La circulación de un campo vectorial por una curva cerrada equivale al flujo de su rotacional a través de cualquier superficie que la encierra.'}
-                </p>
-              </div>
+                    <div className="pt-2.5 border-t border-slate-800/70 text-[11px] text-emerald-300 font-mono leading-relaxed bg-emerald-950/20 p-2 rounded-lg">
+                      💡 {isEn ? law.relevanceEn : law.relevanceEs}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

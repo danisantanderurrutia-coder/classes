@@ -375,9 +375,9 @@ const FOUNDATIONAL_BOOKS = [
     subjectEs: "Cálculo Multivariable Riguroso y Formas Diferenciales",
     usedIn: ["HM-101/201"],
     descriptionEn: "The European rigorous foundation for higher mathematics: precise limits, uniform convergence, multiple integrals, curvilinear coordinate transforms, and Stokes' theorem.",
-    descriptionEs: "La base rigurosa europea para Höhere Mathematik: límites estrictos, convergencia uniforme, integrales múltiples, transformaciones de coordenadas y teorema de Stokes.",
+    descriptionEs: "La base rigurosa europea para el Cálculo Avanzado y Superior: límites estrictos, convergencia uniforme, integrales múltiples, transformaciones de coordenadas y teorema de Stokes.",
     image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80",
-    tag: "Höhere Mathematik"
+    tag: "Cálculo Superior"
   },
   {
     id: "landau_lifshitz",
@@ -446,7 +446,7 @@ const WHY_ME_REASONS = [
     id: 'altklausur',
     icon: FileCheck,
     titleEn: 'Past-exam preparation',
-    titleEs: 'Preparación con Altklausuren',
+    titleEs: 'Preparación con Exámenes Reales',
     textEn: 'We practise with past exams, answer structure and how to earn partial points.',
     textEs: 'Practicamos con exámenes anteriores, estructura de respuesta y cómo conseguir puntos parciales.',
   },
@@ -1411,7 +1411,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   <span className="text-slate-900 font-bold">Course Catalog</span>
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                  {lang === 'en' ? 'Official Course Catalog & Klausur Modules' : 'Catálogo Curricular Oficial de Materias'}
+                  {lang === 'en' ? 'Official Course Catalog & University Exam Modules' : 'Catálogo Curricular Oficial de Materias'}
                 </h1>
                 <p className="text-slate-600 text-base max-w-3xl leading-relaxed">
                   {lang === 'en'
@@ -1571,7 +1571,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </h4>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans">
                       {lang === 'en'
-                        ? 'Available for high-urgency exercise problem sheets or last-minute Klausur drills. Choose between online interactive whiteboarding or in-person coaching in Hannover.'
+                        ? 'Available for high-urgency exercise problem sheets or last-minute university exam drills. Choose between online interactive whiteboarding or in-person coaching in Hannover.'
                         : 'Disponible para resolver guías de ejercicios urgentes o dudas de último minuto antes del examen. Modalidad online interactiva o presencial en Hannover.'}
                     </p>
                     <button
@@ -1589,7 +1589,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               <div className="flex flex-wrap items-center gap-2 pb-6 mb-8 border-b border-slate-200">
                 {[
                   { id: 'all', labelEn: 'All Courses (6)', labelEs: 'Todas las Materias (6)' },
-                  { id: 'bachelor', labelEn: 'TU9 Bachelor Klausuren', labelEs: 'Grado Universitario TU9' },
+                  { id: 'bachelor', labelEn: 'Bachelor & Engineering Exams', labelEs: 'Grado Universitario e Ingeniería' },
                   { id: 'master', labelEn: 'Master & Geophysics', labelEs: 'Máster & Geofísica' },
                   { id: 'ib', labelEn: 'IB Diploma HL', labelEs: 'Bachillerato IB' }
                 ].map((tab) => (
@@ -1668,7 +1668,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                         <div className="mb-6">
                           <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500 block mb-2 font-bold">
-                            {lang === 'en' ? 'Core Syllabus & Klausur Drills:' : 'Temario Clave y Exámenes:'}
+                            {lang === 'en' ? 'Core Syllabus & University Exam Drills:' : 'Temario Clave y Exámenes:'}
                           </span>
                           <ul className="space-y-2 text-xs text-slate-700">
                             {(lang === 'en' ? course.syllabusEn : course.syllabusEs).map((item, i) => (
@@ -1838,8 +1838,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </h1>
                 <p className="text-slate-600 text-sm max-w-2xl mx-auto font-sans leading-relaxed">
                   {lang === 'en'
-                    ? 'Calculate your customized investment, explore fixed Klausur sprint bundles, and inspect Daniel Santander’s verified engineering and geophysics background.'
-                    : 'Calcula tu inversión a medida, explora los planes de sprint para exámenes (Klausur) y conoce la formación y metodología de Daniel Santander.'}
+                    ? 'Calculate your customized investment, explore fixed intensive exam sprint bundles, and inspect Daniel Santander’s verified engineering and geophysics background.'
+                    : 'Calcula tu inversión a medida, explora los planes de sprint intensivo para exámenes universitarios y conoce la formación y metodología de Daniel Santander.'}
                 </p>
               </div>
 

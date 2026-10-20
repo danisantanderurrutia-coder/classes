@@ -680,7 +680,7 @@ export const LAB_PROBLEMS = [
   {
     id: 'vector_calculus',
     courseId: 'klausur',
-    badgeEs: 'Cálculo Vectorial & Höhere Mathematik',
+    badgeEs: 'Cálculo Vectorial & Avanzado',
     badgeEn: 'Vector Calculus & Higher Mathematics',
     titleEs: 'Campos Vectoriales, Rotacional y Teorema de Green / Stokes',
     titleEn: 'Vector Fields, Curl & Green’s / Stokes’ Theorem',
@@ -4359,7 +4359,7 @@ export default function PhysicsLab({
                 <Award className="w-3.5 h-3.5" />
                 <span>
                   {lang === 'en'
-                    ? 'Interactive Klausur / Exam Exercise'
+                    ? 'Interactive University Exam Exercise'
                     : 'Ejercicio Clásico de Examen (Con Comprobación en el Lab)'}
                 </span>
               </div>
@@ -4460,7 +4460,7 @@ export default function PhysicsLab({
               <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-2.5 font-mono text-xs">
                 <span className="text-emerald-400 uppercase tracking-wider font-bold block">
                   {lang === 'en'
-                    ? 'Official Step-by-Step Klausur Derivation:'
+                    ? 'Official Step-by-Step Exam Derivation:'
                     : 'Resolución Oficial Paso a Paso (Estructura de Puntaje Completo):'}
                 </span>
                 {(lang === 'en' ? currentProblem.exercise?.solutionStepsEn : currentProblem.exercise?.solutionStepsEs)?.map(
@@ -4480,7 +4480,7 @@ export default function PhysicsLab({
               <strong className="text-slate-900 block">
                 {lang === 'en'
                   ? 'Want to master these problems for your upcoming exam?'
-                  : '¿Quieres dominar este tipo de problemas con tus propios exámenes (Altklausuren)?'}
+                  : '¿Quieres dominar este tipo de problemas con tus propios exámenes y ejercicios?'}
               </strong>
               <span>
                 {lang === 'en'
@@ -4520,7 +4520,7 @@ export default function PhysicsLab({
                       {lang === 'en' ? currentProblem.badgeEn : currentProblem.badgeEs}
                     </span>
                     <span className="text-xs font-mono text-slate-400">
-                      • {lang === 'en' ? 'Official Klausur Study Sheet' : 'Ficha Oficial de Estudio y Examen'}
+                      • {lang === 'en' ? 'Official University Exam Study Sheet' : 'Ficha Oficial de Estudio y Examen'}
                     </span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-1 text-white">
@@ -4638,7 +4638,7 @@ export default function PhysicsLab({
                 <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                     <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
-                      {lang === 'en' ? '5. Benchmark Klausur Exam Exercise & Derivation' : '5. Ejercicio Típico de Examen Klausur y Pauta Paso a Paso'}
+                      {lang === 'en' ? '5. Benchmark University Exam Exercise & Derivation' : '5. Ejercicio Típico de Examen Universitario y Pauta Paso a Paso'}
                     </span>
                     <span className="text-[10px] font-mono text-slate-400">
                       {lang === 'en' ? 'Full score rubric' : 'Puntaje completo'}
@@ -4692,7 +4692,7 @@ export default function PhysicsLab({
                 {/* Footer Brand */}
                 <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-500">
                   <span>
-                    Daniel Santander Urrutia • M.Sc. RWTH Aachen • Clases &amp; Mentoría TU9
+                    Daniel Santander Urrutia • M.Sc. RWTH Aachen • Clases &amp; Mentoría Universitaria
                   </span>
                   <span>
                     classes-danielsantander.com

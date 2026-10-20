@@ -629,6 +629,10 @@ export const PLANET_SUBJECTS = [
 
 export const LINEUP_PLANETS = PLANET_SUBJECTS.filter((p) => p.inLineup);
 
+export const getPlanetName = (p, lang) => !p ? '' : (lang === 'en' ? (p.nameEn || p.name) : (p.nameEs || p.name));
+export const getPlanetShortName = (p, lang) => !p ? '' : (lang === 'en' ? (p.shortNameEn || p.shortName || p.name) : (p.shortNameEs || p.shortName || p.name));
+
+
 export function calculateAstrodynamics(planet, currentR_AU = 1.0, currentSpeedKms = 29.8) {
   const G = 6.6743e-11;
   const M_sun = 1.989e30; // kg
@@ -3904,7 +3908,11 @@ export default function SolarSystem({
     const syllabusList = activeCourse
       ? (lang === 'en' ? activeCourse.syllabusEn : activeCourse.syllabusEs)
       : [];
-    const skriptKeywords = activeCourse?.skriptKeywords || activeCourse?.germanSkriptKeywords || [];
+    const skriptKeywords = activeCourse
+      ? (lang === 'en'
+          ? (activeCourse.keywordsEn || activeCourse.skriptKeywords || [])
+          : (activeCourse.keywordsEs || activeCourse.skriptKeywords || []))
+      : [];
     const hourlyRate = activeCourse?.rateHourly || activePlanet.rateHourly || 38;
     const packPrice = activeCourse?.packagePrice || activePlanet.packagePrice || 275;
     const courseCode = activeCourse?.code || activePlanet.courseCode || 'COURSE';
@@ -3932,7 +3940,7 @@ export default function SolarSystem({
                     {courseCode}
                   </span>
                   <span className="font-mono text-[10px] text-slate-400">
-                    {activePlanet.name} • {levelLabel}
+                    {getPlanetName(activePlanet, lang)} • {levelLabel}
                   </span>
                 </div>
                 <h4 className="text-base sm:text-lg font-bold text-white tracking-tight truncate mt-0.5">
@@ -4264,11 +4272,11 @@ export default function SolarSystem({
             {/* Replay Intro Animation button */}
             <button
               onClick={replayIntroAnimation}
-              className="px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white font-mono text-[11px] font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
-              title="Volver a reproducir la animación de aproximación desde el espacio profundo y alineación"
+              className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white font-mono text-xs font-medium transition-colors flex items-center justify-center cursor-pointer shadow-xs"
+              title={lang === 'en' ? 'Replay intro animation' : 'Volver a reproducir la animación de inicio'}
+              aria-label={lang === 'en' ? 'Replay intro' : 'Repetir intro'}
             >
-              <span>🎬</span>
-              <span className="hidden sm:inline">Repetir Intro</span>
+              <span className="text-sm leading-none">🔁</span>
             </button>
 
             {/* Toggle between Modo Clases and Modo Planetario */}
@@ -4499,7 +4507,7 @@ export default function SolarSystem({
             >
               <div className="px-4 py-1.5 rounded-full bg-slate-950/85 border border-sky-500/40 backdrop-blur-md shadow-lg flex items-center gap-2 text-xs text-slate-200 font-mono">
                 <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping shrink-0" />
-                <span>Haz click en cualquier astro (o su tarjeta) para hacer zoom 3D y abrir su clase</span>
+                <span>{lang === 'en' ? 'Click any celestial body (or its card) to zoom in 3D and view its syllabus' : 'Haz click en cualquier astro (o su tarjeta) para hacer zoom 3D y abrir su clase'}</span>
               </div>
             </div>
           )}
@@ -4525,7 +4533,7 @@ export default function SolarSystem({
                   >
                     <div className="flex items-center justify-center gap-1 text-[9px] font-mono uppercase tracking-wider text-sky-300">
                       <span>{planet.emoji}</span>
-                      <span className="truncate">{planet.name.split(' ')[0]}</span>
+                      <span className="truncate">{getPlanetShortName(planet, lang)}</span>
                     </div>
                     <div className="text-[11px] font-bold text-white leading-tight line-clamp-1 mt-0.5">
                       {lang === 'en' ? planet.shortCourseEn : planet.shortCourseEs}
@@ -4552,7 +4560,7 @@ export default function SolarSystem({
                   className="px-3 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>←</span>
-                  <span>Ver los 7 Planetas en Fila</span>
+                  <span>{lang === 'en' ? 'View 7 Planets in Line' : 'Ver los 7 Planetas en Fila'}</span>
                 </button>
 
                 <div className="flex items-center gap-1 overflow-x-auto py-0.5">
@@ -4567,7 +4575,7 @@ export default function SolarSystem({
                           : 'bg-slate-800/80 text-slate-400 hover:text-white'
                       }`}
                     >
-                      {p.emoji} {p.name.split(' ')[0]}
+                      {p.emoji} {getPlanetShortName(p, lang)}
                     </button>
                   ))}
                 </div>
@@ -4590,13 +4598,13 @@ export default function SolarSystem({
                 <span className="text-lg">{activePlanet.emoji || '🌍'}</span>
                 <div>
                   <div className="text-xs font-bold text-white">
-                    {activePlanet.name}:{' '}
+                    {getPlanetName(activePlanet, lang)}:{' '}
                     <span className="text-sky-300">
                       {lang === 'en' ? activePlanet.shortCourseEn : activePlanet.shortCourseEs}
                     </span>
                   </div>
                   <div className="text-[10px] font-mono text-slate-400">
-                    Haz click en cualquier planeta de la fila 3D para acercar la cámara y abrir su temario.
+                    {lang === 'en' ? 'Click any planet in the 3D row to zoom in and open its syllabus.' : 'Haz click en cualquier planeta de la fila 3D para acercar la cámara y abrir su temario.'}
                   </div>
                 </div>
               </div>
@@ -4605,7 +4613,7 @@ export default function SolarSystem({
                   onClick={() => setViewVariant('orbital')}
                   className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-700 font-mono text-xs transition-all cursor-pointer"
                 >
-                  🌌 Ver Órbitas
+                  {lang === 'en' ? '🌌 View Orbits' : '🌌 Ver Órbitas'}
                 </button>
                 <button
                   onClick={() => {
@@ -4614,7 +4622,7 @@ export default function SolarSystem({
                   }}
                   className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer"
                 >
-                  🔍 Ver Temario de {activePlanet.name.split(' ')[0]} →
+                  {lang === 'en' ? `🔍 Syllabus: ${getPlanetShortName(activePlanet, lang)} →` : `🔍 Ver Temario de ${getPlanetShortName(activePlanet, lang)} →`}
                 </button>
               </div>
             </div>
@@ -4633,7 +4641,7 @@ export default function SolarSystem({
                   className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-sky-400/80 hover:border-sky-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-sky-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
-                  <span>🎓 Volver a las 7 Clases (Alinear Planetas)</span>
+                  <span>{lang === 'en' ? '🎓 Back to 7 Courses (Align Planets)' : '🎓 Volver a las 7 Clases (Alinear Planetas)'}</span>
                   <span className="text-sky-400 group-hover:translate-x-1 transition-transform text-xs">→</span>
                 </button>
 
@@ -4650,7 +4658,7 @@ export default function SolarSystem({
                   className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-emerald-400/60 hover:border-emerald-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Tutoría de proyectos / tesis</span>
+                  <span>{lang === 'en' ? 'Project / Thesis Mentoring' : 'Tutoría de proyectos / tesis'}</span>
                   <span className="text-emerald-400 group-hover:translate-x-1 transition-transform text-xs">→</span>
                 </button>
               </div>

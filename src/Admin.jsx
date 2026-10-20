@@ -1,770 +1,1451 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard,
-  ListChecks,
-  Megaphone,
-  MapPin,
-  Users,
-  Download,
-  Upload,
   Copy,
   Check,
-  Trash2,
+  QrCode,
+  MapPin,
+  Globe,
+  Megaphone,
+  Users,
   Plus,
+  Trash2,
   ArrowLeft,
-  Lock,
+  Calendar,
+  Sparkles,
+  CheckCircle2,
+  Printer,
+  Send,
+  RefreshCw,
+  DollarSign,
+  AlertTriangle,
+  ExternalLink,
+  Columns,
+  Table,
+  Compass,
+  Cpu
 } from 'lucide-react';
+import { CURRENCY_TIERS, formatMoney } from './pricingConfig';
 
-/* ------------------------------------------------------------------ */
-/* Constants                                                           */
-/* ------------------------------------------------------------------ */
+const BASE_SITE_URL = 'https://danisantanderurrutia-coder.github.io/classes/';
 
-const STORAGE_KEY = 'admin_marketing_v1';
-
-const CHANNELS = [
-  { id: 'ebay', label: 'eBay Kleinanzeigen' },
-  { id: 'flyer', label: 'Calle: flyer / tear-off' },
-  { id: 'tarjeta', label: 'Calle: tarjeta / colegio' },
-  { id: 'web', label: 'Web directa' },
-  { id: 'referido', label: 'Referido' },
+const KANBAN_COLUMNS = [
+  { id: 'New Inquiry', label: '1. Nueva Consulta', badgeClass: 'bg-sky-50 text-sky-800 border-sky-200' },
+  { id: 'Diagnostic Booked', label: '2. Diagnóstico Agendado', badgeClass: 'bg-amber-50 text-amber-800 border-amber-200' },
+  { id: 'Active Student', label: '3. Alumno Activo', badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+  { id: 'Completed / Exam Passed', label: '4. Examen Aprobado', badgeClass: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
+  { id: 'Archived', label: '5. Archivado', badgeClass: 'bg-slate-100 text-slate-600 border-slate-300' }
 ];
 
-const SEGMENTS = [
-  { id: 'A', label: 'A · Universidad (internacionales)' },
-  { id: 'B', label: 'B · IB (alumno o padres)' },
-  { id: 'C', label: 'C · Máster / tesis' },
-];
+const PAYMENT_METHODS = ['SEPA IBAN', 'Wise', 'PayPal', 'Transferencia Chile', 'Efectivo (Hannover)'];
 
-const STATUSES = [
-  { id: 'nuevo', label: 'Nuevo', color: 'bg-slate-100 text-slate-700 border-slate-300' },
-  { id: 'contactado', label: 'Contactado', color: 'bg-sky-100 text-sky-800 border-sky-300' },
-  { id: 'diagnostico', label: 'Diagnóstico hecho', color: 'bg-amber-100 text-amber-800 border-amber-300' },
-  { id: 'alumno', label: 'Alumno', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
-  { id: 'perdido', label: 'Perdido', color: 'bg-rose-100 text-rose-800 border-rose-300' },
-];
-
-const SPOT_TYPES = [
-  { id: 'tablon', label: 'Tablón (flyer A4/A5)' },
-  { id: 'tear-off', label: 'Tear-off (tiras con QR)' },
-  { id: 'colegio', label: 'Colegio / academia (tarjetas)' },
-  { id: 'otro', label: 'Otro' },
-];
-
-/** Plan de la semana 1: SOLO eBay Kleinanzeigen + calle. */
-const WEEK1_TASKS = [
+const INITIAL_CHANNELS = [
+  // Alemania / Hannover
   {
-    group: 'eBay Kleinanzeigen',
-    items: [
-      { id: 'e1', text: 'Publicar anuncio A (Universidad: Mathe & Physik, clase en español o inglés)' },
-      { id: 'e2', text: 'Publicar anuncio B (IB Math AA HL & Physik HL)' },
-      { id: 'e3', text: 'Añadir fotos (perfil profesional + captura del Physics Lab) y QR/enlace a la web' },
-      { id: 'e4', text: 'Incluir ciudad y universidad en el título (Hannover, LUH…)' },
-      { id: 'e5', text: 'Renovar los anuncios cada 2-3 días para mantenerlos arriba' },
-      { id: 'e6', text: 'Responder todos los mensajes en menos de 1 hora y ofrecer sesión diagnóstica gratis' },
+    id: 'ch-kleinanzeigen-de',
+    country: '🇩🇪 Alemania (Hannover)',
+    platform: 'Kleinanzeigen.de (Anuncio con título DE)',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.kleinanzeigen.de',
+    notes: 'Categoría: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
+  },
+  {
+    id: 'ch-kleinanzeigen-en',
+    country: '🇩🇪 Alemania (Expat/IB)',
+    platform: 'Kleinanzeigen.de (Anuncio en Inglés)',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.kleinanzeigen.de',
+    notes: 'Enfocado en familias expat, IB Diploma (ISH) y programas internacionales.'
+  },
+  {
+    id: 'ch-luh-brett',
+    country: '🇩🇪 Alemania (Hannover)',
+    platform: 'Leibniz Uni Hannover • Schwarzes Brett / AStA',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.asta-hannover.de',
+    notes: 'Jobbörse / Nachhilfe digital y grupos estudiantiles de Maschinenbau e Ingeniería.'
+  },
+  // Suiza (Alto poder adquisitivo)
+  {
+    id: 'ch-tutti',
+    country: '🇨🇭 Suiza (ETH / EPFL / IB)',
+    platform: 'Tutti.ch (Zürich / Basel / Bern)',
+    currency: 'CHF',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.tutti.ch',
+    notes: 'Mercado premium en CHF (55–75 CHF/h). Publicar en inglés/alemán aclarando clases en EN/ES.'
+  },
+  {
+    id: 'ch-anibis',
+    country: '🇨🇭 Suiza (Ginebra / Lausanne)',
+    platform: 'Anibis.ch (Suiza Romanda / EPFL)',
+    currency: 'CHF',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.anibis.ch',
+    notes: 'Excelente para estudiantes de EPFL y colegios IB en Ginebra/Lausanne (tarifa CHF).'
+  },
+  // España
+  {
+    id: 'es-tusclases',
+    country: '🇪🇸 España',
+    platform: 'Tusclasesparticulares.com',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.tusclasesparticulares.com',
+    notes: 'Destacar Método PIAD™, doble máster en Europa y simuladores interactivos.'
+  },
+  {
+    id: 'es-milanuncios',
+    country: '🇪🇸 España',
+    platform: 'Milanuncios / Wallapop Servicios',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.milanuncios.com',
+    notes: 'Renovar anuncio cada 5 días para mantenerse arriba en Ingeniería y Física.'
+  },
+  // Chile
+  {
+    id: 'cl-tusclases',
+    country: '🇨🇱 Chile (FCFM / UC / USM)',
+    platform: 'Tusclasesparticulares.cl / Superprof.cl',
+    currency: 'CLP',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.tusclasesparticulares.cl',
+    notes: 'Gran gancho: Ex-alumno Geofísica U. de Chile (Beauchef) con controles reales resueltos en el Lab.'
+  },
+  {
+    id: 'cl-yapo',
+    country: '🇨🇱 Chile',
+    platform: 'Yapo.cl (Servicios / Clases)',
+    currency: 'CLP',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.yapo.cl',
+    notes: 'Ideal para captar alumnos de Plan Común de Ingeniería y Bachillerato IB en Santiago.'
+  },
+  // UK / NL
+  {
+    id: 'uk-gumtree',
+    country: '🇬🇧 UK / 🇳🇱 Países Bajos',
+    platform: 'Gumtree UK / Marktplaats.nl',
+    currency: 'GBP',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.gumtree.com',
+    notes: 'Enfocado en A-Levels, IB Diploma y Bachelor en Ingeniería (cobro en GBP / EUR).'
+  }
+];
+
+const INITIAL_STREET_LOCATIONS = [
+  { id: 'st-1', place: 'Hauptgebäude LUH (Welfengarten 1) - Tablones junto a cafetería y pasillos', zone: 'Nordstadt / Mitte', status: 'pendiente', flyersCount: 5, qrTag: 'flyer-luh-main' },
+  { id: 'st-2', place: 'TIB Technik / Naturwissenschaften (Welfengarten 1B) - Entrada y lockers', zone: 'Nordstadt', status: 'pendiente', flyersCount: 4, qrTag: 'flyer-tib' },
+  { id: 'st-3', place: 'Campus Maschinenbau Garbsen (LUH) - Comedor (Mensa) y edificio central', zone: 'Garbsen', status: 'pendiente', flyersCount: 5, qrTag: 'flyer-garbsen' },
+  { id: 'st-4', place: 'Hochschule Hannover (HsH - Ricklinger Stadtweg) - Facultad de Ingeniería', zone: 'Linden / Ricklingen', status: 'pendiente', flyersCount: 4, qrTag: 'flyer-hsh' },
+  { id: 'st-5', place: 'International School Hannover Region (ISH) - Cafés cercanos y paradas ÜSTRA', zone: 'Mitte / Maschsee', status: 'pendiente', flyersCount: 4, qrTag: 'flyer-ish' },
+  { id: 'st-6', place: 'Bibliotecas públicas y cafés de estudio en Nordstadt / E-Damm / Lister Meile', zone: 'Nordstadt / List', status: 'pendiente', flyersCount: 5, qrTag: 'flyer-cafe' }
+];
+
+const INITIAL_LEADS = [
+  {
+    id: 'lead-demo-1',
+    name: 'Lukas M. (Ejemplo)',
+    subject: 'Höhere Mathematik I / Linear Algebra',
+    university: 'Leibniz Universität Hannover (LUH)',
+    countryCurrency: 'EUR',
+    mode: 'In-Person Hannover',
+    quotedRate: '42',
+    paymentMethod: 'SEPA IBAN',
+    contact: '+49 176 ... (Kleinanzeigen)',
+    status: 'Diagnostic Booked',
+    date: '2026-10-20',
+    notes: 'Prefiere explicaciones en inglés siguiendo su Skript en alemán. Quiere clase presencial en TIB.'
+  },
+  {
+    id: 'lead-demo-2',
+    name: 'Matías R. (Ejemplo)',
+    subject: 'Mecánica de Fluidos / Geofísica',
+    university: 'FCFM U. de Chile (Beauchef)',
+    countryCurrency: 'CLP',
+    mode: 'Online',
+    quotedRate: '28000',
+    paymentMethod: 'Transferencia Chile',
+    contact: '+56 9 ... (WhatsApp)',
+    status: 'New Inquiry',
+    date: '2026-10-20',
+    notes: 'Vio los problemas de viento geostrófico y Poiseuille en el Laboratorio Interactivo.'
+  }
+];
+
+const AD_TEMPLATES = [
+  {
+    id: 'ad-de',
+    badge: '🇩🇪🇨🇭 Kleinanzeigen / Tutti.ch (Título en Alemán -> Clase EN/ES)',
+    title: 'Nachhilfe Mathematik, Physik & Python (Uni / FH / IB / Abitur) – M.Sc. Ingenieur',
+    priceNote: '35 € VB (Alemania) | 55 CHF (Suiza) — Presencial en Hannover tiene pequeño costo extra',
+    body: `Steht deine Klausur in Höherer Mathematik, Technischer Mechanik, Physik, Fluiddynamik oder Python-Programmierung bevor?
+
+Ich bin Daniel Santander, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
+
+⚠️ WICHTIGER HINWEIS ZUR SPRACHE:
+Der Unterricht findet auf ENGLISCH oder SPANISCH statt (ich spreche kein Deutsch). 
+ABER: Du kannst mir problemlos deine deutschen Vorlesungsfolien (Skripte), Übungsblätter und Altklausuren schicken! Mathematische Gleichungen, Freikörperbilder (DCL) und physikalische Gesetze sind universell.
+
+🚀 WAS MEINE METHODE EINZIGARTIG MACHT (PIAD™-Methode & Interaktives Labor):
+• Eigenes Interaktives Physik- & Mathe-Labor: Auf meiner Website kannst du vorab 14 interaktive Echtzeit-Simulatoren mit Freikörperbildern (DCL) und ein 5-Säulen Mathe-Toolkit (Taylor, Eigenwerte, ODEs, FFT) kostenlos testen.
+• Produktive KI für Python: Ich zeige dir, wie du KI als wissenschaftlichen Co-Piloten nutzt, um sauberen Python-Code (NumPy/SciPy/Matplotlib) zu schreiben und zu verstehen.
+• Open-Knowledge Artefakte: Nach jeder Sitzung erhältst du alle Herleitungen als hochauflösendes Vektor-PDF (Miro-Board + druckbares Study Sheet).
+
+📚 FÄCHER:
+• Höhere Mathematik I–III: Analysis, Lineare Algebra, Differentialgleichungen, Vektoranalysis.
+• Physik & Ingenieurwesen: Klassische Mechanik, Elektromagnetismus, Wellen, Thermodynamik, Fluiddynamik.
+• Wissenschaftliches Programmieren: Python, NumPy, SciPy, Datenanalyse & Simulation.
+
+📍 ORT & PREISE:
+• Online (Google Meet + Miro): Ab 35 €/Std. (Bachelor/IB) | 15% Rabatt im 8h Klausur-Sprint-Paket.
+• Präsenz in Hannover (TIB, LUH Campus, Café): Kleiner Aufpreis für die Anfahrt (+10 €/Std.).
+• Kostenloses 15-minütiges Diagnosegespräch vorab!
+
+🌐 Teste mein interaktives Labor: ${BASE_SITE_URL}?src=kleinanzeigen-de
+📲 Schreib mir direkt auf WhatsApp (Englisch oder Spanisch): +49 176 7649 7440`
+  },
+  {
+    id: 'ad-en',
+    badge: '🇬🇧🌍 International / IB Diploma / UK / Expat (English)',
+    title: 'IB & University Math, Physics & Python Tutor (Double M.Sc.) | Interactive STEM Lab',
+    priceNote: 'EUR 35 / GBP 38 / CHF 55 / USD 42 (Adapted to region)',
+    body: `Struggling with IB Physics/Math HL, University Calculus, Linear Algebra, Fluid Mechanics, or Scientific Python?
+
+Hi! I’m Daniel Santander, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I help university students (B.Sc. / M.Sc.) and IB Diploma students master complex STEM subjects without rote memorization.
+
+🚀 WHY LEARN WITH ME? (THE PIAD™ METHOD):
+1. Free Body Diagrams (DCL) & Visual Intuition First: Before touching any integral, we sketch the physical system and force vectors so you never get stuck on a blank exam page.
+2. 14-Simulator Interactive Physics Lab & 5-Pillar Math Toolkit: Explore my custom web platform featuring real university exam problems, live Algebra ↔ Calculus bridges, and printable PDF Study Sheets.
+3. Productive AI for Python: Learn how to prompt AI with mathematical precision to design, debug, and verify your own Python (NumPy, SciPy, Matplotlib) simulations.
+4. Open-Knowledge PDF Artifacts: Every session includes exported vector PDF notes from our collaborative Miro whiteboard.
+
+📍 MODES:
+• Online Worldwide (Google Meet + Vector Whiteboard)
+• In-Person in Hannover (LUH / TIB / Cafés — in-person sessions include a small travel extra)
+
+🎯 Book a FREE 15-minute diagnostic call & test the interactive simulators at:
+🌐 ${BASE_SITE_URL}?src=classifieds-en
+📲 WhatsApp: +49 176 7649 7440`
+  },
+  {
+    id: 'ad-es',
+    badge: '🇪🇸🇨🇱 España y Latinoamérica / FCFM / Ingeniería (Español)',
+    title: 'Mentor de Física, Cálculo, Fluidos y Python (Doble M.Sc. Europa + Geofísico U. de Chile)',
+    priceNote: '€35/h (España/Europa) | $25.000 CLP/h (Chile)',
+    body: `¿Se acerca tu certamen, control o examen final de Cálculo, Álgebra Lineal, Física Clásica, Mecánica de Fluidos, Geofísica o Programación en Python?
+
+Soy Daniel Santander, Geofísico de la Universidad de Chile (Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Imparto mentorías 1-a-1 de alto rendimiento para estudiantes de Ingeniería, Ciencias y Bachillerato Internacional (IB).
+
+🚀 ¿POR QUÉ MI METODOLOGÍA (MÉTODO PIAD™) ES DIFERENTE?
+• Laboratorio Interactivo Propio (14 Simuladores + DCL en vivo): En mi web puedes practicar gratis con controles reales de la U. de Chile (FCFM) y universidades europeas, viendo cómo cambian los vectores de fuerza y el puente entre Álgebra y Cálculo.
+• Toolkit Matemático de 5 Pilares: Visualizador interactivo de Series de Taylor, Autovalores ( Álgebra Lineal), EDOs, Gradientes 2D y Transformada de Fourier (FFT).
+• IA Productiva para Programar en Python: Te enseño a usar la Inteligencia Artificial como copiloto científico para estructurar y auditar tu propio código en NumPy, SciPy y Matplotlib.
+• Artefactos en PDF Vectorial: Al terminar cada sesión recibes el PDF de alta resolución de nuestra pizarra Miro + Hojas de Estudio descargables.
+
+🎯 Agenda una llamada de diagnóstico GRATUITA de 15 minutos y prueba el laboratorio en:
+🌐 ${BASE_SITE_URL}?src=clasificados-es
+📲 WhatsApp directo: +49 176 7649 7440`
+  }
+];
+
+const FLYER_PRESETS = {
+  de_en: {
+    name: '🇩🇪 Hannover / Uni Alemana (DE + EN)',
+    badge: 'OPEN KNOWLEDGE STEM MENTORSHIP • HANNOVER & ONLINE',
+    headline: 'KLAUSUR IN GEFAHR? STRUGGLING WITH UNI MATH, PHYSICS OR PYTHON?',
+    subheadline: '1-on-1 Mentorship by a Geophysicist & Double M.Sc. Engineer (LUH / HsH / IB / Abitur)',
+    languageNotice: '📌 Honest Language Note: Sessions are taught in ENGLISH or SPANISH. Send me your German Skripte, Übungsblätter & Altklausuren — math, physics diagrams (DCL) and code are universal!',
+    bullets: [
+      'Higher Mathematics: Calculus I–III, Linear Algebra, Eigenvalues, ODEs & Vector Analysis',
+      'Physics & Engineering: Classical Mechanics, Electromagnetism, Waves, Thermodynamics & Fluids',
+      'Scientific Python & Productive AI: NumPy, SciPy, Matplotlib & AI-assisted simulation design',
+      'Includes: Interactive 14-Problem Physics Lab + Vector PDF Whiteboard Notes after every session'
     ],
+    footerCallout: 'Free 15-min Diagnostic Call • Online or In-Person in Hannover (in-person class has a small travel extra)',
+    tearOffTitle: 'STEM Mentorship (Math / Physics / Python)',
+    qrTag: 'flyer-hannover-de'
   },
-  {
-    group: 'Calle',
-    items: [
-      { id: 'c1', text: 'Diseñar e imprimir flyers A5 / posters A4 con QR (un QR distinto por ubicación)' },
-      { id: 'c2', text: 'Imprimir tear-off tabs (tiras con contacto/QR)' },
-      { id: 'c3', text: 'Pegar en Mensa, Fachschaften y bibliotecas (pedir permiso donde haga falta)' },
-      { id: 'c4', text: 'Pegar en residencias (Studentenwerk), copisterías y cafeterías' },
-      { id: 'c5', text: 'Dejar tarjetas en colegios internacionales y academias de idiomas' },
-      { id: 'c6', text: 'Registrar cada ubicación en la pestaña «Calle»' },
+  ib_en: {
+    name: '🌍 International & IB Diploma (EN)',
+    badge: 'IB DIPLOMA & UNIVERSITY STEM MENTORSHIP',
+    headline: 'MASTER IB & UNIVERSITY MATH, PHYSICS & PYTHON WITH VISUAL INTUITION',
+    subheadline: 'Geophysicist & Double M.Sc. Engineer • The PIAD™ Scientific Inquiry Method',
+    languageNotice: '📌 Bilingual Mentorship (English & Spanish) • Online Worldwide & In-Person in Hannover (extra for travel)',
+    bullets: [
+      'IB Physics & Math (AA / AI — SL & HL): Exam-style paper drills, Internal Assessments (IA) & lab graphs',
+      'Interactive 14-Problem Physics Lab: Live Free Body Diagrams (DCL) & Algebra ↔ Calculus toggle',
+      '5-Pillar Applied Math Toolkit: Taylor Series, 2D Matrices, Damped ODEs, Vector Fields & FFT Signals',
+      'Productive AI for Python: Learn to design & verify scientific code + get full Miro Vector PDF notes'
     ],
+    footerCallout: 'Scan the QR Code to test the 14 Interactive Simulators for free & book your 15-min diagnostic!',
+    tearOffTitle: 'IB & Uni Math/Physics Mentor',
+    qrTag: 'flyer-ib-en'
   },
-  {
-    group: 'Medición',
-    items: [
-      { id: 'm1', text: 'Registrar cada contacto en «Leads» con su canal' },
-      { id: 'm2', text: 'Revisar al final de la semana: contactos por canal → diagnósticos → alumnos' },
+  es_latam: {
+    name: '🇪🇸🇨🇱 Ingeniería & Ciencias (Español)',
+    badge: 'MENTORÍA CIENTÍFICA ABIERTA • MÉTODO PIAD™',
+    headline: '¿PROBLEMAS CON CÁLCULO, FÍSICA, MECÁNICA DE FLUIDOS O PYTHON?',
+    subheadline: 'Geofísico U. de Chile (FCFM) & Doble M.Sc. en Ingeniería en Europa • Clases 1-a-1',
+    languageNotice: '📌 Clases Online en vivo (Pizarra Miro con entrega de PDF Vectorial) o Presenciales en Hannover (recargo por traslado)',
+    bullets: [
+      'Matemáticas Superiores: Cálculo I–III, Álgebra Lineal, Ecuaciones Diferenciales (EDOs) y Análisis Vectorial',
+      'Física e Ingeniería: Mecánica Clásica, Electromagnetismo, Termodinámica, Fluidos y Geofísica',
+      'Laboratorio Web con 14 Simuladores: Diagramas de Cuerpo Libre (DCL) y controles reales resueltos paso a paso',
+      'IA Productiva para Python: Aprende a diseñar código científico en NumPy/SciPy sin depender de cajas negras'
     ],
-  },
-];
-
-/** Fase posterior: bloqueada hasta que haya casos verificables. */
-const LATER_TASKS = [
-  { id: 'l1', text: 'Pedir reseña (con permiso) a los primeros alumnos reales' },
-  { id: 'l2', text: 'Valorar Google Business Profile cuando existan reseñas' },
-  { id: 'l3', text: 'Valorar anuncios de pago y comunidades online' },
-  { id: 'l4', text: 'Repetir flyers antes de los períodos de Klausuren (feb-mar y jul-sep)' },
-];
-
-const TEMPLATES = [
-  {
-    id: 'adA',
-    title: 'eBay · Anuncio A (Universidad)',
-    text: `Titel: Nachhilfe Mathe & Physik Uni (Hannover, LUH…) – Unterricht auf Spanisch oder Englisch
-
-Du hast bald eine Klausur in Höhere Mathematik, Lineare Algebra oder Mechanik? Ich bin Geophysiker und Ingenieur (Double M.Sc.) und biete Einzelunterricht an.
-⚠️ Der Unterricht findet auf Englisch oder Spanisch statt, nicht auf Deutsch.
-Altklausuren, Punkte-Strategie, Python-Anwendungen. Ab 55 €/h, 8h-Paket 390 €. Erstes Diagnosegespräch kostenlos. Offizielle Rechnung (§ 19 UStG).
-Online oder vor Ort in Hannover.
-
-EN/ES: Classes are taught in English or Spanish. / Las clases son en español o inglés. First diagnostic session free / Primera sesión diagnóstica gratis.
-Link/QR: [web]`,
-  },
-  {
-    id: 'adB',
-    title: 'eBay · Anuncio B (IB)',
-    text: `Titel: IB Mathe AA HL & Physik HL Nachhilfe – Englisch oder Spanisch
-
-IA-Betreuung, Paper 1/2/3 Training, Syllabus-Check. Unterricht ausschließlich auf Englisch oder Spanisch. Ab 50 €/h, 8h-Paket 360 €. Kostenloses Erstgespräch.
-
-EN/ES: IA guidance, Paper 1/2/3 drills. Classes in English or Spanish. / Guía para el IA, práctica de Paper 1/2/3. Clases en español o inglés. Primera sesión gratis.
-Link/QR: [web]`,
-  },
-  {
-    id: 'flyer',
-    title: 'Flyer A5 / tear-off',
-    text: `Klausur in Mathe oder Physik?
-Nachhilfe 1:1 – Unterricht auf Spanisch / English (nicht auf Deutsch)
-Clases 1-a-1 en español · 1-on-1 classes in English
-Geophysicist, Double M.Sc. · Altklausuren · Python
-Erste Stunde kostenlos / Primera sesión diagnóstica gratis ▸ [QR]`,
-  },
-  {
-    id: 'short',
-    title: 'Anuncio corto',
-    text: 'Nachhilfe Mathe/Physik auf Spanisch oder Englisch – 1. Stunde gratis',
-  },
-  {
-    id: 'pitchEs',
-    title: 'Pitch web · ES',
-    text: `Mentoría de Mates y Física para tu Klausur, en español o inglés.
-
-Clases 1-a-1 con un ingeniero y geofísico para estudiantes de universidades alemanas e IB. Entiendes el porqué y llegas al examen con método. Las clases son en español o inglés.
-
-¿Por qué tomar clases conmigo?
-1. Clases en tu idioma: explico en español o inglés, para que te concentres en la materia y no en traducir.
-2. Conozco el contexto: ingeniero y geofísico (doble M.Sc.) con experiencia en el nivel que piden las universidades alemanas.
-3. Intuición primero: cada concepto se explica con un fenómeno real y lo compruebas en el Physics Lab interactivo.
-4. Preparación con Altklausuren: practicamos con exámenes anteriores, estructura de respuesta y puntos parciales.
-5. Ciencia aplicada: del cálculo a Python (NumPy/SciPy).
-6. Claro y profesional: precios desde 50 €/h, paquetes de 8 h y factura oficial (§ 19 UStG).
-
-Empieza con una sesión diagnóstica gratuita de 20 minutos: me cuentas tu módulo, tu fecha de examen y dónde te atascas, y te propongo un plan.`,
-  },
-  {
-    id: 'pitchEn',
-    title: 'Pitch web · EN',
-    text: `STEM mentoring for your German university exams, taught in English or Spanish.
-
-1-on-1 classes with an engineer and geophysicist for university and IB students. Classes are taught in English or Spanish. Exam drills, intuition-first teaching, Python for real-world insight, official invoice.
-
-Book a free 20-minute diagnostic session.`,
-  },
-];
-
-const EMPTY_DATA = {
-  tasks: {},
-  leads: [],
-  spots: [],
-  baseUrl: '',
+    footerCallout: 'Escanea el código QR para probar gratis el Laboratorio Interactivo y agendar 15 min de diagnóstico.',
+    tearOffTitle: 'Mentoría Mate / Física / Python',
+    qrTag: 'flyer-es'
+  }
 };
 
-/* ------------------------------------------------------------------ */
-/* Helpers                                                             */
-/* ------------------------------------------------------------------ */
-
-const uid = () => Math.random().toString(36).slice(2, 10);
-const today = () => new Date().toISOString().slice(0, 10);
-const slug = (s) =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 30);
-const pct = (a, b) => (b ? `${Math.round((a / b) * 100)}%` : '–');
-
-function loadData() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { ...EMPTY_DATA, baseUrl: window.location.origin + window.location.pathname };
-    return { ...EMPTY_DATA, ...JSON.parse(raw) };
-  } catch {
-    return { ...EMPTY_DATA };
+// Recommends a direct simulator link based on subject keywords
+function getRecommendedLabLink(subject = '') {
+  const s = subject.toLowerCase();
+  if (s.includes('fluid') || s.includes('geof') || s.includes('meteo') || s.includes('poiseuille')) {
+    return { label: 'Simulador Geofísica / Fluidos (Viento Geostrófico)', url: `${BASE_SITE_URL}?src=lead-lab#lab` };
   }
+  if (s.includes('álgebra') || s.includes('algebra') || s.includes('taylor') || s.includes('cálculo') || s.includes('calculo') || s.includes('math') || s.includes('hm') || s.includes('mathe')) {
+    return { label: 'Toolkit Matemático 5 Pilares (Taylor / Matrices / EDOs)', url: `${BASE_SITE_URL}?src=lead-toolkit#toolkit` };
+  }
+  if (s.includes('termo') || s.includes('thermo') || s.includes('calor')) {
+    return { label: 'Simulador Termodinámica (Ciclos PV / Adiabático)', url: `${BASE_SITE_URL}?src=lead-thermo#lab` };
+  }
+  return { label: 'Laboratorio Interactivo 14 Problemas (DCL + Examen)', url: `${BASE_SITE_URL}?src=lead-physics#lab` };
 }
 
-/* ------------------------------------------------------------------ */
-/* Small UI pieces                                                     */
-/* ------------------------------------------------------------------ */
+function getDaysSince(dateStr) {
+  if (!dateStr) return null;
+  const posted = new Date(dateStr);
+  if (isNaN(posted.getTime())) return null;
+  const now = new Date();
+  const diffTime = now.getTime() - posted.getTime();
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
 
-const inputCls =
-  'w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500';
-const btnPrimary =
-  'px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-semibold transition-colors flex items-center gap-2';
-const btnGhost =
-  'px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-mono font-semibold transition-colors flex items-center gap-1.5';
+export default function Admin({ onBack }) {
+  const [activeTab, setActiveTab] = useState('strategy');
+  const [copiedId, setCopiedId] = useState(null);
+  const [pipelineView, setPipelineView] = useState('kanban'); // 'kanban' | 'table'
 
-const Card = ({ title, children, right }) => (
-  <section className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
-    {(title || right) && (
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-        {right}
-      </div>
-    )}
-    {children}
-  </section>
-);
-
-const Kpi = ({ label, value, hint }) => (
-  <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
-    <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wide">{label}</div>
-    <div className="text-3xl font-extrabold text-slate-900 mt-1">{value}</div>
-    {hint && <div className="text-xs text-slate-500 mt-0.5">{hint}</div>}
-  </div>
-);
-
-function CopyButton({ text }) {
-  const [done, setDone] = useState(false);
-  const copy = async () => {
+  // Persisted Channels
+  const [channels, setChannels] = useState(() => {
     try {
-      await navigator.clipboard.writeText(text);
-      setDone(true);
-      setTimeout(() => setDone(false), 1500);
+      const saved = localStorage.getItem('ds_admin_channels_v2');
+      return saved ? JSON.parse(saved) : INITIAL_CHANNELS;
     } catch {
-      window.prompt('Copia el texto:', text);
+      return INITIAL_CHANNELS;
     }
-  };
-  return (
-    <button onClick={copy} className={btnGhost}>
-      {done ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-      {done ? 'Copiado' : 'Copiar'}
-    </button>
-  );
-}
+  });
 
-/* ------------------------------------------------------------------ */
-/* Tabs                                                                */
-/* ------------------------------------------------------------------ */
+  // Persisted Street Boards
+  const [streetLocations, setStreetLocations] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ds_admin_street_v2');
+      return saved ? JSON.parse(saved) : INITIAL_STREET_LOCATIONS;
+    } catch {
+      return INITIAL_STREET_LOCATIONS;
+    }
+  });
 
-function Dashboard({ data }) {
-  const { leads, spots, tasks } = data;
-  const stats = useMemo(() => {
-    const total = leads.length;
-    const diag = leads.filter((l) => ['diagnostico', 'alumno'].includes(l.status)).length;
-    const alumnos = leads.filter((l) => l.status === 'alumno');
-    const revenue = alumnos.reduce((s, l) => s + (Number(l.value) || 0), 0);
-    const byChannel = CHANNELS.map((c) => {
-      const ls = leads.filter((l) => l.channel === c.id);
-      return {
-        ...c,
-        total: ls.length,
-        diag: ls.filter((l) => ['diagnostico', 'alumno'].includes(l.status)).length,
-        alumnos: ls.filter((l) => l.status === 'alumno').length,
-      };
-    });
-    return { total, diag, alumnos: alumnos.length, revenue, byChannel };
-  }, [leads]);
+  // Persisted Leads (CRM Pipeline)
+  const [leads, setLeads] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ds_admin_leads_v2');
+      return saved ? JSON.parse(saved) : INITIAL_LEADS;
+    } catch {
+      return INITIAL_LEADS;
+    }
+  });
 
-  const week1Ids = WEEK1_TASKS.flatMap((g) => g.items.map((i) => i.id));
-  const done = week1Ids.filter((id) => tasks[id]).length;
-  const flyers = spots.reduce((s, x) => s + (Number(x.qty) || 0), 0);
+  const [newLead, setNewLead] = useState({
+    name: '',
+    subject: '',
+    university: '',
+    countryCurrency: 'EUR',
+    mode: 'Online',
+    quotedRate: '35',
+    paymentMethod: 'SEPA IBAN',
+    contact: '',
+    status: 'New Inquiry',
+    notes: ''
+  });
 
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Kpi label="Leads" value={stats.total} hint="contactos registrados" />
-        <Kpi label="Diagnósticos" value={stats.diag} hint={`${pct(stats.diag, stats.total)} de los leads`} />
-        <Kpi label="Alumnos" value={stats.alumnos} hint={`${pct(stats.alumnos, stats.diag)} de los diagnósticos`} />
-        <Kpi label="Ingresos" value={`${stats.revenue} €`} hint="suma de los alumnos" />
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2">
-          <Card title="Resultados por canal">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-[11px] font-mono text-slate-500 uppercase">
-                    <th className="py-2 pr-3">Canal</th>
-                    <th className="py-2 pr-3">Leads</th>
-                    <th className="py-2 pr-3">Diagnósticos</th>
-                    <th className="py-2 pr-3">Alumnos</th>
-                    <th className="py-2">Conversión</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.byChannel.map((c) => (
-                    <tr key={c.id} className="border-t border-slate-100">
-                      <td className="py-2 pr-3 font-semibold text-slate-800">{c.label}</td>
-                      <td className="py-2 pr-3">{c.total}</td>
-                      <td className="py-2 pr-3">{c.diag}</td>
-                      <td className="py-2 pr-3">{c.alumnos}</td>
-                      <td className="py-2 text-slate-500">{pct(c.alumnos, c.total)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-
-        <div className="space-y-5">
-          <Card title="Semana 1">
-            <div className="text-3xl font-extrabold text-slate-900">
-              {done}/{week1Ids.length}
-            </div>
-            <div className="h-2 rounded-full bg-slate-100 mt-2 overflow-hidden">
-              <div
-                className="h-full bg-emerald-500 transition-all"
-                style={{ width: `${(done / week1Ids.length) * 100}%` }}
-              />
-            </div>
-            <p className="text-xs text-slate-500 mt-2">Tareas completadas (solo eBay + calle).</p>
-          </Card>
-          <Card title="Calle">
-            <div className="text-3xl font-extrabold text-slate-900">{flyers}</div>
-            <p className="text-xs text-slate-500">
-              piezas repartidas en {spots.length} ubicaciones
-            </p>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Plan({ data, update }) {
-  const toggle = (id) => update({ tasks: { ...data.tasks, [id]: !data.tasks[id] } });
-  return (
-    <div className="space-y-5">
-      <div className="p-4 rounded-xl bg-sky-50 border border-sky-200 text-sm text-sky-900">
-        <strong>Regla de la semana 1:</strong> solo <strong>eBay Kleinanzeigen</strong> y <strong>calle</strong>. Las clases son en inglés o español; los títulos y avisos pueden ir en alemán. Sin casos verificables: no se usan tasas de aprobación ni testimonios.
-      </div>
-
-      {WEEK1_TASKS.map((g) => (
-        <Card key={g.group} title={g.group}>
-          <ul className="space-y-2">
-            {g.items.map((t) => (
-              <li key={t.id}>
-                <label className="flex items-start gap-3 cursor-pointer text-sm">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 accent-emerald-600"
-                    checked={!!data.tasks[t.id]}
-                    onChange={() => toggle(t.id)}
-                  />
-                  <span className={data.tasks[t.id] ? 'line-through text-slate-400' : 'text-slate-800'}>
-                    {t.text}
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      ))}
-
-      <Card
-        title="Después de la semana 1 (bloqueado)"
-        right={
-          <span className="flex items-center gap-1 text-xs font-mono text-slate-500">
-            <Lock className="w-3.5 h-3.5" /> solo si hay tracción y tú lo decides
-          </span>
-        }
-      >
-        <ul className="space-y-2 opacity-60">
-          {LATER_TASKS.map((t) => (
-            <li key={t.id} className="flex items-start gap-3 text-sm text-slate-700">
-              <input type="checkbox" disabled className="mt-1 h-4 w-4" />
-              <span>{t.text}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
-    </div>
-  );
-}
-
-function Templates() {
-  return (
-    <div className="grid lg:grid-cols-2 gap-5">
-      {TEMPLATES.map((t) => (
-        <Card key={t.id} title={t.title} right={<CopyButton text={t.text} />}>
-          <pre className="whitespace-pre-wrap text-xs text-slate-700 font-sans leading-relaxed">{t.text}</pre>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-function Spots({ data, update }) {
-  const [form, setForm] = useState({ name: '', type: 'tablon', qty: 10, date: today(), notes: '' });
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-
-  const add = (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) return;
-    const tag = slug(form.name) || uid();
-    update({ spots: [{ id: uid(), tag, ...form, qty: Number(form.qty) || 0 }, ...data.spots] });
-    setForm({ name: '', type: 'tablon', qty: 10, date: today(), notes: '' });
-  };
-  const remove = (id) => update({ spots: data.spots.filter((s) => s.id !== id) });
-  const leadsFor = (id) => data.leads.filter((l) => l.spotId === id).length;
-  const link = (tag) => `${data.baseUrl || window.location.origin}?src=${tag}`;
-
-  return (
-    <div className="space-y-5">
-      <Card title="Nueva ubicación">
-        <form onSubmit={add} className="grid md:grid-cols-6 gap-3 items-end">
-          <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Lugar</label>
-            <input className={inputCls} value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Mensa LUH Welfengarten" />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Tipo</label>
-            <select className={inputCls} value={form.type} onChange={(e) => set('type', e.target.value)}>
-              {SPOT_TYPES.map((t) => (
-                <option key={t.id} value={t.id}>{t.label}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Cantidad</label>
-            <input type="number" min="0" className={inputCls} value={form.qty} onChange={(e) => set('qty', e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Fecha</label>
-            <input type="date" className={inputCls} value={form.date} onChange={(e) => set('date', e.target.value)} />
-          </div>
-          <button type="submit" className={btnPrimary}>
-            <Plus className="w-3.5 h-3.5" /> Añadir
-          </button>
-          <div className="md:col-span-6">
-            <input className={inputCls} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Notas (permiso, persona de contacto…)" />
-          </div>
-        </form>
-      </Card>
-
-      <Card title="URL base para los QR">
-        <input
-          className={inputCls}
-          value={data.baseUrl}
-          onChange={(e) => update({ baseUrl: e.target.value })}
-          placeholder="https://tu-sitio.github.io/Classes/"
-        />
-        <p className="text-xs text-slate-500 mt-1.5">
-          Cada ubicación genera un enlace con <code>?src=etiqueta</code> para crear un QR distinto y saber qué punto funciona. El panel no cuenta visitas por sí solo: registra el lead en «Leads» indicando la ubicación.
-        </p>
-      </Card>
-
-      <Card title={`Ubicaciones (${data.spots.length})`}>
-        {data.spots.length === 0 ? (
-          <p className="text-sm text-slate-500">Aún no hay ubicaciones.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-[11px] font-mono text-slate-500 uppercase">
-                  <th className="py-2 pr-3">Lugar</th>
-                  <th className="py-2 pr-3">Tipo</th>
-                  <th className="py-2 pr-3">Cant.</th>
-                  <th className="py-2 pr-3">Fecha</th>
-                  <th className="py-2 pr-3">Leads</th>
-                  <th className="py-2 pr-3">Enlace QR</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {data.spots.map((s) => (
-                  <tr key={s.id} className="border-t border-slate-100 align-top">
-                    <td className="py-2 pr-3">
-                      <div className="font-semibold text-slate-800">{s.name}</div>
-                      {s.notes && <div className="text-xs text-slate-500">{s.notes}</div>}
-                    </td>
-                    <td className="py-2 pr-3">{SPOT_TYPES.find((t) => t.id === s.type)?.label}</td>
-                    <td className="py-2 pr-3">{s.qty}</td>
-                    <td className="py-2 pr-3 whitespace-nowrap">{s.date}</td>
-                    <td className="py-2 pr-3">{leadsFor(s.id)}</td>
-                    <td className="py-2 pr-3">
-                      <div className="flex items-center gap-2">
-                        <CopyButton text={link(s.tag)} />
-                        <a
-                          className="text-xs text-sky-700 underline"
-                          target="_blank"
-                          rel="noreferrer"
-                          href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(link(s.tag))}`}
-                        >
-                          Ver QR
-                        </a>
-                      </div>
-                    </td>
-                    <td className="py-2 text-right">
-                      <button onClick={() => remove(s.id)} className="text-rose-600 hover:text-rose-800" aria-label="Eliminar">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
-    </div>
-  );
-}
-
-function Leads({ data, update }) {
-  const blank = { name: '', contact: '', channel: 'ebay', spotId: '', segment: 'A', notes: '', value: '' };
-  const [form, setForm] = useState(blank);
-  const [filter, setFilter] = useState('all');
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-
-  const add = (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) return;
-    update({
-      leads: [{ id: uid(), createdAt: today(), status: 'nuevo', ...form }, ...data.leads],
-    });
-    setForm(blank);
-  };
-  const patch = (id, p) => update({ leads: data.leads.map((l) => (l.id === id ? { ...l, ...p } : l)) });
-  const remove = (id) => update({ leads: data.leads.filter((l) => l.id !== id) });
-  const shown = filter === 'all' ? data.leads : data.leads.filter((l) => l.status === filter);
-
-  return (
-    <div className="space-y-5">
-      <Card title="Nuevo lead">
-        <form onSubmit={add} className="grid md:grid-cols-4 gap-3 items-end">
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Nombre</label>
-            <input className={inputCls} value={form.name} onChange={(e) => set('name', e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Contacto (WhatsApp / email)</label>
-            <input className={inputCls} value={form.contact} onChange={(e) => set('contact', e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Canal</label>
-            <select className={inputCls} value={form.channel} onChange={(e) => set('channel', e.target.value)}>
-              {CHANNELS.map((c) => (
-                <option key={c.id} value={c.id}>{c.label}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Segmento</label>
-            <select className={inputCls} value={form.segment} onChange={(e) => set('segment', e.target.value)}>
-              {SEGMENTS.map((s) => (
-                <option key={s.id} value={s.id}>{s.label}</option>
-              ))}
-            </select>
-          </div>
-          {(form.channel === 'flyer' || form.channel === 'tarjeta') && (
-            <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Ubicación (calle)</label>
-              <select className={inputCls} value={form.spotId} onChange={(e) => set('spotId', e.target.value)}>
-                <option value="">— sin especificar —</option>
-                {data.spots.map((s) => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
-                ))}
-              </select>
-            </div>
-          )}
-          <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-600 mb-1">Notas</label>
-            <input className={inputCls} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Módulo, fecha de examen…" />
-          </div>
-          <button type="submit" className={btnPrimary}>
-            <Plus className="w-3.5 h-3.5" /> Añadir lead
-          </button>
-        </form>
-      </Card>
-
-      <Card
-        title={`Leads (${shown.length})`}
-        right={
-          <select className="px-2 py-1 rounded-lg border border-slate-300 text-xs bg-white" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">Todos</option>
-            {STATUSES.map((s) => (
-              <option key={s.id} value={s.id}>{s.label}</option>
-            ))}
-          </select>
-        }
-      >
-        {shown.length === 0 ? (
-          <p className="text-sm text-slate-500">No hay leads en esta vista.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-[11px] font-mono text-slate-500 uppercase">
-                  <th className="py-2 pr-3">Lead</th>
-                  <th className="py-2 pr-3">Canal</th>
-                  <th className="py-2 pr-3">Estado</th>
-                  <th className="py-2 pr-3">Valor (€)</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {shown.map((l) => {
-                  const st = STATUSES.find((s) => s.id === l.status);
-                  const spot = data.spots.find((s) => s.id === l.spotId);
-                  return (
-                    <tr key={l.id} className="border-t border-slate-100 align-top">
-                      <td className="py-2 pr-3">
-                        <div className="font-semibold text-slate-800">
-                          {l.name} <span className="text-xs font-mono text-slate-400">· {l.segment}</span>
-                        </div>
-                        <div className="text-xs text-slate-500">{l.contact}</div>
-                        {l.notes && <div className="text-xs text-slate-500">{l.notes}</div>}
-                        <div className="text-[11px] text-slate-400">{l.createdAt}</div>
-                      </td>
-                      <td className="py-2 pr-3">
-                        {CHANNELS.find((c) => c.id === l.channel)?.label}
-                        {spot && <div className="text-xs text-slate-500">{spot.name}</div>}
-                      </td>
-                      <td className="py-2 pr-3">
-                        <select
-                          className={`px-2 py-1 rounded-lg border text-xs font-semibold ${st?.color}`}
-                          value={l.status}
-                          onChange={(e) => patch(l.id, { status: e.target.value })}
-                        >
-                          {STATUSES.map((s) => (
-                            <option key={s.id} value={s.id}>{s.label}</option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="py-2 pr-3">
-                        <input
-                          type="number"
-                          min="0"
-                          className="w-24 px-2 py-1 rounded-lg border border-slate-300 text-sm"
-                          value={l.value}
-                          onChange={(e) => patch(l.id, { value: e.target.value })}
-                          placeholder="0"
-                        />
-                      </td>
-                      <td className="py-2 text-right">
-                        <button onClick={() => remove(l.id)} className="text-rose-600 hover:text-rose-800" aria-label="Eliminar">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Root                                                                */
-/* ------------------------------------------------------------------ */
-
-const TABS = [
-  { id: 'dashboard', label: 'Resumen', icon: LayoutDashboard },
-  { id: 'plan', label: 'Plan', icon: ListChecks },
-  { id: 'templates', label: 'Anuncios', icon: Megaphone },
-  { id: 'spots', label: 'Calle', icon: MapPin },
-  { id: 'leads', label: 'Leads', icon: Users },
-];
-
-export default function Admin() {
-  const [data, setData] = useState(loadData);
-  const [tab, setTab] = useState('dashboard');
-  const fileRef = useRef(null);
+  // Printable A4 Flyer Generator state
+  const [flyerPresetKey, setFlyerPresetKey] = useState('de_en');
+  const [flyerInkSaving, setFlyerInkSaving] = useState(true);
+  const [flyerTabsCount, setFlyerTabsCount] = useState(10);
+  const [customFlyer, setCustomFlyer] = useState(FLYER_PRESETS.de_en);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [data]);
+    localStorage.setItem('ds_admin_channels_v2', JSON.stringify(channels));
+  }, [channels]);
 
-  const update = (patch) => setData((d) => ({ ...d, ...patch }));
+  useEffect(() => {
+    localStorage.setItem('ds_admin_street_v2', JSON.stringify(streetLocations));
+  }, [streetLocations]);
 
-  const exportJson = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `marketing-admin-${today()}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  useEffect(() => {
+    localStorage.setItem('ds_admin_leads_v2', JSON.stringify(leads));
+  }, [leads]);
+
+  const handleSelectFlyerPreset = (key) => {
+    setFlyerPresetKey(key);
+    setCustomFlyer(FLYER_PRESETS[key]);
   };
 
-  const importJson = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (window.confirm('Esto reemplazará los datos actuales. ¿Continuar?')) {
-          setData({ ...EMPTY_DATA, ...parsed });
-        }
-      } catch {
-        window.alert('Archivo no válido.');
-      }
+  const copyToClipboard = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2200);
+  };
+
+  const markChannelPostedToday = (id) => {
+    const today = new Date().toISOString().split('T')[0];
+    setChannels((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, status: 'activo', lastPosted: today } : c))
+    );
+  };
+
+  const toggleChannelStatus = (id) => {
+    const today = new Date().toISOString().split('T')[0];
+    setChannels((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c;
+        const nextStatus = c.status === 'activo' ? 'pendiente' : 'activo';
+        return {
+          ...c,
+          status: nextStatus,
+          lastPosted: nextStatus === 'activo' ? today : c.lastPosted
+        };
+      })
+    );
+  };
+
+  const toggleStreetStatus = (id) => {
+    setStreetLocations((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: s.status === 'pegado' ? 'pendiente' : 'pegado' } : s))
+    );
+  };
+
+  const handleAddLead = (e) => {
+    e.preventDefault();
+    if (!newLead.name.trim()) return;
+    const item = {
+      ...newLead,
+      id: `lead-${Date.now()}`,
+      date: new Date().toISOString().split('T')[0]
     };
-    reader.readAsText(file);
-    e.target.value = '';
+    setLeads([item, ...leads]);
+    setNewLead({
+      name: '',
+      subject: '',
+      university: '',
+      countryCurrency: 'EUR',
+      mode: 'Online',
+      quotedRate: '35',
+      paymentMethod: 'SEPA IBAN',
+      contact: '',
+      status: 'New Inquiry',
+      notes: ''
+    });
   };
+
+  const updateLeadStatus = (id, status) => {
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)));
+  };
+
+  const deleteLead = (id) => {
+    setLeads((prev) => prev.filter((l) => l.id !== id));
+  };
+
+  // KPIs
+  const activeChannelsCount = channels.filter((c) => c.status === 'activo').length;
+  const expiredChannelsCount = channels.filter((c) => {
+    const days = getDaysSince(c.lastPosted);
+    return c.status === 'activo' && days !== null && days >= 5;
+  }).length;
+  const activeStreetCount = streetLocations.filter((s) => s.status === 'pegado').length;
+  const activeStudentsCount = leads.filter((l) => l.status === 'Active Student').length;
+
+  const flyerTargetUrl = `${BASE_SITE_URL}?src=${encodeURIComponent(customFlyer.qrTag || 'flyer')}`;
+  const flyerQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=6&data=${encodeURIComponent(flyerTargetUrl)}`;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+      {/* Top Admin Header (hidden when printing A4 flyer) */}
+      <header className="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 sm:px-8 py-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center font-mono text-lg font-bold">
-              [Φ]
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+              <Megaphone className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-base font-extrabold tracking-tight">Panel de administrador · Marketing</h1>
-              <p className="text-xs font-mono text-slate-500">Captación de alumnos · eBay Kleinanzeigen + calle</p>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                  Admin Growth &amp; Geo-Pricing Hub
+                </span>
+                <span className="font-mono text-[10px] text-slate-400">
+                  EN / ES • PIAD™ &amp; 14-Lab Integrated
+                </span>
+              </div>
+              <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                Panel de Captación, Geo-Pricing y Operaciones • Daniel Santander
+              </h1>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={exportJson} className={btnGhost}>
-              <Download className="w-3.5 h-3.5" /> Exportar
-            </button>
-            <button onClick={() => fileRef.current?.click()} className={btnGhost}>
-              <Upload className="w-3.5 h-3.5" /> Importar
-            </button>
-            <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={importJson} />
-            <a href="#/" className={btnPrimary}>
-              <ArrowLeft className="w-3.5 h-3.5" /> Volver al sitio
+
+          <div className="flex items-center gap-3">
+            <a
+              href="https://wa.me/4917676497440"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs flex items-center gap-2 border border-slate-700 transition-colors"
+            >
+              <Send className="w-3.5 h-3.5 text-emerald-400" />
+              <span>WhatsApp (+49 176 7649 7440)</span>
             </a>
+            <button
+              onClick={onBack}
+              className="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Volver al Sitio Público</span>
+            </button>
           </div>
         </div>
-        <nav className="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto">
-          {TABS.map((t) => {
-            const Icon = t.icon;
-            const active = tab === t.id;
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8">
+        {/* KPI Row (hidden on print) */}
+        <div className="no-print grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
+              <span>CLASIFICADOS ACTIVOS</span>
+              <Globe className="w-4 h-4 text-sky-400" />
+            </div>
+            <div className="text-3xl font-mono font-extrabold text-white">
+              {activeChannelsCount} <span className="text-base font-normal text-slate-500">/ {channels.length}</span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Alemania, Suiza (CHF), España, Chile y UK
+            </p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
+              <span>ALERTAS DE RENOVACIÓN (5 DÍAS)</span>
+              <AlertTriangle className={`w-4 h-4 ${expiredChannelsCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`} />
+            </div>
+            <div className="text-3xl font-mono font-extrabold text-white">
+              {expiredChannelsCount}
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              {expiredChannelsCount > 0
+                ? 'Anuncios con más de 5 días: republicar hoy'
+                : 'Todos los anuncios activos están al día (<5 días)'}
+            </p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
+              <span>TABLONES HANNOVER (FLYERS)</span>
+              <MapPin className="w-4 h-4 text-amber-400" />
+            </div>
+            <div className="text-3xl font-mono font-extrabold text-white">
+              {activeStreetCount} <span className="text-base font-normal text-slate-500">/ {streetLocations.length}</span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              LUH Hauptgebäude, TIB, Garbsen, HsH &amp; ISH
+            </p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
+              <span>PIPELINE CRM (LEADS / ACTIVOS)</span>
+              <Users className="w-4 h-4 text-emerald-400" />
+            </div>
+            <div className="text-3xl font-mono font-extrabold text-white">
+              {leads.length} <span className="text-sm font-normal text-emerald-400">({activeStudentsCount} activos)</span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Kanban 5 etapas guardado en tu navegador
+            </p>
+          </div>
+        </div>
+
+        {/* Navigation Tabs (hidden on print) */}
+        <div className="no-print flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+          {[
+            { id: 'strategy', label: '1. Geo-Pricing (Capacidad de Pago) & Plan', icon: DollarSign },
+            { id: 'crm', label: '2. Pipeline CRM (Kanban + Lab Links)', icon: Columns },
+            { id: 'classifieds', label: '3. Clasificados Multi-País & Avisos Copy-Paste', icon: Globe },
+            { id: 'flyer', label: '4. Generador de Flyer A4 Imprimible & Calle', icon: Printer }
+          ].map((tab) => {
+            const Icon = tab.icon;
             return (
               <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={`px-4 py-2.5 text-xs font-mono font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap transition-colors ${
-                  active ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-800'
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'bg-sky-600 text-white shadow-md'
+                    : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
-                {t.label}
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
               </button>
             );
           })}
-        </nav>
-      </header>
+        </div>
 
-      <main className="max-w-6xl mx-auto px-4 py-6">
-        {tab === 'dashboard' && <Dashboard data={data} />}
-        {tab === 'plan' && <Plan data={data} update={update} />}
-        {tab === 'templates' && <Templates />}
-        {tab === 'spots' && <Spots data={data} update={update} />}
-        {tab === 'leads' && <Leads data={data} update={update} />}
-        <p className="text-[11px] text-slate-400 mt-8">
-          Los datos se guardan solo en este navegador (localStorage). Exporta una copia de seguridad con regularidad. Esta página no tiene autenticación: no guardes datos sensibles de los alumnos más allá de lo necesario.
-        </p>
-      </main>
+        {/* ================================================================= */}
+        {/* TAB 1: GEO-PRICING (ABILITY-TO-PAY) & WEEKLY EXECUTION STRATEGY   */}
+        {/* ================================================================= */}
+        {activeTab === 'strategy' && (
+          <div className="space-y-8">
+            {/* Ability-to-Pay / Purchasing Power Parity Methodology */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-emerald-400 font-bold block mb-1">
+                    Metodología de Tarifación Internacional (Purchasing-Power Parity / Capacidad de Pago)
+                  </span>
+                  <h2 className="text-2xl font-bold text-white">
+                    Estrategia de Cobro Basada en Posibilidad de Pago por País y Moneda
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                    El sitio público detecta automáticamente la zona horaria y el país del visitante (con opción de cambiar la moneda manualmente en el encabezado o en la calculadora). Si el alumno ingresa desde mercados con mayor poder adquisitivo (Suiza, Reino Unido, EE.UU.), el sistema presenta tarifas superiores acordes a su mercado local; si ingresa desde Chile, adapta la tarifa a pesos chilenos para no frenar la conversión.
+                  </p>
+                </div>
+                <div className="bg-emerald-950/40 border border-emerald-500/30 rounded-xl px-4 py-3 text-xs font-mono text-emerald-300">
+                  <div>✓ Detección automática activa en Web</div>
+                  <div>✓ Recargo presencial Hannover incluido</div>
+                  <div>✓ Sin menciones de § 19 UStG</div>
+                </div>
+              </div>
+
+              {/* Currency Tiers Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-[11px] font-mono text-slate-400 uppercase">
+                      <th className="py-3 px-4">Moneda / Región</th>
+                      <th className="py-3 px-4">IB / Abitur (1h)</th>
+                      <th className="py-3 px-4">Bachelor / Grado (1h)</th>
+                      <th className="py-3 px-4">Máster / Tesis (1h)</th>
+                      <th className="py-3 px-4">Extra Presencial</th>
+                      <th className="py-3 px-4">Racional Estratégico (Capacidad de Pago)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/70 text-xs">
+                    {Object.values(CURRENCY_TIERS).map((tier) => (
+                      <tr key={tier.code} className="hover:bg-slate-800/40">
+                        <td className="py-3.5 px-4 font-mono font-bold text-white whitespace-nowrap">
+                          <span className="mr-2">{tier.flag}</span>
+                          {tier.code} — {tier.labelEs}
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-sky-300 font-bold">
+                          {formatMoney(tier.rates.ib, tier.code)}/h
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-emerald-400 font-bold">
+                          {formatMoney(tier.rates.bachelor, tier.code)}/h
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-amber-300 font-bold">
+                          {formatMoney(tier.rates.master, tier.code)}/h
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-slate-300">
+                          +{formatMoney(tier.inPersonSurchargePerHour, tier.code)}/h
+                        </td>
+                        <td className="py-3.5 px-4 text-slate-300 leading-relaxed max-w-md">
+                          {tier.rationaleEs}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Operational Rules for Quoting */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="font-mono text-xs font-bold text-amber-400 mb-1">
+                    1. Regla Suiza / Colegios IB Privados (CHF / GBP)
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    En Suiza (Tutti.ch / Anibis.ch) un tutor universitario cobra entre 60 y 90 CHF/h. Cobrar muy barato genera desconfianza. Mantén siempre la tarifa de <strong>55–75 CHF/h</strong> y destaca tu Doble M.Sc. y el Laboratorio Interactivo.
+                  </p>
+                </div>
+                <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="font-mono text-xs font-bold text-sky-400 mb-1">
+                    2. Regla Clase Presencial en Hannover (+Extra)
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Tu ventaja competitiva es la pizarra Miro + Laboratorio interactivo online. Si un alumno en Hannover quiere sesión presencial (TIB, LUH o domicilio), la calculadora muestra automáticamente que <em>la clase presencial tiene un costo extra</em> (+€10/h) para compensar tu tiempo de traslado.
+                  </p>
+                </div>
+                <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                  <div className="font-mono text-xs font-bold text-emerald-400 mb-1">
+                    3. Regla Chile / LatAm (Volumen &amp; Prestigio U. de Chile)
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    En Chile ($25.000–$35.000 CLP/h) tu credencial de Geofísico de Beauchef (FCFM) + Doble M.Sc. en Europa te posiciona en el tope del mercado. Ofrece grupos de estudio de hasta 3 compañeros (-30% c/u) para maximizar tu ingreso por hora.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* How our new Web Tools feed the Marketing Funnel */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-sky-400" />
+                <span>Cómo usar las Nuevas Herramientas de la Web para Cerrar Alumnos sin Casos Previos</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-sky-400 uppercase">Gancho 1: El Laboratorio de 14 Problemas</div>
+                  <p className="text-slate-300 leading-relaxed">
+                    Cuando un alumno te escriba por WhatsApp preguntando precio, no le respondas solo con el valor. Envíale el link al simulador de su materia (ej. Mecánica o Fluidos) y dile: <em>&ldquo;Mira cómo desglosamos el Diagrama de Cuerpo Libre (DCL) en vivo en mi plataforma antes de integrar&rdquo;</em>.
+                  </p>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-emerald-400 uppercase">Gancho 2: Toolkit Matemático de 5 Pilares</div>
+                  <p className="text-slate-300 leading-relaxed">
+                    Para alumnos de <em>Höhere Mathematik</em>, Cálculo o Álgebra Lineal, muéstrales el visualizador de Series de Taylor, Autovalores 2D y EDOs. Ven en 30 segundos que tienes una plataforma de ingeniería superior a cualquier profesor particular tradicional.
+                  </p>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-amber-400 uppercase">Gancho 3: Método PIAD™ + IA para Python</div>
+                  <p className="text-slate-300 leading-relaxed">
+                    Muchos estudiantes usan ChatGPT mal y reprueban en el examen escrito o en entregas de Python. Diles que les enseñas a usar IA como copiloto científico para estructurar código en NumPy/SciPy que ellos mismos saben defender.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 2: PIPELINE CRM (KANBAN + TABLE + SIMULATOR RECOMMENDER)      */}
+        {/* ================================================================= */}
+        {activeTab === 'crm' && (
+          <div className="space-y-6">
+            {/* Add Lead Form */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                <div>
+                  <h2 className="text-lg font-bold text-white">Registrar Nuevo Lead / Alumno</h2>
+                  <p className="text-xs text-slate-400">
+                    Guarda cada contacto que llegue por Kleinanzeigen, Tutti.ch, Flyers o WhatsApp y muévelo por el embudo.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 font-mono text-xs">
+                  <button
+                    onClick={() => setPipelineView('kanban')}
+                    className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
+                      pipelineView === 'kanban' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Columns className="w-3.5 h-3.5" />
+                    <span>Kanban</span>
+                  </button>
+                  <button
+                    onClick={() => setPipelineView('table')}
+                    className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
+                      pipelineView === 'table' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Table className="w-3.5 h-3.5" />
+                    <span>Tabla</span>
+                  </button>
+                </div>
+              </div>
+
+              <form onSubmit={handleAddLead} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+                <input
+                  type="text"
+                  placeholder="Nombre del alumno *"
+                  value={newLead.name}
+                  onChange={(e) => setNewLead({ ...newLead, name: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Materia (ej. HM I, Fluidos, IB Physics)"
+                  value={newLead.subject}
+                  onChange={(e) => setNewLead({ ...newLead, subject: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="Universidad / Colegio (ej. LUH, ETH, UCh)"
+                  value={newLead.university}
+                  onChange={(e) => setNewLead({ ...newLead, university: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                />
+                <div className="flex gap-2">
+                  <select
+                    value={newLead.countryCurrency}
+                    onChange={(e) => {
+                      const code = e.target.value;
+                      const defaultRate = CURRENCY_TIERS[code]?.rates?.bachelor || 35;
+                      setNewLead({ ...newLead, countryCurrency: code, quotedRate: String(defaultRate) });
+                    }}
+                    className="px-2.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
+                  >
+                    {Object.values(CURRENCY_TIERS).map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.flag} {c.code}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Tarifa / h"
+                    value={newLead.quotedRate}
+                    onChange={(e) => setNewLead({ ...newLead, quotedRate: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
+                  />
+                </div>
+                <select
+                  value={newLead.mode}
+                  onChange={(e) => setNewLead({ ...newLead, mode: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                >
+                  <option value="Online">Online (Meet + Miro)</option>
+                  <option value="In-Person Hannover">Presencial Hannover (+Extra)</option>
+                </select>
+
+                <select
+                  value={newLead.paymentMethod}
+                  onChange={(e) => setNewLead({ ...newLead, paymentMethod: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                >
+                  {PAYMENT_METHODS.map((pm) => (
+                    <option key={pm} value={pm}>{pm}</option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="Contacto (WhatsApp / Canal)"
+                  value={newLead.contact}
+                  onChange={(e) => setNewLead({ ...newLead, contact: e.target.value })}
+                  className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="Notas (ej. tiene Skript en alemán, examen en 3 semanas)"
+                  value={newLead.notes}
+                  onChange={(e) => setNewLead({ ...newLead, notes: e.target.value })}
+                  className="sm:col-span-2 px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Añadir al Pipeline</span>
+                </button>
+              </form>
+            </div>
+
+            {/* KANBAN VIEW */}
+            {pipelineView === 'kanban' ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {KANBAN_COLUMNS.map((col) => {
+                  const colLeads = leads.filter((l) => l.status === col.id);
+                  return (
+                    <div key={col.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col min-h-[420px]">
+                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                        <span className="font-mono text-xs font-bold text-white">{col.label}</span>
+                        <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-slate-800 text-sky-400 font-bold">
+                          {colLeads.length}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3 flex-1">
+                        {colLeads.length === 0 && (
+                          <div className="text-center py-10 text-xs text-slate-600 font-mono">
+                            Sin leads en esta etapa
+                          </div>
+                        )}
+                        {colLeads.map((lead) => {
+                          const recLab = getRecommendedLabLink(lead.subject);
+                          return (
+                            <div key={lead.id} className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2.5 text-xs">
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <div className="font-bold text-white text-sm">{lead.name}</div>
+                                  <div className="text-[11px] text-sky-400 font-mono">{lead.subject || 'STEM General'}</div>
+                                </div>
+                                <button
+                                  onClick={() => deleteLead(lead.id)}
+                                  className="text-slate-500 hover:text-rose-400 cursor-pointer"
+                                  title="Eliminar lead"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+
+                              {lead.university && (
+                                <div className="text-[11px] text-slate-400">{lead.university}</div>
+                              )}
+
+                              <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                                <span className="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 font-bold">
+                                  {lead.countryCurrency} {lead.quotedRate}/h
+                                </span>
+                                <span className="px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">
+                                  {lead.mode}
+                                </span>
+                                <span className="px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                                  {lead.paymentMethod}
+                                </span>
+                              </div>
+
+                              {lead.notes && (
+                                <p className="text-[11px] text-slate-400 bg-slate-900/70 p-2 rounded-lg border border-slate-800/80">
+                                  {lead.notes}
+                                </p>
+                              )}
+
+                              {/* 1-Click Recommended Simulator Link to send to student */}
+                              <div className="pt-1">
+                                <button
+                                  onClick={() => copyToClipboard(recLab.url, `lab-${lead.id}`)}
+                                  className="w-full py-1.5 px-2 rounded-lg bg-sky-950/50 hover:bg-sky-900/60 border border-sky-500/30 text-sky-300 font-mono text-[10px] flex items-center justify-between gap-1 cursor-pointer transition-colors"
+                                  title={recLab.label}
+                                >
+                                  <span className="truncate flex items-center gap-1">
+                                    <Compass className="w-3 h-3 shrink-0" />
+                                    {copiedId === `lab-${lead.id}` ? '¡Link del Lab copiado!' : 'Copiar Link Simulador'}
+                                  </span>
+                                  <Copy className="w-3 h-3 shrink-0" />
+                                </button>
+                              </div>
+
+                              <div className="pt-1 border-t border-slate-900">
+                                <select
+                                  value={lead.status}
+                                  onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
+                                  className="w-full px-2 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-200"
+                                >
+                                  {KANBAN_COLUMNS.map((c) => (
+                                    <option key={c.id} value={c.id}>{c.label}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              /* TABLE VIEW */
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-800 font-mono text-[11px] text-slate-400 uppercase">
+                      <th className="py-3.5 px-4">Alumno / Contacto</th>
+                      <th className="py-3.5 px-4">Materia &amp; Universidad</th>
+                      <th className="py-3.5 px-4">Modalidad &amp; Pago</th>
+                      <th className="py-3.5 px-4">Tarifa Cotizada</th>
+                      <th className="py-3.5 px-4">Simulador Recomendado</th>
+                      <th className="py-3.5 px-4">Etapa Pipeline</th>
+                      <th className="py-3.5 px-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/70">
+                    {leads.map((lead) => {
+                      const recLab = getRecommendedLabLink(lead.subject);
+                      return (
+                        <tr key={lead.id} className="hover:bg-slate-800/40">
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-white">{lead.name}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">{lead.contact}</div>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <div className="text-sky-400 font-mono font-semibold">{lead.subject}</div>
+                            <div className="text-[11px] text-slate-400">{lead.university}</div>
+                          </td>
+                          <td className="py-3.5 px-4 font-mono text-[11px]">
+                            <div>{lead.mode}</div>
+                            <div className="text-slate-400">{lead.paymentMethod}</div>
+                          </td>
+                          <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                            {lead.countryCurrency} {lead.quotedRate}/h
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <button
+                              onClick={() => copyToClipboard(recLab.url, `tbl-lab-${lead.id}`)}
+                              className="px-2.5 py-1.5 rounded-lg bg-sky-950/60 border border-sky-500/30 text-sky-300 font-mono text-[11px] flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Copy className="w-3 h-3" />
+                              <span>{copiedId === `tbl-lab-${lead.id}` ? '¡Copiado!' : recLab.label}</span>
+                            </button>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <select
+                              value={lead.status}
+                              onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
+                              className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-white"
+                            >
+                              {KANBAN_COLUMNS.map((c) => (
+                                <option key={c.id} value={c.id}>{c.label}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <button
+                              onClick={() => deleteLead(lead.id)}
+                              className="text-slate-500 hover:text-rose-400 cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 3: MULTI-COUNTRY CLASSIFIEDS TRACKER & COPY-PASTE ADS         */}
+        {/* ================================================================= */}
+        {activeTab === 'classifieds' && (
+          <div className="space-y-8">
+            {/* Multi-Country Channel Matrix with 5-Day Renewal Alert */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-sky-400 font-bold block mb-1">
+                    Step A Checklist • Recordatorio Automático cada 5 Días
+                  </span>
+                  <h2 className="text-xl font-bold text-white">
+                    Matriz de Portales de Clasificados (Alemania, Suiza, España, Chile, UK/NL)
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-1">
+                    En portales como Kleinanzeigen, Tutti.ch o Milanuncios, republicar cada 5 días mantiene tu aviso en la primera página sin pagar anuncios destacados.
+                  </p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-800 font-mono text-[11px] text-slate-400 uppercase">
+                      <th className="py-3 px-4">País / Mercado</th>
+                      <th className="py-3 px-4">Plataforma</th>
+                      <th className="py-3 px-4">Moneda</th>
+                      <th className="py-3 px-4">Última Publicación</th>
+                      <th className="py-3 px-4">Estado / Alerta 5 Días</th>
+                      <th className="py-3 px-4 text-right">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/70">
+                    {channels.map((ch) => {
+                      const days = getDaysSince(ch.lastPosted);
+                      const needsRenewal = ch.status === 'activo' && days !== null && days >= 5;
+                      return (
+                        <tr key={ch.id} className="hover:bg-slate-800/40">
+                          <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
+                            {ch.country}
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <div className="font-semibold text-slate-200 flex items-center gap-1.5">
+                              <span>{ch.platform}</span>
+                              <a
+                                href={ch.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-sky-400 hover:text-sky-300"
+                                title="Abrir plataforma"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            </div>
+                            <div className="text-[11px] text-slate-400">{ch.notes}</div>
+                          </td>
+                          <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                            {ch.currency}
+                          </td>
+                          <td className="py-3.5 px-4 font-mono text-slate-300">
+                            {ch.lastPosted ? (
+                              <span>{ch.lastPosted} ({days === 0 ? 'hoy' : `hace ${days}d`})</span>
+                            ) : (
+                              <span className="text-slate-500">Sin publicar</span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 font-mono">
+                            {ch.status !== 'activo' ? (
+                              <span className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[11px]">
+                                Pendiente
+                              </span>
+                            ) : needsRenewal ? (
+                              <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-bold flex items-center gap-1 w-fit">
+                                <AlertTriangle className="w-3 h-3" />
+                                Renovar (&gt;5 días)
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 w-fit">
+                                <CheckCircle2 className="w-3 h-3" />
+                                Activo al día
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
+                            <button
+                              onClick={() => markChannelPostedToday(ch.id)}
+                              className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-[11px] font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <RefreshCw className="w-3 h-3" />
+                              <span>Publicado Hoy</span>
+                            </button>
+                            <button
+                              onClick={() => toggleChannelStatus(ch.id)}
+                              className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px] cursor-pointer"
+                            >
+                              {ch.status === 'activo' ? 'Pausar' : 'Activar'}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Copy-Paste Ads Updated with PIAD™ + 14-Problem Lab + Productive AI */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-white">
+                Plantillas de Avisos Actualizadas (Método PIAD™ + Lab de 14 Problemas + IA Productiva)
+              </h3>
+              <div className="grid grid-cols-1 gap-6">
+                {AD_TEMPLATES.map((ad) => (
+                  <div key={ad.id} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                      <div>
+                        <span className="font-mono text-xs font-bold text-sky-400 block mb-1">
+                          {ad.badge}
+                        </span>
+                        <h4 className="text-base font-bold text-white">{ad.title}</h4>
+                        <span className="text-xs font-mono text-emerald-400">{ad.priceNote}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => copyToClipboard(ad.title, `${ad.id}-title`)}
+                          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs flex items-center gap-1.5 cursor-pointer"
+                        >
+                          {copiedId === `${ad.id}-title` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span>Copiar Título</span>
+                        </button>
+                        <button
+                          onClick={() => copyToClipboard(ad.body, `${ad.id}-body`)}
+                          className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                        >
+                          {copiedId === `${ad.id}-body` ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span>{copiedId === `${ad.id}-body` ? '¡Texto Copiado!' : 'Copiar Anuncio Completo'}</span>
+                        </button>
+                      </div>
+                    </div>
+                    <pre className="whitespace-pre-wrap font-sans text-xs text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 leading-relaxed">
+                      {ad.body}
+                    </pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 4: PRINTABLE A4 FLYER GENERATOR (ABREISSZETTEL + QR) & STREET */}
+        {/* ================================================================= */}
+        {activeTab === 'flyer' && (
+          <div className="space-y-10">
+            {/* Flyer Controls (hidden when printing) */}
+            <div className="no-print bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-amber-400 font-bold block mb-1">
+                    Generador A4 con Pestañas Recortables (Abreißzettel) + Código QR Dinámico
+                  </span>
+                  <h2 className="text-xl font-bold text-white">
+                    Diseñador de Carteles Imprimibles para Campus (LUH / TIB / HsH / Colegios IB)
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Elige una plantilla, personaliza los textos si lo deseas y pulsa <strong>Imprimir / Guardar PDF (A4)</strong>. La hoja se formatea automáticamente en tamaño A4 con 10 pestañas recortables en la parte inferior.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => window.print()}
+                  className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Imprimir / Guardar PDF (A4)</span>
+                </button>
+              </div>
+
+              {/* Preset & Mode Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block font-mono text-xs text-slate-400 mb-2">1. Idioma / Plantilla del Flyer</label>
+                  <div className="flex flex-col gap-2">
+                    {Object.entries(FLYER_PRESETS).map(([key, preset]) => (
+                      <button
+                        key={key}
+                        onClick={() => handleSelectFlyerPreset(key)}
+                        className={`px-3 py-2 rounded-xl font-mono text-xs text-left border transition-all cursor-pointer ${
+                          flyerPresetKey === key
+                            ? 'bg-sky-600/20 border-sky-500 text-white font-bold'
+                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        {preset.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-mono text-xs text-slate-400 mb-1">2. Titular Principal</label>
+                    <input
+                      type="text"
+                      value={customFlyer.headline}
+                      onChange={(e) => setCustomFlyer({ ...customFlyer, headline: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-slate-400 mb-1">Subtítulo Académico</label>
+                    <input
+                      type="text"
+                      value={customFlyer.subheadline}
+                      onChange={(e) => setCustomFlyer({ ...customFlyer, subheadline: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-mono text-xs text-slate-400 mb-1">3. Etiqueta de Rastreo QR (?src=...)</label>
+                    <input
+                      type="text"
+                      value={customFlyer.qrTag}
+                      onChange={(e) => setCustomFlyer({ ...customFlyer, qrTag: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                    <label className="flex items-center gap-2 text-xs font-mono text-slate-300 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={flyerInkSaving}
+                        onChange={(e) => setFlyerInkSaving(e.target.checked)}
+                        className="rounded border-slate-700"
+                      />
+                      <span>Modo Ahorro de Tinta (Fondo 100% Blanco)</span>
+                    </label>
+                    <select
+                      value={flyerTabsCount}
+                      onChange={(e) => setFlyerTabsCount(Number(e.target.value))}
+                      className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-white"
+                    >
+                      <option value={10}>10 pestañas</option>
+                      <option value={12}>12 pestañas</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ============================================================= */}
+            {/* ACTUAL PRINTABLE A4 FLYER PREVIEW (#printable-a4-flyer)       */}
+            {/* ============================================================= */}
+            <div className="flex justify-center">
+              <div
+                id="printable-a4-flyer"
+                className="w-full max-w-[794px] bg-white text-slate-900 rounded-2xl border-2 border-slate-900 shadow-2xl overflow-hidden flex flex-col justify-between"
+                style={{ minHeight: '1080px' }}
+              >
+                {/* Top Banner */}
+                <div className="p-8 pb-6">
+                  <div
+                    className={`rounded-2xl p-6 mb-6 border-2 ${
+                      flyerInkSaving
+                        ? 'bg-white border-slate-900 text-slate-900'
+                        : 'bg-slate-900 border-slate-900 text-white'
+                    }`}
+                  >
+                    <div className="font-mono text-xs uppercase tracking-widest font-bold mb-2 text-sky-700">
+                      {customFlyer.badge}
+                    </div>
+                    <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight mb-2">
+                      {customFlyer.headline}
+                    </h1>
+                    <p className={`text-sm font-mono font-semibold ${flyerInkSaving ? 'text-slate-700' : 'text-slate-300'}`}>
+                      {customFlyer.subheadline}
+                    </p>
+                  </div>
+
+                  {/* Honest Language & Skript Notice */}
+                  <div className="p-4 rounded-xl bg-slate-100 border-2 border-slate-900 text-xs font-mono font-bold text-slate-900 mb-6 leading-relaxed">
+                    {customFlyer.languageNotice}
+                  </div>
+
+                  {/* Main Body: Left Bullets + Right QR & Lab Highlight */}
+                  <div className="grid grid-cols-12 gap-6 items-center mb-6">
+                    <div className="col-span-7 space-y-3">
+                      <div className="font-mono text-xs uppercase tracking-wider font-extrabold text-slate-900 border-b-2 border-slate-900 pb-1">
+                        CORE SUBJECTS &amp; INTERACTIVE STEM PLATFORM:
+                      </div>
+                      <ul className="space-y-2.5 text-xs text-slate-900 font-medium">
+                        {customFlyer.bullets.map((b, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="font-mono font-extrabold text-slate-900">▸</span>
+                            <span className="leading-snug">{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="pt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
+                        <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
+                          <div className="font-extrabold text-slate-900">14 LIVE SIMULATORS</div>
+                          <div className="text-[10px] text-slate-700">Free Body Diagrams (DCL) &amp; Exam Steps</div>
+                        </div>
+                        <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
+                          <div className="font-extrabold text-slate-900">5-PILLAR MATH TOOLKIT</div>
+                          <div className="text-[10px] text-slate-700">Taylor, Matrices, ODEs, Grad &amp; FFT</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-900 bg-white text-center">
+                      <span className="font-mono text-[10px] uppercase tracking-wider font-extrabold text-slate-900 mb-2">
+                        SCAN TO TEST THE LAB FOR FREE
+                      </span>
+                      <img
+                        src={flyerQrImageUrl}
+                        alt="QR Code to STEM Platform"
+                        className="w-40 h-40 object-contain border border-slate-300 rounded-lg p-1 mb-2"
+                      />
+                      <span className="font-mono text-[11px] font-extrabold text-slate-900">
+                        WhatsApp: +49 176 7649 7440
+                      </span>
+                      <span className="font-mono text-[9px] text-slate-600 break-all mt-0.5">
+                        danisantanderurrutia-coder.github.io/classes
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Callout Bar */}
+                  <div className="p-3 rounded-xl border-2 border-slate-900 bg-slate-50 text-center font-mono text-xs font-extrabold text-slate-900">
+                    {customFlyer.footerCallout}
+                  </div>
+                </div>
+
+                {/* ========================================================= */}
+                {/* PERFORATED TEAR-OFF TABS (ABREISSZETTEL) AT BOTTOM        */}
+                {/* ========================================================= */}
+                <div className="border-t-2 border-dashed border-slate-900 bg-white px-4 pt-2 pb-4">
+                  <div className="text-center font-mono text-[10px] uppercase tracking-widest text-slate-600 font-bold mb-2">
+                    ✂️ Tear off a tab / Abreißzettel mitnehmen (WhatsApp &amp; Interactive STEM Lab QR) ✂️
+                  </div>
+                  <div
+                    className="grid gap-0 border-2 border-slate-900"
+                    style={{ gridTemplateColumns: `repeat(${flyerTabsCount}, minmax(0, 1fr))` }}
+                  >
+                    {Array.from({ length: flyerTabsCount }).map((_, idx) => (
+                      <div
+                        key={idx}
+                        className="border-r last:border-r-0 border-dashed border-slate-900 p-1.5 flex flex-col items-center justify-between text-center"
+                        style={{ minHeight: '210px' }}
+                      >
+                        <img
+                          src={flyerQrImageUrl}
+                          alt="QR"
+                          className="w-11 h-11 object-contain mb-1"
+                        />
+                        <div
+                          className="font-mono text-[9px] leading-tight text-slate-900 font-bold py-1"
+                          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                        >
+                          {customFlyer.tearOffTitle}
+                          {' • '}
+                          WA: +49 176 7649 7440
+                        </div>
+                        <span className="font-mono text-[8px] font-extrabold text-slate-700 mt-1">
+                          EN / ES
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Street Poster Locations Checklist (hidden when printing) */}
+            <div className="no-print bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-amber-400" />
+                <span>Ruta de Tablones Físicos en Hannover (Schwarze Bretter)</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {streetLocations.map((loc) => (
+                  <div
+                    key={loc.id}
+                    className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-4"
+                  >
+                    <div>
+                      <div className="font-bold text-white text-sm">{loc.place}</div>
+                      <div className="text-xs font-mono text-slate-400 mt-0.5">
+                        Zona: {loc.zone} • Tag QR sugerido: <code className="text-sky-400">{loc.qrTag}</code>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => toggleStreetStatus(loc.id)}
+                      className={`px-3 py-2 rounded-xl font-mono text-xs font-bold cursor-pointer shrink-0 ${
+                        loc.status === 'pegado'
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                          : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {loc.status === 'pegado' ? '✓ Cartel Pegado' : 'Marcar Pegado'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

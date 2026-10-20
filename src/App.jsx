@@ -1017,7 +1017,9 @@ Sent from STEM Mentorship Portal`;
                               {lang === 'en' ? 'Target:' : 'Objetivo:'}
                             </span>
                             <span>
-                              {lang === 'en' ? prob.exercise.questionEn : prob.exercise.questionEs}
+                              {lang === 'en'
+                                ? (prob.exercise?.questionEn || prob.klausurProblem?.titleEn || prob.titleEn)
+                                : (prob.exercise?.questionEs || prob.klausurProblem?.titleEs || prob.titleEs)}
                             </span>
                           </div>
                         </div>

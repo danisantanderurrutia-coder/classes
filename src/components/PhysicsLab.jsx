@@ -1174,6 +1174,31 @@ export const LAB_PROBLEMS = [
         '3. Area: A = 400×10³ m × 150×10³ m = 6.0 × 10¹⁰ m².',
         '4. Mean fault slip: D = M₀ / (μ · A) = (1.995 × 10²² N·m) / (3.5 × 10¹⁰ Pa × 6.0 × 10¹⁰ m²) ≈ 9.50 meters of coseismic displacement.'
       ]
+    },
+    exercise: {
+      questionEs:
+        'En un megaterremoto de subducción en Chile con Mw = 8.8 (M₀ ≈ 1.995 × 10²² N·m) y área de ruptura A = 400 km × 150 km en corteza con rigidez μ = 3.5×10¹⁰ Pa, ¿cuál es el desplazamiento medio de deslizamiento cosísmico D en la falla?',
+      questionEn:
+        'In a Chilean subduction megathrust earthquake with Mw = 8.8 (M₀ ≈ 1.995 × 10²² N·m) and rupture area A = 400 km × 150 km in crust with μ = 3.5×10¹⁰ Pa, what is the mean coseismic fault slip D?',
+      presetValues: { strike: 15, dip: 18, rake: 90, magnitude: 8.8 },
+      options: [
+        { id: 'a', text: 'D ≈ 9.5 m (Deslizamiento cosísmico masivo característico de Mw 8.8)', correct: true },
+        { id: 'b', text: 'D ≈ 0.95 m (Deslizamiento menor)', correct: false },
+        { id: 'c', text: 'D ≈ 95.0 m (Físicamente inconsistente)', correct: false },
+        { id: 'd', text: 'D ≈ 0.10 m (Régimen de microsismicidad)', correct: false }
+      ],
+      hintEs: 'Aplica la relación fundamental del momento sísmico escalar: M₀ = μ · A · D. Despeja el deslizamiento medio D = M₀ / (μ · A).',
+      hintEn: 'Apply the fundamental scalar seismic moment relation: M₀ = μ · A · D. Isolate mean slip D = M₀ / (μ · A).',
+      solutionStepsEs: [
+        '1. Momento sísmico: M₀ = 10^(1.5 · 8.8 + 9.1) = 10^22.3 ≈ 1.995 × 10²² N·m.',
+        '2. Área de ruptura: A = (400 × 10³ m) × (150 × 10³ m) = 6.0 × 10¹⁰ m².',
+        '3. Deslizamiento medio: D = M₀ / (μ · A) = (1.995 × 10²²) / (3.5 × 10¹⁰ × 6.0 × 10¹⁰) ≈ 9.50 metros.'
+      ],
+      solutionStepsEn: [
+        '1. Seismic moment: M₀ = 10^(1.5 · 8.8 + 9.1) = 10^22.3 ≈ 1.995 × 10²² N·m.',
+        '2. Rupture area: A = (400 × 10³ m) × (150 × 10³ m) = 6.0 × 10¹⁰ m².',
+        '3. Mean fault slip: D = M₀ / (μ · A) = (1.995 × 10²²) / (3.5 × 10¹⁰ × 6.0 × 10¹⁰) ≈ 9.50 meters.'
+      ]
     }
   },
   {
@@ -1246,6 +1271,31 @@ export const LAB_PROBLEMS = [
         '4. Total crustal thickness: H_total = H₀ + h + b = 35 km + 4.0 km + 17.0 km ≈ 56.0 km thickened crust.',
         '5. Bouguer slab correction: Δg_BP = 2π G ρ_c h = 0.04193 · 10⁻³ · 2670 · 4000 ≈ 447.8 mGal of topographic mass subtracted.'
       ]
+    },
+    exercise: {
+      questionEs:
+        'En los Andes Centrales a una altitud de h = 4000 m (ρ_c = 2670 kg/m³, manto ρ_m = 3300 kg/m³), ¿cuál es el espesor b de la raíz cortical que penetra en el manto según la compensación isostática de Airy?',
+      questionEn:
+        'In the Central Andes at elevation h = 4000 m (crustal density ρ_c = 2670 kg/m³, mantle ρ_m = 3300 kg/m³), what is the thickness b of the crustal root penetrating the mantle under Airy isostasy?',
+      presetValues: { mountainHeight: 4000, crustDensity: 2670, mantleDensity: 3300, crustThickness: 35 },
+      options: [
+        { id: 'a', text: 'b ≈ 17.0 km (Profunda raíz de baja densidad que genera anomalía de Bouguer negativa)', correct: true },
+        { id: 'b', text: 'b ≈ 4.0 km (Igual a la altura superficial)', correct: false },
+        { id: 'c', text: 'b ≈ 35.0 km (Corteza basal duplicada sin compensación)', correct: false },
+        { id: 'd', text: 'b ≈ 0.5 km (Topografía no compensada)', correct: false }
+      ],
+      hintEs: 'Aplica el balance isostático de masas a nivel de compensación: b = h · [ρ_c / (ρ_m - ρ_c)]. El contraste de densidades es Δρ = 630 kg/m³.',
+      hintEn: 'Apply the isostatic mass balance at compensation depth: b = h · [ρ_c / (ρ_m - ρ_c)]. The density contrast is Δρ = 630 kg/m³.',
+      solutionStepsEs: [
+        '1. Contraste de densidad corteza-manto: Δρ = ρ_m - ρ_c = 3300 - 2670 = 630 kg/m³.',
+        '2. Fórmula de raíz isostática: b = h · (ρ_c / Δρ) = 4000 m · (2670 / 630).',
+        '3. Cálculo: b ≈ 16,952 m ≈ 17.0 km de raíz cortical.'
+      ],
+      solutionStepsEn: [
+        '1. Crust-mantle density contrast: Δρ = ρ_m - ρ_c = 3300 - 2670 = 630 kg/m³.',
+        '2. Isostatic root formula: b = h · (ρ_c / Δρ) = 4000 m · (2670 / 630).',
+        '3. Result: b ≈ 16,952 m ≈ 17.0 km of crustal root.'
+      ]
     }
   },
   {
@@ -1317,6 +1367,31 @@ export const LAB_PROBLEMS = [
         '4. Ekman transport: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) ≈ 2.80 m²/s per meter of coastline.',
         '5. Direction: In the Southern Hemisphere, transport is 90° to the LEFT of wind. With a northward wind, transport is directed WESTWARD (offshore), triggering coastal upwelling.'
       ]
+    },
+    exercise: {
+      questionEs:
+        'En las costas de Valparaíso (φ = -33°S, f = -7.94×10⁻⁵ s⁻¹), un viento del sur produce una tensión superficial τ₀ = 0.228 Pa en agua marina (ρ = 1025 kg/m³). ¿Cuál es la magnitud del Transporte neto de Ekman M_E y hacia qué dirección se desplaza la masa de agua superficial?',
+      questionEn:
+        'Off the coast of Valparaíso (φ = -33°S, f = -7.94×10⁻⁵ s⁻¹), a southerly wind produces surface stress τ₀ = 0.228 Pa in seawater (ρ = 1025 kg/m³). What is the net Ekman transport M_E magnitude, and in what direction does the surface water mass move?',
+      presetValues: { windSpeed: 12, latitude: -33, eddyViscosity: 0.05 },
+      options: [
+        { id: 'a', text: 'M_E ≈ 2.80 m²/s hacia el Oeste (mar adentro a 90° a la izquierda), induciendo surgencia costera', correct: true },
+        { id: 'b', text: 'M_E ≈ 2.80 m²/s hacia el Este (hacia la costa), provocando hundimiento', correct: false },
+        { id: 'c', text: 'M_E ≈ 0.23 m²/s hacia el Norte (paralelo exacto al viento)', correct: false },
+        { id: 'd', text: 'M_E ≈ 28.5 m²/s hacia el Sur (en contra del viento)', correct: false }
+      ],
+      hintEs: 'La magnitud del transporte neto integrado es M_E = τ₀ / (ρ · |f|). En el Hemisferio Sur, la fuerza de Coriolis desvía el transporte neto a 90° a la izquierda de la dirección del viento.',
+      hintEn: 'Net integrated transport magnitude is M_E = τ₀ / (ρ · |f|). In the Southern Hemisphere, Coriolis deflects net transport 90° to the left of wind direction.',
+      solutionStepsEs: [
+        '1. Parámetro de Coriolis: |f| = 2 · (7.292×10⁻⁵ s⁻¹) · sin(33°) ≈ 7.943 × 10⁻⁵ s⁻¹.',
+        '2. Transporte de Ekman: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) ≈ 2.80 m²/s.',
+        '3. Dirección: 90° a la izquierda de un viento que sopla hacia el Norte apunta al Oeste (mar abierto), forzando la surgencia de aguas profundas ricas en nutrientes.'
+      ],
+      solutionStepsEn: [
+        '1. Coriolis parameter: |f| = 2 · (7.292×10⁻⁵ s⁻¹) · sin(33°) ≈ 7.943 × 10⁻⁵ s⁻¹.',
+        '2. Ekman transport: M_E = τ₀ / (ρ · |f|) = 0.228 / (1025 · 7.943×10⁻⁵) ≈ 2.80 m²/s.',
+        '3. Direction: 90° to the left of a northward wind points West (offshore), forcing upwelling of deep nutrient-rich water.'
+      ]
     }
   },
   {
@@ -1386,6 +1461,31 @@ export const LAB_PROBLEMS = [
         '2. Angular frequency: ω = 2π · 4 ≈ 25.13 rad/s.',
         '3. Cagniard surface impedance: |Z| = √(ω · μ₀ · ρ₁) = √(25.13 · 4π×10⁻⁷ · 16) ≈ 0.0225 Ω.',
         '4. Maximum frequency for z = 8000 m: δ = 503 · √(ρ / f) ⇒ √f = 503 · √100 / 8000 ⇒ f = (5030 / 8000)² ≈ 0.395 Hz (period T ≈ 2.53 seconds).'
+      ]
+    },
+    exercise: {
+      questionEs:
+        'En un sondeo magnetotelúrico sobre una capa arcillosa geotérmica de resistividad ρ₁ = 16 Ω·m, se registra una señal natural de frecuencia f = 4 Hz. ¿Cuál es la profundidad de penetración (Skin Depth) δ en el subsuelo?',
+      questionEn:
+        'In a magnetotelluric survey over a geothermal clay cap of resistivity ρ₁ = 16 Ω·m, an EM natural signal of frequency f = 4 Hz is measured. What is the subsurface skin depth δ?',
+      presetValues: { frequency: 4, resTop: 16, resBottom: 600, layerThickness: 250 },
+      options: [
+        { id: 'a', text: 'δ ≈ 1006 m (Aproximadamente 1.0 km de penetración de la onda EM)', correct: true },
+        { id: 'b', text: 'δ ≈ 200 m (Atenuación excesiva inmediata)', correct: false },
+        { id: 'c', text: 'δ ≈ 5030 m (Sobreestimación por omisión de frecuencia)', correct: false },
+        { id: 'd', text: 'δ ≈ 64 m (Escala errónea)', correct: false }
+      ],
+      hintEs: 'Aplica la aproximación práctica para el Skin Depth electromagnético cuasi-estacionario: δ ≈ 503 · √(ρ / f).',
+      hintEn: 'Apply the practical quasi-stationary electromagnetic skin depth formula: δ ≈ 503 · √(ρ / f).',
+      solutionStepsEs: [
+        '1. Relación de resistividad y frecuencia: ρ / f = 16 / 4 = 4.0.',
+        '2. Raíz cuadrada: √(ρ / f) = √4.0 = 2.0.',
+        '3. Skin depth: δ ≈ 503 · 2.0 = 1006 metros.'
+      ],
+      solutionStepsEn: [
+        '1. Resistivity to frequency ratio: ρ / f = 16 / 4 = 4.0.',
+        '2. Square root: √(ρ / f) = √4.0 = 2.0.',
+        '3. Skin depth: δ ≈ 503 · 2.0 = 1006 meters.'
       ]
     }
   }

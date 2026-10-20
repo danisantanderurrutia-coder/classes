@@ -34,7 +34,6 @@ import {
   Waves,
   Radio
 } from 'lucide-react';
-import PhysicsToolkit from './PhysicsToolkit';
 
 // ============================================================================
 // CATALOG OF 14 CLASSICAL PHYSICS, ENGINEERING & GEOPHYSICS LAB PROBLEMS
@@ -1669,7 +1668,6 @@ export default function PhysicsLab({
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [showStudySheet, setShowStudySheet] = useState(false);
-  const [viewMode, setViewMode] = useState('benchmarks'); // 'benchmarks' | 'toolkit'
 
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -4009,53 +4007,28 @@ export default function PhysicsLab({
           </div>
         </div>
 
-        {/* Dual Mode Switcher: 10 Benchmarks vs Compendium Toolkit */}
-        <div className="flex flex-wrap items-center gap-3 mb-8 pb-4 border-b border-slate-200">
-          <button
-            onClick={() => setViewMode('benchmarks')}
-            className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
-              viewMode === 'benchmarks'
-                ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-sky-500/30'
-                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
-            }`}
-          >
-            <Compass className="w-4 h-4 text-sky-400" />
-            <span>
+        {/* Shortcut banner to the Classical Library for theoretical laws */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 p-4 rounded-2xl bg-slate-100/90 border border-slate-200 text-xs font-mono">
+          <div className="flex items-center gap-2.5 text-slate-800">
+            <BookOpen className="w-4 h-4 text-sky-600 shrink-0" />
+            <span className="font-sans text-xs text-slate-700">
               {lang === 'en'
-                ? '10 Benchmark Lab Simulations & FBDs'
-                : 'Laboratorio de 10 Problemas Clásicos & DCL'}
+                ? 'Looking for theoretical formulations, Maxwell equations, PDEs & spectral theorems? Explore the Compendium in the Classical Library.'
+                : '¿Buscas formulaciones teóricas, ecuaciones de Maxwell, EDPs y teoremas espectrales? Explora el Compendio en la Biblioteca Clásica.'}
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold ml-1">
-              10
-            </span>
-          </button>
-
-          <button
-            onClick={() => setViewMode('toolkit')}
-            className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
-              viewMode === 'toolkit'
-                ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-emerald-500/30'
-                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
-            }`}
-          >
-            <Wrench className="w-4 h-4 text-emerald-400" />
-            <span>
-              {lang === 'en'
-                ? 'Compendium of Laws & Tools (Physics • Algebra • Calculus)'
-                : 'Compendio de Leyes & Herramientas (Física • Álgebra • Cálculo)'}
-            </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold ml-1">
-              ✨ {lang === 'en' ? 'Toolkit' : 'Herramientas'}
-            </span>
-          </button>
+          </div>
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('library')}
+              className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto shrink-0 shadow-xs"
+            >
+              {lang === 'en' ? 'Open Library & Laws →' : 'Ver Biblioteca & Leyes →'}
+            </button>
+          )}
         </div>
 
-        {viewMode === 'toolkit' ? (
-          <PhysicsToolkit lang={lang} onOpenBooking={onOpenBooking} />
-        ) : (
-          <>
-            {/* Discipline Category Filter Bar */}
-            <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200">
+        {/* Discipline Category Filter Bar */}
+        <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200">
               {PROBLEM_CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat.id;
                 return (
@@ -4527,8 +4500,6 @@ export default function PhysicsLab({
             )}
           </div>
         </div>
-        </>
-        )}
 
         {/* ================================================================= */}
         {/* MODAL: EXPORTAR FICHA DE ESTUDIO / IMPRIMIR RESUMEN OFICIAL       */}

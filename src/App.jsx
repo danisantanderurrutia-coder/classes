@@ -50,6 +50,7 @@ import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
 import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
 import { ProblemThumbnail } from './components/LabThumbnails';
 import PIADMethod from './components/PIADMethod';
+import PhysicsToolkit from './components/PhysicsToolkit';
 import {
   CURRENCY_TIERS,
   CURRENCY_LIST,
@@ -772,6 +773,9 @@ export default function App() {
 
   // FAQ State
   const [openFaq, setOpenFaq] = useState(0);
+
+  // Library View State: 'laws' (Compendium of Laws & PDEs) | 'books' (Classical Treatises)
+  const [libraryTab, setLibraryTab] = useState('laws');
 
   const liveTiers = getCurrencyTiers();
   const activeTier = liveTiers[currency] || liveTiers.EUR;
@@ -2043,20 +2047,20 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         )}
 
         {/* ========================================================= */}
-        {/* PAGE 3: FOUNDATIONAL STEM LIBRARY (THE CLASSICS)          */}
+        {/* PAGE 3: FOUNDATIONAL STEM LIBRARY & COMPENDIUM OF LAWS     */}
         {/* ========================================================= */}
         {currentPage === 'library' && (
           <div className="pt-24 pb-12 sm:pt-28 sm:pb-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
               
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
                 <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
                 <span>/</span>
-                <span className="text-slate-900 font-bold">{lang === 'en' ? 'Classical Library' : 'Biblioteca Clásica'}</span>
+                <span className="text-slate-900 font-bold">{lang === 'en' ? 'Classical Library & Compendium' : 'Biblioteca Clásica & Compendio de Leyes'}</span>
               </div>
 
               {/* Library Banner with Real Historical Library + Illuminated Treatises Crossfade */}
-              <div className="relative rounded-3xl overflow-hidden mb-12 bg-slate-900 text-white shadow-lg group">
+              <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-lg group">
                 <img 
                   src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
                   alt="Academic Library" 
@@ -2069,71 +2073,113 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 />
                 <div className="relative z-10 p-8 sm:p-14 max-w-3xl">
                   <span className="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold block mb-2">
-                    {lang === 'en' ? 'Core Literature & Classical Foundations' : 'Literatura Fundamental & Fuentes Clásicas'}
+                    {lang === 'en' ? 'Core Literature & Exact Mathematical Formulations' : 'Literatura Fundamental & Formulaciones Exactas'}
                   </span>
                   <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-                    {lang === 'en' ? 'The Foundational Science & Mathematics Library' : 'Biblioteca de Clásicos de la Ciencia y las Matemáticas'}
+                    {lang === 'en' ? 'Classical Library & Compendium of Laws' : 'Biblioteca Clásica y Compendio de Leyes'}
                   </h1>
                   <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">
                     {lang === 'en'
-                      ? 'Every concept taught in our sessions is anchored directly in the great historical treatises of mathematics, classical mechanics, continuum geophysics, and numerical analysis.'
+                      ? 'Every concept taught in our sessions is anchored directly in the great historical treatises and exact mathematical formulations of classical physics, continuum mechanics, multivariable calculus, and spectral analysis.'
                       : 'Cada demostración y concepto impartido en nuestras sesiones se fundamenta directamente en los grandes tratados de la física matemática, la mecánica de medios continuos y el cálculo diferencial.'}
                   </p>
                 </div>
               </div>
 
-              {/* Grid of Foundational Books */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {FOUNDATIONAL_BOOKS.map((book) => (
-                  <div 
-                    key={book.id} 
-                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-md transition-all"
-                  >
-                    <div className="h-44 overflow-hidden relative">
-                      <img 
-                        src={book.image} 
-                        alt={book.title} 
-                        className="w-full h-full object-cover" 
-                      />
-                      <div className="absolute top-3 right-3">
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900/90 text-amber-300 backdrop-blur-xs font-bold">
-                          {book.tag}
-                        </span>
-                      </div>
-                    </div>
+              {/* Dual Sub-View Switcher: Compendium of Laws vs Classical Treatises */}
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <button
+                  onClick={() => setLibraryTab('laws')}
+                  className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
+                    libraryTab === 'laws'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-sky-500/30'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 text-sky-400" />
+                  <span>{lang === 'en' ? 'Compendium of Laws & Formulations (LaTeX)' : 'Compendio de Leyes & Formulaciones (LaTeX)'}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold ml-1">
+                    20+
+                  </span>
+                </button>
 
-                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                      <div>
-                        <h3 className="text-lg font-bold text-slate-900 leading-snug mb-1">
-                          {book.title}
-                        </h3>
-                        <p className="text-xs font-mono text-slate-500 mb-2">
-                          {book.authors}
-                        </p>
-                        <p className="text-[11px] font-mono text-sky-700 font-semibold mb-3">
-                          {lang === 'en' ? book.subjectEn : book.subjectEs}
-                        </p>
-                        <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                          {lang === 'en' ? book.descriptionEn : book.descriptionEs}
-                        </p>
+                <button
+                  onClick={() => setLibraryTab('books')}
+                  className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
+                    libraryTab === 'books'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-amber-500/30'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4 text-amber-400" />
+                  <span>{lang === 'en' ? 'Foundational Academic Books & Treatises' : 'Tratados Clásicos y Bibliografía'}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold ml-1">
+                    {FOUNDATIONAL_BOOKS.length}
+                  </span>
+                </button>
+              </div>
+
+              {/* Tab 1: Compendium of Laws, Formulations, SVD & PDEs */}
+              {libraryTab === 'laws' && (
+                <div>
+                  <PhysicsToolkit lang={lang} onOpenBooking={handleOpenBooking} />
+                </div>
+              )}
+
+              {/* Tab 2: Foundational Academic Treatises Grid */}
+              {libraryTab === 'books' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {FOUNDATIONAL_BOOKS.map((book) => (
+                    <div 
+                      key={book.id} 
+                      className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-md transition-all"
+                    >
+                      <div className="h-44 overflow-hidden relative">
+                        <img 
+                          src={book.image} 
+                          alt={book.title} 
+                          className="w-full h-full object-cover" 
+                        />
+                        <div className="absolute top-3 right-3">
+                          <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900/90 text-amber-300 backdrop-blur-xs font-bold">
+                            {book.tag}
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-slate-400">
-                          {book.edition}
-                        </span>
-                        <div className="flex gap-1">
-                          {book.usedIn.map((m, i) => (
-                            <span key={i} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                              {m}
-                            </span>
-                          ))}
+                      <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900 leading-snug mb-1">
+                            {book.title}
+                          </h3>
+                          <p className="text-xs font-mono text-slate-500 mb-2">
+                            {book.authors}
+                          </p>
+                          <p className="text-[11px] font-mono text-sky-700 font-semibold mb-3">
+                            {lang === 'en' ? book.subjectEn : book.subjectEs}
+                          </p>
+                          <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                            {lang === 'en' ? book.descriptionEn : book.descriptionEs}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-slate-400">
+                            {book.edition}
+                          </span>
+                          <div className="flex gap-1">
+                            {book.usedIn.map((m, i) => (
+                              <span key={i} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                                {m}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
             </div>
           </div>

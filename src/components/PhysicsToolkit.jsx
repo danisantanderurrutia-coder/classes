@@ -25,6 +25,7 @@ import {
   Flame,
   Wind
 } from 'lucide-react';
+import MathFormula from './MathFormula';
 
 export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   const isEn = lang === 'en';
@@ -107,7 +108,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   const complexCanvasRef = useRef(null);
 
   // ==========================================================================
-  // MASTER COMPENDIUM OF FUNDAMENTAL LAWS (COVERING ALL ACADEMIC COURSES)
+  // MASTER COMPENDIUM OF FUNDAMENTAL LAWS (KATEX LATEX FORMULATIONS)
   // ==========================================================================
   const ALL_FUNDAMENTAL_LAWS = [
     // ------------------------------------------------------------------------
@@ -119,7 +120,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Newton's 2nd Law of Motion (Momentum Formulation)",
       titleEs: "2ª Ley de Newton (Dinámica y Momento Lineal)",
-      formula: "F⃗_net = dp⃗/dt = m a⃗",
+      latex: "\\mathbf{F}_{\\text{net}} = \\frac{d\\mathbf{p}}{dt} = m\\mathbf{a}",
       descEn: "The rate of change of linear momentum equals the net external force. In constant mass systems, it reduces to F = ma, the bedrock of classical dynamics.",
       descEs: "La tasa temporal de cambio del momento lineal es igual a la fuerza neta exterior. Con masa constante se reduce a F = ma, base de la dinámica clásica."
     },
@@ -129,7 +130,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'AST-401 / PHY-201',
       titleEn: "Newton's Law of Universal Gravitation & Gravitational Potential",
       titleEs: "Ley de Gravitación Universal y Potencial Gravitatorio",
-      formula: "F⃗_g = -G (M m / r²) r̂  |  Φ(r) = -G M / r",
+      latex: "\\mathbf{F}_g = -G \\frac{M m}{r^2} \\hat{\\mathbf{r}} \\quad \\Big| \\quad \\Phi(r) = -\\frac{G M}{r}",
       descEn: "Every mass attracts every other mass along the radial line. The conservative force field derives from the scalar potential via F = -m∇Φ, obeying Gauss's law for gravity.",
       descEs: "Toda masa atrae a cualquier otra a lo largo de la línea radial. El campo conservativo deriva del potencial escalar F = -m∇Φ y satisface la ley de Gauss gravitatoria."
     },
@@ -139,7 +140,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Conservation of Mechanical Energy & Angular Momentum",
       titleEs: "Conservación de Energía Mecánica y Momento Angular",
-      formula: "E = T + V = const  |  L⃗ = r⃗ × p⃗ ,  dL⃗/dt = τ⃗_ext",
+      latex: "E = T + V = \\text{const} \\quad \\Big| \\quad \\mathbf{L} = \\mathbf{r} \\times \\mathbf{p}, \\; \\frac{d\\mathbf{L}}{dt} = \\boldsymbol{\\tau}_{\\text{ext}}",
       descEn: "By Noether's theorem, time translation invariance yields energy conservation, while rotational symmetry yields angular momentum conservation in central force fields.",
       descEs: "Por el teorema de Noether, la simetría temporal garantiza la conservación de la energía, y la simetría rotacional conserva el momento angular en campos centrales."
     },
@@ -149,7 +150,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'AST-401',
       titleEn: "Kepler's 3rd Law of Planetary Motion (Harmonic Law)",
       titleEs: "3ª Ley de Kepler (Ley Armónica de Órbitas)",
-      formula: "T² = [4π² / (G (M + m))] · a³",
+      latex: "T^2 = \\frac{4\\pi^2}{G (M + m)} \\, a^3",
       descEn: "The square of the orbital period T is directly proportional to the cube of the semi-major axis a, derived rigorously from balance of gravitational and centripetal acceleration.",
       descEs: "El cuadrado del período orbital T es proporcional al cubo del semieje mayor a, deducible rigurosamente del balance entre gravitación y aceleración centrípeta."
     },
@@ -159,7 +160,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'GEO-301',
       titleEn: "Hooke's Generalized Law of Linear Elasticity (Stress Tensor)",
       titleEs: "Ley Generalizada de Hooke (Tensor de Esfuerzos y Deformaciones)",
-      formula: "σ_ij = c_ijkl ε_kl = λ δ_ij ε_kk + 2μ ε_ij",
+      latex: "\\sigma_{ij} = c_{ijkl} \\, \\varepsilon_{kl} = \\lambda \\delta_{ij} \\varepsilon_{kk} + 2\\mu \\varepsilon_{ij}",
       descEn: "Relates the 2nd-order Cauchy stress tensor σ to infinitesimal strain ε via Lamé parameters (λ, μ), governing seismic P and S wave propagation in solid earth.",
       descEs: "Relaciona el tensor de esfuerzos de Cauchy con la deformación infinitesimal mediante los parámetros de Lamé (λ, μ), rigiendo las ondas sísmicas P y S."
     },
@@ -169,7 +170,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Work-Kinetic Energy Theorem",
       titleEs: "Teorema del Trabajo y la Energía Cinética",
-      formula: "W_net = ∫ F⃗_net · dr⃗ = ΔK = (1/2)m v_f² - (1/2)m v_i²",
+      latex: "W_{\\text{net}} = \\int \\mathbf{F}_{\\text{net}} \\cdot d\\mathbf{r} = \\Delta K = \\frac{1}{2}m v_f^2 - \\frac{1}{2}m v_i^2",
       descEn: "The line integral of net force along a particle's trajectory equals the exact change in kinetic energy, independent of conservative or non-conservative paths.",
       descEs: "La integral de línea de la fuerza neta a lo largo de la trayectoria equivale exactamente a la variación de energía cinética, con fuerzas conservativas o disipativas."
     },
@@ -183,7 +184,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Fluid Mass Continuity Equation (Conservation of Mass)",
       titleEs: "Ecuación de Continuidad de Fluidos (Conservación de Masa)",
-      formula: "∂ρ/∂t + ∇ · (ρ u⃗) = 0  (∇ · u⃗ = 0 for incompressible)",
+      latex: "\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\mathbf{u}) = 0 \\quad (\\nabla \\cdot \\mathbf{u} = 0 \\text{ for incompressible})",
       descEn: "Fundamental differential law stating that the local rate of density change equals the negative divergence of mass flux. For liquids, velocity is solenoidal.",
       descEs: "Ley diferencial fundamental: la variación local de densidad equilibra la divergencia del flujo de masa. Para fluidos incompresibles, la velocidad es solenoidal."
     },
@@ -193,7 +194,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / GEO-301',
       titleEn: "Navier-Stokes Equations of Momentum for Viscous Fluids",
       titleEs: "Ecuaciones de Navier-Stokes (Conservación de Momento en Fluidos)",
-      formula: "ρ (∂u⃗/∂t + (u⃗ · ∇)u⃗) = -∇P + μ ∇²u⃗ + ρ g⃗",
+      latex: "\\rho \\left(\\frac{\\partial \\mathbf{u}}{\\partial t} + (\\mathbf{u} \\cdot \\nabla)\\mathbf{u}\\right) = -\\nabla P + \\mu \\nabla^2 \\mathbf{u} + \\rho \\mathbf{g}",
       descEn: "Describes Newton's 2nd law in continuum fluids, balancing convective acceleration, pressure gradients, viscous shear dissipation, and body forces.",
       descEs: "Aplica la 2ª ley de Newton a medios continuos: equilibra aceleración advectiva, gradientes de presión, disipación viscosa por cizalle y gravedad."
     },
@@ -203,7 +204,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Bernoulli's Streamline Energy Conservation Principle",
       titleEs: "Ecuación de Bernoulli (Conservación de Energía en Líneas de Corriente)",
-      formula: "P + (1/2) ρ v² + ρ g z = const (along streamline)",
+      latex: "P + \\frac{1}{2} \\rho v^2 + \\rho g z = \\text{const} \\quad (\\text{along streamline})",
       descEn: "Conservation of energy in steady, incompressible, and inviscid fluid flow: static pressure drops where kinetic flow speed increases (Venturi effect).",
       descEs: "Conservación de energía mecánica para flujo estacionario e incompresible sin viscosidad: la presión estática disminuye cuando la velocidad aumenta (efecto Venturi)."
     },
@@ -213,7 +214,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'GEO-301 / AST-401',
       titleEn: "Hydrostatic Equilibrium & Atmospheric Pressure Profile",
       titleEs: "Equilibrio Hidrostático y Perfil de Presión Atmosférica",
-      formula: "dP/dz = -ρ(z) g  ⇒  P(z) = P_0 exp(-z / H)",
+      latex: "\\frac{dP}{dz} = -\\rho(z) g \\implies P(z) = P_0 e^{-z / H}",
       descEn: "Balance between vertical upward pressure gradient and downward gravity. Explains the barometric formula, ocean water columns, and stellar hydrostatic stability.",
       descEs: "Equilibrio entre el gradiente vertical de presión hacia arriba y la gravedad. Explica la fórmula barométrica, la columna oceánica y la estabilidad estelar."
     },
@@ -227,7 +228,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "Gauss's Law for Electricity (1st Maxwell Equation)",
       titleEs: "Ley de Gauss para el Campo Eléctrico (1ª Ecuación de Maxwell)",
-      formula: "∇ · E⃗ = ρ / ε₀  |  ∮ E⃗ · dA⃗ = Q_enc / ε₀",
+      latex: "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon_0} \\quad \\Big| \\quad \\oiint_{\\partial V} \\mathbf{E} \\cdot d\\mathbf{A} = \\frac{Q_{\\text{enc}}}{\\varepsilon_0}",
       descEn: "Electric charges act as sources (positive) or sinks (negative) of electric displacement flux. Directly yields Coulomb's law by spherical symmetry.",
       descEs: "Las cargas eléctricas actúan como fuentes (positivas) o sumideros (negativas) del flujo eléctrico. Deduce la ley de Coulomb por simetría esférica."
     },
@@ -237,7 +238,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "Gauss's Law for Magnetism (2nd Maxwell Equation)",
       titleEs: "Ley de Gauss para el Magnetismo (2ª Ecuación de Maxwell)",
-      formula: "∇ · B⃗ = 0  |  ∮ B⃗ · dA⃗ = 0",
+      latex: "\\nabla \\cdot \\mathbf{B} = 0 \\quad \\Big| \\quad \\oiint_{\\partial V} \\mathbf{B} \\cdot d\\mathbf{A} = 0",
       descEn: "There are no isolated magnetic monopoles in nature. Magnetic field lines always form closed continuous loops with zero divergence everywhere.",
       descEs: "No existen monopolos magnéticos aislados en la naturaleza. Las líneas de campo magnético siempre forman bucles cerrados con divergencia nula."
     },
@@ -247,7 +248,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "Faraday-Lenz Law of Induction (3rd Maxwell Equation)",
       titleEs: "Ley de Inducción de Faraday-Lenz (3ª Ecuación de Maxwell)",
-      formula: "∇ × E⃗ = -∂B⃗/∂t  |  ε = -dΦ_B/dt",
+      latex: "\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t} \\quad \\Big| \\quad \\mathcal{E} = -\\frac{d\\Phi_B}{dt}",
       descEn: "A time-varying magnetic field induces a rotational electric field. The negative sign represents Lenz's law of opposing change, powering transformers and dynamos.",
       descEs: "Un campo magnético variable en el tiempo induce un campo eléctrico rotacional. El signo negativo representa la oposición de Lenz, base de transformadores y dínamos."
     },
@@ -257,7 +258,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "Ampère-Maxwell Circuital Law with Displacement Current (4th)",
       titleEs: "Ley de Ampère-Maxwell con Corriente de Desplazamiento (4ª)",
-      formula: "∇ × B⃗ = μ₀ (J⃗ + ε₀ ∂E⃗/∂t)",
+      latex: "\\nabla \\times \\mathbf{B} = \\mu_0 \\left(\\mathbf{J} + \\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}\\right)",
       descEn: "Electric currents and changing electric fields generate circulating magnetic fields. Maxwell's displacement term predicts electromagnetic wave propagation at speed c.",
       descEs: "Las corrientes eléctricas y los campos eléctricos variables generan campos magnéticos. El término de Maxwell predice la propagación de ondas de luz a velocidad c."
     },
@@ -267,7 +268,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "Lorentz Force Law on Charged Particles",
       titleEs: "Ley de Fuerza de Lorentz sobre Partículas Cargadas",
-      formula: "F⃗ = q (E⃗ + v⃗ × B⃗)",
+      latex: "\\mathbf{F} = q (\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B})",
       descEn: "Complete electromagnetic force combining electric acceleration collinear with E and perpendicular magnetic deflecting force responsible for cyclotron orbits.",
       descEs: "Fuerza electromagnética total que combina aceleración eléctrica colineal con E y deflexión magnética perpendicular responsable de órbitas ciclotrónicas."
     },
@@ -277,7 +278,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Poynting Vector & Electromagnetic Energy Flux Density",
       titleEs: "Vector de Poynting y Densidad de Flujo de Energía Electromagnética",
-      formula: "S⃗ = (1 / μ₀) (E⃗ × B⃗)  |  ⟨|S⃗|⟩ = (1/2) c ε₀ E₀²",
+      latex: "\\mathbf{S} = \\frac{1}{\\mu_0} (\\mathbf{E} \\times \\mathbf{B}) \\quad \\Big| \\quad \\langle |\\mathbf{S}| \\rangle = \\frac{1}{2} c \\varepsilon_0 E_0^2",
       descEn: "Represents the directional energy flux density (watts per square meter) carried by an electromagnetic wave through space, perpendicular to both E and B.",
       descEs: "Representa el flujo direccional de energía (vatios por metro cuadrado) transportado por una onda electromagnética a través del espacio, perpendicular a E y B."
     },
@@ -291,7 +292,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201 / IB-HL',
       titleEn: "First Law of Thermodynamics (Conservation of Energy)",
       titleEs: "Primera Ley de la Termodinámica (Conservación de Energía)",
-      formula: "dU = δQ - δW = δQ - P dV",
+      latex: "dU = \\delta Q - \\delta W = \\delta Q - P dV",
       descEn: "The change in internal energy of a closed system equals heat supplied minus mechanical work done on the surroundings. Internal energy U is a state function.",
       descEs: "La variación de energía interna de un sistema cerrado equivale al calor absorbido menos el trabajo realizado. La energía interna U es función de estado."
     },
@@ -301,7 +302,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'PHY-201',
       titleEn: "Second Law of Thermodynamics (Entropy & Irreversibility)",
       titleEs: "Segunda Ley de la Termodinámica (Entropía e Irreversibilidad)",
-      formula: "dS ≥ δQ / T  |  ΔS_universe ≥ 0  |  η_Carnot = 1 - T_C / T_H",
+      latex: "dS \\ge \\frac{\\delta Q}{T} \\quad \\Big| \\quad \\Delta S_{\\text{univ}} \\ge 0 \\quad \\Big| \\quad \\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}",
       descEn: "Spontaneous natural processes increase the net entropy of an isolated universe. Defines the thermodynamic arrow of time and sets the Carnot efficiency ceiling.",
       descEs: "Los procesos espontáneos aumentan la entropía total del universo aislado. Define la flecha del tiempo termodinámica y el límite de eficiencia de Carnot."
     },
@@ -311,7 +312,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'AST-401',
       titleEn: "Einstein's Field Equations of Spacetime Curvature (General Relativity)",
       titleEs: "Ecuaciones de Campo de Einstein (Relatividad General y Curvatura)",
-      formula: "G_μν + Λ g_μν = (8πG / c⁴) T_μν  (G_μν = R_μν - (1/2)R g_μν)",
+      latex: "G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu} \\quad (G_{\\mu\\nu} = R_{\\mu\\nu} - \\tfrac{1}{2}R g_{\\mu\\nu})",
       descEn: "Spacetime tells matter how to move; matter tells spacetime how to curve. The Einstein tensor G balances the stress-energy-momentum tensor T of matter and radiation.",
       descEs: "El espacio-tiempo le dice a la materia cómo moverse; la materia le dice al espacio-tiempo cómo curvarse. El tensor G equilibra el tensor energía-momento T."
     },
@@ -321,7 +322,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       courseCode: 'AST-401',
       titleEn: "Schwarzschild Metric & Gravitational Horizon Radius",
       titleEs: "Métrica de Schwarzschild y Radio del Horizonte de Sucesos",
-      formula: "ds² = -(1 - r_s/r)c² dt² + (1 - r_s/r)⁻¹ dr² + r² dΩ²  (r_s = 2GM/c²)",
+      latex: "ds^2 = -\\left(1 - \\frac{r_s}{r}\\right)c^2 dt^2 + \\left(1 - \\frac{r_s}{r}\\right)^{-1} dr^2 + r^2 d\\Omega^2 \\quad (r_s = \\tfrac{2GM}{c^2})",
       descEn: "Exact vacuum solution to Einstein's equations outside a static, spherically symmetric mass. Defines the event horizon r_s and gravitational time dilation.",
       descEs: "Solución exacta al vacío fuera de una masa esférica estática. Define el radio del horizonte de sucesos r_s y la dilatación temporal gravitatoria."
     }
@@ -385,31 +386,31 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
     const cy = originY - lenC;
 
     // Bilingual vector labels
-    let labelA = isEn ? 'v⃗ (Velocity)' : 'v⃗ (Velocidad)';
-    let labelB = isEn ? 'B⃗ (Magnetic Field)' : 'B⃗ (Campo Magnético)';
-    let labelC = isEn ? 'F⃗_L = q(v⃗ × B⃗)' : 'F⃗_L = q(v⃗ × B⃗)';
+    let labelA = isEn ? 'v (Velocity)' : 'v (Velocidad)';
+    let labelB = isEn ? 'B (Magnetic Field)' : 'B (Campo Magnético)';
+    let labelC = isEn ? 'F_L = q(v × B)' : 'F_L = q(v × B)';
     let subDesc = isEn ? 'Lorentz Force on positive test charge' : 'Fuerza de Lorentz sobre carga positiva';
 
     if (rhrMode === 'torque') {
-      labelA = isEn ? 'r⃗ (Lever Arm)' : 'r⃗ (Brazo de Palanca)';
-      labelB = isEn ? 'F⃗ (Applied Force)' : 'F⃗ (Fuerza Aplicada)';
-      labelC = isEn ? 'τ⃗ = r⃗ × F⃗ (Torque)' : 'τ⃗ = r⃗ × F⃗ (Torque)';
+      labelA = isEn ? 'r (Lever Arm)' : 'r (Brazo de Palanca)';
+      labelB = isEn ? 'F (Applied Force)' : 'F (Fuerza Aplicada)';
+      labelC = isEn ? 'τ = r × F (Torque)' : 'τ = r × F (Torque)';
       subDesc = isEn ? 'Torque relative to rotation axis' : 'Momento de fuerza respecto al eje de rotación';
     } else if (rhrMode === 'omega') {
-      labelA = isEn ? 'ω⃗ (Angular Velocity)' : 'ω⃗ (Velocidad Angular)';
-      labelB = isEn ? 'r⃗ (Position Vector)' : 'r⃗ (Radio vector)';
-      labelC = isEn ? 'v⃗ = ω⃗ × r⃗ (Velocity)' : 'v⃗ = ω⃗ × r⃗';
+      labelA = isEn ? 'ω (Angular Velocity)' : 'ω (Velocidad Angular)';
+      labelB = isEn ? 'r (Position Vector)' : 'r (Radio vector)';
+      labelC = isEn ? 'v = ω × r (Velocity)' : 'v = ω × r';
       subDesc = isEn ? 'Tangential velocity in rigid body rotation' : 'Velocidad tangencial en rotación de cuerpo rígido';
     } else if (rhrMode === 'coriolis') {
-      labelA = isEn ? 'Ω⃗ (Earth Rotation)' : 'Ω⃗ (Rotación Terrestre)';
-      labelB = isEn ? 'v⃗ (Fluid Velocity)' : 'v⃗ (Velocidad Viento/Océano)';
-      labelC = isEn ? 'a⃗_Cor = -2(Ω⃗ × v⃗)' : 'a⃗_Cor = -2(Ω⃗ × v⃗)';
+      labelA = isEn ? 'Ω (Earth Rotation)' : 'Ω (Rotación Terrestre)';
+      labelB = isEn ? 'v (Fluid Velocity)' : 'v (Velocidad Viento/Océano)';
+      labelC = isEn ? 'a_Cor = -2(Ω × v)' : 'a_Cor = -2(Ω × v)';
       subDesc = isEn ? 'Apparent Coriolis acceleration in non-inertial frames' : 'Aceleración aparente de Coriolis en sistemas no inerciales';
     } else if (rhrMode === 'pure') {
-      labelA = isEn ? 'A⃗ (First Vector)' : 'A⃗ (Primer Vector)';
-      labelB = isEn ? 'B⃗ (Second Vector)' : 'B⃗ (Segundo Vector)';
-      labelC = isEn ? 'C⃗ = A⃗ × B⃗' : 'C⃗ = A⃗ × B⃗';
-      subDesc = isEn ? '|C⃗| = |A⃗||B⃗| sin(θ) [Area of Parallelogram]' : '|C⃗| = |A⃗||B⃗| sin(θ) [Área del paralelogramo]';
+      labelA = isEn ? 'A (First Vector)' : 'A (Primer Vector)';
+      labelB = isEn ? 'B (Second Vector)' : 'B (Segundo Vector)';
+      labelC = isEn ? 'C = A × B' : 'C = A × B';
+      subDesc = isEn ? '|C| = |A||B| sin(θ) [Area of Parallelogram]' : '|C| = |A||B| sin(θ) [Área del paralelogramo]';
     }
 
     const drawVector = (x2, y2, color, label, isC = false) => {
@@ -443,7 +444,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
 
     ctx.fillStyle = '#94A3B8';
     ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.fillText(isEn ? `Angle θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitude |A⃗×B⃗| = ${magC.toFixed(2)}` : `Ángulo θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitud |A⃗×B⃗| = ${magC.toFixed(2)}`, 20, 24);
+    ctx.fillText(isEn ? `Angle θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitude |A×B| = ${magC.toFixed(2)}` : `Ángulo θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitud |A×B| = ${magC.toFixed(2)}`, 20, 24);
 
     ctx.fillStyle = '#CBD5E1';
     ctx.font = 'bold 11px "JetBrains Mono", monospace';
@@ -832,11 +833,11 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
                 {[
-                  { id: 'lorentz', label: 'q(v⃗×B⃗)' },
-                  { id: 'torque', label: 'r⃗×F⃗' },
-                  { id: 'omega', label: 'ω⃗×r⃗' },
-                  { id: 'coriolis', label: '-2(Ω⃗×v⃗)' },
-                  { id: 'pure', label: 'A⃗×B⃗' }
+                  { id: 'lorentz', label: 'q(v×B)' },
+                  { id: 'torque', label: 'r×F' },
+                  { id: 'omega', label: 'ω×r' },
+                  { id: 'coriolis', label: '-2(Ω×v)' },
+                  { id: 'pure', label: 'A×B' }
                 ].map((mode) => (
                   <button
                     key={mode.id}
@@ -865,7 +866,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
 
                 <div>
                   <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Angle θ between A & B:' : 'Ángulo θ entre A⃗ y B⃗:'}</span>
+                    <span>{isEn ? 'Angle θ between A & B:' : 'Ángulo θ entre A y B:'}</span>
                     <strong className="text-sky-400">{vectorAngle}°</strong>
                   </div>
                   <input
@@ -881,7 +882,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
 
                 <div>
                   <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Magnitude |A⃗|:' : 'Magnitud |A⃗|:'}</span>
+                    <span>{isEn ? 'Magnitude |A|:' : 'Magnitud |A|:'}</span>
                     <strong className="text-sky-400">{magA}</strong>
                   </div>
                   <input
@@ -897,7 +898,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
 
                 <div>
                   <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                    <span>{isEn ? 'Magnitude |B⃗|:' : 'Magnitud |B⃗|:'}</span>
+                    <span>{isEn ? 'Magnitude |B|:' : 'Magnitud |B|:'}</span>
                     <strong className="text-sky-400">{magB}</strong>
                   </div>
                   <input
@@ -914,8 +915,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-[11px] font-mono text-slate-400 leading-relaxed">
                   💡 <strong className="text-white">{isEn ? 'Practical Rule:' : 'Regla práctica:'}</strong>{' '}
                   {isEn
-                    ? 'Point your index finger along vector A⃗, curl your middle finger towards B⃗; your extended thumb points in the direction of C⃗.'
-                    : 'Apunta con el índice hacia A⃗, gira los dedos hacia B⃗; el pulgar extendido apunta en dirección de C⃗.'}
+                    ? 'Point your index finger along vector A, curl your middle finger towards B; your extended thumb points in the direction of C.'
+                    : 'Apunta con el índice hacia A, gira los dedos hacia B; el pulgar extendido apunta en dirección de C.'}
                 </div>
               </div>
             </div>
@@ -958,10 +959,10 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               </div>
             </div>
 
-            {/* Comprehensive Grid of Fundamental Laws */}
+            {/* Comprehensive Grid of Fundamental Laws with KaTeX LaTeX rendering */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredLaws.map((card) => (
-                <div key={card.id} className="p-4 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5 flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div key={card.id} className="p-4 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-slate-700 transition-all shadow-sm">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-1.5">
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold uppercase tracking-wider">
@@ -973,8 +974,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                     </h4>
                   </div>
 
-                  <div className="p-2.5 bg-slate-950 rounded-xl font-mono text-xs text-amber-300 font-bold border border-slate-800/80 overflow-x-auto whitespace-pre-wrap">
-                    {card.formula}
+                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-amber-300 text-xs sm:text-sm text-center">
+                    <MathFormula math={card.latex} display={true} />
                   </div>
 
                   <p className="text-xs text-slate-400 leading-relaxed font-sans">
@@ -1100,9 +1101,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-slate-400 text-[10px] uppercase">
                   {isEn ? '1. Characteristic Polynomial: det(A - λI) = 0' : '1. Polinomio Característico: det(A - λI) = 0'}
                 </span>
-                <p className="text-sm font-bold text-amber-300">
-                  λ² - ({tr})λ + ({det}) = 0
-                </p>
+                <div className="text-sm font-bold text-amber-300">
+                  <MathFormula math={`\\lambda^2 - (${tr})\\lambda + (${det}) = 0`} display={true} />
+                </div>
                 <span className="text-slate-500 text-[10px]">
                   {isEn ? `Trace(A) = ${tr} | Det(A) = ${det}` : `Traza(A) = ${tr} | Det(A) = ${det}`}
                 </span>
@@ -1114,14 +1115,18 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                     {isEn ? 'Eigenvalue λ₁' : 'Autovalor λ₁'}
                   </span>
                   <span className="text-base font-bold text-white block mt-1">{lambda1.toFixed(3)}</span>
-                  <span className="text-[10px] text-slate-400">v⃗₁ = [{v1x.toFixed(2)}, {v1y.toFixed(2)}]</span>
+                  <span className="text-[10px] text-slate-400">
+                    <MathFormula math={`\\mathbf{v}_1 = [${v1x.toFixed(2)}, \\; ${v1y.toFixed(2)}]^T`} />
+                  </span>
                 </div>
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
                   <span className="text-emerald-400 text-[10px] uppercase block font-bold">
                     {isEn ? 'Eigenvalue λ₂' : 'Autovalor λ₂'}
                   </span>
                   <span className="text-base font-bold text-white block mt-1">{lambda2.toFixed(3)}</span>
-                  <span className="text-[10px] text-slate-400">v⃗₂ = [{v2x.toFixed(2)}, {v2y.toFixed(2)}]</span>
+                  <span className="text-[10px] text-slate-400">
+                    <MathFormula math={`\\mathbf{v}_2 = [${v2x.toFixed(2)}, \\; ${v2y.toFixed(2)}]^T`} />
+                  </span>
                 </div>
               </div>
 
@@ -1141,7 +1146,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                     : `Valores singulares: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`}
                 </p>
                 <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 flex justify-between items-center">
-                  <span>{isEn ? 'Tikhonov Inverse Solution m⃗_est for d⃗=[6, 2]ᵀ:' : 'Solución Inversa Tikhonov m⃗_est para d⃗=[6, 2]ᵀ:'}</span>
+                  <span>{isEn ? 'Tikhonov Inverse Solution m̂ for d=[6, 2]ᵀ:' : 'Solución Inversa Tikhonov m̂ para d=[6, 2]ᵀ:'}</span>
                   <strong className="text-amber-400">[{mEst1.toFixed(2)}, {mEst2.toFixed(2)}]ᵀ</strong>
                 </div>
               </div>
@@ -1159,36 +1164,38 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 {
                   titleEn: 'Rank-Nullity Theorem',
                   titleEs: 'Teorema del Rango y Nulidad',
-                  formula: 'dim(im A) + dim(ker A) = n',
+                  latex: '\\dim(\\operatorname{im} A) + \\dim(\\ker A) = n',
                   descEn: 'Relates column space and nullspace dimensions for any m×n matrix, crucial for underdetermined and overdetermined systems.',
                   descEs: 'Relaciona la dimensión de la imagen y el núcleo para cualquier matriz m×n, esencial en sistemas sobre y subdeterminados.'
                 },
                 {
                   titleEn: 'Spectral Theorem',
                   titleEs: 'Teorema Espectral',
-                  formula: 'A = Q Λ Qᵀ  (QᵀQ = I)',
+                  latex: 'A = Q \\Lambda Q^T \\quad (Q^T Q = I)',
                   descEn: 'Any real symmetric matrix can be diagonalized by an orthogonal matrix of eigenvectors, with strictly real eigenvalues.',
                   descEs: 'Toda matriz simétrica real puede ser diagonalizada mediante una base ortonormal de autovectores con autovalores reales.'
                 },
                 {
                   titleEn: 'Singular Value Decomposition (SVD)',
                   titleEs: 'Descomposición en Valores Singulares',
-                  formula: 'A = U Σ Vᵀ = ∑ σ_i u⃗_i v⃗_iᵀ',
+                  latex: 'A = U \\Sigma V^T = \\sum_{i=1}^r \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T',
                   descEn: 'Factorizes any rectangular matrix into orthogonal rotations and non-negative singular values, the core of pseudoinverses and PCA.',
                   descEs: 'Factoriza cualquier matriz rectangular en rotaciones ortogonales y valores singulares no negativos, base de la pseudoinversa y PCA.'
                 },
                 {
                   titleEn: 'Tikhonov Regularized Inverse',
                   titleEs: 'Inversión Regularizada de Tikhonov',
-                  formula: 'm̂ = (AᵀA + ε² I)⁻¹ Aᵀ d',
+                  latex: '\\hat{\\mathbf{m}} = (A^T A + \\varepsilon^2 I)^{-1} A^T \\mathbf{d}',
                   descEn: 'Stabilizes ill-posed rank-deficient inversion problems by penalizing solution model norm, essential in seismic tomography.',
                   descEs: 'Estabiliza problemas inversos mal condicionados penalizando la norma del modelo, vital en tomografía sísmica y gravimetría.'
                 }
               ].map((thm, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                  <span className="text-xs font-mono text-indigo-400 font-bold block">{isEn ? thm.titleEn : thm.titleEs}</span>
-                  <div className="p-2 bg-slate-950 rounded-lg font-mono text-xs text-amber-300 font-bold border border-slate-800/80">
-                    {thm.formula}
+                <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 flex flex-col justify-between">
+                  <div>
+                    <span className="text-xs font-mono text-indigo-400 font-bold block mb-1">{isEn ? thm.titleEn : thm.titleEs}</span>
+                    <div className="p-2.5 bg-slate-950 rounded-xl text-amber-300 text-xs text-center border border-slate-800/80">
+                      <MathFormula math={thm.latex} display={true} />
+                    </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed font-sans">{isEn ? thm.descEn : thm.descEs}</p>
                 </div>
@@ -1217,11 +1224,11 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
             </p>
           </div>
 
-          {/* The Nabla Operator Grid */}
+          {/* The Nabla Operator Grid with KaTeX */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
-                sym: '∇ f',
+                latex: '\\nabla f',
                 nameEs: 'Gradiente',
                 nameEn: 'Gradient',
                 inOutEn: 'Scalar → Vector',
@@ -1231,7 +1238,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 meaningEs: 'Vector en la dirección de máxima tasa de crecimiento espacial (ej. -∇P empuja el viento hacia la baja presión).'
               },
               {
-                sym: '∇ · F⃗',
+                latex: '\\nabla \\cdot \\mathbf{F}',
                 nameEs: 'Divergencia',
                 nameEn: 'Divergence',
                 inOutEn: 'Vector → Scalar',
@@ -1241,7 +1248,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 meaningEs: 'Mide la tasa neta de flujo que sale de un punto. Positiva = Fuente; Negativa = Sumidero; Cero = Incompresible.'
               },
               {
-                sym: '∇ × F⃗',
+                latex: '\\nabla \\times \\mathbf{F}',
                 nameEs: 'Rotacional (Curl)',
                 nameEn: 'Curl',
                 inOutEn: 'Vector → Vector',
@@ -1251,7 +1258,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 meaningEs: 'Mide la rotación local o vorticidad en un fluido. Rige la generación de ondas S por cizalle y ondas electromagnéticas.'
               },
               {
-                sym: '∇² f',
+                latex: '\\nabla^2 f',
                 nameEs: 'Laplaciano',
                 nameEn: 'Laplacian',
                 inOutEn: 'Scalar → Scalar',
@@ -1263,7 +1270,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
             ].map((op, idx) => (
               <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className={`text-xl font-bold font-mono ${op.color}`}>{op.sym}</span>
+                  <div className={`text-lg font-bold ${op.color}`}>
+                    <MathFormula math={op.latex} />
+                  </div>
                   <span className="text-[10px] font-mono text-slate-500 uppercase">{isEn ? op.inOutEn : op.inOutEs}</span>
                 </div>
                 <h4 className="text-sm font-bold text-white font-mono">{isEn ? op.nameEn : op.nameEs}</h4>
@@ -1285,9 +1294,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
                   {isEn ? '1. Elliptic (Laplace / Poisson)' : '1. Elíptica (Laplace / Poisson)'}
                 </span>
-                <pre className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-sky-300 font-bold overflow-x-auto whitespace-pre-wrap">
-                  ∇² u = 4π G ρ  (or  ∇² u = 0)
-                </pre>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-sky-300 text-xs sm:text-sm text-center">
+                  <MathFormula math="\nabla^2 u = 4\pi G \rho \quad (\text{or } \nabla^2 u = 0)" display={true} />
+                </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   {isEn
                     ? 'Time-independent steady states. Governs gravitational potential fields U, electrostatics, Bouguer gravity anomalies, and steady groundwater aquifer flow.'
@@ -1299,9 +1308,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-amber-400 uppercase font-bold block">
                   {isEn ? '2. Parabolic (Heat / Diffusion)' : '2. Parabólica (Difusión / Calor)'}
                 </span>
-                <pre className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-amber-300 font-bold overflow-x-auto whitespace-pre-wrap">
-                  ∂u/∂t = α ∇² u
-                </pre>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 text-xs sm:text-sm text-center">
+                  <MathFormula math="\frac{\partial u}{\partial t} = \alpha \nabla^2 u" display={true} />
+                </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   {isEn
                     ? 'Irreversible in time. Models thermal cooling of tectonic plates, geothermal heat dissipation in continental crust, and electromagnetic diffusion in magnetotellurics.'
@@ -1313,9 +1322,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
                   {isEn ? '3. Hyperbolic (Elastodynamic Wave Equation)' : '3. Hiperbólica (Onda Elastodinámica)'}
                 </span>
-                <pre className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-emerald-300 font-bold overflow-x-auto whitespace-pre-wrap">
-                  ∂²u/∂t² = c² ∇² u
-                </pre>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-emerald-300 text-xs sm:text-sm text-center">
+                  <MathFormula math="\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u" display={true} />
+                </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   {isEn
                     ? 'Reversible in time with finite propagation velocity c. Fundamental equation of seismology and acoustics: elastic P and S waves traveling across Earth mantle and core.'
@@ -1325,7 +1334,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
             </div>
           </div>
 
-          {/* The 3 Fundamental Integral Theorems of Vector Analysis */}
+          {/* The 3 Fundamental Integral Theorems of Vector Analysis with KaTeX */}
           <div className="space-y-4 pt-4 border-t border-slate-800">
             <h4 className="text-base font-bold text-white font-mono uppercase tracking-wider text-slate-200">
               {isEn
@@ -1338,8 +1347,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
                   {isEn ? "Green's Theorem in the Plane" : 'Teorema de Green en el Plano'}
                 </span>
-                <div className="p-2.5 bg-slate-950 rounded-xl font-mono text-xs text-amber-300 font-bold border border-slate-800">
-                  ∮_∂D (L dx + M dy) = ∬_D (∂M/∂x - ∂L/∂y) dA
+                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                  <MathFormula math="\oint_{\partial D} (L \, dx + M \, dy) = \iint_D \left(\frac{\partial M}{\partial x} - \frac{\partial L}{\partial y}\right) dA" display={true} />
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
                   {isEn
@@ -1352,8 +1361,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
                   {isEn ? "Gauss's Divergence Theorem" : 'Teorema de la Divergencia de Gauss'}
                 </span>
-                <div className="p-2.5 bg-slate-950 rounded-xl font-mono text-xs text-amber-300 font-bold border border-slate-800">
-                  ∯_∂V F⃗ · n̂ dS = ∭_V (∇ · F⃗) dV
+                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                  <MathFormula math="\oiint_{\partial V} \mathbf{F} \cdot \hat{\mathbf{n}} \, dS = \iiint_V (\nabla \cdot \mathbf{F}) \, dV" display={true} />
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
                   {isEn
@@ -1366,8 +1375,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-purple-400 uppercase font-bold block">
                   {isEn ? "Stokes's Curl Theorem" : 'Teorema del Rotacional de Stokes'}
                 </span>
-                <div className="p-2.5 bg-slate-950 rounded-xl font-mono text-xs text-amber-300 font-bold border border-slate-800">
-                  ∮_∂S F⃗ · dr⃗ = ∬_S (∇ × F⃗) · dS⃗
+                <div className="p-3 bg-slate-950 rounded-xl text-amber-300 text-xs sm:text-sm text-center border border-slate-800">
+                  <MathFormula math="\oint_{\partial S} \mathbf{F} \cdot d\mathbf{r} = \iint_S (\nabla \times \mathbf{F}) \cdot d\mathbf{S}" display={true} />
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
                   {isEn
@@ -1406,7 +1415,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-sky-400 uppercase font-bold block">
                   {isEn ? 'A. Fourier Spectral Wave Synthesis' : 'A. Descomposición Espectral de Fourier'}
                 </span>
-                <h4 className="text-sm font-bold text-white font-mono">f(t) = (4/π) ∑ [sin((2k-1)ωt) / (2k-1)]</h4>
+                <div className="text-sm font-bold text-white">
+                  <MathFormula math="f(t) = \frac{4}{\pi} \sum_{k=1}^N \frac{\sin((2k-1)\omega t)}{2k-1}" />
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-slate-300">
@@ -1436,7 +1447,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-amber-400 uppercase font-bold block">
                   {isEn ? 'B. Convolutional Model of the Seismogram' : 'B. Modelo Convolutivo del Sismograma'}
                 </span>
-                <h4 className="text-sm font-bold text-white font-mono">s(t) = w(t) * r(t) + n(t)</h4>
+                <div className="text-sm font-bold text-white">
+                  <MathFormula math="s(t) = w(t) * r(t) + n(t)" />
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-slate-300">
@@ -1467,7 +1480,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                   <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
                     {isEn ? 'C. Laplace Response of the Seismometer' : 'C. Respuesta de Laplace del Sismógrafo'}
                   </span>
-                  <h4 className="text-sm font-bold text-white font-mono">H(s) = s² / (s² + 2hω₀s + ω₀²)</h4>
+                  <div className="text-sm font-bold text-white">
+                    <MathFormula math="H(s) = \frac{s^2}{s^2 + 2h\omega_0 s + \omega_0^2}" />
+                  </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-mono text-slate-300">
@@ -1496,9 +1511,12 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               </span>
               <p className="text-slate-300 leading-relaxed font-sans">
                 {isEn
-                  ? 'To reconstruct an analog continuous bandlimited signal with maximum frequency f_max without aliasing distortion, the sampling rate f_s must satisfy f_s ≥ 2·f_max.'
-                  : 'Para registrar una frecuencia máxima f_max sin distorsión por solapamiento espectral (aliasing), la tasa de muestreo debe ser al menos el doble.'}
+                  ? 'To reconstruct an analog continuous bandlimited signal with maximum frequency f_max without aliasing distortion, the sampling rate f_s must satisfy:'
+                  : 'Para registrar una frecuencia máxima f_max sin distorsión por solapamiento espectral (aliasing), la tasa de muestreo debe ser al menos el doble:'}
               </p>
+              <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-center text-cyan-300">
+                <MathFormula math="f_s \ge 2 f_{\max} \quad \Longleftrightarrow \quad \Delta t \le \frac{1}{2 f_{\max}}" display={true} />
+              </div>
               <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
                 <div className="flex justify-between items-center text-slate-400">
                   <span>{isEn ? 'Sampling Interval Δt:' : 'Paso de muestreo Δt:'}</span>
@@ -1554,7 +1572,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-xs font-mono text-rose-400 uppercase font-bold block">
                   {isEn ? 'A. Cauchy-Riemann Conditions & 2D Hydrodynamic Potential' : 'A. Condiciones de Cauchy-Riemann y Flujo 2D'}
                 </span>
-                <h4 className="text-sm font-bold text-white font-mono">W(z) = φ(x,y) + i ψ(x,y) ⇒ ∂φ/∂x = ∂ψ/∂y , ∂φ/∂y = -∂ψ/∂x</h4>
+                <div className="text-xs sm:text-sm font-bold text-white">
+                  <MathFormula math="W(z) = \phi(x,y) + i \psi(x,y) \implies \frac{\partial \phi}{\partial x} = \frac{\partial \psi}{\partial y}, \quad \frac{\partial \phi}{\partial y} = -\frac{\partial \psi}{\partial x}" />
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 {['dipole', 'cylinder'].map((mode) => (
@@ -1585,9 +1605,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               <span className="text-xs font-mono text-amber-400 uppercase font-bold block">
                 {isEn ? "B. Cauchy's Residue Theorem (Contour Integration)" : 'B. Teorema de los Residuos de Cauchy'}
               </span>
-              <pre className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 font-bold overflow-x-auto">
-                ∮_Γ f(z) dz = 2π i ∑ Res(f, z_k)
-              </pre>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-amber-300 font-bold text-center">
+                <MathFormula math="\oint_\Gamma f(z) \, dz = 2\pi i \sum_k \operatorname{Res}(f, z_k)" display={true} />
+              </div>
               <p className="text-slate-300 leading-relaxed font-sans">
                 {isEn
                   ? 'The premier analytical tool for evaluating improper real Fourier integrals across the elastic half-space. Enables calculating surface wave dispersion (Rayleigh & Love) and intrinsic seismic attenuation Q⁻¹ through complex pole evaluation.'
@@ -1599,9 +1619,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               <span className="text-xs font-mono text-emerald-400 uppercase font-bold block">
                 {isEn ? "C. Fermat's Principle & Seismic Ray Tracing" : 'C. Principio de Fermat & Trazado de Rayos'}
               </span>
-              <pre className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-emerald-300 font-bold overflow-x-auto">
-                δ ∫ (ds / v(x⃗)) = 0 ⇒ p = sin(i) / v = const
-              </pre>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-emerald-300 font-bold text-center">
+                <MathFormula math="\delta \int \frac{ds}{v(\mathbf{x})} = 0 \implies p = \frac{\sin i}{v} = \text{const}" display={true} />
+              </div>
               <p className="text-slate-300 leading-relaxed font-sans">
                 {isEn
                   ? 'Fermat variational principle of stationary travel time: seismic ray paths between hypocenters and seismometer stations minimize acoustic transit duration. Directly derives Snell’s law and the horizontal ray parameter p that bends wavefronts inside Earth.'
@@ -1620,8 +1640,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-sky-400 font-bold block">
                   {isEn ? 'Euler-Lagrange Equations of Motion (Lagrangian L = T - V):' : 'Ecuaciones de Euler-Lagrange (Lagrangiano L = T - V):'}
                 </span>
-                <div className="text-sm font-bold text-amber-300">
-                  (d/dt) (∂L / ∂q̇_i) - ∂L / ∂q_i = 0
+                <div className="text-sm font-bold text-amber-300 text-center py-1 bg-slate-900/60 rounded-lg">
+                  <MathFormula math="\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}_i}\right) - \frac{\partial L}{\partial q_i} = 0" display={true} />
                 </div>
                 <p className="text-slate-400 font-sans text-xs leading-relaxed">
                   {isEn
@@ -1634,8 +1654,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <span className="text-emerald-400 font-bold block">
                   {isEn ? 'Hamilton’s Canonical Phase Space Equations (H = ∑ p_i q̇_i - L):' : 'Ecuaciones Canónicas de Hamilton (Espacio de Fase):'}
                 </span>
-                <div className="text-sm font-bold text-emerald-300">
-                  q̇_i = ∂H / ∂p_i  ,  ṗ_i = -∂H / ∂q_i
+                <div className="text-sm font-bold text-emerald-300 text-center py-1 bg-slate-900/60 rounded-lg">
+                  <MathFormula math="\dot{q}_i = \frac{\partial H}{\partial p_i}, \quad \dot{p}_i = -\frac{\partial H}{\partial q_i}" display={true} />
                 </div>
                 <p className="text-slate-400 font-sans text-xs leading-relaxed">
                   {isEn

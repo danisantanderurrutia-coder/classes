@@ -1614,6 +1614,14 @@ function drawArrow(ctx, x1, y1, x2, y2, color, label, lineWidth = 2.5) {
   ctx.restore();
 }
 
+export const PROBLEM_CATEGORIES = [
+  { id: 'all', labelEs: 'Todos los Problemas (14)', labelEn: 'All Benchmarks (14)', icon: '🌌' },
+  { id: 'mechanics', labelEs: 'Mecánica & Oscilaciones (4)', labelEn: 'Mechanics & Oscillations (4)', icon: '⚙️', ids: ['newtonian', 'intro_physics', 'engineering', 'coupled_oscillators'] },
+  { id: 'geophysics', labelEs: 'Geofísica & Tierra Sólida (5)', labelEn: 'Geophysics & Solid Earth (5)', icon: '🌍', ids: ['seismology_beachball', 'bouguer_gravity', 'waves_geophysics', 'ekman_spiral', 'magnetotellurics'] },
+  { id: 'math_cosmos', labelEs: 'Física Matemática & Atmósfera (3)', labelEn: 'Mathematical Physics & Atmosphere (3)', icon: '🌪️', ids: ['geostrophic_wind', 'vector_calculus', 'relativity'] },
+  { id: 'em_thermo', labelEs: 'Electromagnetismo & Termo (2)', labelEn: 'Electromagnetism & Thermo (2)', icon: '⚡', ids: ['electromagnetism', 'thermodynamics'] }
+];
+
 export default function PhysicsLab({
   lang = 'es',
   initialProblemId = 'newtonian',
@@ -1622,6 +1630,7 @@ export default function PhysicsLab({
   courses = []
 }) {
   const [selectedId, setSelectedId] = useState(initialProblemId || 'newtonian');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const currentProblem = LAB_PROBLEMS.find((p) => p.id === selectedId) || LAB_PROBLEMS[0];
 
   const [params, setParams] = useState(currentProblem.defaults);
@@ -1655,6 +1664,23 @@ export default function PhysicsLab({
     setShowHint(false);
     setShowSolution(false);
   };
+
+  const handleCategoryChange = (catId) => {
+    setSelectedCategory(catId);
+    if (catId !== 'all') {
+      const cat = PROBLEM_CATEGORIES.find((c) => c.id === catId);
+      if (cat && !cat.ids.includes(selectedId)) {
+        handleSelectProblem(cat.ids[0]);
+      }
+    }
+  };
+
+  const filteredProblems = selectedCategory === 'all'
+    ? LAB_PROBLEMS
+    : LAB_PROBLEMS.filter((p) => {
+        const cat = PROBLEM_CATEGORIES.find((c) => c.id === selectedCategory);
+        return cat?.ids?.includes(p.id);
+      });
 
   useEffect(() => {
     if (initialProblemId && LAB_PROBLEMS.some((p) => p.id === initialProblemId)) {
@@ -4004,49 +4030,74 @@ export default function PhysicsLab({
           <PhysicsToolkit lang={lang} onOpenBooking={onOpenBooking} />
         ) : (
           <>
-            {/* 10-Course Problem Selector Pills */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2 mb-8">
-          {LAB_PROBLEMS.map((prob) => {
-            const Icon = prob.icon;
-            const active = prob.id === selectedId;
-            return (
-              <button
-                key={prob.id}
-                onClick={() => handleSelectProblem(prob.id)}
-                className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
-                  active
-                    ? 'bg-slate-900 border-slate-900 text-white shadow-md ring-2 ring-sky-500/40'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className="w-8 h-8 rounded-xl flex items-center justify-center"
-                    style={{
-                      backgroundColor: active ? 'rgba(56, 189, 248, 0.2)' : '#F1F5F9',
-                      color: active ? '#38BDF8' : prob.color
-                    }}
+            {/* Discipline Category Filter Bar */}
+            <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-100 rounded-2xl mb-5 border border-slate-200">
+              {PROBLEM_CATEGORIES.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-white text-slate-950 shadow-sm border border-slate-300/80 ring-1 ring-slate-900/10'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                    }`}
                   >
-                    <Icon className="w-4 h-4" />
-                  </span>
-                  {active && (
-                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold">
-                      Activo
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <div className={`text-[10px] font-mono uppercase tracking-wider ${active ? 'text-sky-300' : 'text-slate-500'}`}>
-                    {lang === 'en' ? prob.badgeEn.split('&')[0] : prob.badgeEs.split('&')[0]}
-                  </div>
-                  <div className="text-xs font-bold leading-snug mt-0.5 line-clamp-2">
-                    {lang === 'en' ? prob.titleEn : prob.titleEs}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                    <span>{cat.icon}</span>
+                    <span>{lang === 'en' ? cat.labelEn : cat.labelEs}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Responsive Problem Selector Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-8">
+              {filteredProblems.map((prob) => {
+                const Icon = prob.icon;
+                const active = prob.id === selectedId;
+                return (
+                  <button
+                    key={prob.id}
+                    onClick={() => handleSelectProblem(prob.id)}
+                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2.5 ${
+                      active
+                        ? 'bg-slate-900 border-slate-900 text-white shadow-lg ring-2 ring-sky-500/50'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-sky-300 hover:shadow-xs'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: active ? 'rgba(56, 189, 248, 0.2)' : '#F1F5F9',
+                          color: active ? '#38BDF8' : prob.color
+                        }}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </span>
+                      {active ? (
+                        <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30">
+                          {lang === 'en' ? 'Active' : 'Activo'}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-semibold">
+                          {prob.courseId}
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <div className={`text-[10px] font-mono uppercase tracking-wider mb-0.5 ${active ? 'text-sky-300' : 'text-slate-500'}`}>
+                        {lang === 'en' ? prob.badgeEn.split('&')[0] : prob.badgeEs.split('&')[0]}
+                      </div>
+                      <div className="text-xs font-bold leading-snug line-clamp-2">
+                        {lang === 'en' ? prob.titleEn : prob.titleEs}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
 
         {/* ================================================================= */}
         {/* MAIN WORKBENCH: CANVAS + DCL TOGGLE + SLIDERS + WHAT-IF PRESETS   */}
@@ -4245,13 +4296,13 @@ export default function PhysicsLab({
                       {lang === 'en' ? 'Layer 1 • Linear Algebra & Trigonometry' : 'Capa 1 • Álgebra Lineal, Trigonometría y Estática'}
                     </span>
                     <h4 className="text-base font-bold text-slate-900">
-                      {lang === 'en' ? currentProblem.algebraSection.titleEn : currentProblem.algebraSection.titleEs}
+                      {lang === 'en' ? currentProblem.algebraSection?.titleEn : currentProblem.algebraSection?.titleEs}
                     </h4>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {currentProblem.algebraSection.formulas.map((f, idx) => (
+                  {currentProblem.algebraSection?.formulas?.map((f, idx) => (
                     <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
                       <span className="text-xs font-semibold text-slate-700 block mb-1.5">
                         {lang === 'en' ? f.labelEn : f.labelEs}
@@ -4276,13 +4327,13 @@ export default function PhysicsLab({
                       {lang === 'en' ? 'Layer 2 • Differential & Integral Calculus' : 'Capa 2 • Cálculo Diferencial, Integrales y EDOs'}
                     </span>
                     <h4 className="text-base font-bold text-slate-900">
-                      {lang === 'en' ? currentProblem.calculusSection.titleEn : currentProblem.calculusSection.titleEs}
+                      {lang === 'en' ? currentProblem.calculusSection?.titleEn : currentProblem.calculusSection?.titleEs}
                     </h4>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {currentProblem.calculusSection.formulas.map((f, idx) => (
+                  {currentProblem.calculusSection?.formulas?.map((f, idx) => (
                     <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
                       <span className="text-xs font-semibold text-slate-700 block mb-1.5">
                         {lang === 'en' ? f.labelEn : f.labelEs}
@@ -4318,7 +4369,7 @@ export default function PhysicsLab({
             </div>
 
             <button
-              onClick={() => applyPreset(currentProblem.exercise.presetValues)}
+              onClick={() => applyPreset(currentProblem.exercise?.presetValues || {})}
               className="px-4 py-2.5 rounded-xl bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer shrink-0 shadow-xs"
             >
               <Sliders className="w-3.5 h-3.5" />
@@ -4332,12 +4383,12 @@ export default function PhysicsLab({
 
           <div className="py-6 space-y-6">
             <p className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200">
-              {lang === 'en' ? currentProblem.exercise.questionEn : currentProblem.exercise.questionEs}
+              {lang === 'en' ? currentProblem.exercise?.questionEn : currentProblem.exercise?.questionEs}
             </p>
 
             {/* Multiple Choice Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {currentProblem.exercise.options.map((opt) => {
+              {currentProblem.exercise?.options?.map((opt) => {
                 const isSelected = selectedOption === opt.id;
                 let btnStyle = 'bg-white border-slate-200 text-slate-800 hover:border-slate-400';
                 if (isSelected) {
@@ -4401,7 +4452,7 @@ export default function PhysicsLab({
             {showHint && (
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs sm:text-sm text-amber-950 leading-relaxed">
                 <strong className="font-mono block mb-1">💡 {lang === 'en' ? 'Examiner Hint:' : 'Pista del Profesor:'}</strong>
-                {lang === 'en' ? currentProblem.exercise.hintEn : currentProblem.exercise.hintEs}
+                {lang === 'en' ? currentProblem.exercise?.hintEn : currentProblem.exercise?.hintEs}
               </div>
             )}
 
@@ -4412,7 +4463,7 @@ export default function PhysicsLab({
                     ? 'Official Step-by-Step Klausur Derivation:'
                     : 'Resolución Oficial Paso a Paso (Estructura de Puntaje Completo):'}
                 </span>
-                {(lang === 'en' ? currentProblem.exercise.solutionStepsEn : currentProblem.exercise.solutionStepsEs).map(
+                {(lang === 'en' ? currentProblem.exercise?.solutionStepsEn : currentProblem.exercise?.solutionStepsEs)?.map(
                   (step, i) => (
                     <div key={i} className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-slate-200">
                       {step}
@@ -4546,7 +4597,7 @@ export default function PhysicsLab({
                     </h4>
                   </div>
                   <div className="space-y-2">
-                    {currentProblem.algebraSection.formulas.map((f, i) => (
+                    {currentProblem.algebraSection?.formulas?.map((f, i) => (
                       <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
                         <span className="text-xs font-mono text-slate-600 block mb-1">
                           {lang === 'en' ? f.labelEn : f.labelEs}
@@ -4570,7 +4621,7 @@ export default function PhysicsLab({
                     </h4>
                   </div>
                   <div className="space-y-2">
-                    {currentProblem.calculusSection.formulas.map((f, i) => (
+                    {currentProblem.calculusSection?.formulas?.map((f, i) => (
                       <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
                         <span className="text-xs font-mono text-slate-600 block mb-1">
                           {lang === 'en' ? f.labelEn : f.labelEs}
@@ -4595,11 +4646,11 @@ export default function PhysicsLab({
                   </div>
 
                   <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                    {lang === 'en' ? currentProblem.exercise.questionEn : currentProblem.exercise.questionEs}
+                    {lang === 'en' ? currentProblem.exercise?.questionEn : currentProblem.exercise?.questionEs}
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {currentProblem.exercise.options.map((opt) => (
+                    {currentProblem.exercise?.options?.map((opt) => (
                       <div
                         key={opt.id}
                         className={`p-2.5 rounded-xl border text-xs font-mono font-bold flex items-center justify-between ${
@@ -4622,7 +4673,7 @@ export default function PhysicsLab({
                       💡 {lang === 'en' ? 'Examiner Hint:' : 'Pista del Profesor:'}
                     </span>
                     <p className="text-slate-300">
-                      {lang === 'en' ? currentProblem.exercise.hintEn : currentProblem.exercise.hintEs}
+                      {lang === 'en' ? currentProblem.exercise?.hintEn : currentProblem.exercise?.hintEs}
                     </p>
                   </div>
 
@@ -4630,7 +4681,7 @@ export default function PhysicsLab({
                     <span className="text-emerald-400 font-bold block uppercase tracking-wider">
                       {lang === 'en' ? 'Official Step-by-Step Derivation:' : 'Resolución Oficial Paso a Paso:'}
                     </span>
-                    {(lang === 'en' ? currentProblem.exercise.solutionStepsEn : currentProblem.exercise.solutionStepsEs).map((step, i) => (
+                    {(lang === 'en' ? currentProblem.exercise?.solutionStepsEn : currentProblem.exercise?.solutionStepsEs)?.map((step, i) => (
                       <div key={i} className="p-2 rounded-lg bg-slate-800/60 border border-slate-700 text-slate-200">
                         {step}
                       </div>

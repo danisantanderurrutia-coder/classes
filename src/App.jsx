@@ -60,10 +60,10 @@ const ACADEMIC_COURSES = [
     id: "klausur",
     planetId: "earth",
     code: "HM-101/201",
-    titleEn: "Höhere Mathematik I, II & III (Calculus & Analysis for Engineers)",
-    titleEs: "Höhere Mathematik I, II y III (Cálculo y Análisis para Ingenieros)",
-    facultyEn: "Faculty of Mathematics & Mechanical Engineering (TU9 Standards)",
-    facultyEs: "Facultad de Matemáticas e Ingeniería Mecánica (Estándar TU9)",
+    titleEn: "Higher Mathematics & Calculus I, II & III (Analysis for Engineers)",
+    titleEs: "Cálculo Avanzado I, II y III (Análisis Matemático para Ingenieros)",
+    facultyEn: "Faculty of Mathematics & Mechanical Engineering (University Standards)",
+    facultyEs: "Facultad de Matemáticas e Ingeniería Mecánica",
     targetEn: "Engineering and science students preparing rigorous multivariable calculus and differential equations exams.",
     targetEs: "Estudiantes de ingeniería y ciencias que preparan exámenes exigentes de cálculo multivariable y ecuaciones diferenciales.",
     rateHourly: 55,
@@ -75,7 +75,7 @@ const ACADEMIC_COURSES = [
       "Integral theorems of vector analysis: Green's, Gauss's (Divergence), and Stokes' theorems",
       "Ordinary Differential Equations (ODEs): Separation of variables, integrating factors, Wronskian",
       "Complex numbers, power series, Taylor expansions, and Cauchy-Riemann conditions",
-      "Official past-exam (Altklausuren) breakdown with examiner partial-point rubrics"
+      "Official past-exam breakdown with examiner partial-point rubrics"
     ],
     syllabusEs: [
       "Cálculo diferencial multivariable y campos vectoriales: gradiente, divergencia y rotacional",
@@ -84,9 +84,11 @@ const ACADEMIC_COURSES = [
       "Números complejos, series de Taylor, criterios de convergencia y condiciones de Cauchy-Riemann",
       "Resolución exhaustiva de exámenes anteriores oficiales para asegurar el máximo de puntos parciales"
     ],
-    skriptKeywords: ["Zwischenwertsatz", "Rotationskörper", "Satz von Stokes", "Divergenzsatz", "Homogene DGL"],
-    badgeEn: "Core TU9 Klausur",
-    badgeEs: "Klausur Fundamental",
+    keywordsEn: ["Intermediate Value Theorem", "Solids of Revolution", "Stokes' Theorem", "Divergence Theorem", "Homogeneous ODEs"],
+    keywordsEs: ["Teorema del Valor Intermedio", "Sólidos de Revolución", "Teorema de Stokes", "Teorema de la Divergencia", "EDOs Homogéneas"],
+    skriptKeywords: ["Intermediate Value Theorem", "Solids of Revolution", "Stokes' Theorem", "Divergence Theorem", "Homogeneous ODEs"],
+    badgeEn: "University Calculus Track",
+    badgeEs: "Cálculo Universitario",
     image: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=700&q=80",
     color: "#0284C7"
   },
@@ -94,7 +96,7 @@ const ACADEMIC_COURSES = [
     id: "linear_algebra",
     planetId: "saturn",
     code: "LA-102",
-    titleEn: "Lineare Algebra & Analytische Geometrie",
+    titleEn: "Linear Algebra & Analytical Geometry",
     titleEs: "Álgebra Lineal y Geometría Analítica",
     facultyEn: "Applied Mathematics & Computational Sciences",
     facultyEs: "Matemáticas Aplicadas y Ciencias Computacionales",
@@ -108,17 +110,19 @@ const ACADEMIC_COURSES = [
       "Vector spaces, subspaces, linear independence, basis transformations, and dual spaces",
       "Linear mappings, kernel/image dimension theorems, and change-of-basis matrices",
       "Eigenvalues, eigenvectors, characteristic polynomials, and eigenspace multiplicities",
-      "Principal axis transformation (Hauptachsentransformation) and quadratic forms",
+      "Principal axis transformation and quadratic forms",
       "Jordan canonical form, singular value decomposition (SVD), and orthogonal projections"
     ],
     syllabusEs: [
       "Espacios vectoriales, subespacios, independencia lineal, transformaciones de base y espacio dual",
       "Aplicaciones lineales, teorema de la dimensión (núcleo e imagen) y matrices asociadas",
       "Autovalores, autovectores, polinomio característico y multiplicidades algebraicas/geométricas",
-      "Transformación a ejes principales (Hauptachsentransformation) y formas cuadráticas",
+      "Transformación a ejes principales y formas cuadráticas",
       "Forma canónica de Jordan, descomposición en valores singulares (SVD) y proyecciones ortogonales"
     ],
-    skriptKeywords: ["Eigenwert", "Kern & Bild", "Hauptachsentransformation", "Jordan-Normalform", "Bilinearform"],
+    keywordsEn: ["Eigenvalues & Eigenvectors", "Kernel & Image", "Principal Axis Theorem", "Jordan Canonical Form", "Bilinear Forms"],
+    keywordsEs: ["Autovalores y Autovectores", "Núcleo e Imagen", "Ejes Principales", "Forma Canónica de Jordan", "Formas Bilineales"],
+    skriptKeywords: ["Eigenvalues & Eigenvectors", "Kernel & Image", "Principal Axis Theorem", "Jordan Canonical Form", "Bilinear Forms"],
     badgeEn: "Proof Rigor",
     badgeEs: "Demostraciones",
     image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
@@ -128,7 +132,7 @@ const ACADEMIC_COURSES = [
     id: "mechanics",
     planetId: "mercury",
     code: "PHY-201",
-    titleEn: "Klassische Mechanik & Analytische Dynamik",
+    titleEn: "Classical Mechanics & Analytical Dynamics",
     titleEs: "Mecánica Clásica y Dinámica Analítica",
     facultyEn: "Theoretical & Experimental Physics",
     facultyEs: "Física Teórica y Experimental",
@@ -152,7 +156,9 @@ const ACADEMIC_COURSES = [
       "Cinemática del sólido rígido: Tensor de inercia, ángulos de Euler, precesión y nutación",
       "Osciladores armónicos acoplados, modos normales de vibración y disipación"
     ],
-    skriptKeywords: ["Trägheitstensor", "Lagrange-Funktion", "Corioliskraft", "Euler-Winkel", "Poisson-Klammern"],
+    keywordsEn: ["Inertia Tensor", "Lagrangian Dynamics", "Coriolis Force", "Euler Angles", "Poisson Brackets"],
+    keywordsEs: ["Tensor de Inercia", "Dinámica Lagrangiana", "Fuerza de Coriolis", "Ángulos de Euler", "Corchetes de Poisson"],
+    skriptKeywords: ["Inertia Tensor", "Lagrangian Dynamics", "Coriolis Force", "Euler Angles", "Poisson Brackets"],
     badgeEn: "Theoretical Mechanics",
     badgeEs: "Mecánica Teórica",
     // Tested 200 OK Unsplash image
@@ -187,7 +193,9 @@ const ACADEMIC_COURSES = [
       "Métodos de campos potenciales: Anomalías gravimétricas (Bouguer) y modelado magnético",
       "Procesamiento de tiempos de viaje en reflexión sísmica, registros de pozo y filtrado espectral"
     ],
-    skriptKeywords: ["Wellengleichung", "Tikhonov-Regularisierung", "Bouguer-Anomalie", "Elastizitätstensor", "Laufzeitkurve"],
+    keywordsEn: ["Wave Equation", "Tikhonov Regularization", "Bouguer Anomaly", "Elasticity Tensor", "Travel-time Curves"],
+    keywordsEs: ["Ecuación de Onda", "Regularización de Tikhonov", "Anomalía de Bouguer", "Tensor de Elasticidad", "Curvas de Tiempo de Viaje"],
+    skriptKeywords: ["Wave Equation", "Tikhonov Regularization", "Bouguer Anomaly", "Elasticity Tensor", "Travel-time Curves"],
     badgeEn: "Mentor Specialty",
     badgeEs: "Especialidad Geofísica",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80",
@@ -221,7 +229,9 @@ const ACADEMIC_COURSES = [
       "Métodos espectrales de Fourier (FFT) para problemas de contorno periódico y descomposición",
       "Pipelines de datos científicos, análisis de propagación de errores y exportación a LaTeX"
     ],
-    skriptKeywords: ["Runge-Kutta-Verfahren", "Finite-Differenzen", "Fourier-Transformation", "Stabilität", "NumPy Vectorisierung"],
+    keywordsEn: ["Runge-Kutta Methods", "Finite Differences", "Fourier Transform", "Stability Analysis", "Vectorized Python"],
+    keywordsEs: ["Métodos de Runge-Kutta", "Diferencias Finitas", "Transformada de Fourier", "Análisis de Estabilidad", "Python Vectorizado"],
+    skriptKeywords: ["Runge-Kutta Methods", "Finite Differences", "Fourier Transform", "Stability Analysis", "Vectorized Python"],
     badgeEn: "Scientific Code",
     badgeEs: "Código Científico",
     image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
@@ -255,6 +265,8 @@ const ACADEMIC_COURSES = [
       "Supervisión completa de la Evaluación Interna (IA): Modelado matemático, cálculo de errores y formato",
       "Entrenamiento exhaustivo con exámenes oficiales (Paper 1 sin calculadora, Paper 2 y Paper 3)"
     ],
+    keywordsEn: ["Internal Assessment (IA)", "Paper 1 (Non-Calc)", "Vector Planes", "Mark Scheme Precision", "Calculus AA"],
+    keywordsEs: ["Evaluación Interna (IA)", "Paper 1 (Sin Calculadora)", "Planos Vectoriales", "Precisión de Pauta", "Cálculo AA"],
     skriptKeywords: ["Internal Assessment (IA)", "Paper 1 (Non-Calc)", "Vector Planes", "Mark Scheme Precision", "Calculus AA"],
     badgeEn: "Target Grade 7",
     badgeEs: "Objetivo Nota 7",
@@ -289,7 +301,9 @@ const ACADEMIC_COURSES = [
       "Solución exterior de Schwarzschild, desplazamiento al rojo gravitacional, esfera de fotones y horizonte",
       "Agujeros negros rotantes de Kerr, arrastre de marcos de referencia (Lense-Thirring) y ondas gravitacionales"
     ],
-    skriptKeywords: ["Schwarzschild-Metrik", "Christoffel-Symbole", "Geodätengleichung", "Einstein-Feldgleichungen", "Kerr-Lösung"],
+    keywordsEn: ["Schwarzschild Metric", "Christoffel Symbols", "Geodesic Equation", "Einstein Field Equations", "Kerr Black Hole"],
+    keywordsEs: ["Métrica de Schwarzschild", "Símbolos de Christoffel", "Ecuación Geodésica", "Ecuaciones de Campo de Einstein", "Agujero Negro de Kerr"],
+    skriptKeywords: ["Schwarzschild Metric", "Christoffel Symbols", "Geodesic Equation", "Einstein Field Equations", "Kerr Black Hole"],
     badgeEn: "General Relativity",
     badgeEs: "Relatividad General",
     image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=700&q=80",
@@ -1027,7 +1041,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               </div>
 
               {/* 3D Planetary Observatory Viewport: Restrained Margins for Seamless Downscroll */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
                 <div id="planetarium-viewport" className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
                   <SolarSystem
                     onSelectSubject={handleSelectPlanetSubject}
@@ -1037,37 +1051,6 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     onOpenBooking={handleOpenBooking}
                     courses={ACADEMIC_COURSES}
                   />
-                </div>
-              </div>
-
-              {/* Minimalist Trust Indicator Bar: Dark Ribbon Connecting Cosmos to Classroom */}
-              <div className="w-full bg-slate-950 border-t border-b border-white/[0.08] py-6">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-xs font-mono text-slate-300">
-                    <div className="flex items-center gap-2.5">
-                      <GraduationCap className="w-4 h-4 text-sky-400 shrink-0" />
-                      <span>Double M.Sc. (CAU Kiel &amp; AMU Poznań)</span>
-                    </div>
-                    <div 
-                      onClick={() => navigateTo('piad')}
-                      className="flex items-center gap-2.5 cursor-pointer text-indigo-400 hover:text-indigo-300 font-bold"
-                    >
-                      <Compass className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span>{lang === 'en' ? 'Proprietary PIAD™ Method' : 'Método Propio PIAD™'}</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Award className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>{lang === 'en' ? 'Past-Exam Focused Preparation' : 'Preparación Enfocada en Exámenes'}</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                      <span>{lang === 'en' ? 'In-Person in Hannover & Online Worldwide' : 'Presencial en Hannover y Online en todo el mundo'}</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Globe className="w-4 h-4 text-sky-400 shrink-0" />
-                      <span>{lang === 'en' ? 'Classes in English & Spanish' : 'Clases en inglés y español'}</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>

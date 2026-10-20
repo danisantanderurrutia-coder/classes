@@ -48,11 +48,14 @@ import PIADMethod from './components/PIADMethod';
 import {
   CURRENCY_TIERS,
   CURRENCY_LIST,
+  SUBJECT_COMPLEXITY_TIERS,
+  getCurrencyTiers,
   detectInitialCurrency,
   mapCountryToCurrency,
   formatMoney,
   getCourseHourlyRate,
-  getCoursePackRate
+  getCoursePackRate,
+  getGroupPricing
 } from './pricingConfig';
 
 // Custom crisp GitHub SVG icon component
@@ -755,25 +758,28 @@ export default function App() {
     notes: ''
   });
 
-  // Rate Calculator State
-  const [calcLevel, setCalcLevel] = useState('bachelor');
-  const [calcHours, setCalcHours] = useState(8);
-  const [calcFormat, setCalcFormat] = useState('1on1');
+  // Rate Calculator State (defaults to Tier 1: Calculus, Physics I & IB, 1 hour)
+  const [calcLevel, setCalcLevel] = useState('ib');
+  const [calcHours, setCalcHours] = useState(1);
+  const [calcStudents, setCalcStudents] = useState(1); // 1 (Solo), 2 (+1 colega), 3 (+2 colegas), 4 (+3 colegas)
   const [calcMode, setCalcMode] = useState('online'); // 'online' | 'inperson'
-  const [calcSprintDiscount, setCalcSprintDiscount] = useState(true);
+  const [calcSprintDiscount, setCalcSprintDiscount] = useState(false);
 
   // FAQ State
   const [openFaq, setOpenFaq] = useState(0);
 
-  const activeTier = CURRENCY_TIERS[currency] || CURRENCY_TIERS.EUR;
+  const liveTiers = getCurrencyTiers();
+  const activeTier = liveTiers[currency] || liveTiers.EUR;
   const baseRates = activeTier.rates;
-  const baseRate = baseRates[calcLevel] || baseRates.bachelor;
-  const inPersonExtraPerHour = Math.round(baseRate * 0.25);
+  const baseRate = baseRates[calcLevel] || baseRates.ib;
+  const inPersonExtraPerHour = activeTier.inPersonSurchargePerHour || Math.round(baseRate * 0.25);
   const hourlyRateWithMode = baseRate + (calcMode === 'inperson' ? inPersonExtraPerHour : 0);
-  const groupMultiplier = calcFormat === 'group' ? 0.70 : 1.0;
   const sprintMultiplier = calcSprintDiscount ? 0.85 : 1.0;
-  const effectiveRate = Math.round(hourlyRateWithMode * groupMultiplier * sprintMultiplier);
+  const singleEffectiveHourly = Math.round(hourlyRateWithMode * sprintMultiplier);
+  const groupPricing = getGroupPricing(singleEffectiveHourly, calcStudents, currency);
+  const effectiveRate = groupPricing.perStudentHourly;
   const totalCost = Math.round(effectiveRate * calcHours);
+  const totalGroupCost = Math.round(groupPricing.totalGroupHourly * calcHours);
 
   // Synchronize hash in URL with page state
   useEffect(() => {
@@ -2160,26 +2166,37 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="md:col-span-7 space-y-6">
                       <div>
                         <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                          {lang === 'en' ? 'Academic Level / Study Track' : 'Nivel Académico / Plan de Estudio'}
+                          {lang === 'en' ? 'Subject Complexity Tier (Price per Class Type)' : 'Complejidad de la Materia (Precio según Ramo)'}
                         </label>
-                        <div className="grid grid-cols-3 gap-2 font-mono text-xs">
-                          {[
-                            { id: 'ib', labelEn: 'IB Diploma', labelEs: 'Bachillerato IB' },
-                            { id: 'bachelor', labelEn: 'Bachelor', labelEs: 'Grado Univ.' },
-                            { id: 'master', labelEn: 'Master & Thesis', labelEs: 'Máster & Tesis' }
-                          ].map((lvl) => (
-                            <button
-                              key={lvl.id}
-                              onClick={() => setCalcLevel(lvl.id)}
-                              className={`py-2 px-3 rounded-lg border transition-all cursor-pointer ${
-                                calcLevel === lvl.id
-                                  ? 'bg-slate-900 border-slate-900 text-white font-bold'
-                                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
-                              }`}
-                            >
-                              {lang === 'en' ? lvl.labelEn : lvl.labelEs}
-                            </button>
-                          ))}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-xs">
+                          {SUBJECT_COMPLEXITY_TIERS.map((lvl) => {
+                            const lvlRate = baseRates[lvl.id] || baseRates.ib;
+                            const isSelected = calcLevel === lvl.id;
+                            return (
+                              <button
+                                key={lvl.id}
+                                type="button"
+                                onClick={() => setCalcLevel(lvl.id)}
+                                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                                  isSelected
+                                    ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
+                                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400'
+                                }`}
+                              >
+                                <div>
+                                  <div className={`text-[11px] font-bold leading-snug mb-1 ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                                    {lang === 'en' ? lvl.shortEn : lvl.shortEs}
+                                  </div>
+                                  <div className={`text-[10px] font-sans leading-tight mb-2 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                                    {lang === 'en' ? lvl.coursesEn : lvl.coursesEs}
+                                  </div>
+                                </div>
+                                <div className={`text-xs font-mono font-extrabold pt-1.5 border-t ${isSelected ? 'border-slate-700 text-emerald-400' : 'border-slate-100 text-sky-800'}`}>
+                                  {formatMoney(lvlRate, currency)}/h
+                                </div>
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -2194,7 +2211,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         </div>
                         <input
                           type="range"
-                          min="2"
+                          min="1"
                           max="20"
                           step="1"
                           value={calcHours}
@@ -2203,7 +2220,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         />
                         <div className="grid grid-cols-3 gap-2 mt-2.5 font-mono text-[11px]">
                           {[
-                            { h: 2, sprint: false, labelEn: '2h Diagnostic / Drill', labelEs: '2h Diagnóstico / Repaso' },
+                            { h: 1, sprint: false, labelEn: '1h Single Class', labelEs: '1h Clase Suelta' },
                             { h: 8, sprint: true, labelEn: '8h Exam Sprint (-15%)', labelEs: '8h Pack Examen (-15%)' },
                             { h: 16, sprint: true, labelEn: '16h Semester Support (-15%)', labelEs: '16h Semestre (-15%)' }
                           ].map((preset) => (
@@ -2226,75 +2243,99 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                            {lang === 'en' ? 'Format' : 'Formato'}
+                      {/* Logarithmic Group Scaling Selector (N = 1, 2, 3, 4 students) */}
+                      <div>
+                        <div className="flex flex-wrap items-center justify-between gap-1 mb-2">
+                          <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold">
+                            {lang === 'en' ? 'Study Solo or Add Classmates (Logarithmic Discount)' : '¿Solo o con Colegas? (Descuento Logarítmico por Persona)'}
                           </label>
-                          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-                            <button
-                              onClick={() => setCalcFormat('1on1')}
-                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                                calcFormat === '1on1'
-                                  ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
-                                  : 'bg-white border-slate-200 text-slate-600'
-                              }`}
-                            >
-                              <div className="font-bold text-slate-900">1-on-1</div>
-                              <div className="text-[10px] text-slate-500">
-                                {lang === 'en' ? 'Individual' : 'Individual'}
-                              </div>
-                            </button>
-
-                            <button
-                              onClick={() => setCalcFormat('group')}
-                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                                calcFormat === 'group'
-                                  ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600'
-                                  : 'bg-white border-slate-200 text-slate-600'
-                              }`}
-                            >
-                              <div className="font-bold text-emerald-800">
-                                {lang === 'en' ? 'Group (≤3)' : 'Grupo (≤3)'}
-                              </div>
-                              <div className="text-[10px] text-emerald-700">-30% / est.</div>
-                            </button>
-                          </div>
+                          <span className="text-[10px] font-mono text-emerald-700 font-bold">
+                            {lang === 'en' ? 'More classmates = each pays less!' : '¡Más colegas = cada uno paga menos!'}
+                          </span>
                         </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs">
+                          {[
+                            { n: 1, titleEn: 'Solo (1-on-1)', titleEs: 'Solo (1-a-1)', subEn: '1 student', subEs: '1 estudiante' },
+                            { n: 2, titleEn: '+1 Classmate', titleEs: '+1 Colega', subEn: '2 students', subEs: '2 estudiantes' },
+                            { n: 3, titleEn: '+2 Classmates', titleEs: '+2 Colegas', subEn: '3 students', subEs: '3 estudiantes' },
+                            { n: 4, titleEn: '+3 Classmates', titleEs: '+3 Colegas', subEn: '4 students', subEs: '4 estudiantes' }
+                          ].map((g) => {
+                            const gp = getGroupPricing(singleEffectiveHourly, g.n, currency);
+                            const isSelected = calcStudents === g.n;
+                            return (
+                              <button
+                                key={g.n}
+                                type="button"
+                                onClick={() => setCalcStudents(g.n)}
+                                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                                  isSelected
+                                    ? g.n === 1
+                                      ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+                                      : 'bg-emerald-900 border-emerald-700 text-white shadow-xs'
+                                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400'
+                                }`}
+                              >
+                                <div>
+                                  <div className={`font-bold text-[11px] ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                                    {lang === 'en' ? g.titleEn : g.titleEs}
+                                  </div>
+                                  <div className={`text-[10px] ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                                    {formatMoney(gp.perStudentHourly, currency)}/h {lang === 'en' ? 'each' : 'c/u'}
+                                  </div>
+                                </div>
+                                <div className={`text-[10px] font-bold mt-1.5 pt-1 border-t ${
+                                  isSelected
+                                    ? 'border-white/20 text-emerald-300'
+                                    : g.n === 1
+                                      ? 'border-slate-100 text-slate-400'
+                                      : 'border-slate-100 text-emerald-700'
+                                }`}>
+                                  {g.n === 1
+                                    ? (lang === 'en' ? '100% Personalized' : '100% Personalizado')
+                                    : `-${gp.studentDiscountPct}% ${lang === 'en' ? 'per student' : 'por alumno'}`}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
 
-                        <div>
-                          <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                            {lang === 'en' ? 'Location Mode' : 'Ubicación'}
-                          </label>
-                          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-                            <button
-                              onClick={() => setCalcMode('online')}
-                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                                calcMode === 'online'
-                                  ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
-                                  : 'bg-white border-slate-200 text-slate-600'
-                              }`}
-                            >
-                              <div className="font-bold text-slate-900">Online</div>
-                              <div className="text-[10px] text-slate-500">Meet / Miro PDF</div>
-                            </button>
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
+                          {lang === 'en' ? 'Location Mode' : 'Modalidad / Ubicación'}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+                          <button
+                            type="button"
+                            onClick={() => setCalcMode('online')}
+                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                              calcMode === 'online'
+                                ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
+                                : 'bg-white border-slate-200 text-slate-600'
+                            }`}
+                          >
+                            <div className="font-bold text-slate-900">Online (Google Meet + Miro)</div>
+                            <div className="text-[10px] text-slate-500">
+                              {lang === 'en' ? 'Live Vector PDF Whiteboard' : 'Pizarra Vectorial PDF en Vivo'}
+                            </div>
+                          </button>
 
-                            <button
-                              onClick={() => setCalcMode('inperson')}
-                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                                calcMode === 'inperson'
-                                  ? 'bg-amber-50 border-amber-500 text-amber-950 ring-1 ring-amber-500'
-                                  : 'bg-white border-slate-200 text-slate-600'
-                              }`}
-                            >
-                              <div className="font-bold text-slate-900">
-                                {lang === 'en' ? 'In-Person' : 'Presencial'}
-                              </div>
-                              <div className="text-[10px] text-amber-700 font-semibold">
-                                {lang === 'en' ? 'In-person is extra' : 'Clase presencial es extra'}
-                              </div>
-                            </button>
-                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setCalcMode('inperson')}
+                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                              calcMode === 'inperson'
+                                ? 'bg-amber-50 border-amber-500 text-amber-950 ring-1 ring-amber-500'
+                                : 'bg-white border-slate-200 text-slate-600'
+                            }`}
+                          >
+                            <div className="font-bold text-slate-900">
+                              {lang === 'en' ? 'In-Person (Hannover)' : 'Presencial (Hannover)'}
+                            </div>
+                            <div className="text-[10px] text-amber-700 font-semibold">
+                              {lang === 'en' ? 'In-person is extra' : 'Clase presencial es extra'}
+                            </div>
+                          </button>
                         </div>
                       </div>
 
@@ -2318,7 +2359,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         />
                         <span className="text-slate-700 font-semibold">
                           {lang === 'en'
-                            ? 'Apply 4-Week Exam Sprint Bundle (-15% discount)'
+                            ? 'Apply 8h Exam Sprint Bundle (-15% discount)'
                             : 'Aplicar Paquete Sprint de Exámenes (-15% de descuento)'}
                         </span>
                       </label>
@@ -2329,7 +2370,9 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
-                            {lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada'}
+                            {calcStudents === 1
+                              ? (lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada')
+                              : (lang === 'en' ? `Per Student (${calcStudents} classmates)` : `Por Estudiante (${calcStudents} colegas)`)}
                           </span>
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-slate-700">
                             {activeTier.flag} {activeTier.code}
@@ -2337,17 +2380,37 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         </div>
                         <div className="flex items-baseline gap-2 mb-2">
                           <span className="text-4xl sm:text-5xl font-mono font-extrabold text-white">{formatMoney(totalCost, currency)}</span>
-                          <span className="text-xs font-mono text-slate-400">{lang === 'en' ? 'total' : 'total'}</span>
+                          <span className="text-xs font-mono text-slate-400">
+                            {calcStudents === 1
+                              ? (lang === 'en' ? 'total' : 'total')
+                              : (lang === 'en' ? 'per student' : 'por alumno')}
+                          </span>
                         </div>
 
-                        <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800 flex items-center justify-between">
-                          <span>{lang === 'en' ? 'Effective Rate: ' : 'Tarifa Efectiva: '}<strong className="text-emerald-400">{formatMoney(effectiveRate, currency)}/hr</strong></span>
-                          {calcMode === 'inperson' && (
-                            <span className="text-[10px] text-amber-300">
-                              {lang === 'en' ? '(incl. in-person extra)' : '(incl. extra presencial)'}
+                        <div className="text-xs font-mono text-slate-300 pb-3 mb-3 border-b border-slate-800 flex items-center justify-between">
+                          <span>
+                            {lang === 'en' ? 'Hourly per student: ' : 'Tarifa por alumno: '}
+                            <strong className="text-emerald-400">{formatMoney(effectiveRate, currency)}/hr</strong>
+                          </span>
+                          {calcStudents > 1 && (
+                            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
+                              -{groupPricing.studentDiscountPct}% c/u
                             </span>
                           )}
                         </div>
+
+                        {calcStudents > 1 && (
+                          <div className="mb-4 p-3 rounded-xl bg-slate-800/90 border border-emerald-500/30 font-mono text-[11px] space-y-1">
+                            <div className="flex items-center justify-between text-slate-200">
+                              <span>{lang === 'en' ? `Total Group (${calcStudents} students):` : `Total Grupo (${calcStudents} personas):`}</span>
+                              <strong className="text-amber-300">{formatMoney(totalGroupCost, currency)}</strong>
+                            </div>
+                            <div className="flex items-center justify-between text-[10px] text-slate-400">
+                              <span>{lang === 'en' ? 'Combined group hourly rate:' : 'Tarifa grupal combinada:'}</span>
+                              <span>{formatMoney(groupPricing.totalGroupHourly, currency)}/hr</span>
+                            </div>
+                          </div>
+                        )}
 
                         <ul className="space-y-2 text-xs text-slate-300 font-mono mb-6">
                           <li className="flex items-center gap-2">
@@ -2372,8 +2435,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       <button
                         onClick={() => handleOpenBooking({
                           code: 'CALC',
-                          titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'In-Person' : 'Online'}) [${formatMoney(totalCost, currency)}]`,
-                          titleEs: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'Presencial' : 'Online'}) [${formatMoney(totalCost, currency)}]`
+                          titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcStudents === 1 ? '1-on-1' : `Group of ${calcStudents}`}, ${calcMode === 'inperson' ? 'In-Person' : 'Online'}) [${formatMoney(totalCost, currency)}/student]`,
+                          titleEs: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcStudents === 1 ? '1-a-1' : `Grupo de ${calcStudents}`}, ${calcMode === 'inperson' ? 'Presencial' : 'Online'}) [${formatMoney(totalCost, currency)}/alumno]`
                         })}
                         className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                       >

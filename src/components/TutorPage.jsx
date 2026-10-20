@@ -32,15 +32,15 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
     const vCardContent = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'N:Santander Urrutia;Daniel;;;',
-      'FN:Daniel Santander Urrutia',
-      'ORG:Φ Science Mentorship & Computational Geophysics',
-      'TITLE:Geophysicist & Double M.Sc. Environmental Engineering',
+      'N:Santander Urrutia;Daniel S.;;;',
+      'FN:Daniel S. Santander Urrutia',
+      'ORG:Φ Science Mentorship & Hydro-Geophysics',
+      'TITLE:Geophysicist & Double M.Sc. Environmental Management',
       'TEL;TYPE=CELL,VOICE,WHATSAPP:+4917676497440',
       'EMAIL;TYPE=INTERNET,PREF:danisantander.urrutia@gmail.com',
       'URL:https://danisantanderurrutia-coder.github.io/portafolio/',
       'ADR;TYPE=WORK:;;Hannover;Lower Saxony;;Germany',
-      'NOTE:Registered German Freiberufler (§ 19 UStG) • University Physics & Math Mentoring (PIAD Method)',
+      'NOTE:German Freiberufler • University Physics & Math Mentoring (PIAD Method)',
       'END:VCARD'
     ].join('\r\n');
 
@@ -48,7 +48,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'Daniel_Santander_STEM_Tutor.vcf');
+    link.setAttribute('download', 'Daniel_S_Santander_Urrutia_STEM_Tutor.vcf');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -83,14 +83,14 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
             {lang === 'en'
-              ? 'Meet Your Mentor: Daniel Santander'
-              : 'Conoce a tu Tutor: Daniel Santander Urrutia'}
+              ? 'Meet Your Mentor: Daniel S. Santander Urrutia'
+              : 'Conoce a tu Tutor: Daniel S. Santander Urrutia'}
           </h1>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-sans">
             {lang === 'en'
-              ? 'Geophysicist and Double Master of Science Engineer based in Hannover, Germany. Over 500 hours of 1-on-1 university physics, differential calculus, and IB exam preparation with 100% Spanish or English fluency.'
-              : 'Geofísico e Ingeniero Doble Máster radicado en Hannover, Alemania. Más de 500 horas de mentoría 1-a-1 en física universitaria, cálculo diferencial y preparación intensiva para exámenes universitarios (Klausuren) e IB.'}
+              ? 'Geophysicist (FCFM, Universidad de Chile) and Double Master of Science Engineer (CAU Kiel, Germany & AMU Poznań, Poland) based in Hannover. Over 500 hours of 1-on-1 university physics, differential calculus, and IB exam preparation with 100% Spanish or English fluency.'
+              : 'Geofísico (FCFM, Universidad de Chile) e Ingeniero Doble Máster en Ciencias Ambientales (CAU Kiel, Alemania y AMU Poznań, Polonia) radicado en Hannover. Más de 500 horas de mentoría 1-a-1 en física universitaria, cálculo diferencial y preparación intensiva para exámenes (Klausuren) e IB.'}
           </p>
         </div>
 
@@ -111,7 +111,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                 <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-black p-1 border-2 border-white/40 shadow-2xl overflow-hidden">
                   <img
                     src="./profile.jpg"
-                    alt="Daniel Santander Urrutia"
+                    alt="Daniel S. Santander Urrutia"
                     className="w-full h-full object-cover object-top filter contrast-105"
                   />
                 </div>
@@ -150,7 +150,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                 </div>
                 <p className="text-slate-400 leading-snug">
                   {lang === 'en'
-                    ? 'Registered Freiberufler (§ 19 UStG). Tax-deductible invoices valid for German university claims and educational grants.'
+                    ? 'Registered Freiberufler (§ 19 UStG). Tax-deductible invoices valid for German university claims, student aid, and educational grants.'
                     : 'Freiberufler registrado en Alemania (§ 19 UStG). Emisión de factura oficial deducible para impuestos, becas y universidades.'}
                 </p>
               </div>
@@ -170,10 +170,10 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                   <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
                     <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
                       <span>🇨🇱 CHILE (FCFM)</span>
-                      <span className="text-amber-300 font-bold">{lang === 'en' ? 'Engineering Degree' : 'Título de Ingeniero'}</span>
+                      <span className="text-amber-300 font-bold">{lang === 'en' ? 'Geophysics Degree' : 'Título en Geofísica'}</span>
                     </div>
-                    <div className="text-white font-bold text-sm">Geofísica (Engineering Geophysics)</div>
-                    <div className="text-slate-400 text-[11px]">Universidad de Chile • Facultad de Cs. Físicas y Matemáticas</div>
+                    <div className="text-white font-bold text-sm">Geofísica (Hydro-Geophysics & Earth Science)</div>
+                    <div className="text-slate-400 text-[11px]">Universidad de Chile • Facultad de Ciencias Físicas y Matemáticas (Beauchef)</div>
                   </div>
 
                   {/* Germany */}
@@ -183,7 +183,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                       <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                     </div>
                     <div className="text-white font-bold text-sm">M.Sc. Environmental Management</div>
-                    <div className="text-slate-400 text-[11px]">Christian-Albrechts-Universität zu Kiel (Germany)</div>
+                    <div className="text-slate-400 text-[11px]">Christian-Albrechts-Universität zu Kiel (Alemania) • Tesis en Dinámica de Gases GEI y Humedales</div>
                   </div>
 
                   {/* Poland */}
@@ -193,7 +193,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                       <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                     </div>
                     <div className="text-white font-bold text-sm">M.Sc. Integrated Catchment Management</div>
-                    <div className="text-slate-400 text-[11px]">Adam Mickiewicz University (Poland)</div>
+                    <div className="text-slate-400 text-[11px]">Adam Mickiewicz University (Polonia) • Tesis en Limnología y Gestión Integral de Cuencas</div>
                   </div>
                 </div>
               </div>
@@ -333,16 +333,16 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
         </div>
 
         {/* ========================================================= */}
-        {/* RESEARCH PORTFOLIO BRIDGE & PROVEN EXPERIENCE            */}
+        {/* RESEARCH PORTFOLIO BRIDGE & VERIFIED SCIENTIFIC EVIDENCE  */}
         {/* ========================================================= */}
         <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 sm:p-10 space-y-6 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
-                {lang === 'en' ? 'Irrefutable Scientific Evidence' : 'Evidencia Científica & Proyectos Reales'}
+                {lang === 'en' ? 'Verified Scientific Background' : 'Evidencia Científica & Proyectos Reales'}
               </span>
               <h2 className="text-2xl font-bold text-slate-900">
-                {lang === 'en' ? 'Research Búnker & Engineering Projects' : 'Investigación Aplicada y Gemelos Digitales'}
+                {lang === 'en' ? 'Research Grounding & Field Environmental Science' : 'Investigación de Terreno, Cuencas y Políticas Públicas'}
               </h2>
             </div>
             
@@ -359,45 +359,48 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
-              <div className="text-xs font-mono font-bold text-emerald-700 uppercase">
-                {lang === 'en' ? 'Peatland Hydrology & GHG' : 'Hidrología de Turberas & GEI'}
-              </div>
-              <h4 className="text-sm font-bold text-slate-900">
-                {lang === 'en' ? 'Catchment Dynamics in Germany & Poland' : 'Dinámica de Cuencas en Alemania y Polonia'}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                {lang === 'en'
-                  ? 'Field monitoring, water balance equations, and greenhouse gas flux models (CH₄/CO₂) developed at CAU Kiel and AMU Poznań.'
-                  : 'Monitoreo de terreno, balances hídricos y modelos de flujos de gases de efecto invernadero (CH₄/CO₂) en CAU Kiel y AMU Poznań.'}
-              </p>
-            </div>
-
+            {/* Card 1: Hydro-Geophysics & Soil Resistivity */}
             <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
               <div className="text-xs font-mono font-bold text-sky-700 uppercase">
-                {lang === 'en' ? 'Geophysical Inverse Theory' : 'Teoría de Inversión Geofísica'}
+                {lang === 'en' ? 'Hydro-Geophysics & Soils (Chile)' : 'Hidrogeofísica & Resistividad (Chile)'}
               </div>
               <h4 className="text-sm font-bold text-slate-900">
-                {lang === 'en' ? 'SVD, Tikhonov & Potential Fields' : 'SVD, Regularización Tikhonov y Campos'}
+                {lang === 'en' ? 'Vertical Electrical Soundings & Water Balances' : 'Sondeos Eléctricos Verticales & Balances Hídricos'}
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-sans">
                 {lang === 'en'
-                  ? 'Singular value decomposition, travel-time seismic inversion, and gravimetric Bouguer reductions at Universidad de Chile.'
-                  : 'Descomposición en valores singulares, inversión de tiempos de viaje sísmicos y reducciones gravimétricas de Bouguer en la FCFM.'}
+                  ? 'Field surveys using vertical electrical soundings (VES/SEV), soil resistivity profiling, rain gauges, and watershed balance equations in Maule and central Chile basins (FCFM, Universidad de Chile).'
+                  : 'Campañas de terreno con sondeos eléctricos verticales (SEV), resistividad de suelos, redes de pluviómetros y balances hídricos de cuencas en el Maule y Chile central (FCFM, Universidad de Chile).'}
               </p>
             </div>
 
+            {/* Card 2: Peatlands, GHG & Catchments */}
             <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
-              <div className="text-xs font-mono font-bold text-indigo-700 uppercase">
-                {lang === 'en' ? 'High-Impact Pedagogy' : 'Pedagogía y Divulgación'}
+              <div className="text-xs font-mono font-bold text-emerald-700 uppercase">
+                {lang === 'en' ? 'Peatland GHG & Catchments (Europe)' : 'Gases GEI & Cuencas (Europa)'}
               </div>
               <h4 className="text-sm font-bold text-slate-900">
-                {lang === 'en' ? 'Mass Science Communication (+700k)' : 'Comunicación Científica Masiva (+700k)'}
+                {lang === 'en' ? 'Eddy Covariance & Rewetted Wetlands' : 'Eddy Covariance & Humedales Rehumedecidos'}
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed font-sans">
                 {lang === 'en'
-                  ? 'Proven mastery in breaking down deeply complex scientific principles into engaging, intuitive, and crystal-clear explanations.'
-                  : 'Dirección editorial y oratoria en medios cívicos: capacidad probada de sintetizar conceptos científicos complejos con máxima claridad.'}
+                  ? 'Micrometeorological greenhouse gas flux monitoring (CH₄/CO₂) with Eddy Covariance towers in European rewetted peatlands (CAU Kiel, Germany) and limnological lake dynamics (AMU Poznań, Poland).'
+                  : 'Monitoreo micrometeorológico de flujos de gases de efecto invernadero (CH₄/CO₂) con torres Eddy Covariance en turberas rehumedecidas (CAU Kiel, Alemania) y dinámica limnológica de lagos (AMU Poznań, Polonia).'}
+              </p>
+            </div>
+
+            {/* Card 3: International Policy, EPN & Congress */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
+              <div className="text-xs font-mono font-bold text-indigo-700 uppercase">
+                {lang === 'en' ? 'Public Advocacy & Publications' : 'Incidencia Pública & Publicaciones'}
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                {lang === 'en' ? 'EPN 2024 Report & National Congress' : 'Informe EPN 2024 & Congreso Nacional'}
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                {lang === 'en'
+                  ? 'Lead author of the international Environmental Paper Network (EPN 2024) biomass report; official expert testimony before the Emergency & Disaster Commission at Chile’s Chamber of Deputies in Valparaíso.'
+                  : 'Autor principal del informe internacional EPN 2024 sobre biomasa forestal; expositor técnico oficial ante la Comisión de Emergencia y Desastres de la Cámara de Diputadas y Diputados de Chile en el Congreso Nacional en Valparaíso.'}
               </p>
             </div>
 

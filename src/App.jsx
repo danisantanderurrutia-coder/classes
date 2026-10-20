@@ -462,7 +462,6 @@ export default function App() {
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
   const [courseFilter, setCourseFilter] = useState('all');
-  const [triggerOpenViewerChat, setTriggerOpenViewerChat] = useState(false);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -733,22 +732,6 @@ Sent from STEM Mentorship Portal`;
             </button>
           </nav>
 
-          {/* Visor 3D & Chat IA Star Feature Quick Link */}
-          <button
-            onClick={() => {
-              if (currentPage !== 'landing') navigateTo('landing');
-              setTimeout(() => {
-                document.getElementById('planetarium-viewport')?.scrollIntoView({ behavior: 'smooth' });
-                setTriggerOpenViewerChat((prev) => !prev);
-              }, 120);
-            }}
-            className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-950/80 to-purple-950/80 border border-sky-400/50 hover:border-sky-300 text-sky-200 hover:text-white text-xs font-mono font-bold transition-all shadow-xs cursor-pointer"
-            title="Abrir Asistente IA y Calibrador del Visor 3D"
-          >
-            <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
-            <span>Visor 3D &amp; Chat IA ⭐</span>
-          </button>
-
           {/* Language Switcher & Call CTA */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-0.5 text-xs font-mono">
@@ -867,17 +850,6 @@ Sent from STEM Mentorship Portal`;
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center gap-3">
-                    {/* Star Flagship Feature: 3D Observatory Settings Chat */}
-                    <button
-                      onClick={() => {
-                        document.getElementById('planetarium-viewport')?.scrollIntoView({ behavior: 'smooth' });
-                        setTriggerOpenViewerChat((prev) => !prev);
-                      }}
-                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 hover:from-sky-500 hover:to-purple-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-sky-600/30 hover:shadow-sky-600/50 hover:scale-105 cursor-pointer ring-2 ring-sky-400/40"
-                    >
-                      <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-                      <span>{lang === 'en' ? '⭐ 3D Planetarium AI Settings Chat' : '⭐ Chat Ajustes del Visor 3D'}</span>
-                    </button>
                     <button
                       onClick={() => openLabProblem('newtonian')}
                       className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-600 to-emerald-600 hover:from-sky-500 hover:to-emerald-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-sky-600/20 cursor-pointer"
@@ -919,7 +891,6 @@ Sent from STEM Mentorship Portal`;
                   onNavigate={navigateTo}
                   onOpenBooking={handleOpenBooking}
                   courses={ACADEMIC_COURSES}
-                  triggerOpenChat={triggerOpenViewerChat}
                 />
               </div>
 

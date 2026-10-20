@@ -6,7 +6,16 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import ObservatoryChat, { DEFAULT_VIEWER_SETTINGS } from './ObservatoryChat';
+
+export const DEFAULT_VIEWER_SETTINGS = {
+  sunIntensity: 2.2,       // Calibrated from 5.2 to avoid blown-out sector
+  ambientIntensity: 0.42,   // Calibrated from 0.90 for rich shadow contrast
+  bloomStrength: 0.36,      // Calibrated from 0.65 to avoid foggy glare
+  bloomThreshold: 0.82,     // Calibrated from 0.55 so planet surfaces don't glow
+  sgrExposure: 0.95,        // Calibrated from 2.2-2.5 for crisp accretion disk & event horizon
+  planetContrast: 1.15,
+  antiGlare: true,
+};
 
 // ============================================================================
 // 0. CINEMATIC LAYER: FINAL GRADE SHADER + GENERATIVE AMBIENT AUDIO
@@ -1623,8 +1632,6 @@ export default function SolarSystem({
   onNavigate,
   onOpenBooking,
   courses = [],
-  initialChatOpen = false,
-  triggerOpenChat = false,
 }) {
   const containerRef = useRef(null);
   const lineupLabelsRef = useRef({});
@@ -1649,7 +1656,6 @@ export default function SolarSystem({
 
   // Optical Telemetry & Glare Control State (Controls the Sun, Bloom, Ambient and Features)
   const [viewerSettings, setViewerSettings] = useState(DEFAULT_VIEWER_SETTINGS);
-  const [isChatOpen, setIsChatOpen] = useState(initialChatOpen);
   
   // Physics & Magnetism States (Visual Physic mode & Magnetic Field mode)
   const [visualPhysicMode, setVisualPhysicMode] = useState(false); // Naturally deactivated by default
@@ -1709,12 +1715,6 @@ export default function SolarSystem({
   useEffect(() => {
     animStateRef.current.viewerSettings = viewerSettings;
   }, [viewerSettings]);
-
-  useEffect(() => {
-    if (triggerOpenChat) {
-      setIsChatOpen(true);
-    }
-  }, [triggerOpenChat]);
 
   const replayIntroAnimation = () => {
     setIsRealScale(false);
@@ -4215,22 +4215,8 @@ export default function SolarSystem({
             </div>
           </div>
 
-          {/* Right Action Controls: Toggle Planetario / Clases, Chat Asistente & Intro Replay */}
+          {/* Right Action Controls: Toggle Planetario / Clases & Intro Replay */}
           <div className="flex flex-wrap items-center gap-2">
-            {/* Toggle Asistente de Ajustes Chat */}
-            <button
-              onClick={() => setIsChatOpen(!isChatOpen)}
-              className={`px-3 py-1.5 rounded-xl border font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md ${
-                isChatOpen
-                  ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-sky-300 shadow-sky-500/30 ring-1 ring-sky-300/40'
-                  : 'bg-slate-900/90 hover:bg-slate-800 text-sky-300 border-sky-500/50 hover:border-sky-400 shadow-sky-950/40'
-              }`}
-              title="Abrir Chat de Ajustes de Visor (Control de Misión IA)"
-            >
-              <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
-              <span>💬 Chat de Ajustes ⭐</span>
-            </button>
-
             {/* Replay Intro Animation button */}
             <button
               onClick={replayIntroAnimation}
@@ -4686,51 +4672,6 @@ export default function SolarSystem({
               </div>
             </>
           )}
-
-          {/* FLOATING CHAT / OPTICAL TUNING PILL LAUNCHER */}
-          {!isChatOpen && (
-            <button
-              onClick={() => setIsChatOpen(true)}
-              className="absolute bottom-3.5 left-3.5 z-40 px-3.5 py-2 rounded-2xl bg-slate-950/90 hover:bg-slate-900 border border-sky-400/60 hover:border-sky-300 text-white font-mono text-xs font-bold shadow-xl shadow-sky-500/25 backdrop-blur-md flex items-center gap-2 transition-all hover:scale-105 cursor-pointer ring-1 ring-white/10"
-              title="Abrir Chat de Ajustes del Visor 3D"
-            >
-              <span className="text-base">🛰️</span>
-              <span>{lang === 'en' ? 'Optical AI Chat ⭐' : 'Chat Ajustes del Visor ⭐'}</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            </button>
-          )}
-
-          {/* OBSERVATORY AI CHAT & OPTICAL CALIBRATION PANEL */}
-          <ObservatoryChat
-            isOpen={isChatOpen}
-            onClose={() => setIsChatOpen(false)}
-            viewerSettings={viewerSettings}
-            onUpdateSettings={setViewerSettings}
-            activePlanet={activePlanet}
-            onSelectPlanet={(planet, zoom = true) => handleSelectPlanet(planet, zoom)}
-            allPlanets={PLANET_SUBJECTS}
-            archLevel={archLevel}
-            onSetArchLevel={(lvl) => {
-              setArchLevel(lvl);
-              animStateRef.current.isTransitioning = true;
-            }}
-            viewVariant={viewVariant}
-            onSetViewVariant={(v) => {
-              setViewVariant(v);
-              if (v === 'option3') {
-                setLineupZoomed(false);
-                animStateRef.current.lineupZoomed = false;
-              }
-            }}
-            isRealScale={isRealScale}
-            onToggleRealScale={() => {
-              const nextState = !isRealScale;
-              setIsRealScale(nextState);
-              animStateRef.current.isTransitioning = true;
-              setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
-            }}
-            lang={lang}
-          />
 
           {/* Intro: fade from absolute black */}
           {!introDone && (

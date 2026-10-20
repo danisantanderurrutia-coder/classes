@@ -42,6 +42,7 @@ import {
   Copy
 } from 'lucide-react';
 import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
+import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
 
 // Custom crisp GitHub SVG icon component
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -89,7 +90,7 @@ const ACADEMIC_COURSES = [
   },
   {
     id: "linear_algebra",
-    planetId: "earth",
+    planetId: "saturn",
     code: "LA-102",
     titleEn: "Lineare Algebra & Analytische Geometrie",
     titleEs: "Álgebra Lineal y Geometría Analítica",
@@ -226,7 +227,7 @@ const ACADEMIC_COURSES = [
   },
   {
     id: "ib",
-    planetId: "earth",
+    planetId: "jupiter",
     code: "IB-HL",
     titleEn: "IB Diploma: Mathematics AA HL & Physics HL",
     titleEs: "Bachillerato Internacional: Math AA HL y Física HL",
@@ -444,9 +445,10 @@ const WHY_ME_REASONS = [
 ];
 
 export default function App() {
-  const [lang, setLang] = useState('en');
-  // Multi-page navigation state: 'landing' | 'courses' | 'library' | 'precios' | 'contact'
+  const [lang, setLang] = useState('es');
+  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'library' | 'precios' | 'contact'
   const [currentPage, setCurrentPage] = useState('landing');
+  const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
   const [courseFilter, setCourseFilter] = useState('all');
 
@@ -500,7 +502,7 @@ export default function App() {
             document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
           }, 100);
         }
-      } else if (['landing', 'courses', 'library', 'contact'].includes(hash)) {
+      } else if (['landing', 'lab', 'courses', 'library', 'contact'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
         setCurrentPage('landing');
@@ -541,6 +543,11 @@ export default function App() {
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const openLabProblem = (problemId = 'newtonian') => {
+    setActiveLabProblemId(problemId);
+    navigateTo('lab');
   };
 
   // Keyboard Escape listener for Modal
@@ -651,11 +658,23 @@ Sent from Galileo STEM Mentorship Portal`;
             </div>
           </button>
 
-          {/* Dedicated Page Tabs (Cursos, Librería, Precios, Contact & FAQ) */}
+          {/* Dedicated Page Tabs (Laboratorio, Cursos, Librería, Precios, Contact & FAQ) */}
           <nav className="hidden lg:flex items-center gap-1.5 p-1 bg-slate-900/90 border border-slate-800 rounded-2xl text-xs font-mono font-semibold shadow-inner">
             <button
+              onClick={() => navigateTo('lab')}
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+                currentPage === 'lab'
+                  ? 'bg-gradient-to-r from-sky-500 to-emerald-500 text-slate-950 shadow-md shadow-sky-500/30 font-extrabold'
+                  : 'text-sky-300 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Atom className={`w-4 h-4 ${currentPage === 'lab' ? 'text-slate-950' : 'text-sky-400'}`} />
+              <span>{lang === 'en' ? 'Physics Lab (DCL)' : 'Laboratorio (DCL)'}</span>
+            </button>
+
+            <button
               onClick={() => navigateTo('courses')}
-              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
                 currentPage === 'courses'
                   ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30 font-bold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -667,7 +686,7 @@ Sent from Galileo STEM Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('library')}
-              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
                 currentPage === 'library'
                   ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30 font-bold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -679,7 +698,7 @@ Sent from Galileo STEM Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('precios')}
-              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
                 currentPage === 'precios'
                   ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-bold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -691,7 +710,7 @@ Sent from Galileo STEM Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('contact')}
-              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
                 currentPage === 'contact'
                   ? 'bg-white text-slate-900 shadow-md font-bold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -707,7 +726,7 @@ Sent from Galileo STEM Mentorship Portal`;
             <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-0.5 text-xs font-mono">
               <button
                 onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-lg transition-colors ${
+                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                   lang === 'en' ? 'bg-slate-800 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -715,7 +734,7 @@ Sent from Galileo STEM Mentorship Portal`;
               </button>
               <button
                 onClick={() => setLang('es')}
-                className={`px-2.5 py-1 rounded-lg transition-colors ${
+                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                   lang === 'es' ? 'bg-slate-800 text-white font-bold shadow-xs' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -738,6 +757,51 @@ Sent from Galileo STEM Mentorship Portal`;
             </button>
           </div>
 
+        </div>
+
+        {/* Mobile / Tablet Navigation Bar */}
+        <div className="lg:hidden border-t border-slate-800/80 px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs font-mono">
+          <button
+            onClick={() => navigateTo('lab')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap flex items-center gap-1.5 ${
+              currentPage === 'lab' ? 'bg-sky-500 text-slate-950 font-bold' : 'bg-slate-900 text-sky-300'
+            }`}
+          >
+            <Atom className="w-3.5 h-3.5" />
+            <span>{lang === 'en' ? 'Physics Lab' : 'Laboratorio DCL'}</span>
+          </button>
+          <button
+            onClick={() => navigateTo('courses')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+              currentPage === 'courses' ? 'bg-sky-600 text-white font-bold' : 'bg-slate-900 text-slate-300'
+            }`}
+          >
+            {lang === 'en' ? 'Courses' : 'Cursos'}
+          </button>
+          <button
+            onClick={() => navigateTo('library')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+              currentPage === 'library' ? 'bg-amber-600 text-white font-bold' : 'bg-slate-900 text-slate-300'
+            }`}
+          >
+            {lang === 'en' ? 'Library' : 'Librería'}
+          </button>
+          <button
+            onClick={() => navigateTo('precios')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+              currentPage === 'precios' ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-900 text-slate-300'
+            }`}
+          >
+            {lang === 'en' ? 'Pricing' : 'Precios'}
+          </button>
+          <button
+            onClick={() => navigateTo('contact')}
+            className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+              currentPage === 'contact' ? 'bg-white text-slate-900 font-bold' : 'bg-slate-900 text-slate-300'
+            }`}
+          >
+            Contact
+          </button>
         </div>
       </header>
 
@@ -774,22 +838,29 @@ Sent from Galileo STEM Mentorship Portal`;
 
                   <div className="flex flex-wrap items-center justify-center gap-3">
                     <button
+                      onClick={() => openLabProblem('newtonian')}
+                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-sky-500/20 cursor-pointer"
+                    >
+                      <Atom className="w-4 h-4" />
+                      <span>{lang === 'en' ? 'Interactive Physics Lab (DCL) →' : 'Laboratorio Interactivo (DCL) →'}</span>
+                    </button>
+                    <button
                       onClick={() => navigateTo('courses')}
-                      className="px-5 py-2.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors shadow-sm"
+                      className="px-5 py-2.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
                     >
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>{lang === 'en' ? 'Open Course Catalog →' : 'Abrir Catálogo de Clases →'}</span>
                     </button>
                     <button
                       onClick={() => handleOpenBooking(null, true)}
-                      className="px-5 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-amber-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2"
+                      className="px-5 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-amber-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
                     >
                       <Zap className="w-3.5 h-3.5 text-amber-400" />
                       <span>{lang === 'en' ? 'Spontaneous 1-on-1 Class' : 'Clase Espontánea Urgente'}</span>
                     </button>
                     <button
                       onClick={() => navigateTo('contact')}
-                      className="px-5 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2"
+                      className="px-5 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 font-mono text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer"
                     >
                       <Phone className="w-3.5 h-3.5 text-emerald-400" />
                       <span>{lang === 'en' ? 'Direct Contact & WhatsApp' : 'Contacto Directo & WhatsApp'}</span>
@@ -805,6 +876,7 @@ Sent from Galileo STEM Mentorship Portal`;
                     lang={lang}
                     onNavigate={navigateTo}
                     onOpenBooking={handleOpenBooking}
+                    courses={ACADEMIC_COURSES}
                   />
                 </div>
 
@@ -828,6 +900,77 @@ Sent from Galileo STEM Mentorship Portal`;
                   </div>
                 </div>
 
+              </div>
+            </section>
+
+            {/* Interactive Classical Physics Lab Preview Section on Landing */}
+            <section className="py-16 bg-slate-950 text-white border-b border-slate-800">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold mb-2">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === 'en'
+                          ? 'Interactive Sandbox • Free Body Diagrams (FBD) • Calculus Bridge'
+                          : 'Laboratorio Tipo Juego • Botón de DCL • Puente Álgebra ↔ Cálculo'}
+                      </span>
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                      {lang === 'en'
+                        ? 'Explore the Classical Physics & Engineering Problems'
+                        : 'Explora los Problemas Clásicos de la Física y la Ingeniería'}
+                    </h2>
+                    <p className="text-sm text-slate-300 max-w-2xl mt-2 leading-relaxed">
+                      {lang === 'en'
+                        ? 'Test each phenomenon experimentally: toggle Free Body Diagrams (DCL), see how linear algebra and trigonometry turn into differential equations, and solve a classic exam exercise.'
+                        : 'Experimenta cada caso clásico como un mini-laboratorio: activa los Diagramas de Cuerpo Libre (DCL), conecta las ecuaciones de álgebra y cálculo, y resuelve un ejercicio real de examen.'}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => openLabProblem('newtonian')}
+                    className="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 shrink-0 cursor-pointer shadow-lg shadow-sky-500/20"
+                  >
+                    <Atom className="w-4 h-4" />
+                    <span>{lang === 'en' ? 'Launch Full Physics Lab →' : 'Abrir Laboratorio Completo →'}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {LAB_PROBLEMS.map((prob) => {
+                    const Icon = prob.icon;
+                    return (
+                      <div
+                        key={prob.id}
+                        onClick={() => openLabProblem(prob.id)}
+                        className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500/60 transition-all cursor-pointer flex flex-col justify-between group"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-800 text-sky-300 font-bold">
+                              {lang === 'en' ? prob.badgeEn : prob.badgeEs}
+                            </span>
+                            <span className="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-slate-950 transition-colors">
+                              <Icon className="w-4 h-4" />
+                            </span>
+                          </div>
+                          <h3 className="text-base font-bold text-white group-hover:text-sky-300 transition-colors mb-2 leading-snug">
+                            {lang === 'en' ? prob.titleEn : prob.titleEs}
+                          </h3>
+                          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                            {lang === 'en' ? prob.subtitleEn : prob.subtitleEs}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-emerald-400 font-bold">
+                          <span>{lang === 'en' ? 'DCL + Algebra/Calculus + 1 Exercise' : 'Botón DCL + Ecuaciones + 1 Ejercicio'}</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </section>
 
@@ -1002,6 +1145,19 @@ Sent from Galileo STEM Mentorship Portal`;
               </div>
             </section>
           </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* PAGE 1.5: INTERACTIVE CLASSICAL PHYSICS & CALCULUS LAB    */}
+        {/* ========================================================= */}
+        {currentPage === 'lab' && (
+          <PhysicsLab
+            lang={lang}
+            initialProblemId={activeLabProblemId}
+            onOpenBooking={handleOpenBooking}
+            onNavigate={navigateTo}
+            courses={ACADEMIC_COURSES}
+          />
         )}
 
         {/* ========================================================= */}

@@ -719,6 +719,9 @@ export default function PhysicsLab({
   const currentProblem = LAB_PROBLEMS.find((p) => p.id === selectedId) || LAB_PROBLEMS[0];
 
   const [params, setParams] = useState(currentProblem.defaults);
+  // Guarantee every parameter key for the active problem is always defined even on synchronous tab switch
+  const safeParams = { ...currentProblem.defaults, ...params };
+
   const [isPlaying, setIsPlaying] = useState(true);
   const [showDCL, setShowDCL] = useState(true);
   const [mathTab, setMathTab] = useState('both'); // 'both' | 'algebra' | 'calculus'
@@ -733,20 +736,20 @@ export default function PhysicsLab({
   const animRef = useRef(null);
   const lastTimeRef = useRef(performance.now());
 
-  // Sync when problem changes
-  useEffect(() => {
-    const prob = LAB_PROBLEMS.find((p) => p.id === selectedId) || LAB_PROBLEMS[0];
+  const handleSelectProblem = (probId) => {
+    const prob = LAB_PROBLEMS.find((p) => p.id === probId) || LAB_PROBLEMS[0];
+    setSelectedId(prob.id);
     setParams(prob.defaults);
     setSimTime(0);
     setIsPlaying(true);
     setSelectedOption(null);
     setShowHint(false);
     setShowSolution(false);
-  }, [selectedId]);
+  };
 
   useEffect(() => {
     if (initialProblemId && LAB_PROBLEMS.some((p) => p.id === initialProblemId)) {
-      setSelectedId(initialProblemId);
+      handleSelectProblem(initialProblemId);
     }
   }, [initialProblemId]);
 
@@ -769,12 +772,12 @@ export default function PhysicsLab({
   }, [isPlaying]);
 
   const handleParamChange = (key, value) => {
-    setParams((prev) => ({ ...prev, [key]: value }));
+    setParams((prev) => ({ ...currentProblem.defaults, ...prev, [key]: value }));
     setSimTime(0);
   };
 
   const applyPreset = (presetValues) => {
-    setParams(presetValues);
+    setParams({ ...currentProblem.defaults, ...presetValues });
     setSimTime(0);
     setIsPlaying(true);
   };
@@ -785,7 +788,7 @@ export default function PhysicsLab({
   const computeTelemetry = () => {
     const g = 9.81;
     if (selectedId === 'newtonian') {
-      const { m1, m2, angle, mu } = params;
+      const { m1, m2, angle, mu } = safeParams;
       const rad = (angle * Math.PI) / 180;
       const N = m1 * g * Math.cos(rad);
       const Fgx = m1 * g * Math.sin(rad);
@@ -824,7 +827,7 @@ export default function PhysicsLab({
     }
 
     if (selectedId === 'intro_physics') {
-      const { v0, angle, g: grav, drag } = params;
+      const { v0, angle, g: grav, drag } = safeParams;
       const rad = (angle * Math.PI) / 180;
       const vx0 = v0 * Math.cos(rad);
       const vy0 = v0 * Math.sin(rad);
@@ -867,7 +870,7 @@ export default function PhysicsLab({
     }
 
     if (selectedId === 'engineering') {
-      const { loadPos, mass, k, damping } = params;
+      const { loadPos, mass, k, damping } = safeParams;
       const L = 10.0;
       const W = mass * g;
       const RB = W * (loadPos / L);
@@ -898,7 +901,7 @@ export default function PhysicsLab({
     }
 
     if (selectedId === 'electromagnetism') {
-      const { E, B, v0, qSign } = params;
+      const { E, B, v0, qSign } = safeParams;
       const FE = -qSign * E; // downward if q > 0
       const FB = qSign * v0 * B; // upward if q > 0
       const Fnet = FE + FB;
@@ -928,7 +931,7 @@ export default function PhysicsLab({
     }
 
     if (selectedId === 'thermodynamics') {
-      const { V1, V2, T, processType } = params;
+      const { V1, V2, T, processType } = safeParams;
       const R = 8.314;
       const n = 1.0;
       const P1 = (n * R * T) / V1; // kPa (since L -> 10^-3 m^3)
@@ -972,7 +975,7 @@ export default function PhysicsLab({
     }
 
     // waves_geophysics
-    const { theta1, v1, v2 } = params;
+    const { theta1, v1, v2 } = safeParams;
     const rad1 = (theta1 * Math.PI) / 180;
     const sinTheta2 = (v2 / v1) * Math.sin(rad1);
     const isTIR = sinTheta2 >= 1.0;
@@ -982,9 +985,9 @@ export default function PhysicsLab({
 
     return {
       items: [
-        { label: 'Ángulo Incidente θ₁', value: `${theta1.toFixed(1)}°` },
-        { label: 'Ángulo Refractado θ₂', value: isTIR ? 'Reflexión Total' : `${theta2.toFixed(1)}°` },
-        { label: 'Ángulo Crítico θ_c', value: hasCrit ? `${thetaCrit.toFixed(1)}°` : 'N/A (v₁≥v₂)' },
+        { label: 'Ángulo Incidente θ₁', value: `${Number(theta1).toFixed(1)}°` },
+        { label: 'Ángulo Refractado θ₂', value: isTIR ? 'Reflexión Total' : `${Number(theta2).toFixed(1)}°` },
+        { label: 'Ángulo Crítico θ_c', value: hasCrit && thetaCrit !== null ? `${Number(thetaCrit).toFixed(1)}°` : 'N/A (v₁≥v₂)' },
         { label: 'Relación v₂ / v₁', value: `${(v2 / v1).toFixed(2)}` }
       ],
       status: isTIR
@@ -992,8 +995,8 @@ export default function PhysicsLab({
           ? 'Total Internal Reflection / Critical Head Wave!'
           : '¡Reflexión Total Interna / Onda Crítica Rasante!'
         : lang === 'en'
-        ? `Refracted Ray Transmitted (θ₂ = ${theta2.toFixed(1)}°)`
-        : `Rayo Refractado Transmitido (θ₂ = ${theta2.toFixed(1)}°)`,
+        ? `Refracted Ray Transmitted (θ₂ = ${Number(theta2).toFixed(1)}°)`
+        : `Rayo Refractado Transmitido (θ₂ = ${Number(theta2).toFixed(1)}°)`,
       raw: { rad1, sinTheta2, isTIR, theta2, thetaCrit }
     };
   };
@@ -1036,7 +1039,7 @@ export default function PhysicsLab({
     // 1. NEWTONIAN INCLINED PLANE & PULLEY
     // ------------------------------------------------------------------------
     if (selectedId === 'newtonian') {
-      const { m1, m2, angle } = params;
+      const { m1, m2, angle } = safeParams;
       const { a, T, N, Fgx, fFriction } = telemetry.raw;
       const rad = (angle * Math.PI) / 180;
 
@@ -1200,7 +1203,7 @@ export default function PhysicsLab({
     // 2. PROJECTILE MOTION & DRAG
     // ------------------------------------------------------------------------
     if (selectedId === 'intro_physics') {
-      const { v0, angle, g: grav, drag } = params;
+      const { v0, angle, g: grav, drag } = safeParams;
       const rad = (angle * Math.PI) / 180;
       const originX = 55;
       const originY = H - 45;
@@ -1310,7 +1313,7 @@ export default function PhysicsLab({
     // 3. ENGINEERING BEAM & DAMPED OSCILLATOR
     // ------------------------------------------------------------------------
     if (selectedId === 'engineering') {
-      const { loadPos, mass } = params;
+      const { loadPos, mass } = safeParams;
       const { RA, RB, W: weight, gamma, omegaD } = telemetry.raw;
 
       const beamLeft = 75;
@@ -1392,7 +1395,7 @@ export default function PhysicsLab({
     // 4. ELECTROMAGNETISM: VELOCITY SELECTOR (LORENTZ FORCE)
     // ------------------------------------------------------------------------
     if (selectedId === 'electromagnetism') {
-      const { v0 } = params;
+      const { v0 } = safeParams;
       const { FE, FB, Fnet } = telemetry.raw;
 
       const plateLeft = 70;
@@ -1469,7 +1472,7 @@ export default function PhysicsLab({
     // 5. THERMODYNAMICS: IDEAL GAS PISTON & LIVE P-V DIAGRAM
     // ------------------------------------------------------------------------
     if (selectedId === 'thermodynamics') {
-      const { V1, V2, T, processType } = params;
+      const { V1, V2, T, processType } = safeParams;
       const phase = 0.5 - 0.5 * Math.cos(simTime * 1.6);
       const curV = V1 + (V2 - V1) * phase;
 
@@ -1550,7 +1553,7 @@ export default function PhysicsLab({
       ctx.moveTo(vToX(V1), plotY);
       const steps = 30;
       for (let i = 0; i <= steps; i++) {
-        const vv = V1 + (( curV - V1) * i) / steps;
+        const vv = V1 + ((curV - V1) * i) / steps;
         ctx.lineTo(vToX(vv), pToY(vv));
       }
       ctx.lineTo(vToX(curV), plotY);
@@ -1582,7 +1585,7 @@ export default function PhysicsLab({
     // 6. WAVES & GEOPHYSICS: SNELL'S LAW & CRITICAL REFRACTION
     // ------------------------------------------------------------------------
     if (selectedId === 'waves_geophysics') {
-      const { v1, v2 } = params;
+      const { theta1, v1, v2, freq } = safeParams;
       const { rad1, isTIR, theta2 } = telemetry.raw;
       const rad2 = (theta2 * Math.PI) / 180;
 
@@ -1608,14 +1611,14 @@ export default function PhysicsLab({
       ctx.strokeStyle = 'rgba(226, 232, 240, 0.45)';
       ctx.setLineDash([5, 5]);
       ctx.beginPath();
-      ctx.moveTo(hitX, 20);
-      ctx.lineTo(hitX, H - 20);
+      ctx.moveTo(hitX, 18);
+      ctx.lineTo(hitX, H - 18);
       ctx.stroke();
       ctx.restore();
 
       ctx.fillStyle = '#93C5FD';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText(`Estrato 1 (v₁ = ${v1} km/s)`, 18, 28);
+      ctx.fillText(`Estrato 1 (v₁ = ${v1} km/s)`, 18, 48);
       ctx.fillStyle = '#FCA5A5';
       ctx.fillText(`Estrato 2 (v₂ = ${v2} km/s)`, 18, H - 18);
 
@@ -1629,10 +1632,53 @@ export default function PhysicsLab({
       const refrEndX = hitX + rayLen * Math.sin(rad2);
       const refrEndY = midY + rayLen * Math.cos(rad2);
 
+      // Angle arcs for theta1 and theta2
+      ctx.strokeStyle = '#FBBF24';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(hitX, midY, 34, -Math.PI / 2 - rad1, -Math.PI / 2);
+      ctx.stroke();
+
+      if (!isTIR) {
+        ctx.strokeStyle = '#10B981';
+        ctx.beginPath();
+        ctx.arc(hitX, midY, 34, Math.PI / 2 - rad2, Math.PI / 2);
+        ctx.stroke();
+      }
+
+      // Animated wavefront pulses moving along rays
+      const pulsePhase = (simTime * (freq || 2.0) * 0.6) % 1;
+      for (let k = 0; k < 3; k++) {
+        const frac = (pulsePhase + k / 3) % 1;
+        // Incident pulse
+        const ix = incStartX + frac * (hitX - incStartX);
+        const iy = incStartY + frac * (midY - incStartY);
+        ctx.fillStyle = '#FBBF24';
+        ctx.beginPath();
+        ctx.arc(ix, iy, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Reflected pulse
+        const rx = hitX + frac * (reflEndX - hitX);
+        const ry = midY + frac * (reflEndY - midY);
+        ctx.fillStyle = '#38BDF8';
+        ctx.beginPath();
+        ctx.arc(rx, ry, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Refracted / Head-wave pulse
+        const tx = hitX + frac * (refrEndX - hitX);
+        const ty = midY + frac * (refrEndY - midY);
+        ctx.fillStyle = isTIR ? '#EF4444' : '#10B981';
+        ctx.beginPath();
+        ctx.arc(tx, ty, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       // Incident ray
-      drawArrow(ctx, incStartX, incStartY, hitX, midY, '#FBBF24', showDCL ? 'k⃗_inc (θ₁)' : '');
+      drawArrow(ctx, incStartX, incStartY, hitX, midY, '#FBBF24', showDCL ? `k⃗_inc (θ₁=${theta1}°)` : '');
       // Reflected ray
-      drawArrow(ctx, hitX, midY, reflEndX, reflEndY, '#38BDF8', showDCL ? 'k⃗_refl (θ₁)' : '');
+      drawArrow(ctx, hitX, midY, reflEndX, reflEndY, '#38BDF8', showDCL ? `k⃗_refl (θ₁=${theta1}°)` : '');
       // Refracted or Critical Head wave ray
       drawArrow(
         ctx,
@@ -1641,10 +1687,10 @@ export default function PhysicsLab({
         refrEndX,
         refrEndY,
         isTIR ? '#EF4444' : '#10B981',
-        showDCL ? (isTIR ? 'Onda Crítica (90°)' : `k⃗_refr (θ₂=${theta2.toFixed(0)}°)`) : ''
+        showDCL ? (isTIR ? 'Onda Crítica (90°)' : `k⃗_refr (θ₂=${Number(theta2).toFixed(0)}°)`) : ''
       );
     }
-  }, [selectedId, params, simTime, showDCL, telemetry.raw]);
+  }, [selectedId, safeParams, simTime, showDCL, telemetry.raw]);
 
   const linkedCourse = courses.find((c) => c.id === currentProblem.courseId) || courses[0];
 
@@ -1700,7 +1746,7 @@ export default function PhysicsLab({
             return (
               <button
                 key={prob.id}
-                onClick={() => setSelectedId(prob.id)}
+                onClick={() => handleSelectProblem(prob.id)}
                 className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
                   active
                     ? 'bg-slate-900 border-slate-900 text-white shadow-md ring-2 ring-sky-500/40'
@@ -1838,7 +1884,7 @@ export default function PhysicsLab({
                     <div className="flex justify-between text-xs font-mono">
                       <span className="text-slate-300">{lang === 'en' ? s.labelEn : s.labelEs}</span>
                       <span className="text-sky-300 font-bold">
-                        {params[s.key]}
+                        {safeParams[s.key]}
                         {s.unit}
                       </span>
                     </div>
@@ -1847,7 +1893,7 @@ export default function PhysicsLab({
                       min={s.min}
                       max={s.max}
                       step={s.step}
-                      value={params[s.key]}
+                      value={safeParams[s.key]}
                       onChange={(e) => handleParamChange(s.key, parseFloat(e.target.value))}
                       className="w-full accent-sky-400 bg-slate-800 rounded-lg cursor-pointer h-2"
                     />

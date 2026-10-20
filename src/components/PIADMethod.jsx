@@ -35,7 +35,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       titleEn: '1. Observation (Sensory Intuition & Sketching)',
       titleEs: '1. Observación (Intuición Sensible y Bocetos)',
       mentorEn: 'Leonardo Da Vinci',
-      image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+      image: '/images/method-piad.webp',
       imageCaptionEn: 'Da Vinci method: analytical sketching and observational geometry before abstract formalisms.',
       imageCaptionEs: 'Método Da Vinci: dibujo analítico y geometría observacional antes del formalismo abstracto.',
       quoteEn: '"Study the science of art. Study the art of science. Develop your senses — especially learn how to see."',
@@ -117,38 +117,38 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       dimensionEs: 'Rol del Estudiante',
       traditionalEn: 'Passive recipient of textbook formulas ("Banking education")',
       traditionalEs: 'Receptor pasivo de fórmulas de manual ("Educación bancaria")',
-      naiveAiEn: 'Prompter who copies and pastes without understanding',
-      naiveAiEs: 'Copiador pasivo que delega el pensamiento a la IA',
-      piadEn: 'Sovereign investigator who uncovers first principles and writes code',
-      piadEs: 'Investigador soberano que domina los primeros principios y diseña su propio código'
+      naiveAiEn: 'Mechanical follower of repetitive exercise recipes without deep understanding',
+      naiveAiEs: 'Repetidor mecánico de recetas de ejercicios sin comprensión de fondo',
+      piadEn: 'Sovereign investigator who uncovers first principles and models with their own code',
+      piadEs: 'Investigador soberano que domina los primeros principios y modela con código propio'
     },
     {
-      dimensionEn: 'Role of Artificial Intelligence',
-      dimensionEs: 'Rol de la Inteligencia Artificial',
-      traditionalEn: 'Banned or treated as a cheating threat',
-      traditionalEs: 'Prohibida o perseguida como trampa',
-      naiveAiEn: 'Comfortable crutch that answers homework exercises',
-      naiveAiEs: 'Muleta cómoda que resuelve ejercicios sin dejar criterio',
-      piadEn: 'Productive catalyst to design code, explore simulations, and accelerate learning',
-      piadEs: 'Catalizador productivo para diseñar código, explorar simulaciones y acelerar el aprendizaje'
+      dimensionEn: 'Approach to Computation & Code',
+      dimensionEs: 'Enfoque hacia el Código y la Computación',
+      traditionalEn: 'Absent or restricted to abstract proofs on paper',
+      traditionalEs: 'Ausente o restringido a demostraciones abstractas en papel',
+      naiveAiEn: 'Pocket calculator approach for routine arithmetic without analysis',
+      naiveAiEs: 'Uso de calculadora para aritmética rutinaria sin análisis conceptual',
+      piadEn: 'Interactive numerical simulations in Python (NumPy/SciPy) to deduce physical laws',
+      piadEs: 'Simulaciones numéricas interactivas en Python (NumPy/SciPy) para deducir leyes físicas'
     },
     {
       dimensionEn: 'Method of Proof',
       dimensionEs: 'Método de Demostración',
       traditionalEn: 'Rote formula memorization for 90-minute written exams',
       traditionalEs: 'Memorización mecánica para un examen escrito de 90 minutos',
-      naiveAiEn: 'Accepting the AI output without cross-checking assumptions',
-      naiveAiEs: 'Creer en la respuesta del LLM sin revisar los supuestos',
-      piadEn: 'Occam\'s parsimony + empirical sandbox + past-exam examiner partial points',
-      piadEs: 'Parsimonia de Ockham + simulación experimental + rúbricas oficiales'
+      naiveAiEn: 'Blind substitution of numbers into textbook recipes',
+      naiveAiEs: 'Reemplazo ciego de números en fórmulas prefijadas',
+      piadEn: 'Occam\'s parsimony + empirical sandbox + official examiner scoring rubrics',
+      piadEs: 'Parsimonia de Ockham + laboratorio experimental + rúbricas oficiales de examen'
     },
     {
       dimensionEn: 'End Deliverable',
       dimensionEs: 'Entregable Final',
       traditionalEn: 'A scored exam paper that gets archived and forgotten',
       traditionalEs: 'Una hoja de examen calificada que se archiva y se olvida',
-      naiveAiEn: 'Generic AI-generated text with no lasting mental model',
-      naiveAiEs: 'Texto genérico que se desvanece de la memoria en 48 horas',
+      naiveAiEn: 'Disjointed notes without lasting conceptual connection',
+      naiveAiEs: 'Apuntes desordenados sin conexión conceptual duradera',
       piadEn: 'Autonomous mental models, vector Miro cheat-sheets, and executable Python code',
       piadEs: 'Criterio autónomo permanente, esquemas vectoriales y código Python ejecutable'
     }
@@ -167,14 +167,14 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
             {lang === 'en'
-              ? 'Harness AI productively: explore, design code, and master higher STEM.'
-              : 'Usa la IA de modo productivo: explora, diseña código propio y domina las ciencias.'}
+              ? 'First-Principles Intuition, Rigorous Modeling & Sovereign Problem Solving.'
+              : 'Intuición por Primeros Principios, Modelación Rigurosa y Criterio Autónomo.'}
           </h1>
 
           <p className="text-base sm:text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
             {lang === 'en'
-              ? 'We know students will use AI. The PIAD Method™ ensures they use it constructively: to explore deeply, design executable code, and make historically difficult math and physics accessible through simple, hands-on inquiry.'
-              : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la transforma en una palanca de aprendizaje productivo: para explorar con curiosidad, democratizar la programación y acercar dificultades complejas mediante ejercicios simples que profundizan la comprensión real.'}
+              ? 'The PIAD Method™ (Pedagogy of Open & Digital Inquiry) connects sensory observation, rigorous mathematical modeling, and empirical verification. Students learn to isolate the essential core of problems and build sovereign analytical understanding.'
+              : 'El Método PIAD™ (Pedagogía de la Indagación Abierta y Digital) une la observación sensible, el modelamiento matemático riguroso y la verificación empírica. El estudiante aprende a relevar lo esencial de cada problema y forjar un criterio analítico soberano.'}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -195,24 +195,24 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
           </div>
         </div>
 
-        {/* SPECIAL MANIFESTO BOX: LA IA PRODUCTIVA & DEMOCRATIZACIÓN DEL CÓDIGO */}
+        {/* MANIFESTO BOX: PEDAGOGÍA ABIERTA & SOBERANÍA INTELECTUAL */}
         <div className="mb-16 p-8 sm:p-10 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl relative overflow-hidden">
           <div className="max-w-4xl relative z-10 space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-mono text-xs font-bold">
               <Code2 className="w-3.5 h-3.5" />
-              <span>{lang === 'en' ? 'Our AI Philosophy' : 'Nuestra Filosofía con la Inteligencia Artificial'}</span>
+              <span>{lang === 'en' ? 'Our Educational Philosophy' : 'Nuestra Filosofía Pedagógica'}</span>
             </div>
 
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
               {lang === 'en'
-                ? 'From Passive Cheating to Computational Empowerment'
-                : 'De la Dependencia Pasiva a la Democratización del Código'}
+                ? 'From Mechanical Memorization to Sovereign Problem-Solving'
+                : 'De la Memorización Mecánica a la Soberanía Intelectual'}
             </h3>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">
               {lang === 'en'
-                ? 'We recognize that students will use AI daily. Rather than futile prohibitions, PIAD channels AI into a powerful accelerator: students learn to formulate exact logic, generate and debug scientific Python code (NumPy, SciPy), and bridge historical bottlenecks in calculus and physics through interactive simulations. AI becomes the gateway to democratizing programming and higher analytical skills for everyone.'
-                : 'Sabemos que los estudiantes usarán la IA sí o sí. En lugar de prohibiciones inútiles, el Método PIAD la canaliza como un acelerador de criterio: enseñamos al alumno a estructurar la lógica, diseñar y depurar código científico en Python (NumPy, SciPy), y acercar dificultades históricas del cálculo y la física mediante ejercicios simples e interactivos. La IA se convierte en la puerta de entrada para democratizar las herramientas de programación y el pensamiento analítico riguroso.'}
+                ? 'Traditional university lectures often treat students as passive recipients of abstract proofs, while standard tutorials reduce problem-solving to rote recipes. The PIAD Method™ transforms this dynamic: students learn to formulate foundational questions, isolate the governing physical laws with Occam’s parsimony, design executable computational models in Python, and verify each step against official examination rubrics. Real mastery comes from understanding why a law holds, not memorizing how to replicate it.'
+                : 'Las clases universitarias tradicionales suelen tratar al estudiante como un receptor pasivo de demostraciones abstractas, mientras que las ayudantías mecánicas se limitan a recetas de manual. El Método PIAD™ transforma esa dinámica: el estudiante formula preguntas de fondo, aísla la ley física gobernante con la parsimonia de Ockham, diseña modelos computacionales ejecutables en Python y contrasta cada paso con las rúbricas de exámenes reales. La maestría real nace de comprender por qué una ley se cumple, no de memorizar cómo repetirla.'}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs font-mono text-slate-300">
@@ -362,8 +362,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
             </h2>
             <p className="text-sm text-slate-600 mt-2">
               {lang === 'en'
-                ? 'Moving beyond obsolete rote memorization and passive AI dependency.'
-                : 'Superando tanto la memorización obsoleta como la dependencia pasiva de la IA.'}
+                ? 'Moving beyond obsolete rote memorization and mechanical exercise recipes.'
+                : 'Superando tanto la memorización obsoleta como las recetas mecánicas de ejercicios.'}
             </p>
           </div>
 
@@ -373,7 +373,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
                 <tr className="bg-slate-100 border-b border-slate-200 font-mono text-slate-700">
                   <th className="p-4 font-bold">{lang === 'en' ? 'Dimension' : 'Dimensión'}</th>
                   <th className="p-4 font-semibold text-slate-500">{lang === 'en' ? 'Traditional Education' : 'Educación Tradicional'}</th>
-                  <th className="p-4 font-semibold text-amber-700">{lang === 'en' ? 'Passive AI Usage' : 'Uso Ingenuo de la IA'}</th>
+                  <th className="p-4 font-semibold text-amber-700">{lang === 'en' ? 'Mechanical Tutorials' : 'Ayudantías Mecánicas'}</th>
                   <th className="p-4 font-extrabold bg-slate-900 text-sky-300">{lang === 'en' ? 'PIAD Method™' : 'Método PIAD™'}</th>
                 </tr>
               </thead>
@@ -412,8 +412,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
           </span>
           <h3 className="text-2xl sm:text-3xl font-extrabold mb-4">
             {lang === 'en'
-              ? 'Ready to master higher STEM with deep critical criteria?'
-              : '¿Listo para dominar las ciencias exactas con criterio crítico profundo?'}
+              ? 'Ready to master physics and higher mathematics with deep critical criteria?'
+              : '¿Listo para dominar la física y las matemáticas avanzadas con criterio crítico profundo?'}
           </h3>
           <p className="text-sm text-slate-300 max-w-2xl mx-auto mb-6 leading-relaxed">
             {lang === 'en'

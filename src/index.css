@@ -65,3 +65,26 @@
   78%  { opacity: 1; }
   100% { opacity: 0; transform: translateY(-4px); }
 }
+
+/* ===== Printable A4 Flyer (@media print) ===== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+  body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  #printable-a4-flyer {
+    box-shadow: none !important;
+    border: 2px solid #0f172a !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+}

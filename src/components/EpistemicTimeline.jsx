@@ -62,7 +62,7 @@ export const HISTORICAL_NODES = [
     quoteEs: '"Principios para desarrollar una mente completa: Estudia la ciencia del arte. Estudia el arte de la ciencia. Aprende a ver. Date cuenta de que todo se conecta con todo."',
     epistemicFocusEn: 'Unification of art, anatomy, hydraulics, and mechanics. The eye and hand as instruments of cognition; sketching not as illustration, but as active inquiry.',
     epistemicFocusEs: 'Unificación de arte, anatomía, hidráulica y mecánica. La mano y el ojo como herramientas cognitivas; el dibujo no como adorno, sino como indagación activa.',
-    pedagogicalReflectionEn: 'Before touching equations or screens, the student draws, measures spatial relations, and connects bodily intuition with mechanics. We refuse the false dichotomy between STEM and the arts.',
+    pedagogicalReflectionEn: 'Before touching equations or screens, the student draws, measures spatial relations, and connects bodily intuition with mechanics. We refuse the false dichotomy between the sciences and the humanities.',
     pedagogicalReflectionEs: 'Antes de tocar ecuaciones abstractas o pantallas, el estudiante dibuja a mano, estima órdenes de magnitud y conecta la intuición corporal con la física. Rechazamos la falsa división entre ciencias y humanidades.',
     tags: ['Polimatía', 'Observación Fenomenológica', 'Dibujo Analítico']
   },
@@ -151,22 +151,22 @@ export const HISTORICAL_NODES = [
     tags: ['Pedagogía del Oprimido', 'Sci-Hub', 'Soberanía del Saber']
   },
   {
-    id: 'ai-era',
+    id: 'digital-era',
     era: 'Current Era',
     icon: Sparkles,
     color: '#22D3EE', // Cyan
-    epochEn: 'Computational Synthesis • The AI Horizon',
-    epochEs: 'Síntesis Computacional • El Horizonte de la IA',
-    titleEn: 'The PIAD Horizon: Productive AI & Democratization of Code',
-    titleEs: 'El Horizonte PIAD: IA Productiva y Democratización del Código',
+    epochEn: 'Digital Synthesis • Computational Inquiry',
+    epochEs: 'Síntesis Digital • Indagación Computacional',
+    titleEn: 'The PIAD Horizon: Open Science & Computational Democratization',
+    titleEs: 'El Horizonte PIAD: Ciencia Abierta y Democratización del Código',
     figureEn: 'The Sovereign Student in the Digital Age',
     figureEs: 'El Estudiante Soberano en la Era Digital',
-    corePrincipleEn: 'Democratizing Programming & Transforming the Algorithmic Oracle into a Thinking Canvas',
-    corePrincipleEs: 'Democratizar la Programación y Convertir el Oráculo Algorítmico en Lienzo de Indagación',
-    quoteEn: '"We know students will use AI daily. Our purpose is for them to use it productively: to explore, design code, and bring historical difficulties to hand through simple, deep inquiry."',
-    quoteEs: '"Sabemos que los estudiantes usarán la IA sí o sí. Nuestro propósito es que la ocupen de modo productivo: para explorar, diseñar código propio y acercar las dificultades del pasado a su manejo mediante ejercicios simples que profundicen el aprendizaje."',
-    epistemicFocusEn: 'Convergence of 700 years of critical epistemology. Facing the contemporary risk of cognitive outsourcing to language models, PIAD positions AI as a high-leverage tool to design scientific code (NumPy, SciPy) and simulate physical dynamics.',
-    epistemicFocusEs: 'Convergencia de 700 años de epistemología crítica. Frente al riesgo contemporáneo de delegar el pensamiento en modelos opacos, PIAD posiciona a la IA como una palanca para diseñar código científico (NumPy, SciPy) y simular dinámicas físicas.',
+    corePrincipleEn: 'Democratizing Scientific Programming & Sovereign First-Principles Inquiry',
+    corePrincipleEs: 'Democratizar la Programación Científica y la Indagación Soberana',
+    quoteEn: '"Our purpose is to bring the historical difficulties of physics and mathematics into the student’s intuitive grasp through simple, deep inquiry and open computational modeling."',
+    quoteEs: '"Nuestro propósito es acercar las dificultades históricas de la física y las matemáticas al manejo intuitivo del estudiante mediante ejercicios simples y modelación computacional abierta."',
+    epistemicFocusEn: 'Convergence of 700 years of critical epistemology. PIAD positions open digital tools and scientific Python (NumPy, SciPy) as an active thinking canvas to simulate physical dynamics and verify analytical derivations.',
+    epistemicFocusEs: 'Convergencia de 700 años de epistemología crítica. PIAD posiciona las herramientas digitales abiertas y el Python científico (NumPy, SciPy) como un lienzo activo para simular dinámicas físicas y verificar deducciones analíticas.',
     pedagogicalReflectionEn: 'Democratizing programming: complex mathematical modeling and numerical calculus, which once required months of bureaucratic coding, are now accessible to every student as intuitive, runnable experiments.',
     pedagogicalReflectionEs: 'Democratizar la programación: modelos matemáticos complejos y cálculo diferencial, que antes tomaban meses de barreras técnicas, ahora están al alcance de cualquier estudiante mediante experimentos ejecutables.',
     tags: ['Democratización del Código', 'Python Científico', 'Criterio Autónomo']
@@ -220,8 +220,8 @@ export default function EpistemicTimeline({ lang = 'es', onNavigate }) {
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-3">
             {lang === 'en'
-              ? 'From Medieval Nominalism to the AI Era: The Intellectual Roots'
-              : 'Del Nominalismo Medieval a la Era de la IA: Las Raíces Teóricas'}
+              ? 'From Medieval Nominalism to the Digital Era: The Intellectual Roots'
+              : 'Del Nominalismo Medieval a la Era Digital: Las Raíces Teóricas'}
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">

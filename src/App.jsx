@@ -45,6 +45,15 @@ import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
 import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
 import { ProblemThumbnail } from './components/LabThumbnails';
 import PIADMethod from './components/PIADMethod';
+import {
+  CURRENCY_TIERS,
+  CURRENCY_LIST,
+  detectInitialCurrency,
+  mapCountryToCurrency,
+  formatMoney,
+  getCourseHourlyRate,
+  getCoursePackRate
+} from './pricingConfig';
 
 // Custom crisp GitHub SVG icon component
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -89,7 +98,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Intermediate Value Theorem", "Solids of Revolution", "Stokes' Theorem", "Divergence Theorem", "Homogeneous ODEs"],
     badgeEn: "University Calculus Track",
     badgeEs: "Cálculo Universitario",
-    image: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=700&q=80",
+    image: "/images/course-calculus.webp",
     color: "#0284C7"
   },
   {
@@ -125,7 +134,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Eigenvalues & Eigenvectors", "Kernel & Image", "Principal Axis Theorem", "Jordan Canonical Form", "Bilinear Forms"],
     badgeEn: "Proof Rigor",
     badgeEs: "Demostraciones",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    image: "/images/course-linear-algebra.webp",
     color: "#4F46E5"
   },
   {
@@ -161,8 +170,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Inertia Tensor", "Lagrangian Dynamics", "Coriolis Force", "Euler Angles", "Poisson Brackets"],
     badgeEn: "Theoretical Mechanics",
     badgeEs: "Mecánica Teórica",
-    // Tested 200 OK Unsplash image
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    image: "/images/course-mechanics.webp",
     color: "#475569"
   },
   {
@@ -234,7 +242,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Runge-Kutta Methods", "Finite Differences", "Fourier Transform", "Stability Analysis", "Vectorized Python"],
     badgeEn: "Scientific Code",
     badgeEs: "Código Científico",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
+    image: "/images/course-computational.webp",
     color: "#D97706"
   },
   {
@@ -306,7 +314,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Schwarzschild Metric", "Christoffel Symbols", "Geodesic Equation", "Einstein Field Equations", "Kerr Black Hole"],
     badgeEn: "General Relativity",
     badgeEs: "Relatividad General",
-    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=700&q=80",
+    image: "/images/course-quantum.webp",
     color: "#8B5CF6"
   }
 ];
@@ -408,63 +416,86 @@ const FOUNDATIONAL_BOOKS = [
   }
 ];
 
-// Pitch: reasons to take classes (shown on the landing page)
+// Pitch: reasons to take classes (shown on the landing page, updated with PIAD™, 14-Problem Lab, and 5-Pillar Toolkit)
 const WHY_ME_REASONS = [
   {
     id: 'piad',
     icon: Compass,
+    badgeEn: '5-Phase Framework',
+    badgeEs: 'Ciclo en 5 Fases',
     titleEn: 'Proprietary PIAD™ Method',
-    titleEs: 'Metodología Propia PIAD™',
-    textEn: 'Open & Digital Inquiry Pedagogy: leverage AI productively to design code, highlight the essential core of problems, and ground science in empirical intuition.',
-    textEs: 'Pedagogía de la Indagación Abierta y Digital: utiliza la IA productivamente para diseñar código, relevar lo esencial de cada problema y conectar la ciencia con intuición empírica.',
+    titleEs: 'Método Propio PIAD™',
+    textEn: 'We start from direct sensory observation and freehand sketching (Da Vinci), apply Occam’s parsimony to isolate the governing law, and connect mathematical derivations with empirical simulation in Python.',
+    textEs: 'Partimos de la observación directa y el dibujo analítico (Da Vinci), aplicamos la parsimonia de Ockham para aislar la ley esencial, y conectamos las deducciones matemáticas con simulación empírica en Python.',
+    actionPage: 'piad',
+    actionLabelEn: 'Explore the 5-Step PIAD™ Method →',
+    actionLabelEs: 'Ver las 5 fases del Método PIAD™ →',
   },
   {
-    id: 'language',
-    icon: Globe,
-    titleEn: 'Classes in your language',
-    titleEs: 'Clases en tu idioma',
-    textEn: 'I explain in English or Spanish, so you can focus on the subject instead of translating.',
-    textEs: 'Explico en español o inglés, para que te concentres en la materia y no en traducir.',
+    id: 'lab',
+    icon: Atom,
+    badgeEn: '14 Interactive Simulators',
+    badgeEs: '14 Simuladores en Vivo',
+    titleEn: 'Interactive Physics Lab (DCL + Calculus Bridge)',
+    titleEs: 'Laboratorio Interactivo (DCL + Puente al Cálculo)',
+    textEn: 'Experiment before memorizing: 14 interactive simulators across Classical Mechanics, Electromagnetism, Vector Calculus, Relativity, and Geophysics with live Free Body Diagrams (DCL), real exam drills, and 1-click PDF Study Sheet export.',
+    textEs: 'Experimenta antes de memorizar: 14 simuladores interactivos de Mecánica, Electromagnetismo, Cálculo Vectorial, Relatividad y Geofísica con Diagramas de Cuerpo Libre (DCL) en vivo, ejercicios reales de examen y guía en PDF descargable.',
+    actionPage: 'lab',
+    actionLabelEn: 'Launch the 14-Problem Lab →',
+    actionLabelEs: 'Abrir los 14 Simuladores del Lab →',
   },
   {
-    id: 'context',
+    id: 'toolkit',
+    icon: Layers,
+    badgeEn: '5 Mathematical Pillars',
+    badgeEs: '5 Pilares Matemáticos',
+    titleEn: 'Applied Math, SVD & Signals Visual Toolkit',
+    titleEs: 'Toolkit Visual de Álgebra, Cálculo y Señales',
+    textEn: 'Interactive visualizers for the hardest exam bottlenecks: 3D Right-Hand Rule (Lorentz/Coriolis/Torque), 2×2 Matrix Diagonalization & SVD/Tikhonov Inverse Theory, Vector Fields (∇f, ∇·F, ∇×F), Fourier/Laplace FFT, and Complex Analysis.',
+    textEs: 'Visualizadores propios para destrabar los temas más difíciles: Regla de la Mano Derecha, Diagonalización de Matrices y SVD/Tikhonov, Campos Vectoriales (gradiente, divergencia, rotacional), Fourier/Laplace y Variable Compleja.',
+    actionPage: 'lab',
+    actionLabelEn: 'Open Mathematical Toolkit →',
+    actionLabelEs: 'Probar Toolkit Matemático →',
+  },
+  {
+    id: 'pedigree',
     icon: GraduationCap,
-    titleEn: 'I know the context',
-    titleEs: 'Conozco el contexto',
-    textEn: 'Engineer and geophysicist (double M.Sc.) with proven experience preparing rigorous university examinations.',
-    textEs: 'Ingeniero y geofísico (doble M.Sc.) con experiencia en el nivel de máxima exigencia universitaria.',
+    badgeEn: 'CAU Kiel • AMU • U. de Chile',
+    badgeEs: 'CAU Kiel • AMU • U. de Chile',
+    titleEn: 'Double European M.Sc. & Geophysicist',
+    titleEs: 'Doble M.Sc. Europeo e Ingeniero Geofísico',
+    textEn: 'Trained at Universidad de Chile (FCFM/Beauchef), CAU Kiel (Germany), and AMU Poznań (Poland), combining catchment modeling and computational geophysics with 500+ hours of 1-on-1 university and IB mentoring.',
+    textEs: 'Formado en la Universidad de Chile (FCFM/Beauchef), CAU Kiel (Alemania) y AMU Poznań (Polonia), combinando modelación hidrogeofísica y física computacional con más de 500 horas de mentoría universitaria e IB.',
+    actionPage: 'precios',
+    actionSection: 'mentor-dossier',
+    actionLabelEn: 'Inspect Academic Credentials →',
+    actionLabelEs: 'Ver Credenciales Académicas →',
   },
   {
-    id: 'intuition',
-    icon: Orbit,
-    titleEn: 'Intuition first',
-    titleEs: 'Intuición primero',
-    textEn: 'Every concept is explained with a real phenomenon, and you can test it in the interactive Physics Lab.',
-    textEs: 'Cada concepto se explica con un fenómeno real y lo compruebas en el Laboratorio interactivo de Física.',
-  },
-  {
-    id: 'altklausur',
+    id: 'exams',
     icon: FileCheck,
-    titleEn: 'Past-exam preparation',
-    titleEs: 'Preparación con Exámenes Reales',
-    textEn: 'We practise with past exams, answer structure and how to earn partial points.',
-    textEs: 'Practicamos con exámenes anteriores, estructura de respuesta y cómo conseguir puntos parciales.',
+    badgeEn: 'Partial-Point Strategy',
+    badgeEs: 'Estrategia de Puntaje',
+    titleEn: 'Official Past Exams & Examiner Rubrics',
+    titleEs: 'Exámenes Oficiales y Pautas de Corrección',
+    textEn: 'We train directly with your university’s past exams (Altklausuren, engineering midterms/finals) and IB HL Papers 1, 2 & 3 + Internal Assessment (IA), structuring every derivation step to secure maximum partial credit.',
+    textEs: 'Entrenamos directamente con exámenes anteriores oficiales de tu universidad (Altklausuren, certámenes de ingeniería) e IB HL Papers 1, 2 y 3 + Evaluación Interna (IA), estructurando cada paso para asegurar el máximo puntaje parcial.',
+    actionPage: 'courses',
+    actionLabelEn: 'Browse 7 Course Syllabi →',
+    actionLabelEs: 'Ver los 7 Programas de Curso →',
   },
   {
-    id: 'applied',
+    id: 'open_deliverables',
     icon: Terminal,
-    titleEn: 'Applied science',
-    titleEs: 'Ciencia aplicada',
-    textEn: 'From calculus to Python (NumPy/SciPy): see how what you study is used in practice.',
-    textEs: 'Del cálculo a Python (NumPy/SciPy): ves cómo se usa en la práctica lo que estudias.',
-  },
-  {
-    id: 'transparent',
-    icon: ShieldCheck,
-    titleEn: 'Clear and professional',
-    titleEs: 'Claro y profesional',
-    textEn: 'Prices from €50/h, 8-hour sprint packs, transparent rates, and direct communication.',
-    textEs: 'Precios desde 50 €/h, paquetes de 8 h, calculadora transparente y comunicación directa.',
+    badgeEn: '100% EN / ES • Hannover & Online',
+    badgeEs: '100% ES / EN • Hannover y Online',
+    titleEn: 'Your Language + Open Knowledge Artifacts',
+    titleEs: 'En Tu Idioma + Artefactos de Conocimiento Abierto',
+    textEn: 'Zero language fatigue in 100% English or Spanish (online worldwide or in-person in Hannover). After every session you keep a 4K vector Miro PDF, custom formula cheat-sheets, executable NumPy/SciPy scripts, and async WhatsApp Q&A.',
+    textEs: 'Cero fatiga idiomática en clases 100% en español o inglés (online global o presencial en Hannover). Al terminar cada sesión te llevas un PDF vectorial 4K de la pizarra Miro, formularios resumen, scripts en Python y soporte por WhatsApp.',
+    actionPage: 'precios',
+    actionLabelEn: 'Calculate Your Study Plan →',
+    actionLabelEs: 'Calcular Plan a Medida →',
   },
 ];
 
@@ -562,6 +593,8 @@ function detectInitialLanguage() {
 
 export default function App() {
   const [lang, setLangState] = useState(() => detectInitialLanguage());
+  const [currency, setCurrencyState] = useState(() => detectInitialCurrency());
+  const [detectedCountry, setDetectedCountry] = useState('');
 
   const setLang = (newLang) => {
     setLangState(newLang);
@@ -570,11 +603,19 @@ export default function App() {
     } catch {}
   };
 
+  const setCurrency = (newCurr) => {
+    if (!CURRENCY_TIERS[newCurr]) return;
+    setCurrencyState(newCurr);
+    try {
+      localStorage.setItem('preferred_currency', newCurr);
+    } catch {}
+  };
+
   // GeoIP detection on mount: fetches country via lightweight API if no user override exists
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('preferred_lang');
-      if (saved) return; // User already chose explicitly
+      const savedLang = localStorage.getItem('preferred_lang');
+      const savedCurr = localStorage.getItem('preferred_currency');
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 2500);
@@ -584,8 +625,15 @@ export default function App() {
         .then((data) => {
           clearTimeout(timeoutId);
           if (data && data.country) {
-            const isHispanic = HISPANIC_COUNTRIES.has(String(data.country).toUpperCase());
-            setLangState(isHispanic ? 'es' : 'en');
+            const cc = String(data.country).toUpperCase();
+            setDetectedCountry(cc);
+            if (!savedLang) {
+              const isHispanic = HISPANIC_COUNTRIES.has(cc);
+              setLangState(isHispanic ? 'es' : 'en');
+            }
+            if (!savedCurr) {
+              setCurrencyState(mapCountryToCurrency(cc));
+            }
           }
         })
         .catch(() => {
@@ -622,13 +670,15 @@ export default function App() {
   const [calcLevel, setCalcLevel] = useState('bachelor');
   const [calcHours, setCalcHours] = useState(8);
   const [calcFormat, setCalcFormat] = useState('1on1');
+  const [calcLocation, setCalcLocation] = useState('online'); // 'online' | 'hannover'
   const [calcSprintDiscount, setCalcSprintDiscount] = useState(true);
 
   // FAQ State
   const [openFaq, setOpenFaq] = useState(0);
 
-  const baseRates = { ib: 50, bachelor: 55, master: 65 };
-  const baseRate = baseRates[calcLevel] || 55;
+  const activeTier = CURRENCY_TIERS[currency] || CURRENCY_TIERS.EUR;
+  const baseRates = activeTier.rates;
+  const baseRate = baseRates[calcLevel] || baseRates.bachelor;
   const groupMultiplier = calcFormat === 'group' ? 0.70 : 1.0;
   const sprintMultiplier = calcSprintDiscount ? 0.85 : 1.0;
   const effectiveRate = Math.round(baseRate * groupMultiplier * sprintMultiplier);
@@ -698,11 +748,15 @@ export default function App() {
     navigateTo('lab');
   };
 
-  // Keyboard Escape listener for Modal
+  // Keyboard Escape listener for Modal + Ctrl/Cmd+Shift+A shortcut for Admin Hub
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isModalOpen) {
         setIsModalOpen(false);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        window.location.hash = '#/admin';
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -739,7 +793,8 @@ Phone / WhatsApp: ${bookingData.phone || 'Not provided'}
 University / School: ${bookingData.university}
 Selected Course / Module: ${bookingData.courseCode || 'Diagnostic / General Mentorship'}
 Type of Session: ${bookingData.sessionType}
-Delivery Mode: ${bookingData.deliveryMode}
+Delivery Mode: ${bookingData.deliveryMode}${bookingData.deliveryMode.includes('Hannover') ? ' (Note: In-person session includes travel extra)' : ''}
+Preferred Currency: ${currency}${detectedCountry ? ` (Country: ${detectedCountry})` : ''}
 Language Preference: ${bookingData.languagePref}
 Target Exam Date / Deadline: ${bookingData.targetDate || 'Not specified'}
 
@@ -880,8 +935,22 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </button>
           </nav>
 
-          {/* Language & Rounded CTA */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Currency, Language & Rounded CTA */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <select
+              aria-label="Currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 rounded-full px-2.5 py-1 text-[11px] font-mono font-bold focus:outline-none cursor-pointer"
+              title={lang === 'en' ? 'Select your currency' : 'Selecciona tu moneda'}
+            >
+              {CURRENCY_LIST.map((c) => (
+                <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                  {c.flag} {c.code}
+                </option>
+              ))}
+            </select>
+
             <div className="flex items-center bg-white/10 border border-white/15 rounded-full p-0.5 text-xs font-mono shrink-0">
               <button
                 onClick={() => setLang('en')}
@@ -968,8 +1037,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
           <div>
             {/* Landing Hero: Deep Obsidian Observatory Canvas Seamlessly Flowing into 3D Planetarium */}
             <section className="pt-24 sm:pt-28 pb-0 bg-black text-white relative overflow-hidden">
+              {/* Deep Space Universe Photographic Backdrop */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-screen pointer-events-none"
+                style={{ backgroundImage: `url('/images/hero-universe.webp')` }}
+              />
+              {/* Top & Bottom Vignette / Seamless Dark Fade to protect UI contrast */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black pointer-events-none" />
               {/* Atmospheric Celestial Ambient Glow */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(14,165,233,0.12),rgba(0,0,0,0))] pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(14,165,233,0.15),rgba(0,0,0,0))] pointer-events-none" />
 
               <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
                 <div className="max-w-4xl mx-auto text-center">
@@ -1215,7 +1291,10 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         </div>
 
                         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                          <span className="font-mono text-lg font-bold text-slate-900">€{course.rateHourly}<span className="text-xs font-normal text-slate-500">/hr</span></span>
+                          <span className="font-mono text-lg font-bold text-slate-900">
+                            {formatMoney(getCourseHourlyRate(course, currency), currency)}
+                            <span className="text-xs font-normal text-slate-500">/hr</span>
+                          </span>
                           <button
                             onClick={() => handleOpenBooking(course)}
                             className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold cursor-pointer"
@@ -1230,49 +1309,100 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               </div>
             </section>
 
-            {/* 2. Pitch: Why take classes with me */}
+            {/* 2. Pitch: Why take classes with me (Updated with PIAD™, 14-Problem Lab, 5-Pillar Toolkit & Epistemic Rigor) */}
             <section id="why-me" className="py-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="max-w-3xl mx-auto text-center mb-10">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {lang === 'en' ? 'Why take classes with me?' : '¿Por qué tomar clases conmigo?'}
+                <div className="max-w-3xl mx-auto text-center mb-12">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-sky-700 font-bold mb-2">
+                    <Compass className="w-3.5 h-3.5 text-sky-600" />
+                    <span>
+                      {lang === 'en'
+                        ? 'Open Knowledge & Science Mentorship • The Pitch'
+                        : 'Open Knowledge & Science Mentorship • Propuesta de Valor'}
+                    </span>
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    {lang === 'en'
+                      ? 'Why study with Daniel Santander?'
+                      : '¿Por qué tomar clases con Daniel Santander?'}
                   </h2>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                    {lang === 'en'
+                      ? 'More than traditional tutoring: an empirical research workshop combining the 5-step PIAD™ Method, 14 interactive physics & geophysics simulators with Free Body Diagrams (DCL), a 5-pillar applied mathematics toolkit, and 100% English or Spanish mentoring.'
+                      : 'Más que clases particulares tradicionales: un taller de indagación empírica que combina el Método PIAD™ en 5 fases, 14 simuladores interactivos de física y geofísica con DCL en vivo, un toolkit matemático de 5 pilares y mentoría 100 % en español o inglés.'}
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {WHY_ME_REASONS.map((r) => {
                     const Icon = r.icon;
                     return (
-                      <div key={r.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="w-9 h-9 rounded-lg bg-white border border-slate-200 text-sky-700 flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4" />
-                          </span>
-                          <h3 className="text-base font-bold text-slate-900 leading-snug">
+                      <div
+                        key={r.id}
+                        className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-sky-400 hover:bg-white hover:shadow-md transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-3">
+                            <span className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-sky-700 flex items-center justify-center shrink-0 shadow-2xs">
+                              <Icon className="w-4 h-4" />
+                            </span>
+                            {r.badgeEn && (
+                              <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-sky-800 font-bold">
+                                {lang === 'en' ? r.badgeEn : r.badgeEs}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="text-base font-bold text-slate-900 leading-snug mb-2">
                             {lang === 'en' ? r.titleEn : r.titleEs}
                           </h3>
+                          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                            {lang === 'en' ? r.textEn : r.textEs}
+                          </p>
                         </div>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                          {lang === 'en' ? r.textEn : r.textEs}
-                        </p>
+
+                        {r.actionPage && (
+                          <button
+                            onClick={() => navigateTo(r.actionPage, r.actionSection)}
+                            className="pt-3 border-t border-slate-200/80 text-left text-xs font-mono font-bold text-sky-700 hover:text-sky-900 flex items-center justify-between group cursor-pointer"
+                          >
+                            <span>{lang === 'en' ? r.actionLabelEn : r.actionLabelEs}</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </button>
+                        )}
                       </div>
                     );
                   })}
                 </div>
 
-                <div className="mt-10 max-w-3xl mx-auto text-center p-6 rounded-2xl bg-slate-900 text-white">
-                  <p className="text-sm sm:text-base leading-relaxed mb-4">
-                    {lang === 'en'
-                      ? 'Start with a free 20-minute diagnostic session: tell me your module, your exam date and where you get stuck, and I will propose a plan.'
-                      : 'Empieza con una sesión diagnóstica gratuita de 20 minutos: me cuentas tu módulo, tu fecha de examen y dónde te atascas, y te propongo un plan.'}
-                  </p>
-                  <button
-                    onClick={() => handleOpenBooking()}
-                    className="px-5 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-mono text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 transition-colors cursor-pointer"
-                  >
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{lang === 'en' ? 'Book a free diagnostic session' : 'Reservar sesión diagnóstica gratis'}</span>
-                  </button>
+                <div className="mt-10 max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="space-y-1.5 text-center md:text-left">
+                    <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold block">
+                      {lang === 'en'
+                        ? 'Zero Risk • 20-Minute Strategy & Diagnostic Session'
+                        : 'Sin Compromiso • Sesión Diagnóstica Gratuita de 20 Minutos'}
+                    </span>
+                    <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-xl">
+                      {lang === 'en'
+                        ? 'Tell me your university module or IB subject, your exam date, and where you get stuck. We inspect your syllabus and design a concrete action plan.'
+                        : 'Cuéntame tu ramo universitario o asignatura IB, tu fecha de examen y dónde te atascas. Revisamos tus apuntes y armamos un plan concreto.'}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+                    <button
+                      onClick={() => handleOpenBooking()}
+                      className="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-400 to-emerald-400 hover:from-sky-300 hover:to-emerald-300 text-slate-950 font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 transition-all cursor-pointer shadow-md"
+                    >
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? 'Book Free Diagnostic' : 'Reservar Diagnóstico Gratis'}</span>
+                    </button>
+                    <button
+                      onClick={() => navigateTo('precios')}
+                      className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Calculator className="w-3.5 h-3.5 text-sky-400" />
+                      <span>{lang === 'en' ? 'Rate Calculator' : 'Calculadora'}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>
@@ -1308,10 +1438,9 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </p>
                     <p className="text-sm text-slate-600 leading-relaxed font-sans">
                       {lang === 'en'
-                        ? 'Combining high-impact territorial environmental science, hydrogeophysical catchment modeling, and digital twins with over 500 hours of 1-on-1 higher STEM mentorship in Germany.'
+                        ? 'Combining high-impact territorial environmental science, hydrogeophysical catchment modeling, and digital twins with over 500 hours of 1-on-1 university physics and mathematics mentorship in Germany.'
                         : 'Combinando ciencia ambiental territorial, modelación hidrogeofísica de cuencas y gemelos digitales con más de 500 horas de mentoría universitaria de alto rendimiento en Alemania.'}
                     </p>
-
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                       <button
                         onClick={() => navigateTo('mentor')}
@@ -1340,13 +1469,13 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       </div>
                       <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                         {lang === 'en'
-                          ? 'The PIAD Method™: Productive STEM & AI Inquiry'
-                          : 'El Método PIAD™: STEM Productivo & Aprendizaje con IA'}
+                          ? 'The PIAD Method™: Open & Digital Inquiry in Physics and Mathematics'
+                          : 'El Método PIAD™: Indagación Abierta y Digital en Física y Matemáticas'}
                       </h2>
                       <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-2xl">
                         {lang === 'en'
-                          ? 'Students will use AI daily. PIAD turns it into a productive catalyst: exploring deeply, designing scientific code, democratizing programming tools, and conquering complex math and physics through hands-on inquiry.'
-                          : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la canaliza productivamente: para explorar, diseñar código propio, democratizar las herramientas de programación y acercar dificultades complejas mediante ejercicios que profundizan el aprendizaje.'}
+                          ? 'A foundational pedagogical cycle connecting sensory intuition, Occam’s parsimony, and empirical simulation. Students learn to isolate the essential core of problems, write their own computational models in Python, and master challenging university coursework.'
+                          : 'Un ciclo pedagógico que une la intuición sensible, la parsimonia de Ockham y la simulación empírica. El estudiante aprende a relevar lo esencial de cada problema, escribir modelos computacionales en Python y dominar materias universitarias de alta exigencia.'}
                       </p>
                       <div className="flex flex-wrap items-center gap-3 pt-2">
                         <button
@@ -1511,12 +1640,12 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       <Compass className="w-4 h-4" />
                     </div>
                     <span className="font-bold text-white block text-sm">
-                      {lang === 'en' ? 'PIAD Critical AI Framework' : 'Criterio PIAD & IA Crítica'}
+                      {lang === 'en' ? 'PIAD First-Principles Framework' : 'Marco PIAD por Primeros Principios'}
                     </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
                       {lang === 'en'
-                        ? 'Prompts, scientific code scaffolding (Python/NumPy), and first-principles heuristics to harness AI productively and democratize analytical tools.'
-                        : 'Prompts estructurados, diseño de código científico (Python/NumPy) y heurísticas para usar la IA de modo productivo y democratizar tus herramientas de análisis.'}
+                        ? 'First-principles heuristics, interactive physical simulations, and scientific code scaffolding (Python/NumPy) to democratize analytical mastery.'
+                        : 'Heurísticas por primeros principios, simulaciones físicas interactivas y código científico (Python/NumPy) para democratizar el dominio analítico.'}
                     </p>
                   </div>
                 </div>
@@ -1667,7 +1796,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         <div className="mb-5 flex items-baseline justify-between bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                           <div>
                             <div className="flex items-baseline gap-1">
-                              <span className="text-2xl font-mono font-bold text-slate-900">€{course.rateHourly}</span>
+                              <span className="text-2xl font-mono font-bold text-slate-900">{formatMoney(getCourseHourlyRate(course, currency), currency)}</span>
                               <span className="text-xs font-mono text-slate-500">/ hour</span>
                             </div>
                             <span className="text-[10px] font-mono text-slate-500 block">
@@ -1676,7 +1805,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           </div>
                           <div className="text-right">
                             <span className="text-xs font-mono font-bold text-emerald-700 block">
-                              €{course.packagePrice} / {course.packageHours}h Pack
+                              {formatMoney(getCoursePackRate(course, currency), currency)} / {course.packageHours}h Pack
                             </span>
                             <span className="text-[10px] font-mono text-slate-500">
                               {lang === 'en' ? 'Exam Sprint Pack' : 'Pack Sprint de Examen'}
@@ -1749,13 +1878,13 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
                 <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
                 <span>/</span>
-                <span className="text-slate-900 font-bold">STEM Library</span>
+                <span className="text-slate-900 font-bold">{lang === 'en' ? 'Classical Library' : 'Biblioteca Clásica'}</span>
               </div>
 
               {/* Library Banner with Unsplash imagery */}
               <div className="relative rounded-3xl overflow-hidden mb-12 bg-slate-900 text-white shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
+                  src="/images/stem-library.webp" 
                   alt="Academic Library" 
                   className="absolute inset-0 w-full h-full object-cover opacity-25" 
                 />
@@ -1764,7 +1893,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     {lang === 'en' ? 'Core Literature & Classical Foundations' : 'Literatura Fundamental & Fuentes Clásicas'}
                   </span>
                   <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-                    {lang === 'en' ? 'The Foundational STEM Library' : 'Biblioteca de Clásicos STEM'}
+                    {lang === 'en' ? 'The Foundational Science & Mathematics Library' : 'Biblioteca de Clásicos de la Ciencia y las Matemáticas'}
                   </h1>
                   <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">
                     {lang === 'en'
@@ -1864,6 +1993,34 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               {/* --- SECTION 1: INTERACTIVE RATE CALCULATOR --- */}
               <div className="max-w-5xl mx-auto">
                 <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm">
+                  {/* Top Bar: Currency / Country Selector */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-slate-100">
+                    <div>
+                      <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold block">
+                        {lang === 'en' ? 'Select Your Country / Currency' : 'Selecciona tu País / Moneda'}
+                      </span>
+                      <span className="text-[11px] text-slate-400">
+                        {lang === 'en' ? 'Rates automatically adapted to regional market & currency' : 'Tarifas adaptadas automáticamente a tu moneda y región'}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 font-mono text-xs">
+                      {Object.values(CURRENCY_TIERS).map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => handleCurrencyChange(c.code)}
+                          className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 ${
+                            currency === c.code
+                              ? 'bg-slate-900 border-slate-900 text-white font-bold shadow-xs'
+                              : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          <span>{c.flag}</span>
+                          <span>{c.code}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                     
                     <div className="md:col-span-7 space-y-6">
@@ -1880,7 +2037,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                             <button
                               key={lvl.id}
                               onClick={() => setCalcLevel(lvl.id)}
-                              className={`py-2 px-3 rounded-lg border transition-all ${
+                              className={`py-2 px-3 rounded-lg border transition-all cursor-pointer ${
                                 calcLevel === lvl.id
                                   ? 'bg-slate-900 border-slate-900 text-white font-bold'
                                   : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
@@ -1910,51 +2067,113 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           onChange={(e) => setCalcHours(parseInt(e.target.value, 10))}
                           className="w-full accent-sky-700 bg-slate-200 rounded-lg cursor-pointer h-2"
                         />
-                        <div className="flex justify-between font-mono text-[10px] text-slate-400 mt-1">
-                          <span>{lang === 'en' ? '2h (Urgent drill)' : '2h (Repaso urgente)'}</span>
-                          <span>{lang === 'en' ? '8h (Exam sprint)' : '8h (Sprint de examen)'}</span>
-                          <span>{lang === 'en' ? '20h (Continuous prep)' : '20h (Acompañamiento continuo)'}</span>
+                        <div className="grid grid-cols-3 gap-2 mt-2.5 font-mono text-[11px]">
+                          {[
+                            { h: 2, sprint: false, labelEn: '2h Diagnostic / Drill', labelEs: '2h Diagnóstico / Repaso' },
+                            { h: 8, sprint: true, labelEn: '8h Exam Sprint (-15%)', labelEs: '8h Pack Examen (-15%)' },
+                            { h: 16, sprint: true, labelEn: '16h Semester Support (-15%)', labelEs: '16h Semestre (-15%)' }
+                          ].map((preset) => (
+                            <button
+                              key={preset.h}
+                              type="button"
+                              onClick={() => {
+                                setCalcHours(preset.h);
+                                setCalcSprintDiscount(preset.sprint);
+                              }}
+                              className={`py-1.5 px-2 rounded-lg border text-center transition-all cursor-pointer ${
+                                calcHours === preset.h
+                                  ? 'bg-sky-50 border-sky-300 text-sky-900 font-bold'
+                                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                              }`}
+                            >
+                              {lang === 'en' ? preset.labelEn : preset.labelEs}
+                            </button>
+                          ))}
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
-                          {lang === 'en' ? 'Delivery Format' : 'Modalidad de Clase'}
-                        </label>
-                        <div className="grid grid-cols-2 gap-3 font-mono text-xs">
-                          <button
-                            onClick={() => setCalcFormat('1on1')}
-                            className={`p-3 rounded-xl border text-left transition-all ${
-                              calcFormat === '1on1'
-                                ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
-                                : 'bg-white border-slate-200 text-slate-600'
-                            }`}
-                          >
-                            <div className="font-bold text-slate-900">
-                              {lang === 'en' ? '1-on-1 Individual' : 'Individual 1-a-1'}
-                            </div>
-                            <div className="text-[11px] text-slate-500">
-                              {lang === 'en' ? 'Online & In-Person in Hannover' : 'Online y presencial en Hannover'}
-                            </div>
-                          </button>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
+                            {lang === 'en' ? 'Format' : 'Formato'}
+                          </label>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+                            <button
+                              onClick={() => setCalcFormat('1on1')}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                calcFormat === '1on1'
+                                  ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <div className="font-bold text-slate-900">1-on-1</div>
+                              <div className="text-[10px] text-slate-500">
+                                {lang === 'en' ? 'Individual' : 'Individual'}
+                              </div>
+                            </button>
 
-                          <button
-                            onClick={() => setCalcFormat('group')}
-                            className={`p-3 rounded-xl border text-left transition-all ${
-                              calcFormat === 'group'
-                                ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600'
-                                : 'bg-white border-slate-200 text-slate-600'
-                            }`}
-                          >
-                            <div className="font-bold text-emerald-800">
-                              {lang === 'en' ? 'Study Group (Max 3)' : 'Grupo de Estudio (Máx 3)'}
-                            </div>
-                            <div className="text-[11px] text-emerald-700">
-                              {lang === 'en' ? '-30% discount per student' : '-30% descuento por alumno'}
-                            </div>
-                          </button>
+                            <button
+                              onClick={() => setCalcFormat('group')}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                calcFormat === 'group'
+                                  ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <div className="font-bold text-emerald-800">
+                                {lang === 'en' ? 'Group (≤3)' : 'Grupo (≤3)'}
+                              </div>
+                              <div className="text-[10px] text-emerald-700">-30% / est.</div>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-mono text-slate-500 uppercase tracking-wider mb-2 font-semibold">
+                            {lang === 'en' ? 'Location Mode' : 'Ubicación'}
+                          </label>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+                            <button
+                              onClick={() => setCalcMode('online')}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                calcMode === 'online'
+                                  ? 'bg-slate-50 border-slate-900 text-slate-900 ring-1 ring-slate-900'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <div className="font-bold text-slate-900">Online</div>
+                              <div className="text-[10px] text-slate-500">Meet / Miro PDF</div>
+                            </button>
+
+                            <button
+                              onClick={() => setCalcMode('inperson')}
+                              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                calcMode === 'inperson'
+                                  ? 'bg-amber-50 border-amber-500 text-amber-950 ring-1 ring-amber-500'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <div className="font-bold text-slate-900">
+                                {lang === 'en' ? 'In-Person' : 'Presencial'}
+                              </div>
+                              <div className="text-[10px] text-amber-700 font-semibold">
+                                {lang === 'en' ? 'In-person is extra' : 'Clase presencial es extra'}
+                              </div>
+                            </button>
+                          </div>
                         </div>
                       </div>
+
+                      {calcMode === 'inperson' && (
+                        <div className="px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px] font-mono text-amber-900 flex items-center justify-between">
+                          <span>
+                            {lang === 'en'
+                              ? '📍 In-person classes (Hannover area) include an extra travel fee per hour.'
+                              : '📍 La clase presencial (zona Hannover) tiene un pequeño recargo extra por traslado.'}
+                          </span>
+                          <span className="font-bold">+{formatMoney(inPersonExtraPerHour, currency)}/h</span>
+                        </div>
+                      )}
 
                       <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer text-xs font-mono">
                         <input
@@ -1974,30 +2193,40 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                     <div className="md:col-span-5 bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 flex flex-col justify-between shadow-md">
                       <div>
-                        <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-2 font-semibold">
-                          {lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada'}
-                        </span>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                            {lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada'}
+                          </span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-slate-700">
+                            {tierConfig.flag} {tierConfig.code}
+                          </span>
+                        </div>
                         <div className="flex items-baseline gap-2 mb-2">
-                          <span className="text-5xl font-mono font-extrabold text-white">€{totalCost}</span>
+                          <span className="text-4xl sm:text-5xl font-mono font-extrabold text-white">{formatMoney(totalCost, currency)}</span>
                           <span className="text-xs font-mono text-slate-400">{lang === 'en' ? 'total' : 'total'}</span>
                         </div>
 
-                        <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800">
-                          <span>{lang === 'en' ? 'Effective Rate: ' : 'Tarifa Efectiva: '}<strong className="text-emerald-400">€{effectiveRate}/hr</strong></span>
+                        <div className="text-xs font-mono text-slate-300 pb-4 mb-4 border-b border-slate-800 flex items-center justify-between">
+                          <span>{lang === 'en' ? 'Effective Rate: ' : 'Tarifa Efectiva: '}<strong className="text-emerald-400">{formatMoney(effectiveRate, currency)}/hr</strong></span>
+                          {calcMode === 'inperson' && (
+                            <span className="text-[10px] text-amber-300">
+                              {lang === 'en' ? '(incl. in-person extra)' : '(incl. extra presencial)'}
+                            </span>
+                          )}
                         </div>
 
                         <ul className="space-y-2 text-xs text-slate-300 font-mono mb-6">
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>{lang === 'en' ? 'Miro Whiteboard Vector PDF Export' : 'Exportación en PDF Vectorial (Pizarra Miro)'}</span>
+                            <span>{lang === 'en' ? 'PIAD™ Method + 14-Problem Interactive Lab' : 'Método PIAD™ + Lab Interactivo (14 Problemas)'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>{lang === 'en' ? 'Step-by-step Exam Problem Solutions' : 'Resolución Paso a Paso de Exámenes Anteriores'}</span>
+                            <span>{lang === 'en' ? 'Miro Whiteboard Vector PDF + Study Sheet' : 'PDF Vectorial (Miro) + Hoja de Estudio PDF'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>{lang === 'en' ? 'Structured Formula Sheets & Exam Summaries' : 'Formularios Estructurados y Resúmenes de Examen'}</span>
+                            <span>{lang === 'en' ? 'Productive AI Prompts to Write Python Code' : 'IA Productiva para Diseñar Código Python'}</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -2007,7 +2236,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       </div>
 
                       <button
-                        onClick={() => handleOpenBooking({ code: 'CALC', titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h Plan` })}
+                        onClick={() => handleOpenBooking({ code: 'CALC', titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'In-Person' : 'Online'}) [${formatMoney(totalCost, currency)}]` })}
                         className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <span>{lang === 'en' ? 'Claim This Study Plan' : 'Elegir este Plan de Estudio'}</span>
@@ -2283,7 +2512,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </p>
                   </div>
                   <a
-                    href="mailto:danisantander.urrutia@gmail.com?subject=STEM%20Mentorship%20Inquiry"
+                    href="mailto:danisantander.urrutia@gmail.com?subject=Academic%20Mentorship%20Inquiry"
                     className="w-full py-2.5 px-3 rounded-xl bg-sky-700 hover:bg-sky-800 text-white font-mono text-xs font-bold text-center block transition-colors shadow-xs"
                   >
                     {lang === 'en' ? 'Send Email →' : 'Enviar Correo →'}

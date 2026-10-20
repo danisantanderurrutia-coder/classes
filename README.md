@@ -80,12 +80,12 @@ npm run build:standalone
 
 ### 6. The Proprietary PIAD Method™ (Pedagogía de la Indagación Abierta y Digital)
 - **Manifesto & Interactive Framework (`#/piad`)**: Dedicated page and landing spotlight showcasing the 5-step dialectical learning cycle for the AI era:
-  1. *Da Vinci Observation*: Physical, freehand sketching & phenomenological perception.
-  2. *Socratic AI Interrogation*: Posing hard boundary prompts; refusing blind consensus.
-  3. *Occam's Razor Pruning*: Stripping artificial jargon to discover irreducible first principles.
-  4. *Empirical & Popperian Falsification*: Verifying claims against the physics sandbox (DCL) and official past exams.
-  5. *Open Knowledge Artifact*: Creating shareable Miro vector sheets, Python code, and open science (Freire & Elbakyan).
-- **Course & Deliverable Integration**: Added a 5th concrete deliverable to every course track: *PIAD Critical AI Framework* (heuristics to harness AI without cognitive outsourcing).
+  1. *Observation*: Physical, freehand sketching & phenomenological perception (inspired by Da Vinci's codices).
+  2. *Questioning Prior Consensus & Dogmas*: Clearing space for new knowledge and scrutinizing assumptions.
+  3. *Highlighting the Essential Core*: Applying Occam's parsimony to isolate governing laws from noise.
+  4. *Empirical Laboratory Verification*: Direct testing against physical simulations (DCL) and official past exams.
+  5. *Open Knowledge Artifact*: Creating shareable Miro vector sheets, Python code, and democratizing tools.
+- **Productive AI Integration**: Channels AI to explore, design executable code (NumPy/SciPy), and democratize advanced STEM tools. Added a 5th concrete deliverable to every course track: *PIAD Critical AI Framework*.
 
 ### 7. Mentor Authority & Background
 - **Mentor Profile**: Double Master's holder in Science & Environmental Engineering, Geophysics background, registered German Freiberufler.

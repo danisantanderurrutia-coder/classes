@@ -401,8 +401,8 @@ const WHY_ME_REASONS = [
     icon: Compass,
     titleEn: 'Proprietary PIAD™ Method',
     titleEs: 'Metodología Propia PIAD™',
-    textEn: 'Open & Digital Inquiry Pedagogy: learn to interrogate AI, prune verbosity with Occam\'s razor, and ground every formula in physical intuition.',
-    textEs: 'Pedagogía de la Indagación Abierta y Digital: aprendes a interrogar a la IA, podar el humo con la navaja de Ockham y conectar la física con criterio propio.',
+    textEn: 'Open & Digital Inquiry Pedagogy: leverage AI productively to design code, highlight the essential core of problems, and ground science in empirical intuition.',
+    textEs: 'Pedagogía de la Indagación Abierta y Digital: utiliza la IA productivamente para diseñar código, relevar lo esencial de cada problema y conectar la ciencia con intuición empírica.',
   },
   {
     id: 'language',
@@ -1377,13 +1377,13 @@ Sent from STEM Mentorship Portal`;
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                       {lang === 'en'
-                        ? 'The PIAD Method™: Critical STEM in the Age of AI'
-                        : 'El Método PIAD™: STEM Crítico en la Era de la IA'}
+                        ? 'The PIAD Method™: Productive STEM & AI Inquiry'
+                        : 'El Método PIAD™: STEM Productivo & Aprendizaje con IA'}
                     </h2>
                     <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-2xl">
                       {lang === 'en'
-                        ? 'Pedagogy of Open & Digital Inquiry. We combine the empirical curiosity of Da Vinci & Newton with Occam’s parsimony to interrogate AI models, prune hallucinations, and master first principles.'
-                        : 'Pedagogía de la Indagación Abierta y Digital. Unimos la curiosidad empírica de Da Vinci y Newton con la navaja de Ockham para interrogar a la IA, podar la palabrería y dominar las ciencias desde sus primeros principios.'}
+                        ? 'Students will use AI daily. PIAD turns it into a productive catalyst: exploring deeply, designing scientific code, democratizing programming tools, and conquering complex math and physics through hands-on inquiry.'
+                        : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la canaliza productivamente: para explorar, diseñar código propio, democratizar las herramientas de programación y acercar dificultades complejas mediante ejercicios que profundizan el aprendizaje.'}
                     </p>
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                       <button
@@ -1405,28 +1405,28 @@ Sent from STEM Mentorship Portal`;
 
                   <div className="lg:col-span-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 font-mono text-xs">
                     <span className="text-[10px] text-sky-400 uppercase tracking-widest font-bold block">
-                      {lang === 'en' ? 'The PIAD DNA' : 'El ADN de PIAD'}
+                      {lang === 'en' ? 'The PIAD 5-Step DNA' : 'El Ciclo PIAD en 5 Fases'}
                     </span>
                     <div className="space-y-2 text-slate-300">
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">1</span>
-                        <span>{lang === 'en' ? 'Direct Da Vinci Observation' : 'Observación Directa Da Vinci'}</span>
+                        <span>{lang === 'en' ? 'Direct Observation & Intuition' : 'Observación Directa e Intuición'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">2</span>
-                        <span>{lang === 'en' ? 'Socratic AI Interrogation' : 'Interrogación Socrática a la IA'}</span>
+                        <span>{lang === 'en' ? 'Questioning Prior Consensus & Dogmas' : 'Cuestionar Consensos y Dogmas Previos'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">3</span>
-                        <span>{lang === 'en' ? 'Occam’s Razor Pruning' : 'Poda con Navaja de Ockham'}</span>
+                        <span>{lang === 'en' ? 'Highlighting the Essential Core (Occam)' : 'Relevar lo Esencial de un Problema'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">4</span>
-                        <span>{lang === 'en' ? 'Empirical & Popper Falsification' : 'Falsación Empírica & Popper'}</span>
+                        <span>{lang === 'en' ? 'Empirical Laboratory Verification' : 'Verificación y Laboratorio Empírico'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">5</span>
-                        <span>{lang === 'en' ? 'Open Knowledge Artifact (Freire)' : 'Artefacto Abierto (Freire & Elbakyan)'}</span>
+                        <span>{lang === 'en' ? 'Open Knowledge Artifact & Code' : 'Artefacto de Conocimiento Abierto'}</span>
                       </div>
                     </div>
                   </div>
@@ -1674,8 +1674,8 @@ Sent from STEM Mentorship Portal`;
                     </span>
                     <p className="text-slate-300 font-sans text-xs leading-relaxed">
                       {lang === 'en'
-                        ? 'Prompts, verification checklists, and Occam pruning heuristics to interrogate AI without losing deep comprehension.'
-                        : 'Prompts estructurados, listas de verificación y heurísticas de poda (Ockham) para usar la IA sin perder tu criterio propio.'}
+                        ? 'Prompts, scientific code scaffolding (Python/NumPy), and first-principles heuristics to harness AI productively and democratize analytical tools.'
+                        : 'Prompts estructurados, diseño de código científico (Python/NumPy) y heurísticas para usar la IA de modo productivo y democratizar tus herramientas de análisis.'}
                     </p>
                   </div>
                 </div>

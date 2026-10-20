@@ -16,7 +16,9 @@ import {
   Award,
   Layers,
   HelpCircle,
-  ExternalLink
+  ExternalLink,
+  Code2,
+  Laptop
 } from 'lucide-react';
 
 export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
@@ -27,81 +29,84 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       number: '01',
       id: 'observation',
       icon: Eye,
-      tagEn: 'Phenomenology & Direct Sensing',
-      tagEs: 'Fenomenología & Percepción Directa',
-      titleEn: '1. Da Vinci Observation (Hands & Senses First)',
-      titleEs: '1. Observación Da Vinci (Mano, Ojo y Sentido)',
+      tagEn: 'Direct Observation & Physical Sense',
+      tagEs: 'Observación Directa & Intuición Física',
+      titleEn: '1. Observation (Sensory Intuition & Sketching)',
+      titleEs: '1. Observación (Intuición Sensible y Bocetos)',
       mentorEn: 'Leonardo Da Vinci',
+      image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+      imageCaptionEn: 'Da Vinci method: analytical sketching and observational geometry before abstract formalisms.',
+      imageCaptionEs: 'Método Da Vinci: dibujo analítico y geometría observacional antes del formalismo abstracto.',
       quoteEn: '"Study the science of art. Study the art of science. Develop your senses — especially learn how to see."',
       quoteEs: '"Estudia la ciencia del arte. Estudia el arte de la ciencia. Desarrolla tus sentidos: aprende especialmente a ver."',
-      descEn: 'Before touching a screen or asking an AI, we start from a visible, tangible physical phenomenon. The student sketches, calculates orders of magnitude, and engages their bodily intuition.',
-      descEs: 'Antes de tocar una pantalla o preguntar a una IA, partimos de un fenómeno real y visible. El estudiante dibuja a mano alzada, estima órdenes de magnitud y conecta su intuición física.',
-      actionEn: 'Freehand sketching • Free Body Diagrams (DCL) • Physical intuition',
-      actionEs: 'Dibujo a mano alzada • Diagramas de Cuerpo Libre (DCL) • Intuición física'
+      descEn: 'Before touching a screen, we start from a visible, tangible physical phenomenon. The student sketches by hand, estimates orders of magnitude, and engages their bodily and spatial intuition.',
+      descEs: 'Antes de tocar una pantalla, partimos de un fenómeno real y visible. El estudiante dibuja a mano alzada, estima órdenes de magnitud y conecta su intuición física y espacial con la realidad.',
+      actionEn: 'Freehand sketching • Free Body Diagrams (DCL) • Physical scale intuition',
+      actionEs: 'Dibujo a mano alzada • Diagramas de Cuerpo Libre (DCL) • Intuición de escala física'
     },
     {
       number: '02',
-      id: 'ai-dialogue',
+      id: 'questioning-dogma',
       icon: Zap,
-      tagEn: 'Digital Provocation',
-      tagEs: 'Provocación Digital',
-      titleEn: '2. Socratic AI Interrogation (Doubt the Consensus)',
-      titleEs: '2. Interrogación Socrática a la IA (Dudar del Consenso)',
+      tagEn: 'Clearing Space for New Knowledge',
+      tagEs: 'Espacio para el Nuevo Conocimiento',
+      titleEn: '2. Questioning Prior Consensus & Dogmas',
+      titleEs: '2. Cuestionar Consensos y Dogmas Previos',
       mentorEn: 'René Descartes & Francis Bacon',
-      quoteEn: '"In questions of science, the authority of a thousand is not worth the humble reasoning of a single individual."',
-      quoteEs: '"En cuestiones de ciencia, la autoridad de mil no vale más que el humilde razonamiento de un solo individuo."',
-      descEn: 'We consult the AI not as an undisputed oracle, but as a generator of working hypotheses. We formulate precise prompts and demand that the model justify its mathematical steps without hiding assumptions.',
-      descEs: 'Consultamos a la IA no como un oráculo incuestionable, sino como un generador de hipótesis de trabajo. Formulamos preguntas exigentes y obligamos al modelo a justificar sus pasos sin esconder suposiciones.',
-      actionEn: 'Rigorous prompting • Exposing hidden assumptions • Socratic dialectic',
-      actionEs: 'Prompting riguroso • Exposición de supuestos ocultos • Dialéctica socrática'
+      quoteEn: '"To examine what is true, it is necessary to doubt all things, as far as possible, at least once in a lifetime."',
+      quoteEs: '"Para examinar la verdad es preciso dudar, en cuanto sea posible, de todas las cosas una vez en la vida."',
+      descEn: 'For genuine new understanding to emerge, we must pause inherited consensus, textbook formulas, and pre-packaged answers. The student identifies what premises are being taken for granted and formulates daring questions.',
+      descEs: 'Para que surja una comprensión genuina y nueva, es indispensable poner en pausa las explicaciones mecánicas, las fórmulas heredadas y los consensos previos. El estudiante examina qué premisas se están dando por sentadas y formula preguntas audaces.',
+      actionEn: 'Exposing hidden premises • Challenging preconceptions • Critical inquiry',
+      actionEs: 'Exposición de premisas ocultas • Desafío de ideas preconcebidas • Diálogo crítico'
     },
     {
       number: '03',
-      id: 'ockham',
+      id: 'relevance-essential',
       icon: Scissors,
-      tagEn: 'Conceptual Parsimony',
-      tagEs: 'Parsimonia Conceptual',
-      titleEn: '3. Occam\'s Razor (Pruning AI Verbosity)',
-      titleEs: '3. La Navaja de Ockham (Podar el Humo de la IA)',
-      mentorEn: 'William of Ockham',
+      tagEn: 'Core Essence & Parsimony',
+      tagEs: 'Esencia y Parsimonia',
+      titleEn: '3. Highlighting the Essential Core of a Problem',
+      titleEs: '3. Relevar lo Esencial de un Problema',
+      mentorEn: 'Guillermo de Ockham',
       quoteEn: '"Entities must not be multiplied beyond necessity."',
       quoteEs: '"No deben multiplicarse los entes sin necesidad."',
-      descEn: 'AI models tend to produce bloated, jargon-heavy explanations that obscure understanding. In this phase, the student strips away unnecessary jargon and reduces the concept to its minimal, beautiful core law.',
-      descEs: 'Las IA tienden a producir explicaciones infladas y llenas de jerga que esconden la falta de comprensión. En esta fase, el estudiante poda la palabrería y extrae la ley fundamental limpia en 3 líneas.',
-      actionEn: 'Jargon removal • Dimensional analysis • First-principles distillation',
-      actionEs: 'Eliminación de jerga • Análisis dimensional • Destilación por primeros principios'
+      descEn: 'Every complex engineering problem contains an elegant governing core hidden beneath layers of noise, excess variables, and decorative jargon. Guided by Occam\'s razor, the student extracts what truly matters.',
+      descEs: 'Todo problema complejo contiene una estructura esencial limpia oculta bajo capas de ruido, exceso de variables o jerga innecesaria. Guiados por la navaja de Ockham, aprendemos a identificar las variables que realmente gobiernan el fenómeno y formular la ley mínima fundamental.',
+      actionEn: 'Critical variable isolation • Dimensional analysis • First-principles distillation',
+      actionEs: 'Aislamiento de variables críticas • Análisis dimensional • Destilación por primeros principios'
     },
     {
       number: '04',
-      id: 'popper',
+      id: 'empirical-lab',
       icon: Atom,
       tagEn: 'Empirical Verification',
       tagEs: 'Verificación Empírica',
-      titleEn: '4. The Empirical Sandbox & Popper Falsification',
-      titleEs: '4. El Laboratorio Empírico & Falsación de Popper',
-      mentorEn: 'Karl Popper & Isaac Newton',
-      quoteEn: '"A theory which is not refutable by any conceivable event is non-scientific."',
-      quoteEs: '"Una teoría que no es refutable por ningún suceso concebible no es científica."',
-      descEn: 'We do not ask the AI if it is right. We test it against physical simulation, calculus benchmarks, or real lab data. The student\'s badge of honor is discovering edge cases where the AI hallucinated or oversimplified.',
-      descEs: 'No le pedimos a la IA que nos dé la razón. Contrastamos sus ecuaciones con simulaciones numéricas (DCL interactivo) o exámenes reales. El mérito del estudiante es cazar las contradicciones del modelo.',
+      titleEn: '4. Empirical Verification & Laboratory Testing',
+      titleEs: '4. Verificación y Laboratorio Empírico',
+      mentorEn: 'Isaac Newton & Karl Popper',
+      quoteEn: '"I do not feign hypotheses. Whatever is not deduced from the phenomena must be called a hypothesis, and has no place in experimental philosophy."',
+      quoteEs: '"No invento hipótesis. Todo lo que no se deduce de los fenómenos debe llamarse hipótesis, y no tiene lugar en la filosofía experimental."',
+      descEn: 'We test every mathematical conjecture against the physical sandbox: numerical simulations, free body diagrams, and official past-exam exercises. We explore boundary limits to see where the physical model holds and where it breaks down.',
+      descEs: 'Contrastamos toda conjetura y desarrollo matemático con el laboratorio empírico: simulaciones numéricas, diagramas de fuerzas (DCL) y problemas de exámenes reales. Comprobamos casos límite para entender con precisión cuándo un modelo físico funciona y cuándo colapsa.',
       actionEn: 'Interactive physics sandbox • Altklausur verification • Boundary testing',
       actionEs: 'Laboratorio interactivo • Verificación en exámenes reales • Casos límite'
     },
     {
       number: '05',
-      id: 'liberation',
+      id: 'open-artifact',
       icon: Share2,
-      tagEn: 'Open Knowledge & Emancipation',
-      tagEs: 'Conocimiento Abierto & Emancipación',
-      titleEn: '5. Open Knowledge Artifact (Freire & Elbakyan)',
-      titleEs: '5. Artefacto de Conocimiento Abierto (Freire & Elbakyan)',
+      tagEn: 'Accessible Science & Code',
+      tagEs: 'Ciencia y Código Accesibles',
+      titleEn: '5. Open Knowledge Artifact',
+      titleEs: '5. Artefacto de Conocimiento Abierto',
       mentorEn: 'Paulo Freire & Alexandra Elbakyan',
-      quoteEn: '"Education either functions as an instrument of conformity or becomes the practice of freedom."',
-      quoteEs: '"La educación o funciona como un instrumento de conformidad o se convierte en la práctica de la libertad."',
-      descEn: 'Knowledge is not memorized to be locked away in an exam folder. The student produces a tangible, high-clarity artifact (a vector Miro sheet, Python code, an open infographic) that helps their peers and community.',
-      descEs: 'El conocimiento no se memoriza para guardarlo en una carpeta cerrada. El estudiante crea un artefacto tangible (resumen vectorial en Miro, código Python, esquema didáctico) listo para compartir con su comunidad.',
+      quoteEn: '"Knowledge emerges only through invention and re-invention, through restless, impatient, continuing inquiry."',
+      quoteEs: '"El conocimiento emerge solo a través de la invención y la reinvención, a través de la indagación inquieta, impaciente y permanente."',
+      descEn: 'Knowledge is not meant to be archived in a drawer. The student cements understanding by building a tangible artifact: a crisp vector Miro cheat-sheet, an executable Python script, or an open explanatory guide for peers.',
+      descEs: 'El conocimiento no se queda en una carpeta cerrada. El estudiante consolida su dominio construyendo un artefacto tangible: un formulario vectorial nítido en Miro, un script ejecutable en Python o un esquema explicativo abierto que democratiza las herramientas para sí mismo y para otros.',
       actionEn: 'Vector Miro PDF • Python scripts • Open community sharing',
-      actionEs: 'PDF vectorial en Miro • Scripts en Python • Difusión abierta'
+      actionEs: 'PDF vectorial en Miro • Scripts en Python • Difusión comunitaria abierta'
     }
   ];
 
@@ -113,8 +118,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       traditionalEs: 'Receptor pasivo de fórmulas de manual ("Educación bancaria")',
       naiveAiEn: 'Prompter who copies and pastes without understanding',
       naiveAiEs: 'Copiador pasivo que delega el pensamiento a la IA',
-      piadEn: 'Sovereign investigator who challenges the AI and tests physical reality',
-      piadEs: 'Investigador soberano que somete a prueba a la IA y comprueba la realidad'
+      piadEn: 'Sovereign investigator who uncovers first principles and writes code',
+      piadEs: 'Investigador soberano que domina los primeros principios y diseña su propio código'
     },
     {
       dimensionEn: 'Role of Artificial Intelligence',
@@ -123,8 +128,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       traditionalEs: 'Prohibida o perseguida como trampa',
       naiveAiEn: 'Comfortable crutch that answers homework exercises',
       naiveAiEs: 'Muleta cómoda que resuelve ejercicios sin dejar criterio',
-      piadEn: 'Dialectical sparring partner; hypothesis generator subject to pruning',
-      piadEs: 'Sparring dialéctico socrático; generador de hipótesis sujeto a poda'
+      piadEn: 'Productive catalyst to design code, explore simulations, and accelerate learning',
+      piadEs: 'Catalizador productivo para diseñar código, explorar simulaciones y acelerar el aprendizaje'
     },
     {
       dimensionEn: 'Method of Proof',
@@ -133,8 +138,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       traditionalEs: 'Memorización mecánica para un examen escrito de 90 minutos',
       naiveAiEn: 'Accepting the AI output without cross-checking assumptions',
       naiveAiEs: 'Creer en la respuesta del LLM sin revisar los supuestos',
-      piadEn: 'Occam\'s Razor + Galilean sandbox + past-exam examiner partial points',
-      piadEs: 'Navaja de Ockham + simulación experimental + rúbricas oficiales'
+      piadEn: 'Occam\'s parsimony + empirical sandbox + past-exam examiner partial points',
+      piadEs: 'Parsimonia de Ockham + simulación experimental + rúbricas oficiales'
     },
     {
       dimensionEn: 'End Deliverable',
@@ -143,8 +148,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       traditionalEs: 'Una hoja de examen calificada que se archiva y se olvida',
       naiveAiEn: 'Generic AI-generated text with no lasting mental model',
       naiveAiEs: 'Texto genérico que se desvanece de la memoria en 48 horas',
-      piadEn: 'Autonomous mental models, vector Miro cheat-sheets, and applied code',
-      piadEs: 'Criterio autónomo permanente, esquemas vectoriales y código vivo'
+      piadEn: 'Autonomous mental models, vector Miro cheat-sheets, and executable Python code',
+      piadEs: 'Criterio autónomo permanente, esquemas vectoriales y código Python ejecutable'
     }
   ];
 
@@ -161,14 +166,14 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
             {lang === 'en'
-              ? 'Don’t let AI think for you. Use AI to sharpen your critical reasoning.'
-              : 'No estudies para que la IA piense por ti. Usa la IA para afilar tu pensamiento crítico.'}
+              ? 'Harness AI productively: explore, design code, and master higher STEM.'
+              : 'Usa la IA de modo productivo: explora, diseña código propio y domina las ciencias.'}
           </h1>
 
           <p className="text-base sm:text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
             {lang === 'en'
-              ? 'The PIAD Method™ is a high-rigor educational framework uniting the empirical rigor of Newton, the multi-disciplinary curiosity of Da Vinci, and the razor-sharp parsimony of Occam with critical, dialectical AI tools.'
-              : 'El Método PIAD™ es un marco formativo propio que une el rigor empírico de Newton, la polimatía humanista de Da Vinci y la parsimonia de Ockham con el uso crítico de la Inteligencia Artificial.'}
+              ? 'We know students will use AI. The PIAD Method™ ensures they use it constructively: to explore deeply, design executable code, and make historically difficult math and physics accessible through simple, hands-on inquiry.'
+              : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la transforma en una palanca de aprendizaje productivo: para explorar con curiosidad, democratizar la programación y acercar dificultades complejas mediante ejercicios simples que profundizan la comprensión real.'}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -186,6 +191,43 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               <Zap className="w-3.5 h-3.5 text-amber-400" />
               <span>{lang === 'en' ? 'Book a PIAD Diagnostic Call' : 'Reservar Sesión Diagnóstica PIAD'}</span>
             </button>
+          </div>
+        </div>
+
+        {/* SPECIAL MANIFESTO BOX: LA IA PRODUCTIVA & DEMOCRATIZACIÓN DEL CÓDIGO */}
+        <div className="mb-16 p-8 sm:p-10 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl relative overflow-hidden">
+          <div className="max-w-4xl relative z-10 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-mono text-xs font-bold">
+              <Code2 className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? 'Our AI Philosophy' : 'Nuestra Filosofía con la Inteligencia Artificial'}</span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+              {lang === 'en'
+                ? 'From Passive Cheating to Computational Empowerment'
+                : 'De la Dependencia Pasiva a la Democratización del Código'}
+            </h3>
+
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">
+              {lang === 'en'
+                ? 'We recognize that students will use AI daily. Rather than futile prohibitions, PIAD channels AI into a powerful accelerator: students learn to formulate exact logic, generate and debug scientific Python code (NumPy, SciPy), and bridge historical bottlenecks in calculus and physics through interactive simulations. AI becomes the gateway to democratizing programming and higher analytical skills for everyone.'
+                : 'Sabemos que los estudiantes usarán la IA sí o sí. En lugar de prohibiciones inútiles, el Método PIAD la canaliza como un acelerador de criterio: enseñamos al alumno a estructurar la lógica, diseñar y depurar código científico en Python (NumPy, SciPy), y acercar dificultades históricas del cálculo y la física mediante ejercicios simples e interactivos. La IA se convierte en la puerta de entrada para democratizar las herramientas de programación y el pensamiento analítico riguroso.'}
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs font-mono text-slate-300">
+              <div className="flex items-center gap-2">
+                <Laptop className="w-4 h-4 text-sky-400 shrink-0" />
+                <span>{lang === 'en' ? 'Scientific Python & NumPy scripts' : 'Scripts en Python científico y NumPy'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{lang === 'en' ? 'Interactive physical intuition' : 'Intuición física interactiva'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-indigo-400 shrink-0" />
+                <span>{lang === 'en' ? 'Sovereign problem-solving skills' : 'Criterio autónomo e intransferible'}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -237,53 +279,73 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               {steps[activeStep].number}
             </div>
 
-            <div className="max-w-3xl relative z-10 space-y-5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-sky-400 font-mono text-xs font-bold border border-slate-700">
-                <span>{steps[activeStep].mentorEn}</span>
-                <span>•</span>
-                <span>{lang === 'en' ? steps[activeStep].tagEn : steps[activeStep].tagEs}</span>
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                {lang === 'en' ? steps[activeStep].titleEn : steps[activeStep].titleEs}
-              </h3>
-
-              <blockquote className="border-l-2 border-sky-400 pl-4 italic text-slate-300 text-sm font-serif">
-                {lang === 'en' ? steps[activeStep].quoteEn : steps[activeStep].quoteEs}
-              </blockquote>
-
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
-                {lang === 'en' ? steps[activeStep].descEn : steps[activeStep].descEs}
-              </p>
-
-              <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>
-                    <strong className="text-white">
-                      {lang === 'en' ? 'Tangible practice: ' : 'Práctica tangible: '}
-                    </strong>
-                    {lang === 'en' ? steps[activeStep].actionEn : steps[activeStep].actionEs}
-                  </span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              
+              <div className={`space-y-5 ${steps[activeStep].image ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-sky-400 font-mono text-xs font-bold border border-slate-700">
+                  <span>{steps[activeStep].mentorEn}</span>
+                  <span>•</span>
+                  <span>{lang === 'en' ? steps[activeStep].tagEn : steps[activeStep].tagEs}</span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={activeStep === 0}
-                    onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-xs font-mono font-bold transition-colors cursor-pointer"
-                  >
-                    ← Anterior
-                  </button>
-                  <button
-                    disabled={activeStep === steps.length - 1}
-                    onClick={() => setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))}
-                    className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 disabled:opacity-40 text-xs font-mono font-bold transition-colors cursor-pointer"
-                  >
-                    Siguiente →
-                  </button>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  {lang === 'en' ? steps[activeStep].titleEn : steps[activeStep].titleEs}
+                </h3>
+
+                <blockquote className="border-l-2 border-sky-400 pl-4 italic text-slate-300 text-sm font-serif">
+                  {lang === 'en' ? steps[activeStep].quoteEn : steps[activeStep].quoteEs}
+                </blockquote>
+
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
+                  {lang === 'en' ? steps[activeStep].descEn : steps[activeStep].descEs}
+                </p>
+
+                <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>
+                      <strong className="text-white">
+                        {lang === 'en' ? 'Tangible practice: ' : 'Práctica tangible: '}
+                      </strong>
+                      {lang === 'en' ? steps[activeStep].actionEn : steps[activeStep].actionEs}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      disabled={activeStep === 0}
+                      onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
+                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-xs font-mono font-bold transition-colors cursor-pointer"
+                    >
+                      ← Anterior
+                    </button>
+                    <button
+                      disabled={activeStep === steps.length - 1}
+                      onClick={() => setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))}
+                      className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 disabled:opacity-40 text-xs font-mono font-bold transition-colors cursor-pointer"
+                    >
+                      Siguiente →
+                    </button>
+                  </div>
                 </div>
               </div>
+
+              {/* Optional Illustrated Sketch for Step 1 (Da Vinci Notebook Style) */}
+              {steps[activeStep].image && (
+                <div className="lg:col-span-5 flex flex-col items-center">
+                  <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950 max-w-sm">
+                    <img
+                      src={steps[activeStep].image}
+                      alt="Da Vinci Notebook Sketch"
+                      className="w-full h-56 object-cover opacity-90 hover:opacity-100 transition-opacity"
+                    />
+                    <div className="p-3 text-[11px] font-mono text-slate-400 border-t border-slate-800">
+                      {lang === 'en' ? steps[activeStep].imageCaptionEn : steps[activeStep].imageCaptionEs}
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
         </div>
@@ -352,15 +414,6 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-mono">
             <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🔭 Isaac Newton</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'Built classical mechanics and calculus from experimental optics and gravitation. "Hypotheses non fingo".'
-                  : 'Fundó la mecánica clásica y el cálculo desde la óptica y la gravitación. "Hypotheses non fingo": rigor empírico antes que dogma.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
               <span className="font-bold text-sm text-slate-900 block">🎨 Leonardo Da Vinci</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
@@ -370,11 +423,20 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
             </div>
 
             <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
+              <span className="font-bold text-sm text-slate-900 block">🔭 Isaac Newton</span>
+              <p className="text-slate-600 font-sans leading-relaxed">
+                {lang === 'en'
+                  ? 'Built classical mechanics and calculus from experimental optics and gravitation. "Hypotheses non fingo".'
+                  : 'Fundó la mecánica clásica y el cálculo desde la óptica y la gravitación. "Hypotheses non fingo": rigor empírico antes que dogma.'}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
               <span className="font-bold text-sm text-slate-900 block">🗡️ Guillermo de Ockham</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
-                  ? 'The razor of parsimony. Cutting through bloated artificial rhetoric to discover the minimal irreducible truth.'
-                  : 'La navaja de la parsimonia. Podar la retórica artificial inflada para hallar la verdad mínima irreducible.'}
+                  ? 'The razor of parsimony. Isolating the governing core of every problem without superfluous entities.'
+                  : 'La navaja de la parsimonia. Aislar el núcleo esencial que gobierna cada problema sin multiplicar entidades superfluas.'}
               </p>
             </div>
 
@@ -382,8 +444,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               <span className="font-bold text-sm text-slate-900 block">✊ Paulo Freire</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
-                  ? 'Pedagogy of the Oppressed. Breaking banking education; teaching as a shared dialogue of mutual liberation.'
-                  : 'Pedagogía del Oprimido. Superación de la educación bancaria; el aprendizaje como diálogo de liberación mutua.'}
+                  ? 'Pedagogy of the Oppressed. Overcoming banking education: learning as active dialogue and emancipation.'
+                  : 'Pedagogía del Oprimido. Superación de la educación bancaria; el aprendizaje como diálogo activo y emancipación.'}
               </p>
             </div>
 
@@ -391,8 +453,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               <span className="font-bold text-sm text-slate-900 block">🔓 Alexandra Elbakyan</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
-                  ? 'Founder of Sci-Hub. Breaking institutional paywalls so science and culture belong to every human being.'
-                  : 'Fundadora de Sci-Hub. Demolición de paywalls institucionales para que la ciencia sea libre y universal.'}
+                  ? 'Founder of Sci-Hub. Democratizing scientific literature and open tools so knowledge belongs to all.'
+                  : 'Fundadora de Sci-Hub. Democratización de la literatura científica y herramientas abiertas para que el conocimiento sea universal.'}
               </p>
             </div>
 
@@ -400,8 +462,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               <span className="font-bold text-sm text-slate-900 block">⚡ Karl Popper & Paul Feyerabend</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
-                  ? 'Falsification over blind confirmation; methodological disobedience against rigid dogmas ("Anything goes").'
-                  : 'Falsación audaz frente a la confirmación ciega; desobediencia metodológica contra los dogmas rígidos.'}
+                  ? 'Critical testing over blind consensus; methodological freedom to tackle scientific bottlenecks.'
+                  : 'Puesta a prueba crítica frente al consenso ciego; libertad metodológica para superar obstáculos científicos.'}
               </p>
             </div>
           </div>

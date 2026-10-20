@@ -1,7 +1,7 @@
-# Φ Open Inquiry Mentorship & Computational Geophysics
+# Φ Open Knowledge & Science Mentorship & Computational Geophysics
 ## Daniel Santander • Double M.Sc. & Geophysicist
 
-An interactive, responsive portfolio, teaching sandbox, and booking portal for **Open Inquiry Mentorship**: from sensory intuition to exact science under the **PIAD Method™**.
+An interactive, responsive portfolio, teaching sandbox, and booking portal for **Open Knowledge & Science Mentorship**: from sensory intuition to exact science under the **PIAD Method™**.
 
 Built following rigorous pedagogical and computational geophysics standards.
 

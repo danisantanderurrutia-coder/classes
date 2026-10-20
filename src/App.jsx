@@ -597,19 +597,19 @@ export default function App() {
     e.preventDefault();
 
     const subject = encodeURIComponent(
-      `[Open Inquiry Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
+      `[Open Knowledge & Science Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
     );
     const bodyText = 
 `Hi Daniel,
 
-I am requesting an Open Inquiry Mentorship session.
+I am requesting an Open Knowledge & Science Mentorship session.
 
 --- STUDENT DETAILS ---
 Name: ${bookingData.name}
 Email: ${bookingData.email}
 Phone / WhatsApp: ${bookingData.phone || 'Not provided'}
 University / School: ${bookingData.university}
-Selected Course / Module: ${bookingData.courseCode || 'Diagnostic / General Inquiry'}
+Selected Course / Module: ${bookingData.courseCode || 'Diagnostic / General Mentorship'}
 Type of Session: ${bookingData.sessionType}
 Delivery Mode: ${bookingData.deliveryMode}
 Language Preference: ${bookingData.languagePref}
@@ -618,7 +618,7 @@ Target Exam Date / Deadline: ${bookingData.targetDate || 'Not specified'}
 --- QUESTIONS / BOTTLENECKS ---
 ${bookingData.notes || 'None provided'}
 
-Sent from Open Inquiry Mentorship Portal`;
+Sent from Open Knowledge & Science Mentorship Portal`;
 
     const mailto = `mailto:danisantander.urrutia@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
     setLastMailtoUrl(mailto);
@@ -672,7 +672,7 @@ Sent from Open Inquiry Mentorship Portal`;
                 DANIEL SANTANDER
               </span>
               <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-tight">
-                Open Inquiry Mentorship
+                Open Knowledge &amp; Science Mentorship
               </span>
             </div>
           </button>
@@ -849,8 +849,8 @@ Sent from Open Inquiry Mentorship Portal`;
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>
                       {lang === 'en'
-                        ? 'OPEN INQUIRY MENTORSHIP • DANIEL SANTANDER • DOUBLE M.SC. & GEOPHYSICIST'
-                        : 'OPEN INQUIRY MENTORSHIP • DANIEL SANTANDER • DOBLE M.SC. Y GEOFÍSICO'}
+                        ? 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL SANTANDER • DOUBLE M.SC. & GEOPHYSICIST'
+                        : 'OPEN KNOWLEDGE & SCIENCE MENTORSHIP • DANIEL SANTANDER • DOBLE M.SC. Y GEOFÍSICO'}
                     </span>
                   </div>
 
@@ -2544,7 +2544,7 @@ Sent from Open Inquiry Mentorship Portal`;
                   )}
 
                   <a
-                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Inquiry Mentorship'}. My name is ${bookingData.name}.`)}`}
+                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Knowledge & Science Mentorship'}. My name is ${bookingData.name}.`)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5"

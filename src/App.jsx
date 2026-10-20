@@ -1042,6 +1042,24 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
               {/* 3D Planetary Observatory Viewport: Restrained Margins for Seamless Downscroll */}
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+                {/* Section Header connecting the Observatory to the Academic Courses */}
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/25 text-sky-300 font-mono text-[11px] uppercase tracking-[0.25em] mb-2 shadow-xs">
+                    <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+                    <span>{lang === 'en' ? 'Observatory of the Cosmos' : 'Observatorio del Cosmos'}</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                    {lang === 'en'
+                      ? 'Interactive Mentorship Courses by Celestial Body'
+                      : 'Explorador Interactivo de Cursos y Mentorías por Astro'}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto mt-1.5 font-sans leading-relaxed">
+                    {lang === 'en'
+                      ? 'Each celestial body represents a core university & IB discipline (Higher Calculus, Classical Mechanics, Electromagnetism, Quantum Physics & Relativity). Click any planet to inspect syllabus, exam exercises, and booking.'
+                      : 'Cada astro representa una disciplina universitaria e IB (Cálculo Superior, Mecánica Clásica, Electromagnetismo, Cuántica y Relatividad). Haz clic en un planeta para explorar temarios, ejercicios de examen y reservas.'}
+                  </p>
+                </div>
+
                 <div id="planetarium-viewport" className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
                   <SolarSystem
                     onSelectSubject={handleSelectPlanetSubject}

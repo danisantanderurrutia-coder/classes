@@ -4258,7 +4258,7 @@ export default function SolarSystem({
             <div className="flex items-center gap-2">
               <h3 className="font-mono text-xs sm:text-sm font-bold text-white tracking-wider uppercase">
                 {viewVariant === 'orbital'
-                  ? (lang === 'en' ? 'Cosmic Observatory & Physics Lab' : 'Observatorio Cósmico & Laboratorio de Física')
+                  ? (lang === 'en' ? 'Observatory of the Cosmos • Courses & Physics' : 'Observatorio del Cosmos • Cursos & Física')
                   : (lang === 'en' ? 'Interactive Courses by Celestial Body' : 'Explorador de Clases por Astro')}
               </h3>
               <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-950/80 border border-sky-800/80 text-sky-300">
@@ -4728,16 +4728,29 @@ export default function SolarSystem({
           {/* Intro: fade from absolute black */}
           {!introDone && (
             <div
-              className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center pointer-events-none"
+              className="absolute inset-0 z-40 bg-black/95 flex flex-col items-center justify-center pointer-events-none px-4 select-none"
               style={{ animation: 'cineIntro 5.2s ease-in-out forwards', fontFamily: CINE_FONT }}
               onAnimationEnd={() => setIntroDone(true)}
             >
-              <span className="text-white/90 text-xs sm:text-sm tracking-[0.6em] uppercase">
-                {lang === 'en' ? 'OBSERVATORY' : 'OBSERVATORIO'}
-              </span>
-              <span className="mt-3 text-sky-200/50 text-[9px] sm:text-[10px] tracking-[0.4em] uppercase">
-                {lang === 'en' ? 'Observatory of the Cosmos' : 'Observatorio del Cosmos'}
-              </span>
+              {/* Epígrafe / Subtítulo: Observatory of the Cosmos */}
+              <div className="flex items-center gap-2 mb-2 text-sky-400 text-[10px] sm:text-xs tracking-[0.45em] uppercase font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-ping" />
+                <span>{lang === 'en' ? 'OBSERVATORY OF THE COSMOS' : 'OBSERVATORIO DEL COSMOS'}</span>
+              </div>
+
+              {/* Título Principal: Conexión explícita con los Cursos y Mentorías */}
+              <h2 className="text-white text-base sm:text-xl md:text-2xl font-black tracking-[0.2em] uppercase text-center max-w-2xl leading-relaxed drop-shadow-[0_2px_14px_rgba(56,189,248,0.3)]">
+                {lang === 'en'
+                  ? 'ACADEMIC COURSES & MENTORSHIP BY CELESTIAL BODY'
+                  : 'CURSOS Y MENTORÍAS CIENTÍFICAS POR ASTRO'}
+              </h2>
+
+              {/* Bajada Descriptiva */}
+              <p className="mt-2 text-slate-300 text-[9px] sm:text-[11px] tracking-[0.25em] uppercase text-center font-mono max-w-xl">
+                {lang === 'en'
+                  ? 'Higher Physics • Advanced Calculus • Geophysics • 1-on-1 Mentorship'
+                  : 'Física Superior • Cálculo Avanzado • Geofísica • Clases 1 a 1'}
+              </p>
             </div>
           )}
         </div>

@@ -39,7 +39,12 @@ import {
   Phone,
   Mail,
   Share2,
-  Copy
+  Copy,
+  Heart,
+  Repeat,
+  Gamepad2,
+  Music,
+  Handshake
 } from 'lucide-react';
 import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
 import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
@@ -1423,6 +1428,40 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </div>
                   ))}
                 </div>
+
+                {/* Barter & Solidarity Callout Banner on Landing */}
+                <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-sky-500/10 border-2 border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
+                  <div className="space-y-2 text-center md:text-left max-w-2xl">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs font-mono font-bold text-slate-800">
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] flex items-center gap-1">
+                        <Repeat className="w-3 h-3 text-amber-700" />
+                        <span>{lang === 'en' ? 'Barter' : 'Trueque'}</span>
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] flex items-center gap-1">
+                        <Heart className="w-3 h-3 text-emerald-700" />
+                        <span>{lang === 'en' ? 'Financial Solidarity' : 'Apoyo Solidario'}</span>
+                      </span>
+                      <span className="text-slate-400 hidden sm:inline">•</span>
+                      <span className="text-slate-700">{lang === 'en' ? 'Education must be accessible to everyone' : 'Que nadie se quede sin aprender'}</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                      {lang === 'en'
+                        ? '“Want to pay with an exchange? Need classes but short on funds?”'
+                        : '“¿Quieres pagar a través del intercambio? ¿Necesitas clases pero no tienes el dinero?”'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                      {lang === 'en'
+                        ? 'I gladly accept music, video games, psychology sessions or creative crafts! And if you are in a tough spot financially, tell me your situation: we can definitely work on it together.'
+                        : 'Acepto música, videojuegos, sesiones de psicología u otros talentos, ¡ponte en contacto! Y si estás en un momento económico difícil, escríbeme y cuéntame tu caso: ¡totalmente podemos encontrar una solución!'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => navigateTo('precios')}
+                    className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold whitespace-nowrap cursor-pointer transition-colors shrink-0 shadow-sm flex items-center gap-2"
+                  >
+                    <span>{lang === 'en' ? 'View Barter & Solidarity Options →' : 'Ver Opciones de Trueque y Apoyo →'}</span>
+                  </button>
+                </div>
               </div>
             </section>
 
@@ -2449,6 +2488,148 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </div>
               </div>
 
+              {/* --- SECTION 1.5: SOLIDARITY ECONOMY & BARTER (TRUEQUE Y ACUERDOS SOLIDARIOS) --- */}
+              <div id="barter-solidarity" className="max-w-5xl mx-auto space-y-6 pt-4">
+                <div className="text-center max-w-2xl mx-auto">
+                  <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
+                    {lang === 'en' ? 'Open Knowledge & Flexible Exchange' : 'Economía Abierta & Acceso Universal'}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    {lang === 'en' ? 'Barter, Skill Exchange & Financial Solidarity' : 'Trueque, Intercambio de Habilidades & Apoyo Solidario'}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 font-sans mt-1">
+                    {lang === 'en'
+                      ? 'The pursuit of science and mathematics should be open to all. If standard tuition does not fit your reality, we have flexible human paths.'
+                      : 'El rigor científico y el aprendizaje de las matemáticas deben ser accesibles para todos. Si la tarifa convencional no se ajusta a tu momento, tenemos caminos abiertos.'}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Card 1: Trueque / Intercambio */}
+                  <div className="bg-gradient-to-br from-amber-500/5 via-white to-amber-500/10 border-2 border-amber-500/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xs hover:border-amber-500 transition-all">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-800 flex items-center justify-center border border-amber-500/30 shrink-0">
+                          <Repeat className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold border border-amber-300">
+                            {lang === 'en' ? 'Barter / Skill Exchange' : 'Pago por Trueque'}
+                          </span>
+                          <h3 className="text-lg font-bold text-slate-900 leading-snug mt-1">
+                            {lang === 'en' ? 'Want to pay through an exchange?' : '¿Quieres pagar a través del intercambio?'}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-700 font-sans leading-relaxed">
+                        {lang === 'en' ? (
+                          <>
+                            <strong>&ldquo;I gladly accept music, video games, psychology sessions or other creative crafts — get in touch!&rdquo;</strong> If you have creative or professional skills, production/instruments, games, languages or other talents, let’s talk and coordinate a fair, meaningful exchange.
+                          </>
+                        ) : (
+                          <>
+                            <strong>&ldquo;Acepto música, videojuegos, sesiones de psicología u otros, ¡ponte en contacto!&rdquo;</strong> Si tienes habilidades musicales, instrumentos, videojuegos, sesiones de terapia/psicología, diseño, idiomas u otros talentos, conversemos y acordemos un trueque justo y enriquecedor para ambos.
+                          </>
+                        )}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 font-mono text-[11px] pt-1">
+                        <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 flex items-center gap-1.5">
+                          <Music className="w-3.5 h-3.5 text-amber-700" />
+                          <span>Música &amp; Producción</span>
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 flex items-center gap-1.5">
+                          <Gamepad2 className="w-3.5 h-3.5 text-amber-700" />
+                          <span>Videojuegos</span>
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
+                          🧠 Sesiones de Psicología
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
+                          🎨 Diseño &amp; Otros Talentos
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-6 mt-6 border-t border-amber-200/60">
+                      <a
+                        href={`https://wa.me/4917676497440?text=${encodeURIComponent(
+                          lang === 'en'
+                            ? 'Hi Daniel! I am interested in STEM mentorship and would love to propose a skill exchange / barter for classes (music, psychology, games, etc.).'
+                            : '¡Hola Daniel! Me interesan tus clases y me gustaría proponerte un intercambio/trueque (música, psicología, videojuegos u otro talento) para coordinar.'
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-mono text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                      >
+                        <Repeat className="w-4 h-4" />
+                        <span>{lang === 'en' ? 'Propose a Barter via WhatsApp →' : 'Proponer un Trueque por WhatsApp →'}</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Apoyo Solidario / Dificultad Económica */}
+                  <div className="bg-gradient-to-br from-emerald-500/5 via-white to-emerald-500/10 border-2 border-emerald-500/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xs hover:border-emerald-500 transition-all">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-800 flex items-center justify-center border border-emerald-500/30 shrink-0">
+                          <Heart className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">
+                            {lang === 'en' ? 'Financial Solidarity & Scholarships' : 'Acceso Solidario & Becas'}
+                          </span>
+                          <h3 className="text-lg font-bold text-slate-900 leading-snug mt-1">
+                            {lang === 'en' ? 'Need classes but running short on money?' : '¿Necesitas clases pero no tienes el dinero?'}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-700 font-sans leading-relaxed">
+                        {lang === 'en' ? (
+                          <>
+                            <strong>&ldquo;Message me and tell me your situation: we can definitely work something out!&rdquo;</strong> Lack of financial resources must never stop you from mastering physics and calculus. Let’s talk openly and build a custom solidarity agreement or partial scholarship so you pass your exam.
+                          </>
+                        ) : (
+                          <>
+                            <strong>&ldquo;Escríbeme y cuéntame tu situación, ¡totalmente podemos trabajar en ello!&rdquo;</strong> La falta de dinero nunca debe ser una barrera para aprender física y matemáticas con rigor. Escríbeme con total confianza: buscamos un acuerdo adaptado a tu realidad o una beca parcial para que apruebes tu ramo.
+                          </>
+                        )}
+                      </p>
+
+                      <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200/80 font-mono text-[11px] text-emerald-900 space-y-1">
+                        <div className="flex items-center gap-1.5 font-bold">
+                          <Handshake className="w-3.5 h-3.5 text-emerald-700" />
+                          <span>{lang === 'en' ? '100% Confidential & Judgment-Free' : '100% Confidencial y sin juicios'}</span>
+                        </div>
+                        <p className="text-[10px] text-emerald-800 leading-normal">
+                          {lang === 'en'
+                            ? 'Tell me which university course you are taking and where you are stuck. We prioritize your academic success.'
+                            : 'Cuéntame qué materia estás cursando y qué examen tienes cerca. Priorizamos tu aprendizaje y tu título.'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pt-6 mt-6 border-t border-emerald-200/60">
+                      <a
+                        href={`https://wa.me/4917676497440?text=${encodeURIComponent(
+                          lang === 'en'
+                            ? 'Hi Daniel! I really need help with my STEM university exams, but I am currently facing financial constraints. I would love to tell you about my situation and see if we can work something out.'
+                            : '¡Hola Daniel! Necesito apoyo urgente con mis ramos de ciencias pero actualmente tengo dificultades económicas. Me gustaría contarte mi situación para ver si podemos trabajar en un acuerdo solidario.'
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                      >
+                        <Heart className="w-4 h-4" />
+                        <span>{lang === 'en' ? 'Tell Me Your Situation via WhatsApp →' : 'Cuéntame tu situación por WhatsApp →'}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* SECTION 2: MENTOR DOSSIER & VERIFIED CREDENTIALS */}
               <div id="mentor-dossier" className="pt-8 border-t border-slate-200">
                 <div className="text-center max-w-2xl mx-auto mb-10">
@@ -2833,6 +3014,12 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       qEs: "¿Qué herramientas digitales y equipos utilizas en las clases online?",
                       aEn: "Sessions are conducted on high-resolution Miro interactive whiteboards with an Apple Pencil. We execute live scientific Python code when relevant and export high-resolution vector PDFs of every calculation right after the call.",
                       aEs: "Utilizamos pizarras interactivas Miro en alta resolución combinadas con Apple Pencil. Ejecutamos código Python en vivo cuando la materia lo requiere y enviamos un PDF vectorial de todas las demostraciones al terminar la sesión."
+                    },
+                    {
+                      qEn: "Do you accept barter, skill exchange, or help students facing financial hardship?",
+                      qEs: "¿Aceptas trueques, intercambio de habilidades o apoyo a estudiantes con dificultades económicas?",
+                      aEn: "Yes, 100%! Open Knowledge means scientific education should be accessible. I gladly accept barter and skill exchanges (such as music production, video games, psychology sessions, design, or languages). And if you are currently in a tough financial situation, write to me with complete confidence and tell me your case — we can definitely work something out with a solidarity arrangement or partial scholarship so you don't miss out on learning.",
+                      aEs: "¡Sí, totalmente! El conocimiento abierto implica que la educación debe ser accesible. Acepto pagos mediante trueque e intercambio de valor (como música, videojuegos, sesiones de psicología, diseño u otros talentos). Y si estás pasando por un momento económico difícil, escríbeme con total confianza y cuéntame tu situación: ¡totalmente podemos trabajar en ello y encontrar un acuerdo solidario o beca parcial para que no te quedes sin aprender!"
                     }
                   ].map((faq, idx) => (
                     <div key={idx} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
@@ -3096,6 +3283,40 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           {lang === 'en' ? lng.labelEn : lng.labelEs}
                         </button>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Payment / Arrangement Type (Includes Barter & Solidarity Agreement) */}
+                  <div>
+                    <label className="block text-slate-700 mb-1 font-semibold">
+                      {lang === 'en' ? 'Payment or Arrangement Type' : 'Modalidad de Pago o Acuerdo'}
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setBookingData({ ...bookingData, sessionType: 'Regular Sprint / Standard' })}
+                        className={`py-2 px-3 rounded-xl border text-left transition-all ${
+                          !bookingData.sessionType.includes('Trueque') && !bookingData.sessionType.includes('Barter')
+                            ? 'bg-slate-900 border-slate-900 text-white font-bold'
+                            : 'bg-slate-50 border-slate-300 text-slate-600'
+                        }`}
+                      >
+                        <div className="text-xs">💳 {lang === 'en' ? 'Standard Tuition / Pack' : 'Tarifa Estándar / Pack'}</div>
+                        <div className="text-[10px] opacity-80">{lang === 'en' ? 'Regular payment rate' : 'Pago convencional por hora/pack'}</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setBookingData({ ...bookingData, sessionType: 'Trueque / Acuerdo Solidario' })}
+                        className={`py-2 px-3 rounded-xl border text-left transition-all ${
+                          bookingData.sessionType.includes('Trueque') || bookingData.sessionType.includes('Barter')
+                            ? 'bg-amber-950 border-amber-500 text-amber-200 font-bold'
+                            : 'bg-slate-50 border-slate-300 text-slate-600'
+                        }`}
+                      >
+                        <div className="text-xs">🔄 {lang === 'en' ? 'Barter or Solidarity' : 'Trueque o Acuerdo Solidario'}</div>
+                        <div className="text-[10px] opacity-80">{lang === 'en' ? 'Skill exchange or financial hardship' : 'Música, juegos, psicología o falta de dinero'}</div>
+                      </button>
                     </div>
                   </div>
 

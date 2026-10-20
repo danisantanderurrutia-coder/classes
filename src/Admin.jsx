@@ -50,7 +50,15 @@ const KANBAN_COLUMNS = [
   { id: 'Archived', label: '5. Archivado', dot: 'bg-slate-500', border: 'border-slate-700' }
 ];
 
-const PAYMENT_METHODS = ['SEPA IBAN', 'Transferencia Chile', 'Wise', 'PayPal', 'Efectivo (Hannover)'];
+const PAYMENT_METHODS = [
+  'SEPA IBAN',
+  'Transferencia Chile',
+  'Wise',
+  'PayPal',
+  'Trueque / Intercambio',
+  'Acuerdo Solidario',
+  'Efectivo (Hannover)'
+];
 
 const WHATSAPP_SUBJECT_PRESETS = [
   {
@@ -432,6 +440,7 @@ export default function Admin({ onBack }) {
   // WhatsApp Quick Closer Generator State
   const [waStudentName, setWaStudentName] = useState('');
   const [waLang, setWaLang] = useState('es');
+  const [waIntent, setWaIntent] = useState('standard'); // 'standard' | 'barter' | 'solidarity'
   const [waSubjectId, setWaSubjectId] = useState('calculo');
   const [waCurrency, setWaCurrency] = useState('CLP');
   const [waMode, setWaMode] = useState('online');
@@ -681,9 +690,45 @@ export default function Admin({ onBack }) {
   const waG4 = getGroupPricing(waFinalHourly, 4, waCurrency);
   const waGroupHourly = waG3.perStudentHourly;
 
-  const generatedWhatsAppMessage =
-    waLang === 'es'
-      ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander (Geofísico U. de Chile y Doble M.Sc. en Ingeniería en Europa).
+  let generatedWhatsAppMessage = '';
+  if (waIntent === 'barter') {
+    generatedWhatsAppMessage =
+      waLang === 'es'
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander (Geofísico U. de Chile y Doble M.Sc. en Alemania).
+
+¡Me parece una excelente iniciativa! En mi plataforma tengo un espacio dedicado al trueque porque creo firmemente en el intercambio directo de habilidades y talentos.
+
+Acepto con gusto música, producción o instrumentos, videojuegos, sesiones de psicología, diseño u otros talentos creativos.
+
+🔬 Cuéntame qué materia o examen estás preparando (puedes ver mis simuladores interactivos aquí: ${selectedWaSubject.simUrl}) y qué propuesta de trueque tienes en mente. ¿Te tinca que coordinemos una videollamada breve de 10 minutos por Meet para acordar un intercambio justo para ambos?`
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander (Geophysicist & Double M.Sc. Engineer).
+
+I love this initiative! On my platform I actively welcome barter and skill exchanges because scientific education should be flexible and human.
+
+I gladly accept music production/instruments, video games, psychology sessions, design, or other creative crafts.
+
+🔬 Tell me which course you are preparing for (feel free to check out my interactive simulators here: ${selectedWaSubject.simUrl}) and what exchange you have in mind. Would you like to hop on a quick 10-minute call to agree on a fair exchange?`;
+  } else if (waIntent === 'solidarity') {
+    generatedWhatsAppMessage =
+      waLang === 'es'
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander. Primero que todo, te agradezco mucho la honestidad y confianza al escribirme.
+
+Quiero decirte con total claridad: la falta de dinero nunca debe ser una barrera para que aprendas física o matemáticas con rigor ni para que apruebes tu universidad. Totalmente podemos trabajar en ello y encontrar una solución juntos.
+
+Cuéntame qué materia estás cursando, qué control o examen tienes cerca y cuál es tu situación actual: podemos coordinar un acuerdo solidario o una beca parcial adaptada a lo que realmente puedas aportar.
+
+¿Qué horario te acomoda hoy o mañana para conversar 10 minutos con calma por Google Meet?`
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander. First of all, thank you for your honesty and trust in reaching out.
+
+I want to be crystal clear: running short on funds should never stop you from mastering physics and calculus, nor from passing your exams. We can definitely work something out together.
+
+Tell me which subject you are taking, which exam is coming up, and what your current situation looks like: we can arrange a flexible solidarity agreement or partial scholarship that fits your reality.
+
+What time works best for a calm 10-minute chat on Google Meet today or tomorrow?`;
+  } else {
+    generatedWhatsAppMessage =
+      waLang === 'es'
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel Santander (Geofísico U. de Chile y Doble M.Sc. en Ingeniería en Europa).
 
 Para *${selectedWaSubject.nameEs}*, trabajamos directo con tus guías y controles/exámenes anteriores usando pizarra vectorial Miro (te llevas el PDF en alta resolución al terminar cada clase) y mi método PIAD™.
 
@@ -696,8 +741,10 @@ ${selectedWaSubject.simUrl}
 • *Con +2 colegas (3 personas, -${waG3.studentDiscountPct}% c/u):* ${formatMoney(waG3.perStudentHourly, waCurrency)}/h cada uno (Total: ${formatMoney(waG3.totalGroupHourly, waCurrency)}/h)
 • *Con +3 colegas (4 personas, -${waG4.studentDiscountPct}% c/u):* ${formatMoney(waG4.perStudentHourly, waCurrency)}/h cada uno (Total: ${formatMoney(waG4.totalGroupHourly, waCurrency)}/h)
 
+*(Nota: También acepto trueques de música/psicología/juegos o acuerdos solidarios si estás en una situación económica difícil).*
+
 Si quieres, conectemos *15 minutos gratis* hoy o mañana por Google Meet para ver tu temario y armar el plan. ¿Qué horario te acomoda?`
-      : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander (Geophysicist & Double M.Sc. Engineer).
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel Santander (Geophysicist & Double M.Sc. Engineer).
 
 For *${selectedWaSubject.nameEn}*, we work directly with your lecture notes (Skripte) and past exams on a collaborative Miro whiteboard (you receive the full vector PDF notes right after every session).
 
@@ -710,7 +757,10 @@ ${selectedWaSubject.simUrl}
 • *With +2 classmates (3 students, -${waG3.studentDiscountPct}% each):* ${formatMoney(waG3.perStudentHourly, waCurrency)}/h per student (${formatMoney(waG3.totalGroupHourly, waCurrency)}/h total)
 • *With +3 classmates (4 students, -${waG4.studentDiscountPct}% each):* ${formatMoney(waG4.perStudentHourly, waCurrency)}/h per student (${formatMoney(waG4.totalGroupHourly, waCurrency)}/h total)
 
+*(Note: I also gladly accept barter/skill exchange or solidarity arrangements if you are facing financial hardship).*
+
 Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today or tomorrow to review your syllabus and exam date?`;
+  }
 
   const flyerTargetUrl = `${BASE_SITE_URL}?src=${encodeURIComponent(customFlyer.qrTag || 'flyer')}`;
   const flyerQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=6&data=${encodeURIComponent(flyerTargetUrl)}`;
@@ -1141,6 +1191,45 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
               <div className="space-y-3 text-xs">
                 <div>
+                  <label className="block font-mono text-slate-400 mb-1">Tipo de Consulta / Propósito</label>
+                  <div className="grid grid-cols-3 gap-1.5 font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setWaIntent('standard')}
+                      className={`py-2 px-2 rounded-xl border text-[11px] font-bold cursor-pointer text-center transition-all ${
+                        waIntent === 'standard'
+                          ? 'bg-sky-600/20 border-sky-500 text-sky-300'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      💰 Tarifas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setWaIntent('barter')}
+                      className={`py-2 px-2 rounded-xl border text-[11px] font-bold cursor-pointer text-center transition-all ${
+                        waIntent === 'barter'
+                          ? 'bg-amber-500/20 border-amber-500 text-amber-300'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      🔄 Trueque
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setWaIntent('solidarity')}
+                      className={`py-2 px-2 rounded-xl border text-[11px] font-bold cursor-pointer text-center transition-all ${
+                        waIntent === 'solidarity'
+                          ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      🌱 Solidario
+                    </button>
+                  </div>
+                </div>
+
+                <div>
                   <label className="block font-mono text-slate-400 mb-1">Nombre del Alumno (opcional)</label>
                   <input
                     type="text"
@@ -1233,7 +1322,15 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                       Vista Previa del Mensaje de WhatsApp
                     </span>
                     <div className="text-[11px] font-mono text-slate-400">
-                      1h: <strong>{formatMoney(waFinalHourly, waCurrency)}</strong> • Pack 8h (-15%): <strong>{formatMoney(waPackHourly, waCurrency)}/h</strong> • Grupo (-30%): <strong>{formatMoney(waGroupHourly, waCurrency)}/h</strong>
+                      {waIntent === 'barter' && (
+                        <span className="text-amber-300 font-semibold">🔄 Enfoque: Propuesta de trueque & intercambio de habilidades</span>
+                      )}
+                      {waIntent === 'solidarity' && (
+                        <span className="text-emerald-300 font-semibold">🌱 Enfoque: Dificultades económicas / Acuerdo solidario y beca</span>
+                      )}
+                      {waIntent === 'standard' && (
+                        <>1h: <strong>{formatMoney(waFinalHourly, waCurrency)}</strong> • Pack 8h (-15%): <strong>{formatMoney(waPackHourly, waCurrency)}/h</strong> • Grupo (-30%): <strong>{formatMoney(waGroupHourly, waCurrency)}/h</strong></>
+                      )}
                     </div>
                   </div>
                   <button

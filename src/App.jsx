@@ -597,19 +597,19 @@ export default function App() {
     e.preventDefault();
 
     const subject = encodeURIComponent(
-      `[STEM Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
+      `[Open Inquiry Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
     );
     const bodyText = 
 `Hi Daniel,
 
-I am requesting a STEM Mentorship session.
+I am requesting an Open Inquiry Mentorship session.
 
 --- STUDENT DETAILS ---
 Name: ${bookingData.name}
 Email: ${bookingData.email}
 Phone / WhatsApp: ${bookingData.phone || 'Not provided'}
 University / School: ${bookingData.university}
-Selected Course / Module: ${bookingData.courseCode || 'Diagnostic / General STEM'}
+Selected Course / Module: ${bookingData.courseCode || 'Diagnostic / General Inquiry'}
 Type of Session: ${bookingData.sessionType}
 Delivery Mode: ${bookingData.deliveryMode}
 Language Preference: ${bookingData.languagePref}
@@ -618,7 +618,7 @@ Target Exam Date / Deadline: ${bookingData.targetDate || 'Not specified'}
 --- QUESTIONS / BOTTLENECKS ---
 ${bookingData.notes || 'None provided'}
 
-Sent from STEM Mentorship Portal`;
+Sent from Open Inquiry Mentorship Portal`;
 
     const mailto = `mailto:danisantander.urrutia@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
     setLastMailtoUrl(mailto);
@@ -667,9 +667,14 @@ Sent from STEM Mentorship Portal`;
             <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center font-mono text-sm font-bold group-hover:bg-white/20 transition-all shrink-0">
               Φ
             </div>
-            <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap">
-              DANIEL SANTANDER
-            </span>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap leading-tight">
+                DANIEL SANTANDER
+              </span>
+              <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-tight">
+                Open Inquiry Mentorship
+              </span>
+            </div>
           </button>
 
           {/* Pill Navigation Links */}
@@ -844,20 +849,26 @@ Sent from STEM Mentorship Portal`;
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>
                       {lang === 'en'
-                        ? 'DANIEL SANTANDER • GEOPHYSICIST & DOUBLE M.SC. ENGINEER • HANNOVER & ONLINE'
-                        : 'DANIEL SANTANDER • GEOFÍSICO E INGENIERO DOBLE M.SC. • HANNOVER Y ONLINE'}
+                        ? 'OPEN INQUIRY MENTORSHIP • DANIEL SANTANDER • DOUBLE M.SC. & GEOPHYSICIST'
+                        : 'OPEN INQUIRY MENTORSHIP • DANIEL SANTANDER • DOBLE M.SC. Y GEOFÍSICO'}
                     </span>
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-5">
                     {lang === 'en'
-                      ? 'STEM Mentoring for your university exams'
-                      : 'Mentoría STEM para tus exámenes universitarios'}
+                      ? 'From sensory intuition to exact science: master higher physics & math'
+                      : 'De la intuición sensible a la ciencia exacta: domina la física y el cálculo'}
                   </h1>
 
-                  <p className="text-base sm:text-lg text-slate-300 font-normal max-w-3xl mx-auto mb-8 leading-relaxed font-sans">
+                  <p className="text-base sm:text-lg text-slate-300 font-normal max-w-3xl mx-auto mb-3 leading-relaxed font-sans">
                     {lang === 'en'
-                      ? 'Significantly improve your grades through 1-on-1 or group classes with a Double Master in Science & Geophysicist, for university and IB students.'
+                      ? 'Learn to see physical phenomena through direct observation before formulas, designing scientific code and sovereign criteria under the PIAD Method™ (Open & Digital Inquiry).'
+                      : 'Aprende a ver los fenómenos mediante la observación directa antes de las fórmulas, diseñando código propio y criterio autónomo bajo el Método PIAD™ (Indagación Abierta y Digital).'}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-400 font-normal max-w-2xl mx-auto mb-8 leading-relaxed font-sans">
+                    {lang === 'en'
+                      ? 'Significantly improve your grades through 1-on-1 or group mentoring with a Double Master in Science & Geophysicist, tailored for university students and IB candidates.'
                       : 'Mejora considerablemente tus calificaciones mediante clases individuales o grupales con un Doble Máster en Ciencias y Geofísico, para estudiantes universitarios y de Bachillerato Internacional (IB).'}
                   </p>
 
@@ -2534,7 +2545,7 @@ Sent from STEM Mentorship Portal`;
                   )}
 
                   <a
-                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'STEM Mentorship'}. My name is ${bookingData.name}.`)}`}
+                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Inquiry Mentorship'}. My name is ${bookingData.name}.`)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5"

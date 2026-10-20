@@ -1,6 +1,7 @@
-# Φ GeoPhysics & STEM Mentorship Web Hub
+# Φ Open Inquiry Mentorship & Computational Geophysics
+## Daniel Santander • Double M.Sc. & Geophysicist
 
-An interactive, responsive portfolio, teaching sandbox, and booking portal for a **STEM Mentor & Geophysicist based in Germany**.
+An interactive, responsive portfolio, teaching sandbox, and booking portal for **Open Inquiry Mentorship**: from sensory intuition to exact science under the **PIAD Method™**.
 
 Built following rigorous pedagogical and computational geophysics standards.
 

@@ -21,11 +21,16 @@ import {
   Target,
   Award,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Printer,
+  FileText,
+  X,
+  Download,
+  Orbit
 } from 'lucide-react';
 
 // ============================================================================
-// CATALOG OF 6 CLASSICAL PHYSICS & ENGINEERING LAB PROBLEMS
+// CATALOG OF 8 CLASSICAL PHYSICS & ENGINEERING LAB PROBLEMS
 // ============================================================================
 export const LAB_PROBLEMS = [
   {
@@ -664,6 +669,220 @@ export const LAB_PROBLEMS = [
         '3. Solve: sin(θ_c) = v₁ / v₂ = 2.0 / 4.0 = 0.50  ⇒  θ_c = arcsin(0.50) = 30.0°.'
       ]
     }
+  },
+  {
+    id: 'vector_calculus',
+    courseId: 'klausur',
+    badgeEs: 'Cálculo Vectorial & Höhere Mathematik',
+    badgeEn: 'Vector Calculus & Higher Mathematics',
+    titleEs: 'Campos Vectoriales, Rotacional y Teorema de Green / Stokes',
+    titleEn: 'Vector Fields, Curl & Green’s / Stokes’ Theorem',
+    subtitleEs: 'El pilar de HM-II y electromagnetismo: campos conservativos (∇×F=0) vs. con vorticidad, circulación cerrada ∮ F·dr y flujo.',
+    subtitleEn: 'The core of HM-II & electromagnetism: conservative (∇×F=0) vs. vortex fields, closed line circulation ∮ F·dr, and flux.',
+    color: '#6366F1',
+    icon: Compass,
+    defaults: { omega: 1.5, kDiv: 0.0, radius: 2.2, particles: 20 },
+    sliders: [
+      { key: 'omega', labelEs: 'Vorticidad / Rotacional (ω)', labelEn: 'Vorticity / Curl (ω)', min: -3.0, max: 3.0, step: 0.5, unit: ' rad/s' },
+      { key: 'kDiv', labelEs: 'Fuerza de Divergencia (k)', labelEn: 'Divergence Source (k)', min: -2.0, max: 2.0, step: 0.5, unit: ' s⁻¹' },
+      { key: 'radius', labelEs: 'Radio del Bucle C (R)', labelEn: 'Loop Radius (R)', min: 1.0, max: 3.5, step: 0.25, unit: ' m' },
+      { key: 'particles', labelEs: 'Trazadores en flujo', labelEn: 'Flow Tracer Particles', min: 10, max: 40, step: 5, unit: '' }
+    ],
+    presets: [
+      {
+        labelEs: 'Campo Conservativo Puro (ω = 0, ∮ F·dr = 0)',
+        labelEn: 'Pure Conservative Field (ω = 0, ∮ F·dr = 0)',
+        values: { omega: 0.0, kDiv: 1.0, radius: 2.0, particles: 25 }
+      },
+      {
+        labelEs: 'Vórtice Rígido Puro (∇×F = 2ω, Circulación Máxima)',
+        labelEn: 'Pure Rigid Vortex (∇×F = 2ω, Max Circulation)',
+        values: { omega: 2.0, kDiv: 0.0, radius: 2.5, particles: 30 }
+      },
+      {
+        labelEs: 'Sumidero Espiral (Divergencia < 0 + Giro)',
+        labelEn: 'Spiral Sink (Negative Divergence + Spin)',
+        values: { omega: 1.5, kDiv: -1.2, radius: 2.2, particles: 35 }
+      }
+    ],
+    algebraSection: {
+      titleEs: 'Planteamiento Algebraico: Campo F(x,y) y Matriz Jacobiana',
+      titleEn: 'Algebraic Formulation: Field F(x,y) & Jacobian Matrix',
+      formulas: [
+        {
+          labelEs: '1. Descomposición del campo vectorial en componentes P y Q:',
+          labelEn: '1. Vector field decomposition into P and Q components:',
+          eq: 'F⃗(x, y) = P(x, y) î + Q(x, y) ĵ = (k·x - ω·y) î + (ω·x + k·y) ĵ'
+        },
+        {
+          labelEs: '2. Matriz Jacobiana J_F del campo vectorial 2×2:',
+          labelEn: '2. 2×2 Jacobian Matrix J_F of the vector field:',
+          eq: 'J_F = [ ∂P/∂x   ∂P/∂y ] = [  k   -ω ]   =  k·I  +  ω·[  0  -1 ]\n      [ ∂Q/∂x   ∂Q/∂y ]   [  ω    k ]              [  1   0 ]'
+        },
+        {
+          labelEs: '3. Rotacional (Vorticidad) y Divergencia locales:',
+          labelEn: '3. Local Curl (Vorticity) and Divergence:',
+          eq: 'rot(F⃗) = (∂Q/∂x - ∂P/∂y) k̂ = 2ω k̂    ;    div(F⃗) = ∂P/∂x + ∂Q/∂y = 2k'
+        }
+      ]
+    },
+    calculusSection: {
+      titleEs: 'Teorema de Green y Circulación por Cálculo Integral',
+      titleEn: 'Green’s Theorem & Circulation via Integral Calculus',
+      formulas: [
+        {
+          labelEs: '1. Teorema de Green en el plano (Integral de línea ↔ Integral doble de área):',
+          labelEn: '1. Green’s Theorem in the plane (Line integral ↔ Double area integral):',
+          eq: '∮_C F⃗ · d r⃗ = ∮_C (P dx + Q dy) = ∬_D (∂Q/∂x - ∂P/∂y) dA = ∬_D (2ω) dA = 2ω · Área(D)'
+        },
+        {
+          labelEs: '2. Verificación por parametrización explícita r⃗(t) = (R cos t, R sin t):',
+          labelEn: '2. Verification by explicit parametrization r⃗(t) = (R cos t, R sin t):',
+          eq: '∮_C F⃗ · d r⃗ = ∫₀²ᵖⁱ [ -ω R sin(t) (-R sin t) + ω R cos(t) (R cos t) ] dt = ∫₀²ᵖⁱ ω R² dt = 2π R² ω'
+        },
+        {
+          labelEs: '3. Criterio de independencia de la trayectoria (Campo Conservativo):',
+          labelEn: '3. Path independence criterion (Conservative Field):',
+          eq: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (para cualquier curva cerrada simple C)'
+        }
+      ]
+    },
+    exercise: {
+      questionEs:
+        'Dado el campo vectorial F⃗(x, y) = (-3y, 3x), calcula la circulación cerrada ∮_C F⃗·dr a lo largo de una circunferencia de radio R = 2.0 m orientada en sentido antihorario, aplicando el Teorema de Green.',
+      questionEn:
+        'Given the vector field F⃗(x, y) = (-3y, 3x), calculate the closed line circulation ∮_C F⃗·dr along a circle of radius R = 2.0 m oriented counterclockwise, applying Green’s Theorem.',
+      presetValues: { omega: 3.0, kDiv: 0.0, radius: 2.0, particles: 25 },
+      options: [
+        { id: 'a', text: '∮ F·dr = 24π ≈ 75.40 J', correct: true },
+        { id: 'b', text: '∮ F·dr = 0 J (campo conservativo)', correct: false },
+        { id: 'c', text: '∮ F·dr = 12π ≈ 37.70 J', correct: false },
+        { id: 'd', text: '∮ F·dr = 6π ≈ 18.85 J', correct: false }
+      ],
+      hintEs:
+        'Aplica el Teorema de Green: ∮_C F·dr = ∬_D (∂Q/∂x - ∂P/∂y) dA. Aquí P = -3y y Q = 3x. El rotacional escalar es constante: ∂Q/∂x - ∂P/∂y = 3 - (-3) = 6.',
+      hintEn:
+        'Apply Green’s Theorem: ∮_C F·dr = ∬_D (∂Q/∂x - ∂P/∂y) dA. Here P = -3y and Q = 3x. The scalar curl is constant: ∂Q/∂x - ∂P/∂y = 3 - (-3) = 6.',
+      solutionStepsEs: [
+        '1. Identificamos P(x,y) = -3y y Q(x,y) = 3x.',
+        '2. Calculamos el rotacional escalar: ∂Q/∂x - ∂P/∂y = 3 - (-3) = 6.',
+        '3. Por el Teorema de Green: ∮_C F·dr = ∬_D 6 dA = 6 · Área(D) = 6 · (π R²).',
+        '4. Sustituyendo R = 2.0: ∮_C F·dr = 6 · π · (2)² = 24π ≈ 75.40 J.'
+      ],
+      solutionStepsEn: [
+        '1. Identify P(x,y) = -3y and Q(x,y) = 3x.',
+        '2. Compute scalar curl: ∂Q/∂x - ∂P/∂y = 3 - (-3) = 6.',
+        '3. By Green’s Theorem: ∮_C F·dr = ∬_D 6 dA = 6 · Area(D) = 6 · (π R²).',
+        '4. Substituting R = 2.0: ∮_C F·dr = 6 · π · (2)² = 24π ≈ 75.40 J.'
+      ]
+    }
+  },
+  {
+    id: 'relativity',
+    courseId: 'mechanics',
+    badgeEs: 'Relatividad General & Astrofísica',
+    badgeEn: 'General Relativity & Astrophysics',
+    titleEs: 'Órbitas Geodésicas de Schwarzschild y Precesión del Perihelio',
+    titleEn: 'Schwarzschild Geodesic Orbits & Perihelion Precession',
+    subtitleEs: 'El triunfo histórico de Einstein: potencial efectivo relativista V_eff(r) con término cúbico -GM L²/(c² r³) que rompe la elipse cerrada y produce la roseta cósmica.',
+    subtitleEn: 'Einstein’s historical triumph: Schwarzschild effective potential V_eff(r) with cubic term -GM L²/(c² r³) breaking closed Keplerian ellipses into a precessing cosmic rosette.',
+    color: '#EC4899',
+    icon: Orbit,
+    defaults: { mass: 1.0, eccentricity: 0.5, grFactor: 1.5, semiMajor: 2.8 },
+    sliders: [
+      { key: 'grFactor', labelEs: 'Factor Relativista (RG)', labelEn: 'Relativistic Factor (GR)', min: 0.0, max: 3.0, step: 0.25, unit: '×' },
+      { key: 'eccentricity', labelEs: 'Excentricidad Orbital (e)', labelEn: 'Orbital Eccentricity (e)', min: 0.1, max: 0.75, step: 0.05, unit: '' },
+      { key: 'mass', labelEs: 'Masa Central (M/M☉)', labelEn: 'Central Mass (M/M☉)', min: 0.5, max: 3.0, step: 0.25, unit: ' M☉' },
+      { key: 'semiMajor', labelEs: 'Semieje Mayor (a)', labelEn: 'Semi-Major Axis (a)', min: 1.8, max: 4.5, step: 0.2, unit: ' UA' }
+    ],
+    presets: [
+      {
+        labelEs: 'Newton Puro Clásico (RG = 0, Elipse Cerrada Perenne)',
+        labelEn: 'Pure Classical Newton (GR = 0, Closed Kepler Ellipse)',
+        values: { mass: 1.0, eccentricity: 0.5, grFactor: 0.0, semiMajor: 3.0 }
+      },
+      {
+        labelEs: 'Precesión de Mercurio Relativista (RG = 1.0, Avance Anómalo)',
+        labelEn: 'Mercury Relativistic Precession (GR = 1.0, Anomalous Advance)',
+        values: { mass: 1.0, eccentricity: 0.45, grFactor: 1.0, semiMajor: 2.8 }
+      },
+      {
+        labelEs: 'Campo Fuerte / Agujero Negro (RG = 2.5, Roseta Pronunciada)',
+        labelEn: 'Strong Gravity / Black Hole (GR = 2.5, Sharp Rosette)',
+        values: { mass: 2.0, eccentricity: 0.65, grFactor: 2.5, semiMajor: 2.2 }
+      }
+    ],
+    algebraSection: {
+      titleEs: 'Álgebra de Fuerzas Centrales y Ecuación de Binet',
+      titleEn: 'Central Force Algebra & Binet’s Equation',
+      formulas: [
+        {
+          labelEs: '1. Conservación de energía E y momento angular L:',
+          labelEn: '1. Conservation of energy E and angular momentum L:',
+          eq: 'L = r² · (dθ/dt) = cte     ;     E = ½ m (dr/dt)² + V_eff(r) = cte'
+        },
+        {
+          labelEs: '2. Potencial Efectivo de Schwarzschild (Término cúbico relativista):',
+          labelEn: '2. Schwarzschild Effective Potential (Cubic relativistic term):',
+          eq: 'V_eff(r) = - (G·M·m) / r  +  L² / (2m·r²)  -  (G·M·L²) / (c²·m·r³)'
+        },
+        {
+          labelEs: '3. Ecuación de Binet modificada en variable u = 1/r:',
+          labelEn: '3. Modified Binet equation in variable u = 1/r:',
+          eq: 'd²u / dθ² + u = (G·M·m²) / L²  +  (3·G·M / c²) · u²   (El término u² rompe la simetría de Kepler)'
+        }
+      ]
+    },
+    calculusSection: {
+      titleEs: 'Cálculo Variacional de Geodésicas e Integración Perturbativa',
+      titleEn: 'Variational Geodesics & Perturbative Integration',
+      formulas: [
+        {
+          labelEs: '1. Métrica de Schwarzschild y Principio Variacional de Acción Geodésica:',
+          labelEn: '1. Schwarzschild Metric & Variational Geodesic Action Principle:',
+          eq: 'ds² = - (1 - 2GM/c²r) c² dt² + (1 - 2GM/c²r)⁻¹ dr² + r² dθ²     ;     δ ∫ ds = 0'
+        },
+        {
+          labelEs: '2. Desplazamiento angular del perihelio por órbita (Teorema de Perturbaciones):',
+          labelEn: '2. Perihelion angular shift per orbit (Perturbation Theory):',
+          eq: 'Δφ = ∮ (dθ/du) du - 2π ≈ (6π · G · M) / (c² · a · (1 - e²))'
+        },
+        {
+          labelEs: '3. Límite Clásico Newtoniano (Velocidad de la luz c → ∞):',
+          labelEn: '3. Classical Newtonian Limit (Speed of light c → ∞):',
+          eq: 'lim_{c → ∞} Δφ = 0   ⇒   Órbita perfectamente cerrada (Teorema de Bertrand: sólo V~1/r y V~r² cierran)'
+        }
+      ]
+    },
+    exercise: {
+      questionEs:
+        'En la órbita de un planeta con semieje mayor a y excentricidad e alrededor de una estrella de masa M, la corrección relativista predice un avance del perihelio de Δφ = 6π·G·M / [c²·a·(1 - e²)] radianes por revolución. Si la excentricidad aumenta de e = 0.2 a e = 0.6 manteniendo a y M constantes, ¿por qué factor se multiplica la precesión Δφ?',
+      questionEn:
+        'In a planet’s orbit with semi-major axis a and eccentricity e around a star of mass M, the relativistic correction yields a perihelion advance of Δφ = 6π·G·M / [c²·a·(1 - e²)] rad/rev. If the eccentricity increases from e = 0.2 to e = 0.6 keeping a and M constant, by what factor is the precession Δφ multiplied?',
+      presetValues: { mass: 1.0, eccentricity: 0.6, grFactor: 1.5, semiMajor: 2.8 },
+      options: [
+        { id: 'a', text: 'Factor = 1.50 (Aumenta un 50%)', correct: true },
+        { id: 'b', text: 'Factor = 1.00 (No depende de e)', correct: false },
+        { id: 'c', text: 'Factor = 0.67 (Disminuye)', correct: false },
+        { id: 'd', text: 'Factor = 3.00 (Se triplica)', correct: false }
+      ],
+      hintEs:
+        'Nota que Δφ es inversamente proporcional a (1 - e²). Calcula (1 - 0.2²) y (1 - 0.6²) y evalúa el cociente (1 - 0.2²) / (1 - 0.6²).',
+      hintEn:
+        'Note that Δφ is inversely proportional to (1 - e²). Calculate (1 - 0.2²) and (1 - 0.6²) and evaluate the ratio (1 - 0.2²) / (1 - 0.6²).',
+      solutionStepsEs: [
+        '1. La fórmula indica: Δφ ∝ 1 / (1 - e²).',
+        '2. Para e₁ = 0.2: (1 - e₁²) = 1 - 0.04 = 0.96.',
+        '3. Para e₂ = 0.6: (1 - e₂²) = 1 - 0.36 = 0.64.',
+        '4. Cociente de precesión: Δφ₂ / Δφ₁ = (1 - e₁²) / (1 - e₂²) = 0.96 / 0.64 = 1.50 (aumenta un 50%).'
+      ],
+      solutionStepsEn: [
+        '1. The formula states: Δφ ∝ 1 / (1 - e²).',
+        '2. For e₁ = 0.2: (1 - e₁²) = 1 - 0.04 = 0.96.',
+        '3. For e₂ = 0.6: (1 - e₂²) = 1 - 0.36 = 0.64.',
+        '4. Precession ratio: Δφ₂ / Δφ₁ = (1 - e₁²) / (1 - e₂²) = 0.96 / 0.64 = 1.50 (increases by 50%).'
+      ]
+    }
   }
 ];
 
@@ -731,6 +950,7 @@ export default function PhysicsLab({
   const [selectedOption, setSelectedOption] = useState(null);
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
+  const [showStudySheet, setShowStudySheet] = useState(false);
 
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -974,8 +1194,57 @@ export default function PhysicsLab({
       };
     }
 
-    // waves_geophysics
-    const { theta1, v1, v2 } = safeParams;
+    if (selectedId === 'vector_calculus') {
+      const { omega = 1.5, kDiv = 0.0, radius = 2.2 } = safeParams;
+      const curlVal = 2 * omega;
+      const divVal = 2 * kDiv;
+      const area = Math.PI * radius * radius;
+      const circulation = curlVal * area;
+      const isConservative = Math.abs(curlVal) < 0.01;
+      return {
+        items: [
+          { label: '∇×F⃗ (Rotacional)', value: `${curlVal.toFixed(2)} k̂` },
+          { label: '∇·F⃗ (Divergencia)', value: `${divVal.toFixed(2)}` },
+          { label: '∮ F⃗·dr⃗ (Circulación)', value: `${circulation.toFixed(2)} J` },
+          { label: 'Área del Bucle (πR²)', value: `${area.toFixed(2)} m²` }
+        ],
+        status: isConservative
+          ? lang === 'en'
+            ? 'Conservative Field (∇×F=0, ∮F·dr=0)'
+            : 'Campo Conservativo (∇×F=0, ∮F·dr=0)'
+          : lang === 'en'
+          ? `Vortex Active (Circulation = ${circulation.toFixed(1)} J)`
+          : `Vórtice Activo (Circulación = ${circulation.toFixed(1)} J)`,
+        raw: { omega, kDiv, radius, curlVal, divVal, circulation, area }
+      };
+    }
+
+    if (selectedId === 'relativity') {
+      const { mass = 1.0, eccentricity = 0.5, grFactor = 1.5, semiMajor = 2.8 } = safeParams;
+      const rMin = semiMajor * (1 - eccentricity);
+      const rMax = semiMajor * (1 + eccentricity);
+      const deltaPhiDeg = grFactor * ((6 * Math.PI * mass) / (semiMajor * (1 - eccentricity * eccentricity))) * (180 / Math.PI) * 0.08;
+      const isNewtonian = grFactor < 0.01;
+      return {
+        items: [
+          { label: 'Δφ (Precesión / órbita)', value: isNewtonian ? '0.00° (Newton)' : `${deltaPhiDeg.toFixed(2)}°` },
+          { label: 'Perihelio (r_mín)', value: `${rMin.toFixed(2)} UA` },
+          { label: 'Afelio (r_máx)', value: `${rMax.toFixed(2)} UA` },
+          { label: 'Excentricidad (e)', value: `${eccentricity.toFixed(2)}` }
+        ],
+        status: isNewtonian
+          ? lang === 'en'
+            ? 'Closed Kepler Ellipse (Newtonian Gravity)'
+            : 'Elipse Cerrada Perenne (Gravedad Newtoniana)'
+          : lang === 'en'
+          ? `Relativistic Precession Active (Δφ = ${deltaPhiDeg.toFixed(1)}°/rev)`
+          : `Precesión Relativista Activa (Δφ = ${deltaPhiDeg.toFixed(1)}°/rev)`,
+        raw: { mass, eccentricity, grFactor, semiMajor, rMin, rMax, deltaPhiDeg }
+      };
+    }
+
+    // Default: waves_geophysics
+    const { theta1 = 30, v1 = 2.0, v2 = 3.5 } = safeParams;
     const rad1 = (theta1 * Math.PI) / 180;
     const sinTheta2 = (v2 / v1) * Math.sin(rad1);
     const isTIR = sinTheta2 >= 1.0;
@@ -1690,6 +1959,290 @@ export default function PhysicsLab({
         showDCL ? (isTIR ? 'Onda Crítica (90°)' : `k⃗_refr (θ₂=${Number(theta2).toFixed(0)}°)`) : ''
       );
     }
+
+    // ------------------------------------------------------------------------
+    // 7. VECTOR CALCULUS: CURL, DIVERGENCE & GREEN'S / STOKES' THEOREM
+    // ------------------------------------------------------------------------
+    if (selectedId === 'vector_calculus') {
+      const { omega = 1.5, kDiv = 0.0, radius = 2.2, particles = 20 } = safeParams;
+      const { curlVal = 3.0, circulation = 45.6 } = telemetry.raw;
+      const midX = W / 2;
+      const midY = H / 2;
+      const scale = 48; // pixels per unit meter
+
+      // Draw subtle axes
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, midY);
+      ctx.lineTo(W, midY);
+      ctx.moveTo(midX, 0);
+      ctx.lineTo(midX, H);
+      ctx.stroke();
+
+      // Draw vector field arrows on a grid
+      const gridStep = 0.65;
+      for (let gx = -4.5; gx <= 4.5; gx += gridStep) {
+        for (let gy = -2.6; gy <= 2.6; gy += gridStep) {
+          const fx = kDiv * gx - omega * gy;
+          const fy = omega * gx + kDiv * gy;
+          const mag = Math.hypot(fx, fy);
+          if (mag < 0.05) continue;
+
+          const px = midX + gx * scale;
+          const py = midY - gy * scale; // screen Y inverted
+
+          const arrowLen = Math.min(22, Math.max(6, mag * 5));
+          const dirX = fx / mag;
+          const dirY = -fy / mag;
+
+          const endX = px + dirX * arrowLen;
+          const endY = py + dirY * arrowLen;
+
+          const hue = Math.abs(omega) > 0.1 ? 240 : 160;
+          ctx.strokeStyle = `hsla(${hue}, 70%, 65%, 0.45)`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+
+          const aAngle = Math.atan2(dirY, dirX);
+          ctx.fillStyle = `hsla(${hue}, 70%, 65%, 0.55)`;
+          ctx.beginPath();
+          ctx.moveTo(endX, endY);
+          ctx.lineTo(endX - 4 * Math.cos(aAngle - Math.PI / 6), endY - 4 * Math.sin(aAngle - Math.PI / 6));
+          ctx.lineTo(endX - 4 * Math.cos(aAngle + Math.PI / 6), endY - 4 * Math.sin(aAngle + Math.PI / 6));
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      // Draw Closed Integration Curve C (Circle of radius R)
+      const rPix = radius * scale;
+      ctx.save();
+      ctx.strokeStyle = '#FBBF24';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(midX, midY, rPix, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Shaded area D inside C
+      ctx.fillStyle = Math.abs(curlVal) > 0.05 ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.12)';
+      ctx.fill();
+
+      // Label Curve C and Area D
+      ctx.fillStyle = '#FBBF24';
+      ctx.font = 'bold 11px "JetBrains Mono", monospace';
+      ctx.fillText(`Curva C (R=${radius}m)`, midX + rPix * 0.72, midY - rPix * 0.72 - 6);
+      ctx.fillStyle = '#C7D2FE';
+      ctx.fillText(`Área D: ∬(∇×F) dA = ${circulation.toFixed(1)} J`, midX - 95, midY + 4);
+      ctx.restore();
+
+      // Animated tracer particles following flow
+      const numP = Math.min(40, Math.max(10, particles));
+      for (let i = 0; i < numP; i++) {
+        const seedAngle = (i * ((Math.PI * 2) / numP)) + simTime * omega * 0.5;
+        const seedRadius = (0.3 + (i % 5) * 0.55) * radius * (kDiv < 0 ? Math.max(0.2, 1 - (simTime * 0.08) % 1) : 1);
+        const ppx = midX + Math.cos(seedAngle) * seedRadius * scale;
+        const ppy = midY - Math.sin(seedAngle) * seedRadius * scale;
+
+        ctx.fillStyle = i % 2 === 0 ? '#38BDF8' : '#A78BFA';
+        ctx.beginPath();
+        ctx.arc(ppx, ppy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // DCL / VECTORS OVERLAY: Highlight line element dr, vector F, and tangent projection
+      if (showDCL) {
+        const tAngle = (simTime * 0.8) % (Math.PI * 2);
+        const px = midX + rPix * Math.cos(tAngle);
+        const py = midY - rPix * Math.sin(tAngle);
+
+        const txScreen = -Math.sin(tAngle);
+        const tyScreen = -Math.cos(tAngle);
+
+        const mx = radius * Math.cos(tAngle);
+        const my = radius * Math.sin(tAngle);
+        const fx = kDiv * mx - omega * my;
+        const fy = omega * mx + kDiv * my;
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        drawArrow(ctx, px, py, px + txScreen * 45, py + tyScreen * 45, '#F59E0B', 'd r⃗ (tangente)', 2.5);
+
+        const fScreenX = fx * 18;
+        const fScreenY = -fy * 18;
+        drawArrow(ctx, px, py, px + fScreenX, py + fScreenY, '#38BDF8', 'F⃗(x,y)', 2.5);
+
+        if (Math.abs(omega) > 0.05) {
+          ctx.save();
+          ctx.translate(midX, midY);
+          ctx.rotate(-simTime * omega);
+          ctx.strokeStyle = '#EC4899';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(-18, 0);
+          ctx.lineTo(18, 0);
+          ctx.moveTo(0, -18);
+          ctx.lineTo(0, 18);
+          ctx.stroke();
+          ctx.fillStyle = '#EC4899';
+          ctx.beginPath();
+          ctx.arc(0, 0, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          ctx.fillStyle = '#F472B6';
+          ctx.font = 'bold 10px "JetBrains Mono", monospace';
+          ctx.fillText('Paleta: ∇×F⃗ rota', midX - 45, midY + 28);
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // 8. GENERAL RELATIVITY: SCHWARZSCHILD GEODESIC ROSETTE & PERIHELION SHIFT
+    // ------------------------------------------------------------------------
+    if (selectedId === 'relativity') {
+      const { mass = 1.0, eccentricity = 0.5, grFactor = 1.5, semiMajor = 2.8 } = safeParams;
+      const { rMin = 1.4, deltaPhiDeg = 4.5 } = telemetry.raw;
+      const midX = W / 2 - 40;
+      const midY = H / 2;
+      const scale = 36; // pixels per AU
+
+      // Draw faint background stars
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      for (let s = 0; s < 18; s++) {
+        const sx = ((s * 79 + 43) % (W - 20)) + 10;
+        const sy = ((s * 53 + 27) % (H - 20)) + 10;
+        ctx.fillRect(sx, sy, 1.5, 1.5);
+      }
+
+      // Draw Schwarzschild central mass (Sun / Black Hole)
+      const starRadius = Math.max(10, mass * 12);
+      const grad = ctx.createRadialGradient(midX, midY, 3, midX, midY, starRadius * 2.2);
+      grad.addColorStop(0, '#FEF08A');
+      grad.addColorStop(0.35, '#F59E0B');
+      grad.addColorStop(0.7, 'rgba(234, 88, 12, 0.45)');
+      grad.addColorStop(1, 'rgba(234, 88, 12, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(midX, midY, starRadius * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#FDE047';
+      ctx.beginPath();
+      ctx.arc(midX, midY, starRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Precessing Rosette Orbit Trajectory
+      const precRate = grFactor * 0.18;
+      const orbitLoops = grFactor > 0.05 ? 3.5 : 1.0;
+      const totalTheta = orbitLoops * Math.PI * 2;
+      const steps = 220;
+
+      ctx.save();
+      ctx.strokeStyle = grFactor > 0.05 ? 'rgba(236, 72, 153, 0.65)' : 'rgba(56, 189, 248, 0.75)';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const th = (i / steps) * totalTheta;
+        const phiShift = precRate * th;
+        const r = (semiMajor * (1 - eccentricity * eccentricity)) / (1 + eccentricity * Math.cos(th));
+        const px = midX + r * scale * Math.cos(th + phiShift);
+        const py = midY - r * scale * Math.sin(th + phiShift);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Current Planet / Mercury position
+      const currentTh = simTime * 2.2;
+      const curShift = precRate * currentTh;
+      const curR = (semiMajor * (1 - eccentricity * eccentricity)) / (1 + eccentricity * Math.cos(currentTh));
+      const curX = midX + curR * scale * Math.cos(currentTh + curShift);
+      const curY = midY - curR * scale * Math.sin(currentTh + curShift);
+
+      ctx.fillStyle = '#38BDF8';
+      ctx.beginPath();
+      ctx.arc(curX, curY, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // DCL / VECTORS OVERLAY: F_Newton, F_GR cubic correction, and velocity v
+      if (showDCL) {
+        const dx = midX - curX;
+        const dy = midY - curY;
+        const dist = Math.hypot(dx, dy);
+        const nx = dx / dist;
+        const ny = dy / dist;
+
+        const fNewtonLen = Math.min(75, Math.max(25, (40 / Math.max(0.5, curR * curR)) * 25));
+        drawArrow(ctx, curX, curY, curX + nx * fNewtonLen, curY + ny * fNewtonLen, '#38BDF8', 'F⃗_Newton', 2.5);
+
+        if (grFactor > 0.05) {
+          const fGRLen = Math.min(45, fNewtonLen * 0.45 * grFactor);
+          drawArrow(ctx, curX, curY, curX + nx * fGRLen, curY + ny * fGRLen, '#EC4899', 'ΔF⃗_RG (r⁻⁴)', 2);
+        }
+
+        const vx = -Math.sin(currentTh + curShift);
+        const vy = -Math.cos(currentTh + curShift);
+        drawArrow(ctx, curX, curY, curX + vx * 36, curY + vy * 36, '#10B981', 'v⃗(t)', 2);
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(midX, midY);
+        ctx.lineTo(midX + rMin * scale, midY);
+        ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = '#FBBF24';
+        ctx.font = 'bold 10px "JetBrains Mono", monospace';
+        ctx.fillText(`r_mín = ${rMin.toFixed(2)} UA`, midX + rMin * scale * 0.45, midY - 6);
+      }
+
+      // Inset plot on the right: Effective Potential V_eff(r)
+      const potX = W - 150;
+      const potY = H - 35;
+      const potW = 135;
+      const potH = 95;
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      ctx.fillRect(potX - 5, potY - potH - 15, potW + 10, potH + 25);
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(potX - 5, potY - potH - 15, potW + 10, potH + 25);
+
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.fillText('V_eff(r) Schwarzschild', potX, potY - potH - 3);
+
+      ctx.strokeStyle = '#EC4899';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      for (let k = 0; k <= 30; k++) {
+        const rv = 0.8 + (k / 30) * 4.5;
+        const vval = -1.8 / rv + 2.2 / (rv * rv) - (grFactor * 0.6) / (rv * rv * rv);
+        const kx = potX + (k / 30) * potW;
+        const ky = potY - (vval + 1.2) * 28;
+        if (k === 0) ctx.moveTo(kx, ky);
+        else ctx.lineTo(kx, ky);
+      }
+      ctx.stroke();
+
+      const normCurR = Math.min(1, Math.max(0, (curR - 0.8) / 4.5));
+      const curVVal = -1.8 / curR + 2.2 / (curR * curR) - (grFactor * 0.6) / (curR * curR * curR);
+      ctx.fillStyle = '#38BDF8';
+      ctx.beginPath();
+      ctx.arc(potX + normCurR * potW, potY - (curVVal + 1.2) * 28, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }, [selectedId, safeParams, simTime, showDCL, telemetry.raw]);
 
   const linkedCourse = courses.find((c) => c.id === currentProblem.courseId) || courses[0];
@@ -1738,8 +2291,8 @@ export default function PhysicsLab({
           </div>
         </div>
 
-        {/* 6-Course Problem Selector Pills */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
+        {/* 8-Course Problem Selector Pills */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 mb-8">
           {LAB_PROBLEMS.map((prob) => {
             const Icon = prob.icon;
             const active = prob.id === selectedId;
@@ -1797,7 +2350,7 @@ export default function PhysicsLab({
               </h2>
             </div>
 
-            {/* Key Action Toggles: DCL Button + Play/Pause + Reset */}
+            {/* Key Action Toggles: DCL Button + Study Sheet + Play/Pause + Reset */}
             <div className="flex flex-wrap items-center gap-2.5">
               <button
                 onClick={() => setShowDCL((v) => !v)}
@@ -1811,12 +2364,21 @@ export default function PhysicsLab({
                 <span>
                   {showDCL
                     ? lang === 'en'
-                      ? 'DCL / FBD Vectors: ON'
-                      : 'DCL / Vectores: ACTIVADO'
+                      ? 'DCL / FBD: ON'
+                      : 'DCL / Vectores: ON'
                     : lang === 'en'
-                    ? 'Show DCL / FBD Vectors'
-                    : 'Activar DCL (Diagrama Cuerpo Libre)'}
+                    ? 'Show DCL / FBD'
+                    : 'Activar DCL'}
                 </span>
+              </button>
+
+              <button
+                onClick={() => setShowStudySheet(true)}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono font-semibold flex items-center gap-1.5 cursor-pointer text-slate-200 hover:text-white transition-colors"
+                title={lang === 'en' ? 'Export Study Sheet / Print Summary' : 'Exportar Ficha de Estudio / Imprimir'}
+              >
+                <FileText className="w-3.5 h-3.5 text-sky-400" />
+                <span>{lang === 'en' ? 'Study Sheet (PDF)' : 'Ficha de Estudio (PDF)'}</span>
               </button>
 
               <button
@@ -2177,6 +2739,203 @@ export default function PhysicsLab({
             )}
           </div>
         </div>
+
+        {/* ================================================================= */}
+        {/* MODAL: EXPORTAR FICHA DE ESTUDIO / IMPRIMIR RESUMEN OFICIAL       */}
+        {/* ================================================================= */}
+        {showStudySheet && (
+          <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto print:p-0 print:bg-white print:static print:overflow-visible">
+            <div className="relative max-w-4xl w-full bg-white text-slate-900 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8 print:my-0 print:border-none print:shadow-none print:rounded-none">
+              {/* Header Bar */}
+              <div className="px-6 py-5 bg-slate-900 text-white flex items-center justify-between gap-4 print:bg-slate-900 print:text-white">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">
+                      {lang === 'en' ? currentProblem.badgeEn : currentProblem.badgeEs}
+                    </span>
+                    <span className="text-xs font-mono text-slate-400">
+                      • {lang === 'en' ? 'Official Klausur Study Sheet' : 'Ficha Oficial de Estudio y Examen'}
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-1 text-white">
+                    {lang === 'en' ? currentProblem.titleEn : currentProblem.titleEs}
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-2 print:hidden">
+                  <button
+                    onClick={() => window.print()}
+                    className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+                  >
+                    <Printer className="w-4 h-4" />
+                    <span>{lang === 'en' ? 'Print / Save PDF' : 'Imprimir / Guardar PDF'}</span>
+                  </button>
+                  <button
+                    onClick={() => setShowStudySheet(false)}
+                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    title="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Study Sheet Content Body */}
+              <div className="p-6 sm:p-8 space-y-6 text-sm max-h-[80vh] overflow-y-auto print:max-h-none print:overflow-visible">
+                {/* 1. Problem Description & Active Experimental Variables */}
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                  <div className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
+                    {lang === 'en' ? '1. Problem Setup & Physical Parameters' : '1. Planteamiento Físico y Parámetros Experimentales'}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    {lang === 'en' ? currentProblem.subtitleEn : currentProblem.subtitleEs}
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-200">
+                    {currentProblem.sliders.map((s) => (
+                      <div key={s.key} className="p-2 rounded-lg bg-white border border-slate-200 text-xs font-mono">
+                        <span className="text-slate-500 block text-[10px]">{lang === 'en' ? s.labelEn : s.labelEs}</span>
+                        <strong className="text-slate-900">{safeParams[s.key]}{s.unit}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 2. Free Body Diagram & Telemetry Status */}
+                <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-wider text-sky-400 font-bold">
+                      {lang === 'en' ? '2. Free Body Diagram (FBD / DCL) & Live Telemetry' : '2. Diagrama de Cuerpo Libre (DCL) y Telemetría'}
+                    </span>
+                    <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                      {telemetry.status}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    {telemetry.items.map((item, idx) => (
+                      <div key={idx} className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700">
+                        <span className="text-[10px] font-mono text-slate-400 block">{item.label}</span>
+                        <span className="text-xs sm:text-sm font-mono font-bold text-white">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Algebraic & Matrix Formulation */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center">
+                      ∑F
+                    </span>
+                    <h4 className="text-sm font-bold font-mono uppercase text-slate-900">
+                      {lang === 'en' ? '3. Algebraic & Matrix Formulation' : '3. Planteamiento Algebraico y Matricial'}
+                    </h4>
+                  </div>
+                  <div className="space-y-2">
+                    {currentProblem.algebraSection.formulas.map((f, i) => (
+                      <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span className="text-xs font-mono text-slate-600 block mb-1">
+                          {lang === 'en' ? f.labelEn : f.labelEs}
+                        </span>
+                        <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
+                          {f.eq}
+                        </pre>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Calculus & Differential Equations */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold flex items-center justify-center">
+                      ∫dx
+                    </span>
+                    <h4 className="text-sm font-bold font-mono uppercase text-slate-900">
+                      {lang === 'en' ? '4. Differential & Integral Calculus Connection' : '4. Conexión con el Cálculo Diferencial e Integral'}
+                    </h4>
+                  </div>
+                  <div className="space-y-2">
+                    {currentProblem.calculusSection.formulas.map((f, i) => (
+                      <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span className="text-xs font-mono text-slate-600 block mb-1">
+                          {lang === 'en' ? f.labelEn : f.labelEs}
+                        </span>
+                        <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
+                          {f.eq}
+                        </pre>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 5. Klausur Exam Exercise & Step-by-Step Scoring Solution */}
+                <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                      {lang === 'en' ? '5. Benchmark Klausur Exam Exercise & Derivation' : '5. Ejercicio Típico de Examen Klausur y Pauta Paso a Paso'}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {lang === 'en' ? 'Full score rubric' : 'Puntaje completo'}
+                    </span>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                    {lang === 'en' ? currentProblem.exercise.questionEn : currentProblem.exercise.questionEs}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {currentProblem.exercise.options.map((opt) => (
+                      <div
+                        key={opt.id}
+                        className={`p-2.5 rounded-xl border text-xs font-mono font-bold flex items-center justify-between ${
+                          opt.correct
+                            ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
+                            : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                        }`}
+                      >
+                        <span>
+                          <span className="uppercase mr-1.5 opacity-60">{opt.id})</span>
+                          {opt.text}
+                        </span>
+                        {opt.correct && <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">✓ Correct</span>}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-800/90 border border-slate-700 space-y-1.5 text-xs font-mono">
+                    <span className="text-amber-400 font-bold block">
+                      💡 {lang === 'en' ? 'Examiner Hint:' : 'Pista del Profesor:'}
+                    </span>
+                    <p className="text-slate-300">
+                      {lang === 'en' ? currentProblem.exercise.hintEn : currentProblem.exercise.hintEs}
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs font-mono">
+                    <span className="text-emerald-400 font-bold block uppercase tracking-wider">
+                      {lang === 'en' ? 'Official Step-by-Step Derivation:' : 'Resolución Oficial Paso a Paso:'}
+                    </span>
+                    {(lang === 'en' ? currentProblem.exercise.solutionStepsEn : currentProblem.exercise.solutionStepsEs).map((step, i) => (
+                      <div key={i} className="p-2 rounded-lg bg-slate-800/60 border border-slate-700 text-slate-200">
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer Brand */}
+                <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-500">
+                  <span>
+                    Daniel Santander Urrutia • M.Sc. RWTH Aachen • Clases &amp; Mentoría TU9
+                  </span>
+                  <span>
+                    classes-danielsantander.com
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

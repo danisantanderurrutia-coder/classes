@@ -2988,7 +2988,6 @@ export default function SolarSystem({
       resizeObserver = new ResizeObserver(() => handleResize());
       resizeObserver.observe(container);
     }
-
     // ========================================================================
     // ANIMATION & HIERARCHY LOOP
     // ========================================================================
@@ -2998,7 +2997,7 @@ export default function SolarSystem({
     let simTime = 0;
     let wasTransitioning = false;
     let lastNavKey = '';
-    const travel = { t: 0, dur: 1.1, p0: new THREE.Vector3(), t0: new THREE.Vector3() };
+    const travel = { t: 0, dur: 5.2, p0: new THREE.Vector3(), t0: new THREE.Vector3() };
     const tmpTarget = new THREE.Vector3();
     const tmpDesired = new THREE.Vector3();
     const tmpOffset = new THREE.Vector3();
@@ -3013,14 +3012,34 @@ export default function SolarSystem({
     const tmpProj = new THREE.Vector3();
     const tmpWorld = new THREE.Vector3();
 
-    // Start ready in front of the lineup so there is no disorienting void
-    camera.position.set(0, 1.8, 34);
-    controls.target.set(0, -0.3, 0);
+    // Intro: Start deep in space behind/above the Solar System, flying in towards the orbiting planets
+    camera.position.set(-290, 90, 1140);
+    controls.target.set(210, 0, 241);
+
+    let alignBlend = 0.0; // 0.0 = 100% Keplerian Orbit, 1.0 = 100% 7-Planet Lineup
+    let isInitialIntro = true;
+    let curSunLineupY = 0;
+    let curSunLineupZ = 0;
+    let curSunLineupScale = PLANET_SUBJECTS[0].lineupScale;
+    let curBhLineupY = 0;
+    let curBhLineupZ = 0;
+    let curBhLineupScale = bhData?.lineupScale || 0.155;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
       const delta = Math.min(clock.getDelta(), 0.1);
       const elapsedTime = clock.getElapsedTime();
+
+      // Check if user requested an intro replay
+      if (animStateRef.current.triggerIntroReplay) {
+        animStateRef.current.triggerIntroReplay = false;
+        camera.position.set(-290, 90, 1140);
+        controls.target.set(210, 0, 241);
+        alignBlend = 0.0;
+        isInitialIntro = true;
+        wasTransitioning = false;
+        animStateRef.current.isTransitioning = true;
+      }
 
       const {
         activePlanet: currentActive,
@@ -3034,9 +3053,41 @@ export default function SolarSystem({
         isTransitioning: transitioning,
       } = animStateRef.current;
 
-      const isShowcase = currentVariant !== 'orbital';
+      const isShowcase = currentVariant !== 'orbital' && !realScaleMode;
 
-      // Gravitational time dilation (cinematic): sqrt(1 - Rs/r)-like slowdown as the camera nears the horizon
+      // Update target alignment factor:
+      // In initial intro: keep at 0 while camera approaches from deep space, then ease to 1 as camera nears the Solar System
+      let targetAlign = 0.0;
+      if (isShowcase) {
+        if (isInitialIntro) {
+          const introU = THREE.MathUtils.clamp(travel.t / Math.max(0.1, travel.dur), 0, 1);
+          if (introU < 0.52) {
+            targetAlign = 0.0;
+          } else {
+            targetAlign = THREE.MathUtils.smoothstep(introU, 0.52, 0.94);
+          }
+          if (introU >= 0.96) {
+            isInitialIntro = false;
+            targetAlign = 1.0;
+          }
+        } else {
+          targetAlign = 1.0;
+        }
+      } else {
+        targetAlign = 0.0;
+        isInitialIntro = false;
+      }
+
+      // Smooth interpolation of alignment blend
+      if (isInitialIntro) {
+        alignBlend = targetAlign;
+      } else {
+        alignBlend += (targetAlign - alignBlend) * Math.min(1.0, delta * 3.2);
+        if (Math.abs(targetAlign - alignBlend) < 0.001) alignBlend = targetAlign;
+      }
+      const b = alignBlend * alignBlend * (3.0 - 2.0 * alignBlend); // Cubic smoothstep
+
+      // Gravitational time dilation (cinematic): slows down near Sgr A*
       const bhR = 7.0 * blackHoleGroup.scale.x;
       const dil = animStateRef.current.cinemaMode && !isShowcase
         ? THREE.MathUtils.clamp((camera.position.length() - bhR * 2.0) / (bhR * 10.0), 0.1, 1.0)
@@ -3106,167 +3157,40 @@ export default function SolarSystem({
       let activeWorldPos = new THREE.Vector3(0, 0, 0);
       let activeSpeedKms = 29.8;
 
-      if (isShowcase) {
-        // ====================================================================
-        // SHOWCASE MODES (Option 1: 3D Lineup, Option 2: Split 50/50, Option 3: Hybrid)
-        // ====================================================================
-        solarSystemGroup.position.set(0, 0, 0);
-        galOrbitLine.visible = false;
-        asteroidBelt.visible = false;
-        streakSprite.visible = false;
-        sunBeacon.visible = false;
-        jetMeshNorth.visible = false;
-        jetMeshSouth.visible = false;
-        sStarPoints.visible = false;
-        showcaseDirLight.intensity = 2.8;
-        sunLight.intensity = 1.1;
+      // ======================================================================
+      // UNIFIED POSITIONS & HIERARCHY: BLENDING ORBITAL & 7-PLANET LINEUP
+      // ======================================================================
+      // 1. Galactic Heliocentric Orbit
+      const galRadius = realScaleMode ? 48000 : 320;
+      if (!paused && driftActive && b < 0.05) {
+        animStateRef.current.galacticAngle += delta * (realScaleMode ? 0.004 : 0.018) * warp;
+      }
+      const gAngle = animStateRef.current.galacticAngle;
+      const sunGalX = galRadius * Math.cos(gAngle);
+      const sunGalZ = galRadius * Math.sin(gAngle);
+      const sunGalY = Math.sin(gAngle * 2.8) * (realScaleMode ? 120.0 : 8.0);
+      solarSystemGroup.position.set(sunGalX, sunGalY, sunGalZ);
 
-        if (earthShaderMatRef) {
-          earthShaderMatRef.uniforms.uUseCustomSunDir.value = 1.0;
-          earthShaderMatRef.uniforms.uSunDir.value.set(-0.38, 0.28, 0.88).normalize();
-        }
+      // Environment visibility & lighting blends
+      galOrbitLine.visible = b < 0.95;
+      galOrbitLine.material.opacity = 0.25 * (1.0 - b);
+      asteroidBelt.visible = b < 0.85;
+      streakSprite.visible = b < 0.95;
+      streakSprite.material.opacity = 0.85 * (1.0 - b);
+      sunBeacon.visible = b < 0.5;
+      jetMeshNorth.visible = b < 0.25;
+      jetMeshSouth.visible = b < 0.25;
+      sStarPoints.visible = b < 0.25;
 
-        const isPanoramaLineup =
-          currentVariant === 'option1' || (currentVariant === 'option3' && !isLineupZoomed);
+      showcaseDirLight.intensity = 2.8 * b;
+      sunLight.intensity = THREE.MathUtils.lerp(5.2, 1.1, b);
+      if (earthShaderMatRef) {
+        earthShaderMatRef.uniforms.uUseCustomSunDir.value = b;
+        earthShaderMatRef.uniforms.uSunDir.value.set(-0.38, 0.28, 0.88).normalize();
+      }
 
-        // 1. Position Sun in Showcase
-        const sunData = PLANET_SUBJECTS[0];
-        const isSunSelected = currentActive.id === 'sun';
-        if (currentVariant === 'option2') {
-          sunAnchor.visible = isSunSelected;
-          sunAnchor.position.set(0, 0, 0);
-          sunAnchor.scale.setScalar(sunData.lineupScale * 1.15);
-          sunMesh.scale.set(1, 1, 1);
-        } else {
-          sunAnchor.visible = true;
-          const sy = isSunSelected && isPanoramaLineup ? 0.38 : 0;
-          const sz = isSunSelected && isPanoramaLineup ? 1.6 : (isSunSelected && isLineupZoomed ? 2.2 : 0);
-          sunAnchor.position.lerp(tmpA.set(sunData.lineupX, sy, sz), 0.14);
-          const sScale = sunData.lineupScale * (isSunSelected ? 1.18 : 1.0);
-          sunAnchor.scale.lerp(tmpB.set(sScale, sScale, sScale), 0.14);
-          sunMesh.scale.set(1, 1, 1);
-        }
-        if (isSunSelected) {
-          sunAnchor.getWorldPosition(activeWorldPos);
-        }
-
-        // 2. Position Sagittarius A* (Black Hole) in Showcase
-        const isBhSelected = currentActive.id === 'blackhole';
-        if (currentVariant === 'option2') {
-          blackHoleGroup.visible = isBhSelected;
-          blackHoleGroup.position.set(0, 0, 0);
-          blackHoleGroup.scale.setScalar(bhData.lineupScale * 1.25);
-        } else {
-          blackHoleGroup.visible = true;
-          const by = isBhSelected && isPanoramaLineup ? 0.38 : 0;
-          const bz = isBhSelected && isPanoramaLineup ? 1.6 : (isBhSelected && isLineupZoomed ? 2.2 : 0);
-          blackHoleGroup.position.lerp(tmpA.set(bhData.lineupX, by, bz), 0.14);
-          const bScale = bhData.lineupScale * (isBhSelected ? 1.18 : 1.0);
-          blackHoleGroup.scale.lerp(tmpB.set(bScale, bScale, bScale), 0.14);
-        }
-        if (isBhSelected) {
-          blackHoleGroup.getWorldPosition(activeWorldPos);
-        }
-
-        // 3. Position Planets in Showcase
-        planetObjects.forEach((pObj) => {
-          if (pObj.data.id === 'sun' || pObj.data.id === 'blackhole') return;
-          if (pObj.orbitLine) pObj.orbitLine.visible = false;
-
-          if (!pObj.data.inLineup) {
-            pObj.anchor.visible = false;
-            return;
-          }
-
-          const isSel = currentActive.id === pObj.data.id;
-          const baseScale = pObj.data.lineupScale || 1.0;
-
-          if (currentVariant === 'option2') {
-            pObj.anchor.visible = isSel;
-            pObj.anchor.position.set(0, 0, 0);
-            const s = baseScale * 1.15;
-            pObj.mesh.scale.setScalar(s);
-            if (pObj.cloudsMesh) pObj.cloudsMesh.scale.setScalar(s);
-            if (pObj.ringMesh) pObj.ringMesh.scale.setScalar(s);
-            if (pObj.moonAnchor) pObj.moonAnchor.scale.setScalar(0.75);
-          } else {
-            pObj.anchor.visible = true;
-            const py = isSel && isPanoramaLineup ? 0.38 : 0;
-            const pz = isSel && isPanoramaLineup ? 1.6 : (isSel && isLineupZoomed ? 2.2 : 0);
-            pObj.anchor.position.lerp(tmpA.set(pObj.data.lineupX, py, pz), 0.14);
-            const s = baseScale * (isSel ? 1.18 : 1.0);
-            pObj.mesh.scale.lerp(tmpB.set(s, s, s), 0.14);
-            if (pObj.cloudsMesh) pObj.cloudsMesh.scale.copy(pObj.mesh.scale);
-            if (pObj.ringMesh) pObj.ringMesh.scale.copy(pObj.mesh.scale);
-            if (pObj.moonAnchor) pObj.moonAnchor.scale.setScalar(0.5);
-          }
-
-          pObj.mesh.rotation.y += delta * 0.45;
-          if (pObj.cloudsMesh) pObj.cloudsMesh.rotation.y += delta * 0.55;
-          if (pObj.moonAnchor) pObj.moonAnchor.rotation.y += delta * 1.1;
-          if (pObj.satellitesGroup) pObj.satellitesGroup.rotation.y += delta * 0.95;
-
-          // DCL & Magnetosphere in Showcase
-          if (pObj.dclGroup) {
-            pObj.dclGroup.visible = (!!animStateRef.current.visualPhysicMode || !!animStateRef.current.showDcl) && isSel;
-          }
-          if (pObj.magnetosphereGroup) {
-            pObj.magnetosphereGroup.visible = (!!animStateRef.current.magneticFieldMode || !!animStateRef.current.showMagnetosphere || !!animStateRef.current.isCmeActive || !!animStateRef.current.isReversing) && isSel;
-          }
-
-          if (isSel) {
-            pObj.anchor.getWorldPosition(activeWorldPos);
-          }
-        });
-
-        // 4. Update Active Selection Halo Ring in Lineup Panorama
-        if (isPanoramaLineup) {
-          selectionHaloGroup.visible = true;
-          selectionHaloGroup.position.copy(activeWorldPos);
-          haloRingMat.color.set(currentActive.color || '#38BDF8');
-          haloOuterMat.color.set(currentActive.color || '#38BDF8');
-          const pulse = 1.0 + Math.sin(elapsedTime * 3.2) * 0.04;
-          selectionHaloGroup.scale.setScalar(pulse);
-          selectionHaloGroup.lookAt(camera.position);
-        } else {
-          selectionHaloGroup.visible = false;
-        }
-      } else {
-        // ====================================================================
-        // ORBITAL OBSERVATORY MODE (Full Galactic / Solar / Planetary Orbits)
-        // ====================================================================
-        selectionHaloGroup.visible = false;
-        galOrbitLine.visible = true;
-        asteroidBelt.visible = true;
-        streakSprite.visible = true;
-        sunBeacon.visible = true;
-        jetMeshNorth.visible = true;
-        jetMeshSouth.visible = true;
-        sStarPoints.visible = true;
-        sunAnchor.visible = true;
-        sunAnchor.position.set(0, 0, 0);
-        sunAnchor.scale.set(1, 1, 1);
-        blackHoleGroup.visible = true;
-        blackHoleGroup.position.set(0, 0, 0);
-        showcaseDirLight.intensity = 0.0;
-        sunLight.intensity = 5.2;
-
-        if (earthShaderMatRef) {
-          earthShaderMatRef.uniforms.uUseCustomSunDir.value = 0.0;
-        }
-
-        // 1. Galactic Heliocentric Orbit around Sagittarius A*
-        const galRadius = realScaleMode ? 48000 : 320;
-        if (!paused && driftActive) {
-          animStateRef.current.galacticAngle += delta * (realScaleMode ? 0.004 : 0.018) * warp;
-        }
-        const gAngle = animStateRef.current.galacticAngle;
-        const sunGalX = galRadius * Math.cos(gAngle);
-        const sunGalZ = galRadius * Math.sin(gAngle);
-        const sunGalY = Math.sin(gAngle * 2.8) * (realScaleMode ? 120.0 : 8.0);
-        solarSystemGroup.position.set(sunGalX, sunGalY, sunGalZ);
-
-        // S-Stars relativistic orbits around Sgr A*
+      // S-Stars relativistic orbits around Sgr A* (when orbital)
+      if (b < 0.25) {
         const posArray = sStarGeo.attributes.position.array;
         for (let i = 0; i < sStarCount; i++) {
           if (!paused) {
@@ -3280,190 +3204,169 @@ export default function SolarSystem({
           posArray[i * 3 + 2] = rad * Math.cos(inc) * Math.sin(ang);
         }
         sStarGeo.attributes.position.needsUpdate = true;
+      }
 
-        // Asteroid Belt tumbling & orbit
-        if (!paused) {
-          for (let i = 0; i < beltCount; i++) {
-            const ast = asteroidData[i];
-            ast.angle += ast.speed * delta * 0.35 * warp;
-            ast.rotX += ast.rotSpeedX * delta;
-            ast.rotY += ast.rotSpeedY * delta;
+      // Asteroid Belt tumbling & orbit
+      if (!paused && b < 0.85) {
+        for (let i = 0; i < beltCount; i++) {
+          const ast = asteroidData[i];
+          ast.angle += ast.speed * delta * 0.35 * warp;
+          ast.rotX += ast.rotSpeedX * delta;
+          ast.rotY += ast.rotSpeedY * delta;
 
-            dummyPos.set(
-              ast.r * Math.cos(ast.angle),
-              ast.verticalDispersion,
-              ast.r * Math.sin(ast.angle)
-            );
-            dummyRot.set(ast.rotX, ast.rotY, ast.rotZ);
-            dummyQuat.setFromEuler(dummyRot);
-            dummyScale.set(ast.scale, ast.scale, ast.scale);
-            dummyMatrix.compose(dummyPos, dummyQuat, dummyScale);
-            asteroidBelt.setMatrixAt(i, dummyMatrix);
-          }
-          asteroidBelt.instanceMatrix.needsUpdate = true;
+          dummyPos.set(
+            ast.r * Math.cos(ast.angle),
+            ast.verticalDispersion,
+            ast.r * Math.sin(ast.angle)
+          );
+          dummyRot.set(ast.rotX, ast.rotY, ast.rotZ);
+          dummyQuat.setFromEuler(dummyRot);
+          dummyScale.set(ast.scale, ast.scale, ast.scale);
+          dummyMatrix.compose(dummyPos, dummyQuat, dummyScale);
+          asteroidBelt.setMatrixAt(i, dummyMatrix);
+        }
+        asteroidBelt.instanceMatrix.needsUpdate = true;
+      }
+
+      const isPanoramaLineup = isShowcase && !isLineupZoomed;
+
+      // 2. Position & Scale of Sun
+      const sunData = PLANET_SUBJECTS[0];
+      const isSunSelected = currentActive.id === 'sun';
+      const targetSunY = isSunSelected && isPanoramaLineup ? 0.38 : 0;
+      const targetSunZ = isSunSelected && isPanoramaLineup ? 1.6 : (isSunSelected && isLineupZoomed ? 2.2 : 0);
+      const targetSunLineupScale = sunData.lineupScale * (isSunSelected ? 1.18 : 1.0);
+      curSunLineupY += (targetSunY - curSunLineupY) * 0.14;
+      curSunLineupZ += (targetSunZ - curSunLineupZ) * 0.14;
+      curSunLineupScale += (targetSunLineupScale - curSunLineupScale) * 0.14;
+
+      sunAnchor.visible = true;
+      sunAnchor.position.set(sunData.lineupX * b, curSunLineupY * b, curSunLineupZ * b);
+      const orbSunScale = (realScaleMode ? 10.0 : 3.4) / 3.4;
+      const finalSunScale = THREE.MathUtils.lerp(orbSunScale, curSunLineupScale, b);
+      sunAnchor.scale.setScalar(finalSunScale);
+      sunMesh.scale.set(1, 1, 1);
+      if (isSunSelected) {
+        sunAnchor.getWorldPosition(activeWorldPos);
+      }
+
+      // 3. Position & Scale of Sagittarius A* (Black Hole)
+      const isBhSelected = currentActive.id === 'blackhole';
+      const targetBhY = isBhSelected && isPanoramaLineup ? 0.38 : 0;
+      const targetBhZ = isBhSelected && isPanoramaLineup ? 1.6 : (isBhSelected && isLineupZoomed ? 2.2 : 0);
+      const targetBhLineupScale = (bhData?.lineupScale || 0.155) * (isBhSelected ? 1.18 : 1.0);
+      curBhLineupY += (targetBhY - curBhLineupY) * 0.14;
+      curBhLineupZ += (targetBhZ - curBhLineupZ) * 0.14;
+      curBhLineupScale += (targetBhLineupScale - curBhLineupScale) * 0.14;
+
+      blackHoleGroup.visible = true;
+      blackHoleGroup.position.set(
+        THREE.MathUtils.lerp(0, sunGalX + (bhData?.lineupX || 21), b),
+        THREE.MathUtils.lerp(0, sunGalY + curBhLineupY, b),
+        THREE.MathUtils.lerp(0, sunGalZ + curBhLineupZ, b)
+      );
+      const orbBhScale = realScaleMode ? 9.5 : 1.0;
+      const finalBhScale = THREE.MathUtils.lerp(orbBhScale, curBhLineupScale, b);
+      blackHoleGroup.scale.setScalar(finalBhScale);
+      if (isBhSelected) {
+        blackHoleGroup.getWorldPosition(activeWorldPos);
+      }
+
+      // 4. Position & Scale of Planets
+      planetObjects.forEach((pObj) => {
+        if (pObj.data.id === 'sun' || pObj.data.id === 'blackhole') return;
+
+        const curA = realScaleMode ? pObj.data.realDistance : pObj.data.distance;
+        const curSize = realScaleMode ? pObj.data.realSize : pObj.data.size;
+        const e = pObj.data.eccentricity;
+        const inc = pObj.data.inclination || 0;
+        const orbScale = curSize / pObj.data.size;
+
+        if (!paused && b < 0.85) {
+          const currentR = (curA * (1 - e * e)) / (1 + e * Math.cos(pObj.angle));
+          const instantaneousSpeed = (pObj.data.speed * 0.32 * warp * (curA / Math.max(1, currentR))) * (1.0 - b * 0.85);
+          pObj.angle += instantaneousSpeed * delta;
         }
 
-        // Smooth scale transitions for Sun and Sagittarius A*
-        const targetSunSize = realScaleMode ? 10.0 : 3.4;
-        sunMesh.scale.lerp(new THREE.Vector3(targetSunSize / 3.4, targetSunSize / 3.4, targetSunSize / 3.4), 0.08);
+        const r = (curA * (1 - e * e)) / (1 + e * Math.cos(pObj.angle));
+        const orbX = r * Math.cos(pObj.angle);
+        const orbZRaw = r * Math.sin(pObj.angle);
+        const orbY = -orbZRaw * Math.sin(inc);
+        const orbZ = orbZRaw * Math.cos(inc);
 
-        const targetSgrScale = realScaleMode ? 9.5 : 1.0;
-        blackHoleGroup.scale.lerp(new THREE.Vector3(targetSgrScale, targetSgrScale, targetSgrScale), 0.08);
+        if (pObj.orbitLine) {
+          pObj.orbitLine.visible = b < 0.98;
+          pObj.orbitLine.material.opacity = 0.22 * (1.0 - b);
+        }
 
-        planetObjects.forEach((pObj) => {
-          if (pObj.data.id === 'sun') {
-            if (currentActive.id === 'sun') {
-              sunMesh.getWorldPosition(activeWorldPos);
-            }
-            return;
-          }
+        const isSel = currentActive.id === pObj.data.id;
 
-          if (pObj.data.id === 'blackhole') {
-            if (currentActive.id === 'blackhole') {
-              blackHoleGroup.getWorldPosition(activeWorldPos);
-            }
-            return;
-          }
-
+        if (pObj.data.inLineup) {
           pObj.anchor.visible = true;
-          if (pObj.orbitLine) pObj.orbitLine.visible = true;
+          const targetPy = isSel && isPanoramaLineup ? 0.38 : 0;
+          const targetPz = isSel && isPanoramaLineup ? 1.6 : (isSel && isLineupZoomed ? 2.2 : 0);
+          const targetLScale = (pObj.data.lineupScale || 1.0) * (isSel ? 1.18 : 1.0);
 
-          const curA = realScaleMode ? pObj.data.realDistance : pObj.data.distance;
-          const curSize = realScaleMode ? pObj.data.realSize : pObj.data.size;
-          const e = pObj.data.eccentricity;
-          const inc = pObj.data.inclination || 0;
+          pObj.curLineupY = (pObj.curLineupY ?? 0) + (targetPy - (pObj.curLineupY ?? 0)) * 0.14;
+          pObj.curLineupZ = (pObj.curLineupZ ?? 0) + (targetPz - (pObj.curLineupZ ?? 0)) * 0.14;
+          pObj.curLineupScale = (pObj.curLineupScale ?? targetLScale) + (targetLScale - (pObj.curLineupScale ?? targetLScale)) * 0.14;
 
-          const scaleFactor = curSize / pObj.data.size;
-          pObj.mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-          if (pObj.ringMesh) pObj.ringMesh.scale.set(1, 1, 1);
-          if (pObj.moonAnchor) pObj.moonAnchor.scale.set(1, 1, 1);
+          pObj.anchor.position.set(
+            THREE.MathUtils.lerp(orbX, pObj.data.lineupX, b),
+            THREE.MathUtils.lerp(orbY, pObj.curLineupY, b),
+            THREE.MathUtils.lerp(orbZ, pObj.curLineupZ, b)
+          );
 
-          if (!paused) {
-            const currentR = (curA * (1 - e * e)) / (1 + e * Math.cos(pObj.angle));
-            const instantaneousSpeed = (pObj.data.speed * 0.32 * warp * (curA / Math.max(1, currentR)));
-            pObj.angle += instantaneousSpeed * delta;
-          }
+          const finalScale = THREE.MathUtils.lerp(orbScale, pObj.curLineupScale, b);
+          pObj.mesh.scale.setScalar(finalScale);
+          if (pObj.cloudsMesh) pObj.cloudsMesh.scale.setScalar(finalScale);
+          if (pObj.ringMesh) pObj.ringMesh.scale.setScalar(THREE.MathUtils.lerp(1.0, finalScale, b));
+          if (pObj.moonAnchor) pObj.moonAnchor.scale.setScalar(THREE.MathUtils.lerp(1.0, 0.5, b));
+        } else {
+          pObj.anchor.position.set(orbX, orbY, orbZ);
+          const nonLineupScale = Math.max(0.001, orbScale * (1.0 - b));
+          pObj.mesh.scale.setScalar(nonLineupScale);
+          if (pObj.cloudsMesh) pObj.cloudsMesh.scale.setScalar(nonLineupScale);
+          if (pObj.ringMesh) pObj.ringMesh.scale.setScalar(Math.max(0.001, 1.0 - b));
+          pObj.anchor.visible = b < 0.98;
+        }
 
-          const r = (curA * (1 - e * e)) / (1 + e * Math.cos(pObj.angle));
-          const x = r * Math.cos(pObj.angle);
-          const z = r * Math.sin(pObj.angle);
-          const y = -z * Math.sin(inc);
-          const zTilted = z * Math.cos(inc);
+        pObj.mesh.rotation.y += delta * 0.45;
+        if (pObj.cloudsMesh) pObj.cloudsMesh.rotation.y += delta * 0.55;
+        if (pObj.moonAnchor) pObj.moonAnchor.rotation.y += delta * 1.1;
+        if (pObj.satellitesGroup) pObj.satellitesGroup.rotation.y += delta * 0.95;
 
-          pObj.anchor.position.set(x, y, zTilted);
-          pObj.mesh.rotation.y += delta * 0.45;
+        // DCL Vectors in Orbital or Selected Mode
+        if (pObj.dclGroup) {
+          const isFocalOrSolar = currentLevel === 'solar' || isSel;
+          pObj.dclGroup.visible = (!!animStateRef.current.visualPhysicMode || !!animStateRef.current.showDcl) && isFocalOrSolar;
+        }
 
-          if (pObj.cloudsMesh) {
-            pObj.cloudsMesh.rotation.y += delta * 0.55;
-            pObj.cloudsMesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-          }
+        // Magnetosphere in Orbital or Selected Mode
+        if (pObj.magnetosphereGroup) {
+          pObj.magnetosphereGroup.visible = (!!animStateRef.current.magneticFieldMode || !!animStateRef.current.showMagnetosphere || !!animStateRef.current.isCmeActive || !!animStateRef.current.isReversing) && (b < 0.5 || isSel);
+        }
 
-          if (pObj.moonAnchor) {
-            pObj.moonAnchor.rotation.y += delta * 1.2;
-          }
+        if (isSel) {
+          pObj.anchor.getWorldPosition(activeWorldPos);
+          activeSpeedKms = (pObj.data.distance / Math.max(1, r)) * 29.8;
+        }
+      });
 
-          if (pObj.satellitesGroup) {
-            pObj.satellitesGroup.rotation.y += delta * 0.95;
-          }
-
-          if (pObj.dclGroup) {
-            const isFocalOrSolar = (currentLevel === 'solar' || pObj.data.id === currentActive.id);
-            pObj.dclGroup.visible = (!!animStateRef.current.visualPhysicMode || !!animStateRef.current.showDcl) && isFocalOrSolar;
-            if (pObj.dclGroup.visible) {
-              const toSunLocal = new THREE.Vector3(-x, -y, -zTilted).normalize();
-              const tanVLocal = new THREE.Vector3(-zTilted, 0, x).normalize();
-              const outward = toSunLocal.clone().negate();
-              const upNorm = new THREE.Vector3(0, 1, 0);
-
-              pObj.arrowFg.setDirection(toSunLocal);
-              pObj.arrowV.setDirection(tanVLocal);
-              pObj.arrowAc.setDirection(toSunLocal);
-              pObj.arrowFcf.setDirection(outward);
-              pObj.arrowL.setDirection(upNorm);
-
-              const fgLen = pObj.data.size * 2.8;
-              const vLen = pObj.data.size * 2.5;
-              const acLen = pObj.data.size * 2.2;
-              const fcfLen = pObj.data.size * 2.2;
-              const lLen = pObj.data.size * 2.6;
-
-              if (pObj.labelFg) pObj.labelFg.position.copy(toSunLocal).multiplyScalar(fgLen + 0.65);
-              if (pObj.labelV) pObj.labelV.position.copy(tanVLocal).multiplyScalar(vLen + 0.65);
-              if (pObj.labelAc) pObj.labelAc.position.copy(toSunLocal).multiplyScalar(acLen * 0.55).add(new THREE.Vector3(0, 0.45, 0));
-              if (pObj.labelFcf) pObj.labelFcf.position.copy(outward).multiplyScalar(fcfLen + 0.65);
-              if (pObj.labelL) pObj.labelL.position.copy(upNorm).multiplyScalar(lLen + 0.65);
-            }
-          }
-
-          if (pObj.magnetosphereGroup) {
-            pObj.magnetosphereGroup.visible = !!animStateRef.current.magneticFieldMode || !!animStateRef.current.showMagnetosphere || !!animStateRef.current.isCmeActive || !!animStateRef.current.isReversing;
-            const isReversingNow = animStateRef.current.isReversing;
-            
-            if (isReversingNow) {
-              animStateRef.current.reversalProgress = Math.min(1.0, animStateRef.current.reversalProgress + delta * 0.22);
-              const revProg = animStateRef.current.reversalProgress;
-              const cosP = Math.cos(revProg * Math.PI);
-              const absP = Math.abs(cosP);
-
-              pObj.magnetosphereGroup.scale.set(1.0, 0.25 + 0.75 * absP, 1.0);
-              const colHex = absP < 0.35 ? 0xF59E0B : (cosP < 0 ? 0xF43F5E : 0x38BDF8);
-              if (pObj.dipoleLines) {
-                pObj.dipoleLines.forEach((l) => {
-                  l.material.color.setHex(colHex);
-                  l.material.opacity = 0.18 + 0.35 * absP;
-                });
-              }
-
-              if (pObj.northAurora && pObj.southAurora) {
-                const aurY = 1.12 * Math.sign(cosP || 1) * (0.3 + 0.7 * absP);
-                pObj.northAurora.position.y = aurY;
-                pObj.southAurora.position.y = -aurY;
-                pObj.northAurora.material.color.setHex(absP < 0.35 ? 0xF59E0B : 0x10B981);
-                pObj.southAurora.material.color.setHex(absP < 0.35 ? 0xF59E0B : 0x10B981);
-              }
-
-              if (revProg >= 1.0) {
-                animStateRef.current.isReversing = false;
-                animStateRef.current.magneticPolarity = -animStateRef.current.magneticPolarity;
-                setMagneticPolarity(animStateRef.current.magneticPolarity);
-                setIsReversing(false);
-              }
-            } else {
-              const isRev = animStateRef.current.magneticPolarity === -1;
-              if (pObj.dipoleLines) {
-                pObj.dipoleLines.forEach((l) => {
-                  l.material.color.setHex(isRev ? 0xF43F5E : 0x38BDF8);
-                  l.material.opacity = 0.42;
-                });
-              }
-              pObj.magnetosphereGroup.scale.set(1.0, 1.0, 1.0);
-              if (pObj.northAurora && pObj.southAurora) {
-                pObj.northAurora.position.y = isRev ? -1.12 : 1.12;
-                pObj.southAurora.position.y = isRev ? 1.12 : -1.12;
-                pObj.northAurora.material.color.setHex(0x10B981);
-                pObj.southAurora.material.color.setHex(0x10B981);
-              }
-            }
-
-            if (animStateRef.current.isCmeActive && animStateRef.current.cmeProgress > 0.35 && animStateRef.current.cmeProgress < 0.75) {
-              pObj.bowShockMesh.scale.set(0.62, 0.75, 0.75);
-              if (pObj.northAurora) pObj.northAurora.material.opacity = 1.0;
-              if (pObj.southAurora) pObj.southAurora.material.opacity = 1.0;
-            } else {
-              pObj.bowShockMesh.scale.set(1.0, 1.0, 1.0);
-              if (pObj.northAurora) pObj.northAurora.material.opacity = 0.85;
-              if (pObj.southAurora) pObj.southAurora.material.opacity = 0.85;
-            }
-
-            if (pObj.northAurora) pObj.northAurora.visible = !!animStateRef.current.showAuroras;
-            if (pObj.southAurora) pObj.southAurora.visible = !!animStateRef.current.showAuroras;
-          }
-
-          if (currentActive.id === pObj.data.id) {
-            pObj.anchor.getWorldPosition(activeWorldPos);
-            activeSpeedKms = (pObj.data.distance / Math.max(1, r)) * 29.8;
-          }
-        });
+      // 5. Active Selection Halo Ring in Lineup
+      if (isPanoramaLineup && b > 0.75) {
+        selectionHaloGroup.visible = true;
+        selectionHaloGroup.position.copy(activeWorldPos);
+        haloRingMat.color.set(currentActive.color || '#38BDF8');
+        haloOuterMat.color.set(currentActive.color || '#38BDF8');
+        const haloAlpha = THREE.MathUtils.smoothstep(b, 0.75, 0.98);
+        haloRingMat.opacity = 0.85 * haloAlpha;
+        haloOuterMat.opacity = 0.35 * haloAlpha;
+        const pulse = 1.0 + Math.sin(elapsedTime * 3.2) * 0.04;
+        selectionHaloGroup.scale.setScalar(pulse);
+        selectionHaloGroup.lookAt(camera.position);
+      } else {
+        selectionHaloGroup.visible = false;
       }
 
       // Update telemetry
@@ -3477,47 +3380,33 @@ export default function SolarSystem({
       }
 
       // ======================================================================
-      // CAMERA FRAMING SYSTEM (Showcase Options 1/2/3 + Orbital 3-Level System)
+      // CAMERA FRAMING SYSTEM: DEEP SPACE FLY-IN -> LINEUP -> ZOOM
       // ======================================================================
       const st = animStateRef.current;
       const shot = st.shot;
       const cineOn = st.cinemaMode;
       const bhRadiusNow = 7.0 * blackHoleGroup.scale.x;
-      const navKey = `${currentVariant}|${isLineupZoomed}|${currentLevel}|${currentActive.id}|${realScaleMode}|${shot}`;
+      const navKey = `${isInitialIntro}|${currentVariant}|${isLineupZoomed}|${currentLevel}|${currentActive.id}|${realScaleMode}|${shot}`;
       const targetCenter = tmpTarget.set(0, 0, 0);
       const desiredCamPos = tmpDesired.set(0, 0, 0);
 
-      if (isShowcase) {
-        const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(20)); // fov 40 / 2
-        const effAspect = Math.max(1.15, camera.aspect);
-        const lineupCamDist = Math.max(30.0, 26.2 / (tanHalfFov * effAspect));
+      const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(20));
+      const effAspect = Math.max(1.15, camera.aspect);
+      const lineupCamDist = Math.max(30.0, 26.2 / (tanHalfFov * effAspect));
 
-        if (currentVariant === 'option1') {
-          // OPTION 1: Panoramic 7-planet 3D lineup with gentle attention shift
-          const panX = (currentActive.lineupX || 0) * 0.12;
-          targetCenter.set(panX, -0.55, 0);
-          desiredCamPos.set(panX, 1.35, lineupCamDist);
-        } else if (currentVariant === 'option2') {
-          // OPTION 2: Dedicated Split-View 50/50 Close-Up Studio
-          targetCenter.set(0, 0, 0);
-          const isWideBody = currentActive.id === 'saturn' || currentActive.id === 'blackhole';
-          const closeZ = isWideBody ? 10.2 : 7.0;
-          const closeY = isWideBody ? 2.2 : 1.1;
-          desiredCamPos.set(1.4, closeY, closeZ);
+      solarSystemGroup.getWorldPosition(tmpSun);
+
+      if (isShowcase) {
+        if (!isLineupZoomed) {
+          targetCenter.set(tmpSun.x, tmpSun.y - 0.55, tmpSun.z);
+          desiredCamPos.set(tmpSun.x, tmpSun.y + 1.35, tmpSun.z + lineupCamDist);
         } else {
-          // OPTION 3: Hybrid (Starts as 7-planet 3D lineup -> Zooms into clicked planet)
-          if (!isLineupZoomed) {
-            targetCenter.set(0, -0.55, 0);
-            desiredCamPos.set(0, 1.35, lineupCamDist);
-          } else {
-            const isWideBody = currentActive.id === 'saturn' || currentActive.id === 'blackhole';
-            const closeZ = isWideBody ? 10.8 : 7.4;
-            const closeY = isWideBody ? 2.0 : 1.0;
-            // Offset camera target to the right on wide screens so the 3D planet sits in the left half
-            const rightPanelOffset = container.clientWidth >= 1024 ? (isWideBody ? 2.8 : 2.1) : 0.0;
-            targetCenter.set(activeWorldPos.x + rightPanelOffset, activeWorldPos.y, activeWorldPos.z);
-            desiredCamPos.set(activeWorldPos.x + rightPanelOffset + 0.8, activeWorldPos.y + closeY, activeWorldPos.z + closeZ);
-          }
+          const isWideBody = currentActive.id === 'saturn' || currentActive.id === 'blackhole';
+          const closeZ = isWideBody ? 10.8 : 7.4;
+          const closeY = isWideBody ? 2.0 : 1.0;
+          const rightPanelOffset = container.clientWidth >= 1024 ? (isWideBody ? 2.8 : 2.1) : 0.0;
+          targetCenter.set(activeWorldPos.x + rightPanelOffset, activeWorldPos.y, activeWorldPos.z);
+          desiredCamPos.set(activeWorldPos.x + rightPanelOffset + 0.8, activeWorldPos.y + closeY, activeWorldPos.z + closeZ);
         }
       } else if (currentLevel === 'galaxy') {
         targetCenter.set(0, 0, 0);
@@ -3529,7 +3418,7 @@ export default function SolarSystem({
           desiredCamPos.set(0, camDist * 0.45, camDist * 0.85);
         }
       } else if (currentLevel === 'solar') {
-        solarSystemGroup.getWorldPosition(targetCenter);
+        targetCenter.copy(tmpSun);
         const camDist = realScaleMode ? 6200 : 70;
         if (shot === 'ecliptic') {
           desiredCamPos.copy(targetCenter).add(tmpOffset.set(camDist * 0.92, camDist * 0.07, camDist * 0.38));
@@ -3538,8 +3427,6 @@ export default function SolarSystem({
         }
       } else {
         targetCenter.copy(activeWorldPos);
-        solarSystemGroup.getWorldPosition(tmpSun);
-
         const sunToPlanet = tmpA.copy(activeWorldPos).sub(tmpSun).normalize();
         const orbitTangent = tmpB.set(-sunToPlanet.z, 0, sunToPlanet.x).normalize();
 
@@ -3573,9 +3460,13 @@ export default function SolarSystem({
           travel.p0.copy(camera.position);
           travel.t0.copy(controls.target);
           const dist = travel.p0.distanceTo(desiredCamPos);
-          travel.dur = isShowcase
-            ? THREE.MathUtils.clamp(0.75 + dist * 0.015, 0.75, 1.25)
-            : THREE.MathUtils.clamp(1.8 + 0.7 * Math.log10(1 + dist), 2.0, 4.8);
+          if (isInitialIntro) {
+            travel.dur = 5.2; // 5.2s epic fly-in from deep space approaching the orbiting planets
+          } else if (isShowcase) {
+            travel.dur = THREE.MathUtils.clamp(0.75 + dist * 0.015, 0.75, 1.35);
+          } else {
+            travel.dur = THREE.MathUtils.clamp(1.8 + 0.7 * Math.log10(1 + dist), 2.0, 4.8);
+          }
           if (!st.shot) st.autoOrbit = false;
         }
         travel.t += delta;
@@ -3583,7 +3474,26 @@ export default function SolarSystem({
         const s = u * u * u * (u * (u * 6 - 15) + 10);
         travelS = s;
 
-        if (isShowcase) {
+        if (isInitialIntro) {
+          // Curved Bezier swoop from deep space down to the front of the aligned Solar System
+          const len = travel.p0.distanceTo(desiredCamPos);
+          tmpDir.subVectors(desiredCamPos, travel.p0);
+          tmpSide.crossVectors(tmpDir, tmpUp.set(0, 1, 0));
+          if (tmpSide.lengthSq() < 1e-9) tmpSide.set(1, 0, 0);
+          tmpSide.normalize();
+          tmpCtrl.addVectors(travel.p0, desiredCamPos).multiplyScalar(0.5)
+            .addScaledVector(tmpUp.set(0, 1, 0), len * 0.14)
+            .addScaledVector(tmpSide, len * 0.10);
+          const ca = (1 - s) * (1 - s);
+          const cb = 2 * (1 - s) * s;
+          const cc = s * s;
+          camera.position.set(
+            ca * travel.p0.x + cb * tmpCtrl.x + cc * desiredCamPos.x,
+            ca * travel.p0.y + cb * tmpCtrl.y + cc * desiredCamPos.y,
+            ca * travel.p0.z + cb * tmpCtrl.z + cc * desiredCamPos.z
+          );
+          controls.target.lerpVectors(travel.t0, targetCenter, s);
+        } else if (isShowcase) {
           camera.position.lerpVectors(travel.p0, desiredCamPos, s);
           controls.target.lerpVectors(travel.t0, targetCenter, s);
         } else {
@@ -3595,13 +3505,13 @@ export default function SolarSystem({
           tmpCtrl.addVectors(travel.p0, desiredCamPos).multiplyScalar(0.5)
             .addScaledVector(tmpUp.set(0, 1, 0), len * 0.16)
             .addScaledVector(tmpSide, len * 0.12);
-          const a = (1 - s) * (1 - s);
-          const b = 2 * (1 - s) * s;
-          const c = s * s;
+          const ca = (1 - s) * (1 - s);
+          const cb = 2 * (1 - s) * s;
+          const cc = s * s;
           camera.position.set(
-            a * travel.p0.x + b * tmpCtrl.x + c * desiredCamPos.x,
-            a * travel.p0.y + b * tmpCtrl.y + c * desiredCamPos.y,
-            a * travel.p0.z + b * tmpCtrl.z + c * desiredCamPos.z
+            ca * travel.p0.x + cb * tmpCtrl.x + cc * desiredCamPos.x,
+            ca * travel.p0.y + cb * tmpCtrl.y + cc * desiredCamPos.y,
+            ca * travel.p0.z + cb * tmpCtrl.z + cc * desiredCamPos.z
           );
           controls.target.lerpVectors(travel.t0, targetCenter, s);
         }
@@ -3609,6 +3519,7 @@ export default function SolarSystem({
         if (u >= 1) {
           st.isTransitioning = false;
           st.shot = null;
+          isInitialIntro = false;
         }
       } else {
         tmpDir.subVectors(targetCenter, prevFocalWorldPos);
@@ -3630,26 +3541,45 @@ export default function SolarSystem({
       controls.autoRotateSpeed = 0.45;
       controls.update();
 
-      // Update 2D projected screen coordinates for the 7 Lineup floating course badges
-      if (isShowcase && (currentVariant === 'option1' || (currentVariant === 'option3' && !isLineupZoomed))) {
-        camera.updateMatrixWorld();
-        planetObjects.forEach((pObj) => {
-          if (!pObj.data?.inLineup) return;
-          const el = lineupLabelsRef.current[pObj.data.id];
-          if (!el || !container) return;
-          pObj.anchor.getWorldPosition(tmpWorld);
-          tmpProj.set(tmpWorld.x, tmpWorld.y - 2.45, tmpWorld.z).project(camera);
-          const sx = (tmpProj.x * 0.5 + 0.5) * container.clientWidth;
-          const staggerY = container.clientWidth < 920 ? (pObj.data.lineupIndex % 2) * 38 : 0;
-          const sy = (-tmpProj.y * 0.5 + 0.5) * container.clientHeight + staggerY;
-          el.style.transform = `translate3d(${sx.toFixed(1)}px, ${sy.toFixed(1)}px, 0) translate(-50%, 0)`;
-          const inBounds = tmpProj.z < 1 && sx > 16 && sx < container.clientWidth - 16;
-          el.style.opacity = inBounds ? '1' : '0';
-          el.style.pointerEvents = inBounds ? 'auto' : 'none';
-        });
+      // ======================================================================
+      // 2D PROJECTED SCREEN COORDINATES FOR THE 7 LINEUP FLOATING COURSE BADGES
+      // ======================================================================
+      const labelAlpha = isShowcase && !isLineupZoomed ? THREE.MathUtils.smoothstep(alignBlend, 0.80, 0.98) : 0;
+
+      // Fade top & bottom UI prompt bars simultaneously
+      if (lineupUiTopRef.current) {
+        lineupUiTopRef.current.style.opacity = labelAlpha.toFixed(3);
+        lineupUiTopRef.current.style.pointerEvents = labelAlpha > 0.5 ? 'auto' : 'none';
+      }
+      if (lineupUiBottomRef.current) {
+        lineupUiBottomRef.current.style.opacity = labelAlpha.toFixed(3);
+        lineupUiBottomRef.current.style.pointerEvents = labelAlpha > 0.5 ? 'auto' : 'none';
       }
 
-      // Handheld breathing + flight roll (applied after lookAt, only in orbital cinema mode)
+      camera.updateMatrixWorld();
+      planetObjects.forEach((pObj) => {
+        if (!pObj.data?.inLineup) return;
+        const el = lineupLabelsRef.current[pObj.data.id];
+        if (!el || !container) return;
+
+        if (labelAlpha <= 0.01) {
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+          return;
+        }
+
+        pObj.anchor.getWorldPosition(tmpWorld);
+        tmpProj.set(tmpWorld.x, tmpWorld.y - 2.45, tmpWorld.z).project(camera);
+        const sx = (tmpProj.x * 0.5 + 0.5) * container.clientWidth;
+        const staggerY = container.clientWidth < 920 ? (pObj.data.lineupIndex % 2) * 38 : 0;
+        const sy = (-tmpProj.y * 0.5 + 0.5) * container.clientHeight + staggerY;
+        el.style.transform = `translate3d(${sx.toFixed(1)}px, ${sy.toFixed(1)}px, 0) translate(-50%, 0)`;
+        const inBounds = tmpProj.z < 1 && sx > 16 && sx < container.clientWidth - 16;
+        el.style.opacity = inBounds ? labelAlpha.toFixed(3) : '0';
+        el.style.pointerEvents = inBounds && labelAlpha > 0.5 ? 'auto' : 'none';
+      });
+
+      // Handheld breathing + flight roll (orbital cinema mode)
       if (cineOn && !isShowcase) {
         const nx = Math.sin(elapsedTime * 0.37) * 0.6 + Math.sin(elapsedTime * 0.91 + 1.3) * 0.4;
         const ny = Math.sin(elapsedTime * 0.29 + 0.7) * 0.6 + Math.sin(elapsedTime * 0.83) * 0.4;
@@ -3658,7 +3588,7 @@ export default function SolarSystem({
         camera.rotateZ(Math.sin(Math.PI * travelS) * 0.07 + Math.sin(elapsedTime * 0.23) * 0.0022);
       }
 
-      // Gravitational lensing of the whole frame around Sgr A* (screen-space)
+      // Gravitational lensing of Sgr A* (fades to 0 in lineup mode so neighboring planets aren't distorted)
       if (cineOn) {
         blackHoleGroup.getWorldPosition(tmpBH);
         camera.updateMatrixWorld();
@@ -3672,7 +3602,7 @@ export default function SolarSystem({
         const farFade = THREE.MathUtils.smoothstep(rho, 0.004, 0.03);
         cineUniforms.uLensPos.value.set(tmpBH.x * 0.5 + 0.5, tmpBH.y * 0.5 + 0.5);
         cineUniforms.uThetaE.value = rho * 2.0;
-        cineUniforms.uLensStrength.value = isShowcase ? 0.0 : (inFront * nearFade * farFade);
+        cineUniforms.uLensStrength.value = isShowcase ? 0.0 : (inFront * nearFade * farFade * (1.0 - b));
         cineUniforms.uAspect.value = camera.aspect;
         cineUniforms.uTime.value = elapsedTime;
         composer.render();
@@ -3916,7 +3846,7 @@ export default function SolarSystem({
               </button>
             </div>
 
-            {viewVariant === 'option3' && lineupZoomed && (
+            {lineupZoomed && (
               <button
                 onClick={() => {
                   setLineupZoomed(false);
@@ -4128,309 +4058,212 @@ export default function SolarSystem({
       }
     >
       {/* ==================================================================== */}
-      {/* 0. PROTOTYPE LAYOUT SWITCHER BAR (COMPARE OPTIONS 1, 2, 3 & ORBITAL)  */}
+      {/* 1. TOP HEADER: INTEGRATED TOGGLE (MODO CLASES ↔ MODO PLANETARIO)     */}
       {/* ==================================================================== */}
       {!isRealScale && (
-        <div className="px-3 py-2.5 sm:px-5 sm:py-3 bg-gradient-to-r from-slate-950 via-indigo-950/70 to-slate-950 border-b border-sky-500/30 flex flex-wrap items-center justify-between gap-2 relative z-40">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-md bg-sky-500/20 border border-sky-400/40 text-sky-300 font-mono text-[10px] font-bold uppercase tracking-wider">
-              Diseño Interactivo
-            </span>
-            <span className="text-xs sm:text-sm font-semibold text-white">
-              Elige cómo quieres conectar los planetas con tus clases:
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-700/80 font-mono text-[11px]">
-            <button
-              onClick={() => {
-                setViewVariant('option1');
-                setLineupZoomed(false);
-                animStateRef.current.lineupZoomed = false;
-                setActivePhysicsTab('syllabus');
-              }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                viewVariant === 'option1'
-                  ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
-            >
-              1️⃣ Opción 1: Fila 3D + Panel Abajo
-            </button>
-
-            <button
-              onClick={() => {
-                setViewVariant('option2');
-                setLineupZoomed(false);
-                animStateRef.current.lineupZoomed = false;
-                setActivePhysicsTab('syllabus');
-              }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                viewVariant === 'option2'
-                  ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
-            >
-              2️⃣ Opción 2: Barra + Split 50/50
-            </button>
-
-            <button
-              onClick={() => {
-                setViewVariant('option3');
-                setLineupZoomed(false);
-                animStateRef.current.lineupZoomed = false;
-                setActivePhysicsTab('syllabus');
-              }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                viewVariant === 'option3'
-                  ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
-            >
-              3️⃣ Opción 3: Fila 3D → Zoom al Click
-            </button>
-
-            <button
-              onClick={() => {
-                setViewVariant('orbital');
-              }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+        <div className="px-3 py-2.5 sm:px-5 sm:py-3 bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-md relative z-40 flex flex-wrap items-center justify-between gap-2.5">
+          {/* Mode Title & Active Context */}
+          <div className="flex items-center gap-2.5">
+            <span
+              className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-sm ${
                 viewVariant === 'orbital'
-                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-purple-400 shadow-purple-400/80'
+                  : 'bg-emerald-400 shadow-emerald-400/80'
               }`}
-            >
-              🌌 Modo Planetario (Órbitas)
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ==================================================================== */}
-      {/* OPTION 2 TOP HORIZONTAL PLANET DOCK (7 PLANETS SIDE-BY-SIDE)          */}
-      {/* ==================================================================== */}
-      {!isRealScale && viewVariant === 'option2' && (
-        <div className="p-3 sm:p-4 bg-slate-950 border-b border-slate-800/90 relative z-30">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-            {LINEUP_PLANETS.map((planet) => {
-              const isSelected = activePlanet.id === planet.id;
-              return (
-                <button
-                  key={planet.id}
-                  onClick={() => handleSelectPlanet(planet)}
-                  className={`p-2.5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-1.5 cursor-pointer ${
-                    isSelected
-                      ? 'bg-sky-950/70 border-sky-400 shadow-lg shadow-sky-500/20 scale-[1.02]'
-                      : 'bg-slate-900/70 border-slate-800/90 hover:border-slate-600 hover:bg-slate-900'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-1.5">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span
-                        className="w-4 h-4 rounded-full shrink-0 shadow-sm border border-white/20"
-                        style={{
-                          background: `radial-gradient(circle at 30% 30%, ${planet.color}, #020617 90%)`,
-                        }}
-                      />
-                      <span className="font-mono text-[10px] text-slate-400 truncate">
-                        {planet.name.split(' ')[0]}
-                      </span>
-                    </div>
-                    <span className="font-mono text-[10px] font-bold text-emerald-400 shrink-0">
-                      €{planet.rateHourly}/h
-                    </span>
-                  </div>
-
-                  <div>
-                    <div className="text-xs font-bold text-white leading-tight line-clamp-1">
-                      {lang === 'en' ? planet.shortCourseEn : planet.shortCourseEs}
-                    </div>
-                    <div className="text-[10px] font-mono text-sky-300/80 mt-0.5">
-                      {planet.courseCode}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ==================================================================== */}
-      {/* 1. TOP HEADER PANEL: COMPACT & SLEEK OBSERVATORY BAR (ORBITAL MODE)  */}
-      {/* ==================================================================== */}
-      {(viewVariant === 'orbital' || isRealScale) && (
-        <div className="px-4 py-2.5 sm:px-6 sm:py-3 bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-md relative z-40">
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
+            />
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/80" />
-              <h3 className="font-mono text-xs font-bold text-slate-300 tracking-wider uppercase">
-                {isRealScale ? 'Escala Real 1:1' : (lang === 'en' ? 'Cosmic Observatory' : 'Observatorio Cósmico')}
+              <h3 className="font-mono text-xs sm:text-sm font-bold text-white tracking-wider uppercase">
+                {viewVariant === 'orbital'
+                  ? (lang === 'en' ? 'Cosmic Observatory & Physics Lab' : 'Observatorio Cósmico & Laboratorio de Física')
+                  : (lang === 'en' ? 'Interactive Courses by Celestial Body' : 'Explorador de Clases por Astro')}
               </h3>
               <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-950/80 border border-sky-800/80 text-sky-300">
-                {archLevel.toUpperCase()}
+                {viewVariant === 'orbital' ? archLevel.toUpperCase() : '7 PLANETAS'}
               </span>
             </div>
+          </div>
 
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-slate-800 rounded-xl font-mono text-[11px]">
-                <button
-                  onClick={() => {
-                    setArchLevel('planetary');
-                    animStateRef.current.isTransitioning = true;
-                  }}
-                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                    archLevel === 'planetary'
-                      ? 'bg-sky-600 text-white shadow-xs'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  🌍 {lang === 'en' ? 'Planet' : 'Planetario'}
-                </button>
+          {/* Right Action Controls: Toggle Planetario / Clases & Intro Replay */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Replay Intro Animation button */}
+            <button
+              onClick={replayIntroAnimation}
+              className="px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white font-mono text-[11px] font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
+              title="Volver a reproducir la animación de aproximación desde el espacio profundo y alineación"
+            >
+              <span>🎬</span>
+              <span className="hidden sm:inline">Repetir Intro</span>
+            </button>
 
-                <button
-                  onClick={() => {
-                    setArchLevel('solar');
-                    animStateRef.current.isTransitioning = true;
-                  }}
-                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                    archLevel === 'solar'
-                      ? 'bg-amber-600 text-white shadow-xs'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  ☀️ {lang === 'en' ? 'Solar' : 'Solar'}
-                </button>
-
-                <button
-                  onClick={() => {
-                    setArchLevel('galaxy');
-                    animStateRef.current.isTransitioning = true;
-                  }}
-                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                    archLevel === 'galaxy'
-                      ? 'bg-purple-600 text-white shadow-xs'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  🌌 {lang === 'en' ? 'Galaxy' : 'Galaxia'}
-                </button>
-              </div>
-
+            {/* Toggle between Modo Clases and Modo Planetario */}
+            {viewVariant === 'orbital' ? (
               <button
                 onClick={() => {
-                  const nextVal = !visualPhysicMode;
-                  setVisualPhysicMode(nextVal);
-                  setShowDcl(nextVal);
-                  animStateRef.current.visualPhysicMode = nextVal;
-                  animStateRef.current.showDcl = nextVal;
-                  if (nextVal) setActivePhysicsTab('dcl');
+                  setViewVariant('option3');
+                  setLineupZoomed(false);
+                  animStateRef.current.lineupZoomed = false;
+                  setActivePhysicsTab('syllabus');
                 }}
-                className={`px-3 py-1 rounded-xl border font-mono text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
-                  visualPhysicMode
-                    ? 'bg-sky-600 text-white border-sky-400 shadow-sky-500/30'
-                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:text-white'
-                }`}
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-mono text-xs font-bold shadow-md shadow-sky-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <span className={`w-2 h-2 rounded-full ${visualPhysicMode ? 'bg-cyan-300 animate-pulse' : 'bg-slate-500'}`} />
-                <span>⚛️ Visual Physic mode</span>
+                <span>🎓</span>
+                <span>{lang === 'en' ? 'Back to Courses (7 Planets) →' : 'Volver a las Clases (7 Planetas) →'}</span>
               </button>
-            </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setViewVariant('orbital');
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/60 text-purple-200 hover:text-white font-mono text-xs font-bold shadow-md shadow-purple-950/40 transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Explora el sistema solar con sus órbitas elípticas, vectores DCL de fuerzas, magnetosfera y simulaciones"
+              >
+                <span>🌌</span>
+                <span>{lang === 'en' ? 'Open Planetarium (Orbits & Physics) →' : 'Ir al Planetario (Órbitas & Física) →'}</span>
+              </button>
+            )}
 
+            {/* In Orbital mode, show physical level selector and physics toggle */}
+            {viewVariant === 'orbital' && (
+              <>
+                <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-slate-800 rounded-xl font-mono text-[11px]">
+                  <button
+                    onClick={() => {
+                      setArchLevel('planetary');
+                      animStateRef.current.isTransitioning = true;
+                    }}
+                    className={`px-2 py-1 rounded-lg font-semibold transition-all ${
+                      archLevel === 'planetary'
+                        ? 'bg-sky-600 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🌍 {lang === 'en' ? 'Planet' : 'Planetario'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setArchLevel('solar');
+                      animStateRef.current.isTransitioning = true;
+                    }}
+                    className={`px-2 py-1 rounded-lg font-semibold transition-all ${
+                      archLevel === 'solar'
+                        ? 'bg-amber-600 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    ☀️ {lang === 'en' ? 'Solar' : 'Solar'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setArchLevel('galaxy');
+                      animStateRef.current.isTransitioning = true;
+                    }}
+                    className={`px-2 py-1 rounded-lg font-semibold transition-all ${
+                      archLevel === 'galaxy'
+                        ? 'bg-purple-600 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🌌 {lang === 'en' ? 'Galaxy' : 'Galaxia'}
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => setShowControls(!showControls)}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-850 border border-slate-700/80 text-[11px] font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <span>{showControls ? '▲ Options' : '⚙️ Options ▾'}</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* EXPANDABLE TECHNICAL DRAWER IN ORBITAL MODE */}
+      {viewVariant === 'orbital' && showControls && !isRealScale && (
+        <div className="px-4 py-3 bg-slate-950 border-b border-slate-800/80 space-y-3 z-30">
+          <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => setShowControls(!showControls)}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-850 border border-slate-700/80 text-[11px] font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+              onClick={() => {
+                const nextState = !isRealScale;
+                setIsRealScale(nextState);
+                animStateRef.current.isTransitioning = true;
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
+              }}
+              className="px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700 cursor-pointer"
             >
-              <span>{showControls ? '▲ Options' : '⚙️ Options ▾'}</span>
+              🔭 Escala Real 1:1
+            </button>
+            <button
+              onClick={() => {
+                const nextVal = !visualPhysicMode;
+                setVisualPhysicMode(nextVal);
+                setShowDcl(nextVal);
+                animStateRef.current.visualPhysicMode = nextVal;
+                animStateRef.current.showDcl = nextVal;
+                if (nextVal) setActivePhysicsTab('dcl');
+              }}
+              className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all cursor-pointer ${
+                visualPhysicMode
+                  ? 'bg-sky-600 text-white border-sky-400'
+                  : 'bg-slate-900 text-slate-300 border-slate-700'
+              }`}
+            >
+              ⚛️ Visual Physic mode
+            </button>
+            <button
+              onClick={() => {
+                const nextVal = !magneticFieldMode;
+                setMagneticFieldMode(nextVal);
+                setShowMagnetosphere(nextVal);
+                animStateRef.current.magneticFieldMode = nextVal;
+                animStateRef.current.showMagnetosphere = nextVal;
+                if (nextVal) setActivePhysicsTab('magnetism');
+              }}
+              className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all cursor-pointer ${
+                magneticFieldMode
+                  ? 'bg-amber-600 text-white border-amber-400'
+                  : 'bg-slate-900 text-slate-400 border-slate-800'
+              }`}
+            >
+              🧲 Magnetic Field mode
+            </button>
+            <button
+              onClick={() => setIsGalacticDriftActive(!isGalacticDriftActive)}
+              className="px-3 py-1 rounded-lg border font-mono text-[11px] bg-slate-900 text-slate-400 border-slate-800 cursor-pointer"
+            >
+              {isGalacticDriftActive ? '🌀 Órbita: Activa' : '⏸ Órbita: Pausada'}
+            </button>
+            <button
+              onClick={() => setIsPaused(!isPaused)}
+              className="px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[11px] cursor-pointer"
+            >
+              {isPaused ? '▶ Play' : '⏸ Pause'}
+            </button>
+            <button
+              onClick={() => setSpeedMultiplier(speedMultiplier === 1 ? 2.5 : 1)}
+              className="px-3 py-1 rounded-lg border font-mono text-[11px] bg-slate-900 text-slate-400 border-slate-800 cursor-pointer"
+            >
+              {speedMultiplier > 1 ? '⚡ 2.5x Warp' : '1.0x Real'}
             </button>
           </div>
 
-          {showControls && (
-            <div className="mt-3 pt-3 border-t border-slate-800/80 space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  onClick={() => {
-                    const nextState = !isRealScale;
-                    setIsRealScale(nextState);
-                    animStateRef.current.isTransitioning = true;
-                    setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
-                  }}
-                  className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all ${
-                    isRealScale
-                      ? 'bg-rose-600 text-white border-rose-400'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
-                  }`}
-                >
-                  {isRealScale ? '✕ Salir Escala Real' : '🔭 Escala Real 1:1'}
-                </button>
-
-                <button
-                  onClick={() => {
-                    const nextVal = !magneticFieldMode;
-                    setMagneticFieldMode(nextVal);
-                    setShowMagnetosphere(nextVal);
-                    animStateRef.current.magneticFieldMode = nextVal;
-                    animStateRef.current.showMagnetosphere = nextVal;
-                    if (nextVal) setActivePhysicsTab('magnetism');
-                  }}
-                  className={`px-3 py-1 rounded-lg border font-mono text-[11px] font-semibold transition-all flex items-center gap-1.5 ${
-                    magneticFieldMode
-                      ? 'bg-amber-600 text-white border-amber-400 shadow-xs'
-                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
-                  }`}
-                >
-                  <span className={`w-2 h-2 rounded-full ${magneticFieldMode ? 'bg-amber-300 animate-pulse' : 'bg-slate-500'}`} />
-                  <span>🧲 Magnetic Field mode</span>
-                </button>
-
-                <button
-                  onClick={() => setIsGalacticDriftActive(!isGalacticDriftActive)}
-                  className={`px-3 py-1 rounded-lg border font-mono text-[11px] transition-all ${
-                    isGalacticDriftActive
-                      ? 'bg-purple-900/80 text-purple-200 border-purple-500'
-                      : 'bg-slate-900 text-slate-400 border-slate-800'
-                  }`}
-                >
-                  {isGalacticDriftActive ? '🌀 Órbita: Activa' : '⏸ Órbita: Pausada'}
-                </button>
-
-                <button
-                  onClick={() => setIsPaused(!isPaused)}
-                  className="px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[11px]"
-                >
-                  {isPaused ? '▶ Play' : '⏸ Pause'}
-                </button>
-
-                <button
-                  onClick={() => setSpeedMultiplier(speedMultiplier === 1 ? 2.5 : 1)}
-                  className={`px-3 py-1 rounded-lg border font-mono text-[11px] transition-all ${
-                    speedMultiplier > 1
-                      ? 'bg-amber-600 text-white border-amber-500 font-semibold'
-                      : 'bg-slate-900 text-slate-400 border-slate-800'
-                  }`}
-                >
-                  {speedMultiplier > 1 ? '⚡ 2.5x Warp' : '1.0x Real'}
-                </button>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-1 pt-2 border-t border-slate-800/60">
-                <span className="text-[10px] font-mono text-slate-500 mr-1.5 uppercase">Astro:</span>
-                {PLANET_SUBJECTS.map((planet) => (
-                  <button
-                    key={planet.id}
-                    onClick={() => handleSelectPlanet(planet)}
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-mono transition-all border ${
-                      activePlanet.id === planet.id
-                        ? 'bg-sky-600 text-white border-sky-400 font-semibold'
-                        : 'bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-800'
-                    }`}
-                  >
-                    {planet.name.split(' ')[0]}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-1 pt-2 border-t border-slate-800/60">
+            <span className="text-[10px] font-mono text-slate-500 mr-1.5 uppercase">Astro:</span>
+            {PLANET_SUBJECTS.map((planet) => (
+              <button
+                key={planet.id}
+                onClick={() => handleSelectPlanet(planet)}
+                className={`px-2 py-0.5 rounded-md text-[10px] font-mono transition-all border cursor-pointer ${
+                  activePlanet.id === planet.id
+                    ? 'bg-sky-600 text-white border-sky-400 font-semibold'
+                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-800'
+                }`}
+              >
+                {planet.name.split(' ')[0]}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -4458,7 +4291,7 @@ export default function SolarSystem({
               setIsRealScale(false);
               setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
             }}
-            className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-lg shrink-0"
+            className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all shadow-lg shrink-0 cursor-pointer"
           >
             ✕ Salir de Escala Real
           </button>
@@ -4466,66 +4299,37 @@ export default function SolarSystem({
       )}
 
       {/* ==================================================================== */}
-      {/* 3. MAIN BODY WRAPPER (KEEPS containerRef MOUNTED IN ALL 4 VARIATIONS) */}
+      {/* 3. MAIN 3D COSMIC VIEWPORT                                           */}
       {/* ==================================================================== */}
-      <div
-        className={
-          isRealScale
-            ? 'flex-1 flex flex-col overflow-hidden'
-            : viewVariant === 'option2'
-              ? 'grid grid-cols-1 lg:grid-cols-12 bg-slate-950/95'
-              : 'flex flex-col'
-        }
-      >
-        {/* 3D COSMIC VIEWPORT COLUMN */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         <div
           className={`relative w-full bg-black overflow-hidden transition-all duration-500 ${
             isRealScale
               ? 'flex-1'
-              : viewVariant === 'option1'
-                ? 'h-[370px] sm:h-[420px] md:h-[450px]'
-                : viewVariant === 'option2'
-                  ? 'lg:col-span-5 h-[330px] sm:h-[380px] lg:h-auto lg:min-h-[540px] border-b lg:border-b-0 lg:border-r border-slate-800/80'
-                  : viewVariant === 'option3'
-                    ? 'h-[540px] sm:h-[600px] md:h-[640px]'
-                    : 'h-[500px] sm:h-[600px] md:h-[640px]'
+              : viewVariant === 'option3'
+                ? 'h-[520px] sm:h-[580px] md:h-[620px]'
+                : 'h-[500px] sm:h-[580px] md:h-[620px]'
           }`}
           style={{ containerType: 'size' }}
         >
           <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-          {/* SHOWCASE INSTRUCTION BANNER (OPTION 1 & OPTION 3 UNZOOMED) */}
-          {isShowcaseMode && (viewVariant === 'option1' || (viewVariant === 'option3' && !lineupZoomed)) && (
-            <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-3 w-full max-w-2xl flex justify-center">
+          {/* SHOWCASE INSTRUCTION BANNER (FADES IN SMOOTHLY ONCE PLANETS ALIGN) */}
+          {isShowcaseMode && !lineupZoomed && (
+            <div
+              ref={lineupUiTopRef}
+              style={{ opacity: 0 }}
+              className="absolute top-3.5 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-3 w-full max-w-2xl flex justify-center transition-opacity duration-300"
+            >
               <div className="px-4 py-1.5 rounded-full bg-slate-950/85 border border-sky-500/40 backdrop-blur-md shadow-lg flex items-center gap-2 text-xs text-slate-200 font-mono">
                 <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping shrink-0" />
-                <span>
-                  {viewVariant === 'option3'
-                    ? 'Haz click en cualquier astro (o su tarjeta) para hacer zoom 3D y abrir su clase'
-                    : 'Haz click en cualquiera de los 7 astros en fila para explorar el curso que representa'}
-                </span>
+                <span>Haz click en cualquier astro (o su tarjeta) para hacer zoom 3D y abrir su clase</span>
               </div>
             </div>
           )}
 
-          {/* OPTION 2 STUDIO BADGE (INSIDE LEFT 3D PANEL) */}
-          {isShowcaseMode && viewVariant === 'option2' && (
-            <div className="absolute top-3.5 left-3.5 right-3.5 z-30 flex items-center justify-between pointer-events-none">
-              <div className="px-3 py-1 rounded-full bg-slate-950/85 border border-white/15 backdrop-blur-md font-mono text-[11px] text-slate-200 flex items-center gap-2">
-                <span
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: activePlanet.color }}
-                />
-                <span className="font-bold">{activePlanet.name}</span>
-              </div>
-              <span className="px-2.5 py-1 rounded-full bg-black/60 border border-white/10 font-mono text-[10px] text-slate-400">
-                Arrastra para rotar 3D
-              </span>
-            </div>
-          )}
-
-          {/* 3D-TRACKED FLOATING COURSE BADGES UNDER EACH PLANET (OPTION 1 & OPTION 3 UNZOOMED) */}
-          {isShowcaseMode && (viewVariant === 'option1' || (viewVariant === 'option3' && !lineupZoomed)) && (
+          {/* 3D-TRACKED FLOATING COURSE BADGES UNDER EACH OF THE 7 PLANETS */}
+          {isShowcaseMode && !lineupZoomed && (
             <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
               {LINEUP_PLANETS.map((planet) => {
                 const isSelected = activePlanet.id === planet.id;
@@ -4560,7 +4364,7 @@ export default function SolarSystem({
           )}
 
           {/* OPTION 3: ZOOMED SIDE OVERLAY PANEL (SLIDES IN ON THE RIGHT WHEN A PLANET IS CLICKED) */}
-          {isShowcaseMode && viewVariant === 'option3' && lineupZoomed && (
+          {isShowcaseMode && lineupZoomed && (
             <div className="absolute inset-y-3 right-3 left-3 lg:left-auto lg:w-[58%] xl:w-[55%] z-30 bg-slate-950/95 border border-sky-500/40 rounded-2xl shadow-2xl backdrop-blur-xl overflow-y-auto flex flex-col">
               {/* Top quick switcher inside zoomed Option 3 */}
               <div className="px-4 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
@@ -4599,9 +4403,13 @@ export default function SolarSystem({
             </div>
           )}
 
-          {/* OPTION 3 UNZOOMED BOTTOM PROMPT BAR */}
-          {isShowcaseMode && viewVariant === 'option3' && !lineupZoomed && (
-            <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-30 w-[94%] max-w-3xl bg-slate-950/90 border border-slate-800/90 rounded-2xl px-4 py-2.5 backdrop-blur-md shadow-xl flex flex-wrap items-center justify-between gap-3">
+          {/* OPTION 3 UNZOOMED BOTTOM PROMPT BAR (FADES IN ONCE PLANETS ALIGN) */}
+          {isShowcaseMode && !lineupZoomed && (
+            <div
+              ref={lineupUiBottomRef}
+              style={{ opacity: 0 }}
+              className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-30 w-[94%] max-w-3xl bg-slate-950/90 border border-slate-800/90 rounded-2xl px-4 py-2.5 backdrop-blur-md shadow-xl flex flex-wrap items-center justify-between gap-3 transition-opacity duration-300"
+            >
               <div className="flex items-center gap-2.5">
                 <span className="text-lg">{activePlanet.emoji || '🌍'}</span>
                 <div>
@@ -4616,15 +4424,23 @@ export default function SolarSystem({
                   </div>
                 </div>
               </div>
-              <button
-                onClick={() => {
-                  setLineupZoomed(true);
-                  animStateRef.current.lineupZoomed = true;
-                }}
-                className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer shrink-0"
-              >
-                🔍 Hacer Zoom a {activePlanet.name.split(' ')[0]} →
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => setViewVariant('orbital')}
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-700 font-mono text-xs transition-all cursor-pointer"
+                >
+                  🌌 Ver Órbitas
+                </button>
+                <button
+                  onClick={() => {
+                    setLineupZoomed(true);
+                    animStateRef.current.lineupZoomed = true;
+                  }}
+                  className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer"
+                >
+                  🔍 Ver Temario de {activePlanet.name.split(' ')[0]} →
+                </button>
+              </div>
             </div>
           )}
 
@@ -4634,16 +4450,14 @@ export default function SolarSystem({
               <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 z-30 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 pointer-events-auto px-3 max-w-full">
                 <button
                   onClick={() => {
-                    if (onNavigate) {
-                      onNavigate('courses');
-                    } else {
-                      window.location.hash = '#/courses';
-                    }
+                    setViewVariant('option3');
+                    setLineupZoomed(false);
+                    animStateRef.current.lineupZoomed = false;
                   }}
-                  className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-sky-400/60 hover:border-sky-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-sky-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
+                  className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-sky-400/80 hover:border-sky-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-sky-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
-                  <span>Cálculo, Álgebra &amp; Física</span>
+                  <span>🎓 Volver a las 7 Clases (Alinear Planetas)</span>
                   <span className="text-sky-400 group-hover:translate-x-1 transition-transform text-xs">→</span>
                 </button>
 
@@ -4657,7 +4471,7 @@ export default function SolarSystem({
                       window.location.hash = '#/courses';
                     }
                   }}
-                  className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-emerald-400/60 hover:border-emerald-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2"
+                  className="group px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-emerald-400/60 hover:border-emerald-300 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/25 backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Tutoría de proyectos / tesis</span>
@@ -4726,56 +4540,33 @@ export default function SolarSystem({
               </div>
             </>
           )}
-        </div>
 
-        {/* ================================================================== */}
-        {/* OPTION 2 RIGHT COLUMN: 50/50 SPLIT COURSE DOSSIER                  */}
-        {/* ================================================================== */}
-        {!isRealScale && viewVariant === 'option2' && (
-          <div className="lg:col-span-7 bg-slate-950/95 text-left flex flex-col justify-between">
-            {renderCourseDossier(true)}
-          </div>
-        )}
+          {/* Intro: fade from absolute black */}
+          {!introDone && (
+            <div
+              className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center pointer-events-none"
+              style={{ animation: 'cineIntro 5.2s ease-in-out forwards', fontFamily: CINE_FONT }}
+              onAnimationEnd={() => setIntroDone(true)}
+            >
+              <span className="text-white/90 text-xs sm:text-sm tracking-[0.6em] uppercase">Galileo</span>
+              <span className="mt-3 text-sky-200/50 text-[9px] sm:text-[10px] tracking-[0.4em] uppercase">
+                {lang === 'en' ? 'Observatory of the Cosmos' : 'Observatorio del Cosmos'}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ==================================================================== */}
-      {/* 4. BOTTOM PANEL FOR OPTION 1 & ORBITAL MODE                          */}
+      {/* 4. BOTTOM PANEL: DOSSIER IN ORBITAL MODE                             */}
       {/* ==================================================================== */}
-      {activePlanet && !isRealScale && (viewVariant === 'option1' || viewVariant === 'orbital') && (
+      {activePlanet && !isRealScale && viewVariant === 'orbital' && (
         <div className="bg-slate-950/95 border-t border-slate-800/90 backdrop-blur-md text-left transition-all">
-          {/* Quick 7-Planet Selector Strip in Option 1 */}
-          {viewVariant === 'option1' && (
-            <div className="px-4 py-2.5 bg-slate-900/70 border-b border-slate-800/80 flex items-center gap-1.5 overflow-x-auto">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 mr-1 shrink-0">
-                7 Clases / Astros:
-              </span>
-              {LINEUP_PLANETS.map((planet) => {
-                const isSelected = activePlanet.id === planet.id;
-                return (
-                  <button
-                    key={planet.id}
-                    onClick={() => handleSelectPlanet(planet, true)}
-                    className={`px-3 py-1.5 rounded-xl font-mono text-xs transition-all flex items-center gap-1.5 shrink-0 cursor-pointer border ${
-                      isSelected
-                        ? 'bg-sky-500/20 text-white border-sky-400 font-bold shadow-sm'
-                        : 'bg-slate-950/70 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
-                    }`}
-                  >
-                    <span>{planet.emoji}</span>
-                    <span>{planet.name.split(' ')[0]}</span>
-                    <span className="text-[10px] text-sky-300/90 hidden sm:inline">
-                      · {lang === 'en' ? planet.shortCourseEn : planet.shortCourseEs}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
           {renderCourseDossier(false)}
         </div>
       )}
     </div>
   );
 }
+
 

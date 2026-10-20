@@ -444,6 +444,16 @@ const WHY_ME_REASONS = [
   },
 ];
 
+// Mapping of academic courses to matching interactive Physics Lab benchmark problems
+const COURSE_LAB_MAPPING = {
+  klausur: 'vector_calculus',
+  linear_algebra: 'engineering',
+  mechanics: 'newtonian',
+  geophysics: 'waves_geophysics',
+  computational: 'intro_physics',
+  ib: 'electromagnetism'
+};
+
 export default function App() {
   const [lang, setLang] = useState('es');
   // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'library' | 'precios' | 'contact'
@@ -1406,10 +1416,18 @@ Sent from Galileo STEM Mentorship Portal`;
                         </div>
                       </div>
 
-                      <div className="pt-2">
+                      <div className="pt-2 space-y-2">
+                        <button
+                          onClick={() => openLabProblem(COURSE_LAB_MAPPING[course.id] || 'newtonian')}
+                          className="w-full py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+                        >
+                          <Compass className="w-3.5 h-3.5 text-sky-600" />
+                          <span>{lang === 'en' ? 'Open Subject Mini-Lab (DCL) →' : 'Ver Mini-Lab de esta Materia (DCL) →'}</span>
+                        </button>
+
                         <button
                           onClick={() => handleOpenBooking(course)}
-                          className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm"
+                          className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
                         >
                           <Calendar className="w-3.5 h-3.5 text-sky-400" />
                           <span>{lang === 'en' ? 'Enroll / Request Diagnostic' : 'Inscribirse / Solicitar Diagnóstico'}</span>

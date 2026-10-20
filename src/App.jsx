@@ -98,7 +98,8 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Intermediate Value Theorem", "Solids of Revolution", "Stokes' Theorem", "Divergence Theorem", "Homogeneous ODEs"],
     badgeEn: "University Calculus Track",
     badgeEs: "Cálculo Universitario",
-    image: "/images/course-calculus.webp",
+    image: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-calculus.webp",
     color: "#0284C7"
   },
   {
@@ -134,7 +135,8 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Eigenvalues & Eigenvectors", "Kernel & Image", "Principal Axis Theorem", "Jordan Canonical Form", "Bilinear Forms"],
     badgeEn: "Proof Rigor",
     badgeEs: "Demostraciones",
-    image: "/images/course-linear-algebra.webp",
+    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-linear-algebra.webp",
     color: "#4F46E5"
   },
   {
@@ -170,7 +172,8 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Inertia Tensor", "Lagrangian Dynamics", "Coriolis Force", "Euler Angles", "Poisson Brackets"],
     badgeEn: "Theoretical Mechanics",
     badgeEs: "Mecánica Teórica",
-    image: "/images/course-mechanics.webp",
+    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-mechanics.webp",
     color: "#475569"
   },
   {
@@ -207,6 +210,7 @@ const ACADEMIC_COURSES = [
     badgeEn: "Mentor Specialty",
     badgeEs: "Especialidad Geofísica",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/lab-sandbox.webp",
     color: "#DC2626"
   },
   {
@@ -242,7 +246,8 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Runge-Kutta Methods", "Finite Differences", "Fourier Transform", "Stability Analysis", "Vectorized Python"],
     badgeEn: "Scientific Code",
     badgeEs: "Código Científico",
-    image: "/images/course-computational.webp",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-computational.webp",
     color: "#D97706"
   },
   {
@@ -279,6 +284,7 @@ const ACADEMIC_COURSES = [
     badgeEn: "Target Grade 7",
     badgeEs: "Objetivo Nota 7",
     image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-calculus.webp",
     color: "#059669"
   },
   {
@@ -314,7 +320,8 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Schwarzschild Metric", "Christoffel Symbols", "Geodesic Equation", "Einstein Field Equations", "Kerr Black Hole"],
     badgeEn: "General Relativity",
     badgeEs: "Relatividad General",
-    image: "/images/course-quantum.webp",
+    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=700&q=80",
+    simulationImage: "/images/course-quantum.webp",
     color: "#8B5CF6"
   }
 ];
@@ -653,6 +660,44 @@ export default function App() {
   const [modalCourse, setModalCourse] = useState(null);
   const [modalSubmitted, setModalSubmitted] = useState(false);
   const [lastMailtoUrl, setLastMailtoUrl] = useState('');
+
+  // Discreet Admin Gate Modal State
+  const [isAdminAuthOpen, setIsAdminAuthOpen] = useState(false);
+  const [adminPinInput, setAdminPinInput] = useState('');
+  const [adminPinError, setAdminPinError] = useState(false);
+
+  const handleOpenAdminGate = () => {
+    try {
+      if (sessionStorage.getItem('ds_admin_unlocked') === 'true') {
+        window.location.hash = '#/admin';
+        return;
+      }
+    } catch {}
+    setAdminPinInput('');
+    setAdminPinError(false);
+    setIsAdminAuthOpen(true);
+  };
+
+  const handleAdminPinSubmit = (e) => {
+    e.preventDefault();
+    const encoded = adminPinInput
+      .trim()
+      .split('')
+      .map((c) => c.charCodeAt(0))
+      .join('.');
+    if (encoded === '50.50.50.51') {
+      try {
+        sessionStorage.setItem('ds_admin_unlocked', 'true');
+      } catch {}
+      setIsAdminAuthOpen(false);
+      setAdminPinInput('');
+      setAdminPinError(false);
+      window.location.hash = '#/admin';
+    } else {
+      setAdminPinError(true);
+      setAdminPinInput('');
+    }
+  };
   const [bookingData, setBookingData] = useState({
     name: '',
     email: '',
@@ -751,17 +796,18 @@ export default function App() {
   // Keyboard Escape listener for Modal + Ctrl/Cmd+Shift+A shortcut for Admin Hub
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isModalOpen) {
-        setIsModalOpen(false);
+      if (e.key === 'Escape') {
+        if (isModalOpen) setIsModalOpen(false);
+        if (isAdminAuthOpen) setIsAdminAuthOpen(false);
       }
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
         e.preventDefault();
-        window.location.hash = '#/admin';
+        handleOpenAdminGate();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
+  }, [isModalOpen, isAdminAuthOpen]);
 
   const handleOpenBooking = (course = null, isSpontaneous = false) => {
     setModalCourse(course);
@@ -1261,18 +1307,36 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {ACADEMIC_COURSES.slice(0, 3).map((course) => (
-                    <div key={course.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 transition-all">
+                    <div key={course.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-lg transition-all group">
                       <div className="h-40 overflow-hidden relative">
+                        {/* Real Academic Photo (Pizarra clásica) */}
                         <img 
                           src={course.image} 
                           alt={course.titleEn} 
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
+                          className="w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0" 
                         />
+                        {/* AI Simulation / Vector Overlay (Crossfade on Hover) */}
+                        {course.simulationImage && (
+                          <img 
+                            src={course.simulationImage} 
+                            alt={`${course.titleEn} Simulation`} 
+                            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100" 
+                          />
+                        )}
                         <div className="absolute top-3 left-3">
                           <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs">
                             {course.code}
                           </span>
                         </div>
+                        {/* Interactive Mode Badge on Hover */}
+                        {course.simulationImage && (
+                          <div className="absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                            <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-sky-300 border border-sky-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
+                              <Sparkles className="w-2.5 h-2.5 text-sky-400" />
+                              <span>{lang === 'en' ? 'Simulation Model' : 'Modelo Simulado'}</span>
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="p-6 flex-1 flex flex-col justify-between">
@@ -1759,14 +1823,23 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 {filteredCourses.map((course) => (
                   <div
                     key={course.id}
-                    className="rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-md transition-all"
+                    className="rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-lg transition-all group"
                   >
                     <div className="h-44 overflow-hidden relative">
+                      {/* Real Academic Photo (Pizarra clásica) */}
                       <img 
                         src={course.image} 
                         alt={course.titleEn} 
-                        className="w-full h-full object-cover" 
+                        className="w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0" 
                       />
+                      {/* AI Simulation / Vector Overlay (Crossfade on Hover) */}
+                      {course.simulationImage && (
+                        <img 
+                          src={course.simulationImage} 
+                          alt={`${course.titleEn} Simulation`} 
+                          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100" 
+                        />
+                      )}
                       <div className="absolute top-3 left-3">
                         <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs">
                           {course.code}
@@ -1777,6 +1850,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           {lang === 'en' ? course.badgeEn : course.badgeEs}
                         </span>
                       </div>
+                      {/* Interactive Mode Badge on Hover */}
+                      {course.simulationImage && (
+                        <div className="absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                          <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-sky-300 border border-sky-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
+                            <Sparkles className="w-2.5 h-2.5 text-sky-400" />
+                            <span>{lang === 'en' ? 'Simulation Model' : 'Modelo Simulado'}</span>
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="p-6 flex-1 flex flex-col justify-between">
@@ -1881,12 +1963,17 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 <span className="text-slate-900 font-bold">{lang === 'en' ? 'Classical Library' : 'Biblioteca Clásica'}</span>
               </div>
 
-              {/* Library Banner with Unsplash imagery */}
-              <div className="relative rounded-3xl overflow-hidden mb-12 bg-slate-900 text-white shadow-lg">
+              {/* Library Banner with Real Historical Library + Illuminated Treatises Crossfade */}
+              <div className="relative rounded-3xl overflow-hidden mb-12 bg-slate-900 text-white shadow-lg group">
+                <img 
+                  src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Academic Library" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity duration-700 ease-in-out group-hover:opacity-0" 
+                />
                 <img 
                   src="/images/stem-library.webp" 
-                  alt="Academic Library" 
-                  className="absolute inset-0 w-full h-full object-cover opacity-25" 
+                  alt="Theoretical STEM Library Treatises" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-35" 
                 />
                 <div className="relative z-10 p-8 sm:p-14 max-w-3xl">
                   <span className="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold block mb-2">
@@ -2675,15 +2762,76 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       <footer className="border-t border-slate-200 bg-white py-12 text-xs font-mono text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700">[Φ] DANIEL SANTANDER</button>
+            <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700 cursor-pointer">[Φ] DANIEL SANTANDER</button>
             <span>•</span>
             <span>Geophysicist &amp; Double M.Sc.</span>
             <span>•</span>
             <a href="tel:+4917676497440" className="hover:text-emerald-700">+49 176 7649 7440</a>
           </div>
-          <p>© 2026 Daniel Santander • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}</p>
+          <div className="flex items-center gap-2 text-center sm:text-right">
+            <p>
+              © 2026 Daniel Santander • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}
+            </p>
+            <button
+              type="button"
+              onClick={handleOpenAdminGate}
+              aria-label="Internal Console"
+              className="text-[11px] text-slate-300 hover:text-slate-500 transition-colors px-1 cursor-pointer select-none"
+            >
+              π
+            </button>
+          </div>
         </div>
       </footer>
+
+      {/* --- DISCREET ADMIN PASSWORD MODAL --- */}
+      {isAdminAuthOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => setIsAdminAuthOpen(false)}
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs"
+          />
+          <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl z-10 text-white font-mono">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs uppercase tracking-widest text-slate-400 font-bold">
+                [Φ] Acceso Privado
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsAdminAuthOpen(false)}
+                className="text-slate-500 hover:text-slate-300 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleAdminPinSubmit} className="space-y-3">
+              <input
+                type="password"
+                inputMode="numeric"
+                autoFocus
+                value={adminPinInput}
+                onChange={(e) => {
+                  setAdminPinInput(e.target.value);
+                  if (adminPinError) setAdminPinError(false);
+                }}
+                placeholder="••••"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center text-lg tracking-[0.4em] text-white focus:outline-none focus:border-sky-500"
+              />
+              {adminPinError && (
+                <p className="text-[11px] text-rose-400 text-center">
+                  Clave incorrecta
+                </p>
+              )}
+              <button
+                type="submit"
+                className="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Entrar
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* --- MODAL: BOOKING & DIAGNOSTIC REQUEST (PROGRAMMED TO EMAIL DANISANTANDER.URRUTIA@GMAIL.COM) --- */}
       {isModalOpen && (

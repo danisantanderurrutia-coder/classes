@@ -1,0 +1,446 @@
+import React from 'react';
+import {
+  GraduationCap,
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  ExternalLink,
+  ShieldCheck,
+  CheckCircle2,
+  Download,
+  Calendar,
+  Sparkles,
+  ArrowRight,
+  Code2,
+  Compass,
+  FileCheck2,
+  Atom,
+  Layers,
+  Award
+} from 'lucide-react';
+
+const GithubIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+  </svg>
+);
+
+export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
+  // Downloadable digital vCard file
+  const handleDownloadVCard = () => {
+    const vCardContent = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'N:Santander Urrutia;Daniel;;;',
+      'FN:Daniel Santander Urrutia',
+      'ORG:Φ Science Mentorship & Computational Geophysics',
+      'TITLE:Geophysicist & Double M.Sc. Environmental Engineering',
+      'TEL;TYPE=CELL,VOICE,WHATSAPP:+4917676497440',
+      'EMAIL;TYPE=INTERNET,PREF:danisantander.urrutia@gmail.com',
+      'URL:https://danisantanderurrutia-coder.github.io/portafolio/',
+      'ADR;TYPE=WORK:;;Hannover;Lower Saxony;;Germany',
+      'NOTE:Registered German Freiberufler (§ 19 UStG) • University Physics & Math Mentoring (PIAD Method)',
+      'END:VCARD'
+    ].join('\r\n');
+
+    const blob = new Blob([vCardContent], { type: 'text/vcard;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Daniel_Santander_STEM_Tutor.vcf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="pt-24 pb-16 sm:pt-28 sm:pb-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        {/* Navigation Breadcrumb */}
+        <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
+          <button onClick={() => navigateTo('landing')} className="hover:underline cursor-pointer">
+            Home
+          </button>
+          <span>/</span>
+          <span className="text-slate-900 font-bold">
+            {lang === 'en' ? 'Tutor Profile & Credentials' : 'Perfil del Tutor & Credenciales'}
+          </span>
+        </div>
+
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold tracking-wide">
+            <GraduationCap className="w-3.5 h-3.5 text-emerald-600" />
+            <span>
+              {lang === 'en'
+                ? 'ACADEMIC PEDIGREE & RESEARCH GROUNDING'
+                : 'TRAYECTORIA ACADÉMICA & RIGOR CIENTÍFICO'}
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+            {lang === 'en'
+              ? 'Meet Your Mentor: Daniel Santander'
+              : 'Conoce a tu Tutor: Daniel Santander Urrutia'}
+          </h1>
+
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-sans">
+            {lang === 'en'
+              ? 'Geophysicist and Double Master of Science Engineer based in Hannover, Germany. Over 500 hours of 1-on-1 university physics, differential calculus, and IB exam preparation with 100% Spanish or English fluency.'
+              : 'Geofísico e Ingeniero Doble Máster radicado en Hannover, Alemania. Más de 500 horas de mentoría 1-a-1 en física universitaria, cálculo diferencial y preparación intensiva para exámenes universitarios (Klausuren) e IB.'}
+          </p>
+        </div>
+
+        {/* ========================================================= */}
+        {/* THE DIGITAL BUSINESS CARD HUD (TARJETA DE PRESENTACIÓN)   */}
+        {/* ========================================================= */}
+        <div className="relative rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-2xl overflow-hidden p-6 sm:p-10 lg:p-12">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 blur-[100px] pointer-events-none rounded-full" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/10 blur-[100px] pointer-events-none rounded-full" />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Left Column: Portrait & Live Badges (5 cols) */}
+            <div className="lg:col-span-5 flex flex-col items-center sm:items-start text-center sm:text-left space-y-4">
+              <div className="relative inline-block">
+                {/* Profile Photo Frame */}
+                <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-black p-1 border-2 border-white/40 shadow-2xl overflow-hidden">
+                  <img
+                    src="./profile.jpg"
+                    alt="Daniel Santander Urrutia"
+                    className="w-full h-full object-cover object-top filter contrast-105"
+                  />
+                </div>
+
+                {/* Geofrecuencia Brand Icon Badge */}
+                <div className="absolute -top-3 -left-3 bg-amber-400 p-2 rounded-xl border-2 border-slate-900 shadow-lg" title="Sello de Investigación Geofísica">
+                  <img src="./geofrecuencia_symbol.svg" alt="Geofrecuencia" className="w-5 h-5 text-slate-950" />
+                </div>
+
+                {/* Status Beacon */}
+                <div className="absolute -bottom-3 -right-2 bg-emerald-500 text-slate-950 font-mono font-bold text-[10px] px-2.5 py-1 rounded-lg border-2 border-slate-900 shadow-lg flex items-center gap-1.5 uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  <span>HANNOVER, DE</span>
+                </div>
+              </div>
+
+              {/* Identity & Legal Trust Badge */}
+              <div className="space-y-1.5">
+                <div className="inline-block bg-white text-slate-950 px-3 py-0.5 rounded font-mono font-extrabold text-sm tracking-tight uppercase">
+                  DANIEL SANTANDER URRUTIA
+                </div>
+                <div className="text-xs font-mono text-amber-300 font-semibold">
+                  Geophysicist (B.Sc.) • Double European M.Sc.
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}</span>
+                </div>
+              </div>
+
+              {/* Official German Registration Notice */}
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 text-[11px] font-mono text-slate-300 space-y-1 w-full max-w-sm">
+                <div className="flex items-center gap-1.5 text-emerald-400 font-bold uppercase text-[10px]">
+                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                  <span>{lang === 'en' ? 'Official Invoices in Germany' : 'Factura Oficial en Alemania'}</span>
+                </div>
+                <p className="text-slate-400 leading-snug">
+                  {lang === 'en'
+                    ? 'Registered Freiberufler (§ 19 UStG). Tax-deductible invoices valid for German university claims and educational grants.'
+                    : 'Freiberufler registrado en Alemania (§ 19 UStG). Emisión de factura oficial deducible para impuestos, becas y universidades.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Right Column: Academic Pedigree & Quick Actions (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Three Official University Degrees */}
+              <div className="space-y-2.5">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-sky-400 font-bold block">
+                  {lang === 'en' ? 'Verified University Degrees' : 'Títulos Universitarios Oficiales'}
+                </span>
+
+                <div className="grid grid-cols-1 gap-2.5 font-mono text-xs">
+                  {/* Chile */}
+                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
+                    <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
+                      <span>🇨🇱 CHILE (FCFM)</span>
+                      <span className="text-amber-300 font-bold">{lang === 'en' ? 'Engineering Degree' : 'Título de Ingeniero'}</span>
+                    </div>
+                    <div className="text-white font-bold text-sm">Geofísica (Engineering Geophysics)</div>
+                    <div className="text-slate-400 text-[11px]">Universidad de Chile • Facultad de Cs. Físicas y Matemáticas</div>
+                  </div>
+
+                  {/* Germany */}
+                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
+                    <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
+                      <span>🇩🇪 ALEMANIA (CAU KIEL)</span>
+                      <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
+                    </div>
+                    <div className="text-white font-bold text-sm">M.Sc. Environmental Management</div>
+                    <div className="text-slate-400 text-[11px]">Christian-Albrechts-Universität zu Kiel (Germany)</div>
+                  </div>
+
+                  {/* Poland */}
+                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
+                    <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
+                      <span>🇵🇱 POLONIA (AMU POZNAŃ)</span>
+                      <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
+                    </div>
+                    <div className="text-white font-bold text-sm">M.Sc. Integrated Catchment Management</div>
+                    <div className="text-slate-400 text-[11px]">Adam Mickiewicz University (Poland)</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons of the Business Card */}
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+                
+                {/* Download vCard Button */}
+                <button
+                  type="button"
+                  onClick={handleDownloadVCard}
+                  className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold flex items-center justify-center gap-2 border border-slate-600 transition-all cursor-pointer shadow-md group"
+                  title="Guardar contacto en tu teléfono (vCard)"
+                >
+                  <Download className="w-4 h-4 text-emerald-400 group-hover:-translate-y-0.5 transition-transform" />
+                  <span>{lang === 'en' ? 'Save Contact (vCard)' : 'Guardar Contacto (vCard)'}</span>
+                </button>
+
+                {/* WhatsApp Direct */}
+                <a
+                  href="https://wa.me/4917676497440"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center gap-2 transition-all shadow-md"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>WhatsApp: +49 176 7649 7440</span>
+                </a>
+
+                {/* Interactive Portfolio Bridge */}
+                <a
+                  href="https://danisantanderurrutia-coder.github.io/portafolio/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-3 px-4 rounded-xl bg-sky-700 hover:bg-sky-600 text-white font-bold flex items-center justify-center gap-2 transition-all shadow-md"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>{lang === 'en' ? 'Web Portfolio & Research' : 'Portafolio Web de Proyectos'}</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-75" />
+                </a>
+
+                {/* Book Session CTA */}
+                <button
+                  type="button"
+                  onClick={onOpenBooking}
+                  className="py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-950 font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+                >
+                  <Calendar className="w-4 h-4 text-emerald-600" />
+                  <span>{lang === 'en' ? 'Book Diagnostic Call →' : 'Agendar Sesión Diagnóstica →'}</span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        {/* ========================================================= */}
+        {/* PEDAGOGICAL METHODOLOGY & WHY STUDENTS SUCCEED           */}
+        {/* ========================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200 p-8 space-y-4 shadow-sm">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block">
+              {lang === 'en' ? 'The Mentorship Core' : 'Filosofía Pedagógica'}
+            </span>
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+              {lang === 'en'
+                ? 'From Phenomenological Intuition to Exact Exam Proofs'
+                : 'De la Intuición Física al Rigor del Examen Universitario'}
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed font-sans">
+              {lang === 'en'
+                ? 'University students rarely struggle because of intellectual limits. They fail because academic lectures often present proofs as dry, abstract equations without grounding their physical meaning. When exam day arrives, professors grade strictly on rigorous, step-by-step mathematical justification.'
+                : 'La mayoría de los estudiantes universitarios no reprueban por falta de talento. Se atascan cuando las cátedras presentan los teoremas como fórmulas desconectadas de la intuición física, pero en los exámenes (Klausuren) se exige una justificación matemática rigurosa paso a paso para otorgar puntos parciales.'}
+            </p>
+            <p className="text-sm text-slate-600 leading-relaxed font-sans">
+              {lang === 'en'
+                ? 'Under the PIAD Method™, we reconstruct each principle from first principles, test it on interactive simulators, and practice directly with past exam papers (Altklausuren).'
+                : 'Bajo el Método PIAD™, reconstruimos cada principio desde sus fundamentos, lo visualizamos en simuladores numéricos y lo entrenamos directamente sobre exámenes pasados (Altklausuren).'}
+            </p>
+          </div>
+
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold flex items-center justify-center mb-4">
+                  01
+                </span>
+                <h3 className="text-sm font-bold text-slate-900 mb-2">
+                  {lang === 'en' ? 'Sensory Physical Intuition' : 'Intuición Física Sensorial'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  {lang === 'en'
+                    ? 'Free body diagrams (DCL), vector field visualization, and geometric insight before formula manipulation.'
+                    : 'Diagramas de cuerpo libre (DCL), visualización de campos vectoriales e intuición geométrica previa a la fórmula.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold flex items-center justify-center mb-4">
+                  02
+                </span>
+                <h3 className="text-sm font-bold text-slate-900 mb-2">
+                  {lang === 'en' ? 'Python Numerical Modeling' : 'Modelación y Python Científico'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  {lang === 'en'
+                    ? 'Turning ODEs and differential systems into concrete, executable code with NumPy and SciPy.'
+                    : 'Transformación de sistemas de EDOs y álgebra lineal en código ejecutable con NumPy, SciPy y visualización.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold flex items-center justify-center mb-4">
+                  03
+                </span>
+                <h3 className="text-sm font-bold text-slate-900 mb-2">
+                  {lang === 'en' ? 'Partial Credit Maximization' : 'Maximización de Teilpunkte'}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                  {lang === 'en'
+                    ? 'Targeted Altklausur drills teaching students how to present proofs so German professors grant maximum points.'
+                    : 'Entrenamiento intensivo en Altklausuren para redactar demostraciones y asegurar cada punto parcial del corrector.'}
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* ========================================================= */}
+        {/* RESEARCH PORTFOLIO BRIDGE & PROVEN EXPERIENCE            */}
+        {/* ========================================================= */}
+        <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 sm:p-10 space-y-6 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
+                {lang === 'en' ? 'Irrefutable Scientific Evidence' : 'Evidencia Científica & Proyectos Reales'}
+              </span>
+              <h2 className="text-2xl font-bold text-slate-900">
+                {lang === 'en' ? 'Research Búnker & Engineering Projects' : 'Investigación Aplicada y Gemelos Digitales'}
+              </h2>
+            </div>
+            
+            <a
+              href="https://danisantanderurrutia-coder.github.io/portafolio/"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold transition-all shrink-0 cursor-pointer shadow-sm"
+            >
+              <Globe className="w-4 h-4 text-sky-400" />
+              <span>{lang === 'en' ? 'Explore 30+ Projects in Portfolio ↗' : 'Explorar +30 Proyectos en Portafolio ↗'}</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
+              <div className="text-xs font-mono font-bold text-emerald-700 uppercase">
+                {lang === 'en' ? 'Peatland Hydrology & GHG' : 'Hidrología de Turberas & GEI'}
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                {lang === 'en' ? 'Catchment Dynamics in Germany & Poland' : 'Dinámica de Cuencas en Alemania y Polonia'}
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                {lang === 'en'
+                  ? 'Field monitoring, water balance equations, and greenhouse gas flux models (CH₄/CO₂) developed at CAU Kiel and AMU Poznań.'
+                  : 'Monitoreo de terreno, balances hídricos y modelos de flujos de gases de efecto invernadero (CH₄/CO₂) en CAU Kiel y AMU Poznań.'}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
+              <div className="text-xs font-mono font-bold text-sky-700 uppercase">
+                {lang === 'en' ? 'Geophysical Inverse Theory' : 'Teoría de Inversión Geofísica'}
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                {lang === 'en' ? 'SVD, Tikhonov & Potential Fields' : 'SVD, Regularización Tikhonov y Campos'}
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                {lang === 'en'
+                  ? 'Singular value decomposition, travel-time seismic inversion, and gravimetric Bouguer reductions at Universidad de Chile.'
+                  : 'Descomposición en valores singulares, inversión de tiempos de viaje sísmicos y reducciones gravimétricas de Bouguer en la FCFM.'}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-2">
+              <div className="text-xs font-mono font-bold text-indigo-700 uppercase">
+                {lang === 'en' ? 'High-Impact Pedagogy' : 'Pedagogía y Divulgación'}
+              </div>
+              <h4 className="text-sm font-bold text-slate-900">
+                {lang === 'en' ? 'Mass Science Communication (+700k)' : 'Comunicación Científica Masiva (+700k)'}
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                {lang === 'en'
+                  ? 'Proven mastery in breaking down deeply complex scientific principles into engaging, intuitive, and crystal-clear explanations.'
+                  : 'Dirección editorial y oratoria en medios cívicos: capacidad probada de sintetizar conceptos científicos complejos con máxima claridad.'}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ========================================================= */}
+        {/* BOTTOM CALL TO ACTION                                     */}
+        {/* ========================================================= */}
+        <div className="rounded-3xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-slate-800">
+          <div className="space-y-2 text-center sm:text-left">
+            <h3 className="text-xl sm:text-2xl font-bold">
+              {lang === 'en'
+                ? 'Ready to Prepare Your Next Exam or Master Thesis?'
+                : '¿Listo para preparar tu próximo examen o tesis de máster?'}
+            </h3>
+            <p className="text-slate-300 text-xs sm:text-sm max-w-xl">
+              {lang === 'en'
+                ? 'Schedule a free 20-minute diagnostic session to review your syllabus, identify exam bottlenecks, and set up your study sprint.'
+                : 'Agenda una sesión diagnóstica gratuita de 20 minutos para revisar tu temario, detectar los puntos críticos y definir tu plan de estudio.'}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={onOpenBooking}
+              className="py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer shadow-lg shadow-emerald-500/20"
+            >
+              {lang === 'en' ? 'Book Diagnostic Call →' : 'Agendar Diagnóstico →'}
+            </button>
+            <a
+              href="https://wa.me/4917676497440"
+              target="_blank"
+              rel="noreferrer"
+              className="py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold transition-all border border-white/20"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};

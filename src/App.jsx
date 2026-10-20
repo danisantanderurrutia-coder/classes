@@ -51,6 +51,7 @@ import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
 import { ProblemThumbnail } from './components/LabThumbnails';
 import PIADMethod from './components/PIADMethod';
 import PhysicsToolkit from './components/PhysicsToolkit';
+import { TutorPage } from './components/TutorPage';
 import {
   CURRENCY_TIERS,
   CURRENCY_LIST,
@@ -702,7 +703,7 @@ export default function App() {
     } catch {}
   }, []);
 
-  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'library' | 'precios' | 'contact'
+  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'precios' | 'contact'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
@@ -799,14 +800,11 @@ export default function App() {
         setTimeout(() => {
           document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
-      } else if (['precios', 'calculator', 'mentor'].includes(hash)) {
+      } else if (['tutor', 'mentor'].includes(hash)) {
+        setCurrentPage('tutor');
+      } else if (['precios', 'calculator'].includes(hash)) {
         setCurrentPage('precios');
-        if (hash === 'mentor') {
-          setTimeout(() => {
-            document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
-          }, 100);
-        }
-      } else if (['landing', 'lab', 'courses', 'piad', 'library', 'contact'].includes(hash)) {
+      } else if (['landing', 'lab', 'courses', 'tutor', 'piad', 'library', 'contact'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
         setCurrentPage('landing');
@@ -818,6 +816,12 @@ export default function App() {
   }, []);
 
   const navigateTo = (page, sectionId) => {
+    if (page === 'tutor' || page === 'mentor') {
+      setCurrentPage('tutor');
+      window.location.hash = '#/tutor';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     if (page === 'faq') {
       setCurrentPage('contact');
       window.location.hash = '#/contact';
@@ -826,10 +830,10 @@ export default function App() {
       }, 50);
       return;
     }
-    if (page === 'mentor' || page === 'calculator' || page === 'precios') {
+    if (page === 'calculator' || page === 'precios') {
       setCurrentPage('precios');
       window.location.hash = '#/precios';
-      if (page === 'mentor' || sectionId === 'mentor-dossier') {
+      if (sectionId === 'mentor-dossier') {
         setTimeout(() => {
           document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
         }, 50);
@@ -994,6 +998,18 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </button>
 
             <button
+              onClick={() => navigateTo('tutor')}
+              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                currentPage === 'tutor'
+                  ? 'bg-white text-slate-950 font-bold shadow-md'
+                  : 'text-slate-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <GraduationCap className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+              <span>{lang === 'en' ? 'Tutor' : 'Tutor'}</span>
+            </button>
+
+            <button
               onClick={() => navigateTo('piad')}
               className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'piad'
@@ -1111,6 +1127,13 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         >
           <BookOpen className="w-3.5 h-3.5" />
           <span>{lang === 'en' ? 'Courses' : 'Cursos'}</span>
+        </button>
+        <button
+          onClick={() => navigateTo('tutor')}
+          className={`p-1 flex flex-col items-center gap-0.5 ${currentPage === 'tutor' ? 'text-white font-bold' : 'hover:text-white'}`}
+        >
+          <GraduationCap className="w-3.5 h-3.5" />
+          <span>Tutor</span>
         </button>
         <button
           onClick={() => navigateTo('piad')}
@@ -1603,7 +1626,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </p>
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                       <button
-                        onClick={() => navigateTo('mentor')}
+                        onClick={() => navigateTo('tutor')}
                         className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold cursor-pointer"
                       >
                         {lang === 'en' ? 'Read Full Academic Dossier →' : 'Ver Dossier Académico Completo →'}
@@ -2747,6 +2770,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                     {/* Direct Contact Buttons */}
                     <div className="pt-2 space-y-2">
+                      <button
+                        type="button"
+                        onClick={() => navigateTo('tutor')}
+                        className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
+                      >
+                        <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{lang === 'en' ? 'View Full Tutor Dossier & Business Card →' : 'Ver Perfil y Tarjeta del Tutor →'}</span>
+                      </button>
+
                       <a
                         href="https://wa.me/4917676497440"
                         target="_blank"
@@ -2889,6 +2921,56 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     ? 'Write directly via WhatsApp, send an email, or schedule your 20-minute diagnostic session.'
                     : 'Escribe directamente por WhatsApp, envía un correo o agenda tu sesión diagnóstica de 20 minutos.'}
                 </p>
+              </div>
+
+              {/* Mentor Identity Banner - Immediate Pedigree & Trust Grounding */}
+              <div className="bg-slate-50 rounded-3xl border border-slate-200 p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center shadow-xs mb-10">
+                <div className="lg:col-span-4 flex justify-center">
+                  <div className="relative">
+                    <img
+                      src="./profile.jpg"
+                      alt="Daniel Santander"
+                      className="w-44 h-44 sm:w-52 sm:h-52 object-cover rounded-2xl border-4 border-white shadow-lg"
+                    />
+                    <div className="absolute -bottom-3 -right-2 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-mono font-bold shadow-md">
+                      M.Sc. Geophysics
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-8 space-y-3.5 text-center lg:text-left">
+                  <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block">
+                    {lang === 'en' ? 'Academic Pedigree & Research Grounding' : 'Trayectoria Académica e Investigación'}
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Daniel Santander Urrutia
+                  </h2>
+                  <p className="text-xs sm:text-sm font-mono text-slate-600">
+                    Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany &amp; AMU Poznań, Poland)
+                  </p>
+                  <p className="text-sm text-slate-600 leading-relaxed font-sans">
+                    {lang === 'en'
+                      ? 'Combining high-impact territorial environmental science, hydrogeophysical catchment modeling, and digital twins with over 500 hours of 1-on-1 university physics and mathematics mentorship in Germany.'
+                      : 'Combinando ciencia ambiental territorial, modelación hidrogeofísica de cuencas y gemelos digitales con más de 500 horas de mentoría universitaria de alto rendimiento en Alemania.'}
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+                    <button
+                      onClick={() => navigateTo('tutor')}
+                      className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold cursor-pointer transition-all shadow-xs"
+                    >
+                      {lang === 'en' ? 'Read Full Academic Dossier →' : 'Ver Dossier Académico Completo →'}
+                    </button>
+                    <a
+                      href="https://wa.me/4917676497440"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-mono text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer transition-all"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? 'Contact (+49 176 7649 7440)' : 'Contacto (+49 176 7649 7440)'}</span>
+                    </a>
+                  </div>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -3093,7 +3175,18 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         )}
 
         {/* ========================================================= */}
-        {/* PAGE 7: PIAD METHOD™ MANIFESTO & OPEN INQUIRY PEDAGOGY     */}
+        {/* PAGE 7: TUTOR PROFILE & CREDENTIALS DOSSIER               */}
+        {/* ========================================================= */}
+        {currentPage === 'tutor' && (
+          <TutorPage
+            lang={lang}
+            onOpenBooking={() => handleOpenBooking()}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {/* ========================================================= */}
+        {/* PAGE 8: PIAD METHOD™ MANIFESTO & OPEN INQUIRY PEDAGOGY     */}
         {/* ========================================================= */}
         {currentPage === 'piad' && (
           <PIADMethod

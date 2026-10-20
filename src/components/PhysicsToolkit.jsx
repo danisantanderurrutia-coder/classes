@@ -35,6 +35,12 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   // Sub-filter for physics laws
   const [physicsLawCategory, setPhysicsLawCategory] = useState('all');
 
+  // Sub-filter for linear algebra formulations
+  const [algebraCategory, setAlgebraCategory] = useState('all');
+
+  // Sub-filter for calculus formulations
+  const [calculusCategory, setCalculusCategory] = useState('all');
+
   // ==========================================================================
   // 1. RIGHT HAND RULE (RHR) INTERACTIVE STATE
   // ==========================================================================
@@ -331,6 +337,350 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   const filteredLaws = physicsLawCategory === 'all'
     ? ALL_FUNDAMENTAL_LAWS
     : ALL_FUNDAMENTAL_LAWS.filter((l) => l.category === physicsLawCategory);
+
+  // ==========================================================================
+  // MASTER COMPENDIUM OF LINEAR ALGEBRA, AXIOMS & MATRIX THEORY (MAT-102 / COMP-205)
+  // ==========================================================================
+  const ALL_ALGEBRA_LAWS = [
+    {
+      id: 'vector_space_axioms',
+      category: 'axioms',
+      courseCode: 'MAT-102',
+      titleEn: 'The 8 Axioms of a Vector Space over Field 𝕂',
+      titleEs: 'Los 8 Axiomas de Espacio Vectorial sobre un Cuerpo 𝕂',
+      latex: '\\mathbf{u} + \\mathbf{v} = \\mathbf{v} + \\mathbf{u}, \\quad \\alpha(\\mathbf{u} + \\mathbf{v}) = \\alpha\\mathbf{u} + \\alpha\\mathbf{v}, \\quad 1\\mathbf{u} = \\mathbf{u}',
+      descEn: 'A set V with addition (+) and scalar multiplication (·) over field 𝕂 satisfies 8 axioms: 4 for abelian group addition (closure, associativity, commutativity, zero element 0, inverse -u) and 4 for scalar scaling (scalar distributivity, vector distributivity, mixed associativity a(bu)=(ab)u, and unit scalar 1u=u).',
+      descEs: 'Un conjunto V con suma (+) y producto por escalar (·) sobre un cuerpo 𝕂 satisface 8 axiomas: 4 de grupo abeliano aditivo (cerradura, asociatividad, conmutatividad, elemento neutro 0, elemento opuesto -u) y 4 de escala (distributividad escalar, distributividad vectorial, asociatividad mixta y neutro 1u=u).',
+      relevanceEn: 'Classic university midterm proof: proving whether a given set and custom operations satisfy vector space axioms.',
+      relevanceEs: 'Pregunta clásica de certamen en Álgebra Lineal: demostrar si un conjunto dado con operaciones no estándar es un espacio vectorial.'
+    },
+    {
+      id: 'subspace_criterion',
+      category: 'axioms',
+      courseCode: 'MAT-102',
+      titleEn: 'Vector Subspace Criterion (Linear Closure Theorem)',
+      titleEs: 'Criterio de Subespacio Vectorial (Teorema de Clausura)',
+      latex: 'W \\le V \\iff \\mathbf{0} \\in W \\quad \\land \\quad \\forall \\alpha, \\beta \\in \\mathbb{K}, \\; \\mathbf{u}, \\mathbf{v} \\in W \\implies \\alpha\\mathbf{u} + \\beta\\mathbf{v} \\in W',
+      descEn: 'A non-empty subset W ⊆ V is a vector subspace if and only if it contains the zero vector 0 and is closed under arbitrary linear combinations of vectors.',
+      descEs: 'Un subconjunto no vacío W ⊆ V es subespacio vectorial si y solo si contiene al vector nulo 0 y es cerrado bajo combinaciones lineales arbitrarias.',
+      relevanceEn: 'Universally used to classify kernel nullspaces, solution sets, and polynomial families as valid subspaces.',
+      relevanceEs: 'Herramienta fundamental para clasificar núcleos, imágenes y conjuntos solución como subespacios vectoriales.'
+    },
+    {
+      id: 'linear_independence_basis',
+      category: 'axioms',
+      courseCode: 'MAT-102',
+      titleEn: 'Linear Independence, Spanning Set & Vector Basis',
+      titleEs: 'Independencia Lineal, Conjunto Generador y Base',
+      latex: '\\sum_{i=1}^k c_i \\mathbf{v}_i = \\mathbf{0} \\implies c_1 = \\dots = c_k = 0 \\quad \\Big| \\quad \\mathcal{B} = \\{\\mathbf{v}_i\\}_{i=1}^n, \\; \\dim(V) = n',
+      descEn: 'Vectors are linearly independent if only the trivial combination produces zero. A basis is a linearly independent spanning set; its cardinality defines the dimension dim(V).',
+      descEs: 'Un conjunto es linealmente independiente si la única combinación lineal que da el vector cero es la trivial. Una base es un conjunto L.I. que genera todo el espacio; su cantidad de elementos define la dimensión dim(V).',
+      relevanceEn: 'Evaluated in coordinate transformations, basis changes, and solutions to homogeneous systems of ODEs.',
+      relevanceEs: 'Evaluado en cambio de base, rango matricial y soluciones fundamentales de sistemas de ecuaciones diferenciales.'
+    },
+    {
+      id: 'linear_transformation',
+      category: 'transformations',
+      courseCode: 'MAT-102',
+      titleEn: 'Linear Transformation, Kernel (Nullspace) & Image',
+      titleEs: 'Transformación Lineal, Núcleo (Kernel) e Imagen',
+      latex: 'T(\\alpha \\mathbf{u} + \\beta \\mathbf{v}) = \\alpha T(\\mathbf{u}) + \\beta T(\\mathbf{v}) \\quad \\Big| \\quad \\ker(T) = \\{\\mathbf{v} \\in V : T(\\mathbf{v}) = \\mathbf{0}\\}',
+      descEn: 'A map T: V → W preserving algebraic vector operations. The kernel ker(T) represents vectors collapsed to zero (T is injective iff ker(T) = {0}); the image im(T) is the range subspace spanned in W.',
+      descEs: 'Una función T: V → W que preserva suma y escala. El núcleo ker(T) agrupa los vectores transformados al cero (T es inyectiva si y solo si ker(T) = {0}); la imagen im(T) es el subespacio generado en el codominio.',
+      relevanceEn: 'Foundational for matrix representation of geometric transformations (rotations, reflections, projections).',
+      relevanceEs: 'Pilar para matrices asociadas a transformaciones geométricas (rotaciones, reflexiones, proyecciones).'
+    },
+    {
+      id: 'rank_nullity_theorem',
+      category: 'transformations',
+      courseCode: 'MAT-102',
+      titleEn: 'Rank-Nullity Theorem (Fundamental Dimension Theorem)',
+      titleEs: 'Teorema de la Dimensión (Rango y Nulidad)',
+      latex: '\\dim(\\operatorname{im} T) + \\dim(\\ker T) = \\dim(V) \\quad \\Longleftrightarrow \\quad \\operatorname{rank}(A) + \\operatorname{nullity}(A) = n',
+      descEn: 'Relates domain dimension n to the dimensions of image (column rank) and kernel (nullity). Dictates the degrees of freedom in systems of linear equations Ax = b.',
+      descEs: 'Conecta la dimensión del dominio n con la dimensión de la imagen (rango) y el núcleo (nulidad). Dicta los grados de libertad en sistemas lineales Ax = b.',
+      relevanceEn: 'Crucial for analyzing underdetermined and overdetermined inverse problems in geophysics and data science.',
+      relevanceEs: 'Esencial para determinar la existencia y unicidad de soluciones en problemas inversos y sistemas indeterminados.'
+    },
+    {
+      id: 'invertible_matrix_theorem',
+      category: 'matrices',
+      courseCode: 'MAT-102',
+      titleEn: 'The Invertible Matrix Theorem (Fundamental Equivalences)',
+      titleEs: 'Teorema de la Matriz Inversible (Equivalencias Fundamentales)',
+      latex: 'A \\in \\mathbb{R}^{n \\times n} \\text{ inv} \\iff \\det(A) \\ne 0 \\iff \\operatorname{rank}(A) = n \\iff \\ker(A) = \\{\\mathbf{0}\\} \\iff \\lambda_i \\ne 0',
+      descEn: 'A square n×n matrix A is invertible if and only if: det(A) ≠ 0, columns form a linearly independent basis of ℝⁿ, nullity is 0, rank is n, 0 is not an eigenvalue, and Ax = b has a unique solution for every b.',
+      descEs: 'Una matriz cuadrada n×n es invertible si y solo si: det(A) ≠ 0, sus columnas forman una base L.I. de ℝⁿ, la nulidad es 0, el rango es n, ningún autovalor es cero, y Ax = b tiene solución única para todo b.',
+      relevanceEn: 'The cornerstone equivalence theorem for university linear algebra exams.',
+      relevanceEs: 'El teorema de equivalencias más preguntado en exámenes y controles de álgebra lineal de primer año.'
+    },
+    {
+      id: 'determinants_laplace',
+      category: 'matrices',
+      courseCode: 'MAT-102',
+      titleEn: 'Determinant Multiplicativity & Laplace Expansion',
+      titleEs: 'Multiplicatividad del Determinante y Regla de Laplace',
+      latex: '\\det(AB) = \\det(A)\\det(B), \\quad \\det(A^T) = \\det(A), \\quad \\det(A^{-1}) = \\frac{1}{\\det(A)}',
+      descEn: 'The determinant measures oriented hypervolume scaling of a linear transformation. Evaluated recursively via Laplace expansion along row i: det(A) = ∑ⱼ aᵢⱼ (-1)ⁱ⁺ʲ Mᵢⱼ.',
+      descEs: 'El determinante mide el factor de dilatación del hipervolumen orientado por una transformación lineal. Se calcula recursivamente mediante desarrollo de Laplace: det(A) = ∑ⱼ aᵢⱼ (-1)ⁱ⁺ʲ Mᵢⱼ.',
+      relevanceEn: 'Used in Jacobian determinants for multiple integrals and Cramer’s rule for solving linear systems.',
+      relevanceEs: 'Imprescindible para el jacobiano en integrales múltiples y cálculo de áreas orientadas en geometría analítica.'
+    },
+    {
+      id: 'inner_product_cauchy_schwarz',
+      category: 'inner_product',
+      courseCode: 'MAT-102',
+      titleEn: 'Inner Product Axioms & Cauchy-Schwarz Inequality',
+      titleEs: 'Axiomas de Producto Interno y Desigualdad de Cauchy-Schwarz',
+      latex: '|\\langle \\mathbf{u}, \\mathbf{v} \\rangle| \\le \\|\\mathbf{u}\\| \\|\\mathbf{v}\\| \\quad \\Big| \\quad \\cos \\theta = \\frac{\\langle \\mathbf{u}, \\mathbf{v} \\rangle}{\\|\\mathbf{u}\\| \\|\\mathbf{v}\\|}',
+      descEn: 'An inner product satisfies conjugate symmetry, linearity in the first argument, and positive definiteness (⟨u, u⟩ > 0 for u ≠ 0). The Cauchy-Schwarz inequality provides a rigorous geometric angle and triangle inequality.',
+      descEs: 'Un producto interior satisface linealidad, simetría (o conjugación) y positividad estricta (⟨u, u⟩ > 0 si u ≠ 0). La desigualdad de Cauchy-Schwarz fundamenta la noción geométrica de ángulo y la desigualdad triangular.',
+      relevanceEn: 'The bedrock of Hilbert spaces, Fourier analysis, and signal correlation in geophysics.',
+      relevanceEs: 'Base de los espacios de Hilbert, series de Fourier y correlación cruzada de señales geofísicas.'
+    },
+    {
+      id: 'gram_schmidt_process',
+      category: 'inner_product',
+      courseCode: 'MAT-102',
+      titleEn: 'Gram-Schmidt Orthonormalization Algorithm',
+      titleEs: 'Proceso de Ortogonalización de Gram-Schmidt',
+      latex: '\\mathbf{u}_k = \\mathbf{v}_k - \\sum_{j=1}^{k-1} \\frac{\\langle \\mathbf{v}_k, \\mathbf{u}_j \\rangle}{\\|\\mathbf{u}_j\\|^2} \\mathbf{u}_j, \\quad \\mathbf{e}_k = \\frac{\\mathbf{u}_k}{\\|\\mathbf{u}_k\\|}',
+      descEn: 'Iterative algorithm that transforms any arbitrary linearly independent basis into an orthonormal basis (eᵢ · eⱼ = δᵢⱼ), subtracting successive orthogonal projections.',
+      descEs: 'Algoritmo recursivo que transforma cualquier base linealmente independiente en una base ortonormal (eᵢ · eⱼ = δᵢⱼ), restando proyecciones ortogonales sucesivas.',
+      relevanceEn: 'Directly yields QR matrix decomposition and Legendre polynomial orthogonal basis functions.',
+      relevanceEs: 'Genera la factorización QR de matrices y las bases ortogonales de polinomios de Legendre en física matemática.'
+    },
+    {
+      id: 'eigenvalues_characteristic_poly',
+      category: 'spectral',
+      courseCode: 'MAT-102',
+      titleEn: 'Eigenvalues, Eigenvectors & Characteristic Polynomial',
+      titleEs: 'Autovalores, Autovectores y Polinomio Característico',
+      latex: 'A\\mathbf{v} = \\lambda \\mathbf{v} \\quad (\\mathbf{v} \\ne \\mathbf{0}) \\iff p(\\lambda) = \\det(A - \\lambda I) = 0',
+      descEn: 'Eigenvectors v are non-zero vectors whose direction is unchanged by matrix A, being scaled only by eigenvalue λ. Computed by finding roots of characteristic polynomial p(λ) = det(A - λI).',
+      descEs: 'Los autovectores son direcciones invariantes bajo la matriz A, escaladas únicamente por el autovalor λ. Se obtienen hallando las raíces del polinomio característico p(λ) = det(A - λI).',
+      relevanceEn: 'Fundamental for normal modes of vibration, structural resonance, and stability of dynamical systems.',
+      relevanceEs: 'Fundamental para modos normales de oscilación sísmica, resonancia mecánica y estabilidad de sistemas dinámicos.'
+    },
+    {
+      id: 'spectral_theorem',
+      category: 'spectral',
+      courseCode: 'MAT-102 / COMP-205',
+      titleEn: 'Spectral Theorem for Real Symmetric Matrices',
+      titleEs: 'Teorema Espectral para Matrices Simétricas Reales',
+      latex: 'A = Q \\Lambda Q^T \\quad (Q^T Q = I, \\; \\Lambda = \\operatorname{diag}(\\lambda_1, \\dots, \\lambda_n))',
+      descEn: 'Every real symmetric matrix (A = A^T) possesses strictly real eigenvalues and an orthonormal basis of eigenvectors. It can be diagonalized by an orthogonal rotation matrix Q.',
+      descEs: 'Toda matriz simétrica real (A = A^T) posee exclusivamente autovalores reales y una base ortonormal de autovectores. Se diagonaliza mediante una matriz de rotación ortogonal Q.',
+      relevanceEn: 'Used to diagonalize moment of inertia tensors, strain tensors, and covariance matrices in PCA.',
+      relevanceEs: 'Permite diagonalizar el tensor de momentos de inercia, tensores de deformación y matrices de covarianza en PCA.'
+    },
+    {
+      id: 'svd_decomposition',
+      category: 'spectral',
+      courseCode: 'COMP-205',
+      titleEn: 'Singular Value Decomposition (SVD)',
+      titleEs: 'Descomposición en Valores Singulares (SVD)',
+      latex: 'A = U \\Sigma V^T = \\sum_{i=1}^r \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T \\quad (\\sigma_1 \\ge \\sigma_2 \\ge \\dots \\ge \\sigma_r > 0)',
+      descEn: 'Factorizes any rectangular m×n matrix into two orthogonal coordinate rotations (U, V) and a diagonal matrix of non-negative singular values Σ, providing Moore-Penrose pseudoinverse A⁺.',
+      descEs: 'Factoriza cualquier matriz rectangular m×n en dos rotaciones ortogonales (U, V) y una matriz diagonal de valores singulares positivos Σ, proveyendo la pseudoinversa de Moore-Penrose.',
+      relevanceEn: 'Gold standard algorithm for low-rank image compression, principal component analysis, and noise filtering.',
+      relevanceEs: 'El estándar de oro para compresión de datos sísmicos, reducción dimensional PCA y filtrado de ruido.'
+    },
+    {
+      id: 'tikhonov_regularization',
+      category: 'spectral',
+      courseCode: 'GEO-301 / COMP-205',
+      titleEn: 'Tikhonov Regularized Inversion (Damped Least Squares)',
+      titleEs: 'Inversión Regularizada de Tikhonov (Mínimos Cuadrados Amortiguados)',
+      latex: '\\hat{\\mathbf{m}} = (A^T A + \\varepsilon^2 I)^{-1} A^T \\mathbf{d} \\quad \\Longleftrightarrow \\quad \\min_{\\mathbf{m}} \\left(\\|A\\mathbf{m} - \\mathbf{d}\\|^2 + \\varepsilon^2 \\|\\mathbf{m}\\|^2\\right)',
+      descEn: 'Stabilizes ill-posed rank-deficient inverse systems by adding an isotropic energy penalty ε²‖m‖², preventing noise amplification from near-zero singular values in tomography.',
+      descEs: 'Estabiliza problemas inversos mal condicionados agregando una penalización de energía ε²‖m‖², evitando que el ruido se amplifique por valores singulares cercanos a cero en tomografía.',
+      relevanceEn: 'Essential in geophysical seismic tomography, satellite gravity recovery, and medical electrical impedance.',
+      relevanceEs: 'Pilar indispensable en tomografía sísmica computarizada y gravimetría satelital.'
+    }
+  ];
+
+  const filteredAlgebraLaws = algebraCategory === 'all'
+    ? ALL_ALGEBRA_LAWS
+    : ALL_ALGEBRA_LAWS.filter((l) => l.category === algebraCategory);
+
+  // ==========================================================================
+  // MASTER COMPENDIUM OF CALCULUS, LIMITS, DERIVATIVES & INTEGRALS (MAT-101 / MAT-201)
+  // ==========================================================================
+  const ALL_CALCULUS_LAWS = [
+    {
+      id: 'epsilon_delta_limit',
+      category: 'limits',
+      courseCode: 'MAT-101',
+      titleEn: 'Rigorous ε-δ Definition of Limit (Cauchy-Weierstrass)',
+      titleEs: 'Definición Rigurosa de Límite (Épsilon-Delta)',
+      latex: '\\lim_{x \\to a} f(x) = L \\iff \\forall \\varepsilon > 0, \\, \\exists \\delta > 0 : 0 < |x - a| < \\delta \\implies |f(x) - L| < \\varepsilon',
+      descEn: 'The formal definition of functional limit: for every target tolerance band ε > 0 around L, there exists a symmetric puncture radius δ > 0 around a such that whenever x is within δ of a, f(x) is trapped within ε of L.',
+      descEs: 'La definición formal de límite: para toda tolerancia ε > 0 alrededor de L, existe un radio δ > 0 alrededor de a tal que si x dista menos de δ de a, entonces f(x) dista menos de ε de L.',
+      relevanceEn: 'The classic opening proof of university Calculus 1 exams: proving limits directly from definition.',
+      relevanceEs: 'La demostración inicial obligada en certámenes de Cálculo 1: demostrar límites directamente por definición ε-δ.'
+    },
+    {
+      id: 'continuity_intermediate_value',
+      category: 'limits',
+      courseCode: 'MAT-101',
+      titleEn: 'Continuity & Intermediate Value Theorem (Bolzano)',
+      titleEs: 'Continuidad y Teorema del Valor Intermedio (Bolzano)',
+      latex: '\\lim_{x \\to a} f(x) = f(a) \\quad \\Big| \\quad f \\in C[a,b], \\, u \\in [f(a), f(b)] \\implies \\exists c \\in [a,b] : f(c) = u',
+      descEn: 'A function is continuous at a if the limit exists and equals f(a). Bolzano’s theorem guarantees that a continuous function on [a,b] takes every intermediate value u, guaranteeing the existence of roots f(c) = 0 if f(a) and f(b) have opposite signs.',
+      descEs: 'Una función es continua en a si el límite existe y coincide con f(a). El teorema de Bolzano asegura que una función continua en [a,b] toma todos los valores intermedios, garantizando la existencia de ceros si los extremos tienen signos opuestos.',
+      relevanceEn: 'Universally used to prove root existence for non-linear equations and bisection algorithm convergence.',
+      relevanceEs: 'Utilizado para demostrar existencia de raíces en ecuaciones no lineales y convergencia del método de bisección.'
+    },
+    {
+      id: 'extreme_value_fermat',
+      category: 'differential',
+      courseCode: 'MAT-101',
+      titleEn: 'Extreme Value Theorem (Weierstrass) & Fermat’s Stationary Points',
+      titleEs: 'Teorema de Valores Extremos (Weierstrass) y Teorema de Fermat',
+      latex: '\\max_{x \\in [a,b]} f(x), \\, \\min_{x \\in [a,b]} f(x) \\text{ exist} \\quad \\Big| \\quad f\'(c) = 0 \\text{ at local extremum } c \\in (a,b)',
+      descEn: 'Every continuous function on a closed bounded interval [a,b] achieves an absolute maximum and minimum. By Fermat’s interior extremum theorem, if f is differentiable at an interior local extremum c, then its derivative must vanish (f’(c) = 0).',
+      descEs: 'Toda función continua en un intervalo cerrado y acotado alcanza un máximo y un mínimo absoluto. Por el teorema de Fermat, si f es derivable en un extremo local interior c, la derivada se anula forzosamente: f’(c) = 0.',
+      relevanceEn: 'The mathematical justification for optimization, finding critical points and stationary states in physics.',
+      relevanceEs: 'La justificación matemática para problemas de optimización y búsqueda de puntos críticos estacionarios.'
+    },
+    {
+      id: 'derivative_definition',
+      category: 'differential',
+      courseCode: 'MAT-101',
+      titleEn: 'Definition of the Derivative as a Difference Quotient Limit',
+      titleEs: 'Definición de la Derivada como Límite del Cociente Incremental',
+      latex: 'f\'(x) = \\frac{df}{dx} = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h} = \\lim_{z \\to x} \\frac{f(z) - f(x)}{z - x}',
+      descEn: 'The instantaneous rate of change of f with respect to x, representing the geometric slope of the tangent line to the curve. Differentiability strictly implies continuity, but the converse is not true (e.g., |x| at 0).',
+      descEs: 'La tasa instantánea de cambio de f con respecto a x, geométricamente la pendiente de la recta tangente a la curva. Toda función diferenciable es continua, pero el recíproco no siempre se cumple (ej. |x| en el origen).',
+      relevanceEn: 'Foundation for differential equations, linear approximations, and instantaneous kinematics v(t) = dx/dt.',
+      relevanceEs: 'Base de las ecuaciones diferenciales, aproximaciones lineales por plano tangente y cinemática instantánea.'
+    },
+    {
+      id: 'differentiation_rules',
+      category: 'differential',
+      courseCode: 'MAT-101',
+      titleEn: 'Core Differentiation Rules: Product, Quotient & Chain Rule',
+      titleEs: 'Reglas Operativas de Derivación: Producto, Cociente y Regla de la Cadena',
+      latex: '(fg)\' = f\'g + fg\', \\quad \\left(\\frac{f}{g}\\right)\' = \\frac{f\'g - fg\'}{g^2}, \\quad (f \\circ g)\'(x) = f\'(g(x)) \\cdot g\'(x)',
+      descEn: 'The fundamental algebraic engine of differential calculus. The chain rule handles composite functions; the product rule accounts for cross-term variations in geometry and conservation flux.',
+      descEs: 'El motor operativo del cálculo diferencial. La regla de la cadena permite derivar funciones compuestas y la regla del producto descompone variaciones en áreas y flujos físicos.',
+      relevanceEn: 'Constant use in all university engineering, physics and economics exams.',
+      relevanceEs: 'De uso continuo en todos los certámenes de ingeniería, cálculo diferencial y física universitaria.'
+    },
+    {
+      id: 'mean_value_rolle',
+      category: 'differential',
+      courseCode: 'MAT-101',
+      titleEn: 'Mean Value Theorem (Lagrange) & Rolle’s Theorem',
+      titleEs: 'Teorema del Valor Medio de Lagrange y Teorema de Rolle',
+      latex: 'f\'(c) = \\frac{f(b) - f(a)}{b - a} \\quad (c \\in (a,b)) \\quad \\Big| \\quad f(a)=f(b) \\implies f\'(c) = 0',
+      descEn: 'If f is continuous on [a,b] and differentiable on (a,b), there exists at least one point c where the instantaneous tangent slope matches the secant line chord slope. Vital for proving monotonicity (f’ > 0 implies strictly increasing).',
+      descEs: 'Si f es continua en [a,b] y derivable en (a,b), existe al menos un punto intermedio c donde la pendiente instantánea coincide con la pendiente secante promedio. Demuestra la monotonía (f’ > 0 implica f estrictamente creciente).',
+      relevanceEn: 'Required theoretical proof in almost every university first-year calculus examination.',
+      relevanceEs: 'Demostración teórica obligada en casi todo examen o control de cálculo diferencial universitario.'
+    },
+    {
+      id: 'lhopital_rule',
+      category: 'differential',
+      courseCode: 'MAT-101',
+      titleEn: 'L’Hôpital’s Rule for Indeterminate Forms',
+      titleEs: 'Regla de L’Hôpital para Formas Indeterminadas',
+      latex: '\\lim_{x \\to a} \\frac{f(x)}{g(x)} = \\lim_{x \\to a} \\frac{f\'(x)}{g\'(x)} \\quad \\left(\\text{for indeterminate } \\left[\\frac{0}{0}\\right] \\text{ or } \\left[\\frac{\\pm\\infty}{\\pm\\infty}\\right]\\right)',
+      descEn: 'Evaluates limits of quotients where direct substitution yields 0/0 or ±∞/±∞, comparing the ratio of instantaneous growth rates of f and g (derived via Cauchy’s generalized mean value theorem).',
+      descEs: 'Permite resolver límites indeterminados del tipo 0/0 o ±∞/±∞ derivando numerador y denominador por separado, comparando sus velocidades de crecimiento instantáneo.',
+      relevanceEn: 'Indispensable tool for resolving complex limit problems in university and IB HL exams.',
+      relevanceEs: 'Herramienta fundamental para el cálculo ágil de límites indeterminados en exámenes y olimpiadas.'
+    },
+    {
+      id: 'taylor_lagrange_series',
+      category: 'differential',
+      courseCode: 'MAT-101 / COMP-205',
+      titleEn: 'Taylor Polynomial & Maclaurin Series with Lagrange Remainder',
+      titleEs: 'Polinomio de Taylor y Serie de Maclaurin con Resto de Lagrange',
+      latex: 'f(x) = \\sum_{k=0}^n \\frac{f^{(k)}(a)}{k!} (x-a)^k + R_n(x), \\quad R_n(x) = \\frac{f^{(n+1)}(\\xi)}{(n+1)!} (x-a)^{n+1}',
+      descEn: 'Approximates any smooth function as an n-th degree polynomial centered at a. The Lagrange remainder Rn(x) with ξ between a and x provides exact bounds on the numerical approximation error.',
+      descEs: 'Aproxima cualquier función suave mediante un polinomio de grado n centrado en a. El resto de Lagrange Rn(x) con ξ entre a y x proporciona una cota analítica exacta del error de truncamiento.',
+      relevanceEn: 'The basis for numerical finite differences, perturbation methods in physics, and algorithmic function evaluation.',
+      relevanceEs: 'La base del método de diferencias finitas, teoría de perturbaciones físicas y algoritmos numéricos.'
+    },
+    {
+      id: 'riemann_integral',
+      category: 'integral',
+      courseCode: 'MAT-101',
+      titleEn: 'Riemann Definite Integral & Darboux Upper/Lower Sums',
+      titleEs: 'Integral Definida de Riemann y Sumas de Darboux',
+      latex: '\\int_a^b f(x) \\, dx = \\lim_{\\|P\\| \\to 0} \\sum_{i=1}^n f(x_i^*) \\, \\Delta x_i \\quad \\Big| \\quad L(f, P) \\le \\int_a^b f \\le U(f, P)',
+      descEn: 'The rigorous definition of area under a curve as the limit of Riemann sums as partition mesh norm ‖P‖ approaches zero. Continuous and piecewise continuous functions are always Riemann integrable.',
+      descEs: 'La definición formal del área bajo la curva mediante el límite de sumas rectangulares finitas cuando la norma de la partición ‖P‖ tiende a cero. Toda función continua en [a,b] es integrable Riemann.',
+      relevanceEn: 'Used to model physical accumulation: cumulative displacement from velocity, work from force, mass from density.',
+      relevanceEs: 'Modela la acumulación física: desplazamiento total a partir de velocidad, trabajo por fuerza y masa total.'
+    },
+    {
+      id: 'fundamental_theorem_calculus',
+      category: 'integral',
+      courseCode: 'MAT-101',
+      titleEn: 'Fundamental Theorem of Calculus (FTC Part 1 & Part 2)',
+      titleEs: 'Teorema Fundamental del Cálculo (Partes 1 y 2)',
+      latex: '\\frac{d}{dx} \\left[ \\int_a^x f(t) \\, dt \\right] = f(x) \\quad \\Big| \\quad \\int_a^b f(x) \\, dx = F(b) - F(a) \\quad (F\' = f)',
+      descEn: 'The supreme bridge of calculus: Part 1 proves that the rate of change of an accumulation function is the original integrand. Part 2 proves that definite integrals can be computed using antiderivatives F.',
+      descEs: 'El puente maestro del cálculo: la Parte 1 demuestra que la derivada de la función de acumulación es el integrando original; la Parte 2 permite evaluar la integral definida mediante cualquier primitiva F.',
+      relevanceEn: 'The central theoretical result of single-variable calculus, tested without exception in all STEM curricula.',
+      relevanceEs: 'El resultado teórico supremo del cálculo de una variable, evaluado sin excepción en toda carrera STEM.'
+    },
+    {
+      id: 'integration_techniques',
+      category: 'integral',
+      courseCode: 'MAT-101',
+      titleEn: 'Integration by Parts & Substitution Rule',
+      titleEs: 'Integración por Partes y Regla de Sustitución',
+      latex: '\\int u \\, dv = uv - \\int v \\, du \\quad \\Big| \\quad \\int f(g(x)) g\'(x) \\, dx = \\int f(u) \\, du \\quad (u = g(x))',
+      descEn: 'The primary techniques for solving non-trivial antiderivatives: substitution reverses the chain rule, and integration by parts reverses the product rule.',
+      descEs: 'Las técnicas operativas reinas para calcular primitivas: la sustitución invierte la regla de la cadena y la integración por partes invierte la regla del producto.',
+      relevanceEn: 'Essential for finding Fourier coefficients, solving differential equations, and probability expectations.',
+      relevanceEs: 'Indispensable para coeficientes de Fourier, resolución de EDOs lineales y cálculo de esperanzas estadísticas.'
+    },
+    {
+      id: 'nabla_spatial_calculus',
+      category: 'multivariable',
+      courseCode: 'MAT-201',
+      titleEn: 'The Nabla (∇) Spatial Operator Dictionary',
+      titleEs: 'El Diccionario del Operador Diferencial Espacial Nabla (∇)',
+      latex: '\\nabla f = \\left(\\frac{\\partial f}{\\partial x}, \\frac{\\partial f}{\\partial y}, \\frac{\\partial f}{\\partial z}\\right), \\quad \\nabla \\cdot \\mathbf{F}, \\quad \\nabla \\times \\mathbf{F}, \\quad \\nabla^2 f',
+      descEn: 'Gradient (maximum spatial ascent), Divergence (source/sink volumetric flux density), Curl (vorticity/circulation density), and Laplacian (local curvature and diffusion).',
+      descEs: 'Gradiente (máximo ascenso espacial), Divergencia (flujo neto por unidad de volumen), Rotacional (vorticidad y circulación) y Laplaciano (curvatura promedio del campo y difusión).',
+      relevanceEn: 'Governs all continuum field equations: Maxwell electrodynamics, Navier-Stokes fluids, and seismology.',
+      relevanceEs: 'Rige todas las ecuaciones de campo continuo: electrodinámica de Maxwell, fluidos y sismología.'
+    },
+    {
+      id: 'canonical_pdes',
+      category: 'multivariable',
+      courseCode: 'MAT-201 / PHY-201',
+      titleEn: 'The 3 Canonical PDEs of Mathematical Physics',
+      titleEs: 'Las 3 EDPs Canónicas de la Física Matemática',
+      latex: '\\nabla^2 u = 0 \\text{ (Elliptic)} \\; \\Big| \\; \\frac{\\partial u}{\\partial t} = \\alpha \\nabla^2 u \\text{ (Parabolic)} \\; \\Big| \\; \\frac{\\partial^2 u}{\\partial t^2} = c^2 \\nabla^2 u \\text{ (Hyperbolic)}',
+      descEn: 'Laplace/Poisson (time-independent potential equilibria), Heat/Diffusion (dissipative, time-irreversible), and Wave equation (finite velocity c, time-reversible, governing seismic P and S waves).',
+      descEs: 'Laplace/Poisson (equilibrio estacionario de potenciales), Calor/Difusión (procesos disipativos irreversibles) y Onda Elastodinámica (velocidad finita c, reversible, ondas sísmicas P y S).',
+      relevanceEn: 'The foundation of boundary-value engineering, geophysics, acoustics, and heat transfer.',
+      relevanceEs: 'La columna vertebral de la geofísica teórica, acústica, transferencia térmica y electromagnetismo.'
+    },
+    {
+      id: 'vector_integral_theorems',
+      category: 'multivariable',
+      courseCode: 'MAT-201 / PHY-201',
+      titleEn: 'The 3 Pillar Integral Theorems: Green, Gauss & Stokes',
+      titleEs: 'Los 3 Grandes Teoremas Integrales: Green, Gauss y Stokes',
+      latex: '\\oint_{\\partial D} (Ldx + Mdy) = \\iint_D \\left(\\frac{\\partial M}{\\partial x} - \\frac{\\partial L}{\\partial y}\\right)dA \\quad \\Big| \\quad \\oiint_{\\partial V} \\mathbf{F} \\cdot d\\mathbf{A} = \\iiint_V (\\nabla \\cdot \\mathbf{F}) dV',
+      descEn: 'Converts boundary circulation into area curl (Green), boundary outward flux into volume divergence (Gauss), and closed-loop circulation into surface curl flux (Stokes). Unifies 1D, 2D, and 3D calculus into differential forms ∫_∂Ω ω = ∫_Ω dω.',
+      descEs: 'Convierte circulación de contorno en rotacional de área (Green), flujo neto superficial en integral de volumen de divergencia (Gauss) y circulación cerrada en flujo de rotacional (Stokes). Unifica el cálculo en el Teorema de Stokes generalizado.',
+      relevanceEn: 'Tested in every advanced multivariable calculus and electromagnetic field theory exam.',
+      relevanceEs: 'Pregunta fija en exámenes de cálculo vectorial multivariable y teoría de campos electromagnéticos.'
+    }
+  ];
+
+  const filteredCalculusLaws = calculusCategory === 'all'
+    ? ALL_CALCULUS_LAWS
+    : ALL_CALCULUS_LAWS.filter((l) => l.category === calculusCategory);
 
   // ==========================================================================
   // CANVAS DRAWING: RIGHT-HAND RULE 3D CROSS PRODUCT
@@ -795,8 +1145,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
         <div className="flex flex-wrap gap-1 p-1 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs font-bold shrink-0">
           {[
             { id: 'physics', labelEs: '1. Física & Leyes', labelEn: '1. Physics & Laws', icon: Compass },
-            { id: 'algebra', labelEs: '2. Álgebra & SVD', labelEn: '2. Algebra & SVD', icon: Calculator },
-            { id: 'calculus', labelEs: '3. Cálculo & EDPs', labelEn: '3. Calculus & PDEs', icon: BookOpen },
+            { id: 'algebra', labelEs: '2. Álgebra & Axiomas', labelEn: '2. Algebra & Axioms', icon: Calculator },
+            { id: 'calculus', labelEs: '3. Cálculo & Análisis', labelEn: '3. Calculus & Analysis', icon: BookOpen },
             { id: 'signals', labelEs: '4. Señales & Fourier', labelEn: '4. Signals & Fourier', icon: Activity },
             { id: 'complex', labelEs: '5. Complejos & Lagrange', labelEn: '5. Complex & Lagrange', icon: Layers }
           ].map((tab) => (

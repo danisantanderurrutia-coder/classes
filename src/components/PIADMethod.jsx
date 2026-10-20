@@ -47,7 +47,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       tagEs: 'Provocación Digital',
       titleEn: '2. Socratic AI Interrogation (Doubt the Consensus)',
       titleEs: '2. Interrogación Socrática a la IA (Dudar del Consenso)',
-      mentorEn: 'Galileo Galilei & René Descartes',
+      mentorEn: 'René Descartes & Francis Bacon',
       quoteEn: '"In questions of science, the authority of a thousand is not worth the humble reasoning of a single individual."',
       quoteEs: '"En cuestiones de ciencia, la autoridad de mil no vale más que el humilde razonamiento de un solo individuo."',
       descEn: 'We consult the AI not as an undisputed oracle, but as a generator of working hypotheses. We formulate precise prompts and demand that the model justify its mathematical steps without hiding assumptions.',
@@ -77,9 +77,9 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       icon: Atom,
       tagEn: 'Empirical Verification',
       tagEs: 'Verificación Empírica',
-      titleEn: '4. The Galileo Telescope & Popper Falsification',
-      titleEs: '4. El Telescopio de Galileo & Falsación de Popper',
-      mentorEn: 'Karl Popper & Galileo Galilei',
+      titleEn: '4. The Empirical Sandbox & Popper Falsification',
+      titleEs: '4. El Laboratorio Empírico & Falsación de Popper',
+      mentorEn: 'Karl Popper & Isaac Newton',
       quoteEn: '"A theory which is not refutable by any conceivable event is non-scientific."',
       quoteEs: '"Una teoría que no es refutable por ningún suceso concebible no es científica."',
       descEn: 'We do not ask the AI if it is right. We test it against physical simulation, calculus benchmarks, or real lab data. The student\'s badge of honor is discovering edge cases where the AI hallucinated or oversimplified.',
@@ -167,8 +167,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
 
           <p className="text-base sm:text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
             {lang === 'en'
-              ? 'The PIAD Method™ is a high-rigor educational framework uniting the empirical rebellion of Galileo, the multi-disciplinary curiosity of Da Vinci, and the razor-sharp parsimony of Occam with critical, dialectical AI tools.'
-              : 'El Método PIAD™ es un marco formativo propio que une la rebeldía empírica de Galileo, la polimatía humanista de Da Vinci y la parsimonia de Ockham con el uso crítico de la Inteligencia Artificial.'}
+              ? 'The PIAD Method™ is a high-rigor educational framework uniting the empirical rigor of Newton, the multi-disciplinary curiosity of Da Vinci, and the razor-sharp parsimony of Occam with critical, dialectical AI tools.'
+              : 'El Método PIAD™ es un marco formativo propio que une el rigor empírico de Newton, la polimatía humanista de Da Vinci y la parsimonia de Ockham con el uso crítico de la Inteligencia Artificial.'}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -339,7 +339,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
           </div>
         </div>
 
-        {/* Founding Fathers of PIAD (Galileo, Da Vinci, Ockham, Freire, Elbakyan) */}
+        {/* Founding Thinkers of PIAD (Newton, Da Vinci, Ockham, Freire, Elbakyan) */}
         <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16">
           <div className="max-w-3xl mb-8">
             <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
@@ -352,11 +352,11 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-mono">
             <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🔭 Galileo Galilei</span>
+              <span className="font-bold text-sm text-slate-900 block">🔭 Isaac Newton</span>
               <p className="text-slate-600 font-sans leading-relaxed">
                 {lang === 'en'
-                  ? 'Persecuted for turning the telescope to Jupiter. Replaces authority with direct experimental observation.'
-                  : 'Perseguido por apuntar su telescopio a Júpiter. Reemplaza el argumento de autoridad por la observación empírica directa.'}
+                  ? 'Built classical mechanics and calculus from experimental optics and gravitation. "Hypotheses non fingo".'
+                  : 'Fundó la mecánica clásica y el cálculo desde la óptica y la gravitación. "Hypotheses non fingo": rigor empírico antes que dogma.'}
               </p>
             </div>
 

@@ -1109,8 +1109,8 @@ Sent from STEM Mentorship Portal`;
                     </h2>
                     <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-2xl">
                       {lang === 'en'
-                        ? 'Pedagogy of Open & Digital Inquiry. We combine the empirical eye of Da Vinci & Galileo with Occam’s parsimony to interrogate AI models, prune hallucinations, and master first principles.'
-                        : 'Pedagogía de la Indagación Abierta y Digital. Unimos la mirada empírica de Da Vinci y Galileo con la navaja de Ockham para interrogar a la IA, podar la palabrería y dominar las ciencias desde sus primeros principios.'}
+                        ? 'Pedagogy of Open & Digital Inquiry. We combine the empirical curiosity of Da Vinci & Newton with Occam’s parsimony to interrogate AI models, prune hallucinations, and master first principles.'
+                        : 'Pedagogía de la Indagación Abierta y Digital. Unimos la curiosidad empírica de Da Vinci y Newton con la navaja de Ockham para interrogar a la IA, podar la palabrería y dominar las ciencias desde sus primeros principios.'}
                     </p>
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                       <button
@@ -1149,7 +1149,7 @@ Sent from STEM Mentorship Portal`;
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">4</span>
-                        <span>{lang === 'en' ? 'Galileo & Popper Falsification' : 'Falsación Galileo & Popper'}</span>
+                        <span>{lang === 'en' ? 'Empirical & Popper Falsification' : 'Falsación Empírica & Popper'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">5</span>

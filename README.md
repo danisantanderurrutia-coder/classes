@@ -78,14 +78,20 @@ npm run build:standalone
 - **Outputs**: Instant total investment in Euros (€), effective hourly rate, estimated sessions, and list of included extras (Miro vector export, Altklausur breakdowns, WhatsApp Q&A, German § 19 UStG invoice).
 - **1-Click Sync**: Clicking *"Claim This Study Plan"* pre-fills the booking modal.
 
-### 6. Mentor Authority & Methodology
-- **Mentor Profile**: Double Master's holder in Science & Environmental Engineering, Geophysics background, registered German Freiberufler.
-- **3 Core Pillars**:
-  1. *No Rote Memorization: Intuition First*
-  2. *University Exam Decoded (Partial Credit Optimization)*
-  3. *Classes in English or Spanish*
+### 6. The Proprietary PIAD Method™ (Pedagogía de la Indagación Abierta y Digital)
+- **Manifesto & Interactive Framework (`#/piad`)**: Dedicated page and landing spotlight showcasing the 5-step dialectical learning cycle for the AI era:
+  1. *Da Vinci Observation*: Physical, freehand sketching & phenomenological perception.
+  2. *Socratic AI Interrogation*: Posing hard boundary prompts; refusing blind consensus.
+  3. *Occam's Razor Pruning*: Stripping artificial jargon to discover irreducible first principles.
+  4. *Empirical & Popperian Falsification*: Verifying claims against the physics sandbox (DCL) and official past exams.
+  5. *Open Knowledge Artifact*: Creating shareable Miro vector sheets, Python code, and open science (Freire & Elbakyan).
+- **Course & Deliverable Integration**: Added a 5th concrete deliverable to every course track: *PIAD Critical AI Framework* (heuristics to harness AI without cognitive outsourcing).
 
-### 7. Academic FAQ
+### 7. Mentor Authority & Background
+- **Mentor Profile**: Double Master's holder in Science & Environmental Engineering, Geophysics background, registered German Freiberufler.
+- **Foundational Lineage**: Leonardo Da Vinci, William of Ockham, Paulo Freire, Alexandra Elbakyan, Karl Popper, and Paul Feyerabend.
+
+### 8. Academic FAQ
 - Accordions answering: Official invoices for German tax/university claims (§ 19 UStG), teaching exams in English/Spanish, digital whiteboard tools (Miro + Apple Pencil), trial/diagnostic sessions, payment methods, and study groups.
 
 ### 8. Diagnostic Request & Booking Modal

@@ -464,8 +464,122 @@ const COURSE_LAB_MAPPING = {
   ib: 'electromagnetism'
 };
 
+// Official Spanish-speaking countries (ISO 3166-1 alpha-2)
+const HISPANIC_COUNTRIES = new Set([
+  'ES', // Spain
+  'MX', // Mexico
+  'CO', // Colombia
+  'AR', // Argentina
+  'PE', // Peru
+  'VE', // Venezuela
+  'CL', // Chile
+  'EC', // Ecuador
+  'GT', // Guatemala
+  'CU', // Cuba
+  'BO', // Bolivia
+  'DO', // Dominican Republic
+  'HN', // Honduras
+  'PY', // Paraguay
+  'SV', // El Salvador
+  'NI', // Nicaragua
+  'CR', // Costa Rica
+  'PA', // Panama
+  'UY', // Uruguay
+  'PR', // Puerto Rico
+  'GQ'  // Equatorial Guinea
+]);
+
+// Hispanic timezones for instantaneous 0ms client-side detection before GeoIP resolves
+const HISPANIC_TIMEZONES = new Set([
+  'America/Santiago',
+  'America/Punta_Arenas',
+  'Pacific/Easter',
+  'Europe/Madrid',
+  'Atlantic/Canary',
+  'Africa/Ceuta',
+  'America/Buenos_Aires',
+  'America/Bogota',
+  'America/Lima',
+  'America/Caracas',
+  'America/Mexico_City',
+  'America/Cancun',
+  'America/Merida',
+  'America/Monterrey',
+  'America/Mazatlan',
+  'America/Chihuahua',
+  'America/Hermosillo',
+  'America/Tijuana',
+  'America/Bahia_Banderas',
+  'America/Guayaquil',
+  'Pacific/Galapagos',
+  'America/Guatemala',
+  'America/Havana',
+  'America/La_Paz',
+  'America/Santo_Domingo',
+  'America/Tegucigalpa',
+  'America/Asuncion',
+  'America/El_Salvador',
+  'America/Managua',
+  'America/Costa_Rica',
+  'America/Panama',
+  'America/Montevideo',
+  'America/Puerto_Rico',
+  'Africa/Malabo'
+]);
+
+function detectInitialLanguage() {
+  if (typeof window === 'undefined') return 'en';
+  try {
+    const saved = localStorage.getItem('preferred_lang');
+    if (saved === 'en' || saved === 'es') return saved;
+
+    // Instantaneous timezone check
+    const tz = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().timeZone : '';
+    if (tz && (HISPANIC_TIMEZONES.has(tz) || tz.startsWith('America/Argentina/'))) {
+      return 'es';
+    }
+
+    // Default to English for all non-Hispanic locations (Germany, USA, UK, etc.)
+    return 'en';
+  } catch {
+    return 'en';
+  }
+}
+
 export default function App() {
-  const [lang, setLang] = useState('es');
+  const [lang, setLangState] = useState(() => detectInitialLanguage());
+
+  const setLang = (newLang) => {
+    setLangState(newLang);
+    try {
+      localStorage.setItem('preferred_lang', newLang);
+    } catch {}
+  };
+
+  // GeoIP detection on mount: fetches country via lightweight API if no user override exists
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('preferred_lang');
+      if (saved) return; // User already chose explicitly
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+      fetch('https://api.country.is/', { signal: controller.signal })
+        .then((res) => res.json())
+        .then((data) => {
+          clearTimeout(timeoutId);
+          if (data && data.country) {
+            const isHispanic = HISPANIC_COUNTRIES.has(String(data.country).toUpperCase());
+            setLangState(isHispanic ? 'es' : 'en');
+          }
+        })
+        .catch(() => {
+          // Keep the initial timezone detection result
+        });
+    } catch {}
+  }, []);
+
   // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'library' | 'precios' | 'contact'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');

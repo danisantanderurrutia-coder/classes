@@ -912,16 +912,18 @@ Sent from Open Inquiry Mentorship Portal`;
                 </div>
               </div>
 
-              {/* Full-bleed 3D Planetary Observatory Viewport: Seamless Continuous Cosmos */}
-              <div id="planetarium-viewport" className="w-full relative left-0 right-0 bg-black">
-                <SolarSystem
-                  onSelectSubject={handleSelectPlanetSubject}
-                  selectedSubjectId={selectedSubjectId}
-                  lang={lang}
-                  onNavigate={navigateTo}
-                  onOpenBooking={handleOpenBooking}
-                  courses={ACADEMIC_COURSES}
-                />
+              {/* 3D Planetary Observatory Viewport: Restrained Margins for Seamless Downscroll */}
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+                <div id="planetarium-viewport" className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
+                  <SolarSystem
+                    onSelectSubject={handleSelectPlanetSubject}
+                    selectedSubjectId={selectedSubjectId}
+                    lang={lang}
+                    onNavigate={navigateTo}
+                    onOpenBooking={handleOpenBooking}
+                    courses={ACADEMIC_COURSES}
+                  />
+                </div>
               </div>
 
               {/* Minimalist Trust Indicator Bar: Dark Ribbon Connecting Cosmos to Classroom */}
@@ -986,12 +988,12 @@ Sent from Open Inquiry Mentorship Portal`;
                     className="px-5 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-emerald-600 hover:from-sky-500 hover:to-emerald-500 text-white font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 shrink-0 cursor-pointer shadow-lg shadow-sky-600/20"
                   >
                     <Atom className="w-4 h-4" />
-                    <span>{lang === 'en' ? 'Launch Full Physics Lab →' : 'Abrir Laboratorio Completo →'}</span>
+                    <span>{lang === 'en' ? 'Launch Full Physics Lab (14 Problems) →' : 'Abrir Laboratorio Completo (14 Problemas) →'}</span>
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {LAB_PROBLEMS.map((prob) => {
+                  {LAB_PROBLEMS.slice(0, 3).map((prob) => {
                     const Icon = prob.icon;
                     return (
                       <div
@@ -1046,137 +1048,21 @@ Sent from Open Inquiry Mentorship Portal`;
               </div>
             </section>
 
-            {/* Pitch: Why take classes with me */}
-            <section id="why-me" className="py-16 bg-white border-b border-slate-200">
+            {/* 1. Courses & Classes Offered (Placed First Before 'Why Take Classes') */}
+            <section id="courses-preview" className="py-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="max-w-3xl mx-auto text-center mb-10">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {lang === 'en' ? 'Why take classes with me?' : '¿Por qué tomar clases conmigo?'}
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {WHY_ME_REASONS.map((r) => {
-                    const Icon = r.icon;
-                    return (
-                      <div key={r.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="w-9 h-9 rounded-lg bg-white border border-slate-200 text-sky-700 flex items-center justify-center shrink-0">
-                            <Icon className="w-4 h-4" />
-                          </span>
-                          <h3 className="text-base font-bold text-slate-900 leading-snug">
-                            {lang === 'en' ? r.titleEn : r.titleEs}
-                          </h3>
-                        </div>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                          {lang === 'en' ? r.textEn : r.textEs}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-10 max-w-3xl mx-auto text-center p-6 rounded-2xl bg-slate-900 text-white">
-                  <p className="text-sm sm:text-base leading-relaxed mb-4">
-                    {lang === 'en'
-                      ? 'Start with a free 20-minute diagnostic session: tell me your module, your exam date and where you get stuck, and I will propose a plan.'
-                      : 'Empieza con una sesión diagnóstica gratuita de 20 minutos: me cuentas tu módulo, tu fecha de examen y dónde te atascas, y te propongo un plan.'}
-                  </p>
-                  <button
-                    onClick={() => handleOpenBooking()}
-                    className="px-5 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-mono text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 transition-colors"
-                  >
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{lang === 'en' ? 'Book a free diagnostic session' : 'Reservar sesión diagnóstica gratis'}</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* PIAD Method Spotlight Banner on Landing */}
-            <section className="py-16 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-slate-800 relative overflow-hidden">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                  <div className="lg:col-span-8 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-mono text-xs font-bold">
-                      <Compass className="w-3.5 h-3.5" />
-                      <span>{lang === 'en' ? 'Proprietary Methodology' : 'Metodología Pedagógica Propia'}</span>
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
-                      {lang === 'en'
-                        ? 'The PIAD Method™: Productive STEM & AI Inquiry'
-                        : 'El Método PIAD™: STEM Productivo & Aprendizaje con IA'}
-                    </h2>
-                    <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-2xl">
-                      {lang === 'en'
-                        ? 'Students will use AI daily. PIAD turns it into a productive catalyst: exploring deeply, designing scientific code, democratizing programming tools, and conquering complex math and physics through hands-on inquiry.'
-                        : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la canaliza productivamente: para explorar, diseñar código propio, democratizar las herramientas de programación y acercar dificultades complejas mediante ejercicios que profundizan el aprendizaje.'}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <button
-                        onClick={() => navigateTo('piad')}
-                        className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-indigo-500/30 cursor-pointer"
-                      >
-                        <Compass className="w-4 h-4" />
-                        <span>{lang === 'en' ? 'Explore the 5-Step PIAD Manifesto →' : 'Conocer el Manifiesto PIAD en 5 Fases →'}</span>
-                      </button>
-                      <button
-                        onClick={() => openLabProblem('newtonian')}
-                        className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
-                      >
-                        <Atom className="w-4 h-4 text-sky-400" />
-                        <span>{lang === 'en' ? 'Test in Physics Sandbox' : 'Probar en el Simulador Físico'}</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 font-mono text-xs">
-                    <span className="text-[10px] text-sky-400 uppercase tracking-widest font-bold block">
-                      {lang === 'en' ? 'The PIAD 5-Step DNA' : 'El Ciclo PIAD en 5 Fases'}
-                    </span>
-                    <div className="space-y-2 text-slate-300">
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">1</span>
-                        <span>{lang === 'en' ? 'Direct Observation & Intuition' : 'Observación Directa e Intuición'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">2</span>
-                        <span>{lang === 'en' ? 'Questioning Prior Consensus & Dogmas' : 'Cuestionar Consensos y Dogmas Previos'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">3</span>
-                        <span>{lang === 'en' ? 'Highlighting the Essential Core (Occam)' : 'Relevar lo Esencial de un Problema'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">4</span>
-                        <span>{lang === 'en' ? 'Empirical Laboratory Verification' : 'Verificación y Laboratorio Empírico'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">5</span>
-                        <span>{lang === 'en' ? 'Open Knowledge Artifact & Code' : 'Artefacto de Conocimiento Abierto'}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Quick Teaser: Featured Modules Grid on Landing */}
-            <section className="py-16 bg-white border-b border-slate-200">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                   <div>
                     <span className="text-xs font-mono uppercase tracking-widest text-sky-700 font-bold block mb-1">
-                      {lang === 'en' ? 'Curriculum Spotlight' : 'Módulos Más Solicitados'}
+                      {lang === 'en' ? 'Classes & Modules Offered' : 'Clases que Ofrezco'}
                     </span>
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                      {lang === 'en' ? 'High-Demand University Exam Preparation Tracks' : 'Materias Críticas Universitarias'}
+                      {lang === 'en' ? 'High-Demand University Exam Preparation Tracks' : 'Materias Críticas y Cursos Universitarios'}
                     </h2>
                   </div>
                   <button
                     onClick={() => navigateTo('courses')}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 hover:text-sky-900"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 hover:text-sky-900 cursor-pointer"
                   >
                     <span>{lang === 'en' ? 'View all 6 course tracks →' : 'Ver las 6 materias →'}</span>
                   </button>
@@ -1217,7 +1103,7 @@ Sent from Open Inquiry Mentorship Portal`;
                           <span className="font-mono text-lg font-bold text-slate-900">€{course.rateHourly}<span className="text-xs font-normal text-slate-500">/hr</span></span>
                           <button
                             onClick={() => handleOpenBooking(course)}
-                            className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold"
+                            className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold cursor-pointer"
                           >
                             {lang === 'en' ? 'Enroll' : 'Inscribirse'}
                           </button>
@@ -1226,15 +1112,62 @@ Sent from Open Inquiry Mentorship Portal`;
                     </div>
                   ))}
                 </div>
-
               </div>
             </section>
 
-            {/* Quick Teaser: Mentor Spotlight with Portfolio Link */}
-            <section className="py-16 bg-white border-b border-slate-200">
+            {/* 2. Pitch: Why take classes with me */}
+            <section id="why-me" className="py-16 bg-white border-b border-slate-200">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                  
+                <div className="max-w-3xl mx-auto text-center mb-10">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    {lang === 'en' ? 'Why take classes with me?' : '¿Por qué tomar clases conmigo?'}
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {WHY_ME_REASONS.map((r) => {
+                    const Icon = r.icon;
+                    return (
+                      <div key={r.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="w-9 h-9 rounded-lg bg-white border border-slate-200 text-sky-700 flex items-center justify-center shrink-0">
+                            <Icon className="w-4 h-4" />
+                          </span>
+                          <h3 className="text-base font-bold text-slate-900 leading-snug">
+                            {lang === 'en' ? r.titleEn : r.titleEs}
+                          </h3>
+                        </div>
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                          {lang === 'en' ? r.textEn : r.textEs}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-10 max-w-3xl mx-auto text-center p-6 rounded-2xl bg-slate-900 text-white">
+                  <p className="text-sm sm:text-base leading-relaxed mb-4">
+                    {lang === 'en'
+                      ? 'Start with a free 20-minute diagnostic session: tell me your module, your exam date and where you get stuck, and I will propose a plan.'
+                      : 'Empieza con una sesión diagnóstica gratuita de 20 minutos: me cuentas tu módulo, tu fecha de examen y dónde te atascas, y te propongo un plan.'}
+                  </p>
+                  <button
+                    onClick={() => handleOpenBooking()}
+                    className="px-5 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-mono text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span>{lang === 'en' ? 'Book a free diagnostic session' : 'Reservar sesión diagnóstica gratis'}</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* 3. Linked Finale at the End of Landing: Mentor Profile Followed by Proprietary PIAD Method */}
+            <section id="mentor-and-method" className="py-16 bg-white border-b border-slate-200">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                
+                {/* 3A. Profile Presentation: First presents Daniel Santander */}
+                <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xs">
                   <div className="lg:col-span-4 flex justify-center">
                     <div className="relative">
                       <img
@@ -1267,21 +1200,87 @@ Sent from Open Inquiry Mentorship Portal`;
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                       <button
                         onClick={() => navigateTo('mentor')}
-                        className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold"
+                        className="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold cursor-pointer"
                       >
                         {lang === 'en' ? 'Read Full Academic Dossier →' : 'Ver Dossier Académico Completo →'}
                       </button>
                       <button
                         onClick={() => navigateTo('contact')}
-                        className="px-4 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-mono text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                        className="px-4 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-mono text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                       >
                         <Phone className="w-3.5 h-3.5" />
                         <span>{lang === 'en' ? 'Contact (+49 176 7649 7440)' : 'Contacto (+49 176 7649 7440)'}</span>
                       </button>
                     </div>
                   </div>
-
                 </div>
+
+                {/* 3B. Direct Link to PIAD Method: Then presents the PIAD method developed by Daniel */}
+                <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 relative overflow-hidden border border-slate-800 shadow-xl">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div className="lg:col-span-8 space-y-4">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-mono text-xs font-bold">
+                        <Compass className="w-3.5 h-3.5" />
+                        <span>{lang === 'en' ? 'Pedagogical Framework by Daniel Santander' : 'Metodología Pedagógica Desarrollada por Daniel'}</span>
+                      </div>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+                        {lang === 'en'
+                          ? 'The PIAD Method™: Productive STEM & AI Inquiry'
+                          : 'El Método PIAD™: STEM Productivo & Aprendizaje con IA'}
+                      </h2>
+                      <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans max-w-2xl">
+                        {lang === 'en'
+                          ? 'Students will use AI daily. PIAD turns it into a productive catalyst: exploring deeply, designing scientific code, democratizing programming tools, and conquering complex math and physics through hands-on inquiry.'
+                          : 'Sabemos que los estudiantes usarán la IA sí o sí. El Método PIAD™ la canaliza productivamente: para explorar, diseñar código propio, democratizar las herramientas de programación y acercar dificultades complejas mediante ejercicios que profundizan el aprendizaje.'}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-3 pt-2">
+                        <button
+                          onClick={() => navigateTo('piad')}
+                          className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-indigo-500/30 cursor-pointer"
+                        >
+                          <Compass className="w-4 h-4" />
+                          <span>{lang === 'en' ? 'Explore the 5-Step PIAD Manifesto →' : 'Conocer el Manifiesto PIAD en 5 Fases →'}</span>
+                        </button>
+                        <button
+                          onClick={() => openLabProblem('newtonian')}
+                          className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                        >
+                          <Atom className="w-4 h-4 text-sky-400" />
+                          <span>{lang === 'en' ? 'Test in Physics Sandbox' : 'Probar en el Simulador Físico'}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 font-mono text-xs">
+                      <span className="text-[10px] text-sky-400 uppercase tracking-widest font-bold block">
+                        {lang === 'en' ? 'The PIAD 5-Step DNA' : 'El Ciclo PIAD en 5 Fases'}
+                      </span>
+                      <div className="space-y-2 text-slate-300">
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">1</span>
+                          <span>{lang === 'en' ? 'Direct Observation & Intuition' : 'Observación Directa e Intuición'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">2</span>
+                          <span>{lang === 'en' ? 'Questioning Prior Consensus & Dogmas' : 'Cuestionar Consensos y Dogmas Previos'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">3</span>
+                          <span>{lang === 'en' ? 'Highlighting the Essential Core (Occam)' : 'Relevar lo Esencial de un Problema'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">4</span>
+                          <span>{lang === 'en' ? 'Empirical Laboratory Verification' : 'Verificación y Laboratorio Empírico'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-md bg-indigo-900/60 text-indigo-300 flex items-center justify-center font-bold text-[10px]">5</span>
+                          <span>{lang === 'en' ? 'Open Knowledge Artifact & Code' : 'Artefacto de Conocimiento Abierto'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </section>
           </div>

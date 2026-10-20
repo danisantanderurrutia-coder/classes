@@ -3768,7 +3768,7 @@ export default function PhysicsLab({
   const linkedCourse = courses.find((c) => c.id === currentProblem.courseId) || courses[0];
 
   return (
-    <div className="py-10">
+    <div className="pt-24 pb-12 sm:pt-28 sm:pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header & Pedagogical Mission */}
         <div className="mb-8">

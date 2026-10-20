@@ -20,6 +20,7 @@ import {
   Code2,
   Laptop
 } from 'lucide-react';
+import EpistemicTimeline from './EpistemicTimeline';
 
 export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
   const [activeStep, setActiveStep] = useState(0);
@@ -154,7 +155,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
   ];
 
   return (
-    <div className="py-12 bg-white text-slate-900 border-b border-slate-200">
+    <div className="pt-24 pb-16 sm:pt-28 sm:pb-20 bg-white text-slate-900 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Badge & Title */}
@@ -401,73 +402,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
           </div>
         </div>
 
-        {/* Founding Thinkers of PIAD (Newton, Da Vinci, Ockham, Freire, Elbakyan) */}
-        <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16">
-          <div className="max-w-3xl mb-8">
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">
-              {lang === 'en' ? 'Philosophical Lineage' : 'Árbol Genealógico Filosófico'}
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              {lang === 'en' ? 'Guided by Rebel Thinkers, Not Academic Bureaucracy' : 'Guiado por Pensadores Libres, No por Burocracia Académica'}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-mono">
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🎨 Leonardo Da Vinci</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'The complete polymath. Art, mechanics, anatomy, and hydraulics forming one unified sensory intelligence.'
-                  : 'El ser humano completo. Arte, mecánica, anatomía e hidráulica integrados como una sola inteligencia sensible.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🔭 Isaac Newton</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'Built classical mechanics and calculus from experimental optics and gravitation. "Hypotheses non fingo".'
-                  : 'Fundó la mecánica clásica y el cálculo desde la óptica y la gravitación. "Hypotheses non fingo": rigor empírico antes que dogma.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🗡️ Guillermo de Ockham</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'The razor of parsimony. Isolating the governing core of every problem without superfluous entities.'
-                  : 'La navaja de la parsimonia. Aislar el núcleo esencial que gobierna cada problema sin multiplicar entidades superfluas.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">✊ Paulo Freire</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'Pedagogy of the Oppressed. Overcoming banking education: learning as active dialogue and emancipation.'
-                  : 'Pedagogía del Oprimido. Superación de la educación bancaria; el aprendizaje como diálogo activo y emancipación.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">🔓 Alexandra Elbakyan</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'Founder of Sci-Hub. Democratizing scientific literature and open tools so knowledge belongs to all.'
-                  : 'Fundadora de Sci-Hub. Democratización de la literatura científica y herramientas abiertas para que el conocimiento sea universal.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-              <span className="font-bold text-sm text-slate-900 block">⚡ Karl Popper & Paul Feyerabend</span>
-              <p className="text-slate-600 font-sans leading-relaxed">
-                {lang === 'en'
-                  ? 'Critical testing over blind consensus; methodological freedom to tackle scientific bottlenecks.'
-                  : 'Puesta a prueba crítica frente al consenso ciego; libertad metodológica para superar obstáculos científicos.'}
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Interactive Epistemic Timeline: Historical Progression of the Project's Philosophy */}
+        <EpistemicTimeline lang={lang} onNavigate={onNavigate} />
 
         {/* Call to Action Box */}
         <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 to-sky-950 text-white text-center max-w-4xl mx-auto shadow-xl">

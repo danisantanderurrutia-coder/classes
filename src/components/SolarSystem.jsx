@@ -1540,9 +1540,11 @@ export default function SolarSystem({
 }) {
   const containerRef = useRef(null);
   const lineupLabelsRef = useRef({});
+  const lineupUiTopRef = useRef(null);
+  const lineupUiBottomRef = useRef(null);
   const [activePlanet, setActivePlanet] = useState(PLANET_SUBJECTS[3]); // Earth (Höhere Mathematik)
-  const [viewVariant, setViewVariant] = useState('option1'); // 'option1' | 'option2' | 'option3' | 'orbital'
-  const [lineupZoomed, setLineupZoomed] = useState(false); // Used in option3: false = row of 7 planets, true = zoomed into clicked planet
+  const [viewVariant, setViewVariant] = useState('option3'); // 'option3' (Lineup -> Zoom) | 'orbital' (Planetarium)
+  const [lineupZoomed, setLineupZoomed] = useState(false); // false = row of 7 planets, true = zoomed into clicked planet
   const [isPaused, setIsPaused] = useState(false);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const [archLevel, setArchLevel] = useState('solar'); // 'planetary' | 'solar' | 'galaxy'
@@ -1552,7 +1554,7 @@ export default function SolarSystem({
   const [cinemaMode, setCinemaMode] = useState(true);
   const [letterbox, setLetterbox] = useState(false);
   const [audioOn, setAudioOn] = useState(false);
-  const [introDone, setIntroDone] = useState(true);
+  const [introDone, setIntroDone] = useState(false);
   const [caption, setCaption] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [showPlanetDetails, setShowPlanetDetails] = useState(false);
@@ -1585,8 +1587,9 @@ export default function SolarSystem({
 
   const animStateRef = useRef({
     activePlanet: PLANET_SUBJECTS[3],
-    viewVariant: 'option1',
+    viewVariant: 'option3',
     lineupZoomed: false,
+    triggerIntroReplay: false,
     isPaused: false,
     speedMultiplier: 1,
     archLevel: 'solar',
@@ -1609,6 +1612,18 @@ export default function SolarSystem({
     isReversing: false,
     reversalProgress: 0.0,
   });
+
+  const replayIntroAnimation = () => {
+    setIsRealScale(false);
+    setViewVariant('option3');
+    setLineupZoomed(false);
+    setIntroDone(false);
+    animStateRef.current.isRealScale = false;
+    animStateRef.current.viewVariant = 'option3';
+    animStateRef.current.lineupZoomed = false;
+    animStateRef.current.triggerIntroReplay = true;
+    animStateRef.current.isTransitioning = true;
+  };
 
   useEffect(() => {
     animStateRef.current.viewVariant = viewVariant;

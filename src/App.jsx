@@ -63,6 +63,50 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
 );
 const Github = GithubIcon;
 
+// Safe React Error Boundary to prevent white screen crashes
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center bg-slate-900 text-slate-100">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-4">
+            ⚠️
+          </div>
+          <h2 className="text-2xl font-bold font-serif mb-2">
+            Algo no cargó correctamente / Something went wrong
+          </h2>
+          <p className="text-slate-400 text-sm max-w-md mb-6 font-sans">
+            {this.state.error?.message || 'Ocurrió un error inesperado al renderizar esta sección.'}
+          </p>
+          <button
+            onClick={() => {
+              this.setState({ hasError: false, error: null });
+              window.location.hash = '#/';
+            }}
+            className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-500/20"
+          >
+            Volver al Inicio / Return to Home
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // Academic Curriculum Directory
 const ACADEMIC_COURSES = [
   {
@@ -715,7 +759,7 @@ export default function App() {
   const [calcLevel, setCalcLevel] = useState('bachelor');
   const [calcHours, setCalcHours] = useState(8);
   const [calcFormat, setCalcFormat] = useState('1on1');
-  const [calcLocation, setCalcLocation] = useState('online'); // 'online' | 'hannover'
+  const [calcMode, setCalcMode] = useState('online'); // 'online' | 'inperson'
   const [calcSprintDiscount, setCalcSprintDiscount] = useState(true);
 
   // FAQ State
@@ -724,9 +768,11 @@ export default function App() {
   const activeTier = CURRENCY_TIERS[currency] || CURRENCY_TIERS.EUR;
   const baseRates = activeTier.rates;
   const baseRate = baseRates[calcLevel] || baseRates.bachelor;
+  const inPersonExtraPerHour = Math.round(baseRate * 0.25);
+  const hourlyRateWithMode = baseRate + (calcMode === 'inperson' ? inPersonExtraPerHour : 0);
   const groupMultiplier = calcFormat === 'group' ? 0.70 : 1.0;
   const sprintMultiplier = calcSprintDiscount ? 0.85 : 1.0;
-  const effectiveRate = Math.round(baseRate * groupMultiplier * sprintMultiplier);
+  const effectiveRate = Math.round(hourlyRateWithMode * groupMultiplier * sprintMultiplier);
   const totalCost = Math.round(effectiveRate * calcHours);
 
   // Synchronize hash in URL with page state
@@ -1075,6 +1121,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       </nav>
 
       <main className="relative z-10">
+        <ErrorBoundary key={currentPage}>
 
         {/* ========================================================= */}
         {/* PAGE 1: ATTRACTIVE LANDING WITH PLANETARY OBSERVATORY     */}
@@ -1914,7 +1961,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                             {lang === 'en' ? 'Course Key Concepts:' : 'Conceptos Clave del Curso:'}
                           </span>
                           <div className="flex flex-wrap gap-1">
-                            {course.skriptKeywords.map((kw, i) => (
+                            {(lang === 'en' ? (course.keywordsEn || course.skriptKeywords) : (course.keywordsEs || course.skriptKeywords))?.map((kw, i) => (
                               <span key={i} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
                                 {kw}
                               </span>
@@ -2094,7 +2141,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       {Object.values(CURRENCY_TIERS).map((c) => (
                         <button
                           key={c.code}
-                          onClick={() => handleCurrencyChange(c.code)}
+                          onClick={() => setCurrency(c.code)}
                           className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 ${
                             currency === c.code
                               ? 'bg-slate-900 border-slate-900 text-white font-bold shadow-xs'
@@ -2285,7 +2332,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                             {lang === 'en' ? 'Estimated Investment' : 'Inversión Estimada'}
                           </span>
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-slate-700">
-                            {tierConfig.flag} {tierConfig.code}
+                            {activeTier.flag} {activeTier.code}
                           </span>
                         </div>
                         <div className="flex items-baseline gap-2 mb-2">
@@ -2323,7 +2370,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       </div>
 
                       <button
-                        onClick={() => handleOpenBooking({ code: 'CALC', titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'In-Person' : 'Online'}) [${formatMoney(totalCost, currency)}]` })}
+                        onClick={() => handleOpenBooking({
+                          code: 'CALC',
+                          titleEn: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'In-Person' : 'Online'}) [${formatMoney(totalCost, currency)}]`,
+                          titleEs: `${calcLevel.toUpperCase()} - ${calcHours}h (${calcMode === 'inperson' ? 'Presencial' : 'Online'}) [${formatMoney(totalCost, currency)}]`
+                        })}
                         className="w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <span>{lang === 'en' ? 'Claim This Study Plan' : 'Elegir este Plan de Estudio'}</span>
@@ -2755,6 +2806,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             onOpenBooking={handleOpenBooking}
           />
         )}
+        </ErrorBoundary>
 
       </main>
 

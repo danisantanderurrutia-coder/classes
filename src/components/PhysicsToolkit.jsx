@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 
 export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
+  const isEn = lang === 'en';
   // Tabs: 'physics' | 'algebra' | 'calculus' | 'signals' | 'complex'
   const [activeTab, setActiveTab] = useState('physics');
 
@@ -216,12 +217,12 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#94A3B8';
     ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.fillText(`Ángulo θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitud |A⃗×B⃗| = ${magC.toFixed(2)}`, 20, 24);
+    ctx.fillText(isEn ? `Angle θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitude |A⃗×B⃗| = ${magC.toFixed(2)}` : `Ángulo θ = ${vectorAngle}° | sin(θ) = ${sinTheta.toFixed(2)} | Magnitud |A⃗×B⃗| = ${magC.toFixed(2)}`, 20, 24);
 
     ctx.fillStyle = '#CBD5E1';
     ctx.font = 'bold 11px "JetBrains Mono", monospace';
     ctx.fillText(subDesc, 20, H - 15);
-  }, [rhrMode, vectorAngle, magA, magB]);
+  }, [rhrMode, vectorAngle, magA, magB, lang]);
 
   // ==========================================================================
   // CANVAS DRAWING: FOURIER DECOMPOSITION
@@ -251,7 +252,7 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#64748B';
     ctx.font = 'bold 10px "JetBrains Mono", monospace';
-    ctx.fillText('Dominio del Tiempo f(t)', 25, 20);
+    ctx.fillText(isEn ? 'Time Domain f(t)' : 'Dominio del Tiempo f(t)', 25, 20);
 
     // Draw individual harmonics faintly
     for (let k = 1; k <= fourierHarmonics; k++) {
@@ -298,7 +299,7 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
     // Right Section: Frequency Spectrum |F(ω)|
     ctx.fillStyle = '#64748B';
     ctx.font = 'bold 10px "JetBrains Mono", monospace';
-    ctx.fillText('Espectro |f̂(ω)|', splitX + 15, 20);
+    ctx.fillText(isEn ? 'Spectrum |f̂(ω)|' : 'Espectro |f̂(ω)|', splitX + 15, 20);
 
     const baseBarY = H - 35;
     const barSpacing = (W - splitX - 40) / 7;
@@ -339,9 +340,9 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#64748B';
     ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.fillText(`1. Ondícula de Ricker w(t) [f₀ = ${rickerFreq} Hz]`, 20, 20);
-    ctx.fillText('2. Serie de Reflectividad Geológica r(t)', 20, 90);
-    ctx.fillText('3. Sismograma Convolutivo s(t) = w(t) * r(t)', 20, 165);
+    ctx.fillText(isEn ? `1. Ricker Wavelet w(t) [f₀ = ${rickerFreq} Hz]` : `1. Ondícula de Ricker w(t) [f₀ = ${rickerFreq} Hz]`, 20, 20);
+    ctx.fillText(isEn ? '2. Geological Reflectivity Series r(t)' : '2. Serie de Reflectividad Geológica r(t)', 20, 90);
+    ctx.fillText(isEn ? '3. Convolutional Seismogram s(t) = w(t) * r(t)' : '3. Sismograma Convolutivo s(t) = w(t) * r(t)', 20, 165);
 
     // 1. Draw Ricker Wavelet
     ctx.strokeStyle = '#38BDF8';
@@ -360,9 +361,9 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     // 2. Reflectivity spikes
     const reflectors = [
-      { x: 120, r: 0.65, label: 'Techo Arenisca' },
-      { x: 250, r: -0.45, label: 'Lutita Marina' },
-      { x: 380, r: 0.85, label: 'Basamento Ígneo' }
+      { x: 120, r: 0.65, label: isEn ? 'Sandstone Top' : 'Techo Arenisca' },
+      { x: 250, r: -0.45, label: isEn ? 'Marine Shale' : 'Lutita Marina' },
+      { x: 380, r: 0.85, label: isEn ? 'Igneous Basement' : 'Basamento Ígneo' }
     ];
 
     ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
@@ -401,7 +402,7 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
       else ctx.lineTo(px, py);
     }
     ctx.stroke();
-  }, [activeTab, rickerFreq]);
+  }, [activeTab, rickerFreq, lang]);
 
   // ==========================================================================
   // CANVAS DRAWING: GEOPHONE LAPLACE TRANSFER FUNCTION
@@ -420,7 +421,7 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#64748B';
     ctx.font = 'bold 10px "JetBrains Mono", monospace';
-    ctx.fillText(`Respuesta en Frecuencia del Geófono |H(ω)| [Amortiguamiento h = ${geophoneDamping.toFixed(3)}]`, 20, 20);
+    ctx.fillText(isEn ? `Geophone Frequency Response |H(ω)| [Damping h = ${geophoneDamping.toFixed(3)}]` : `Respuesta en Frecuencia del Geófono |H(ω)| [Amortiguamiento h = ${geophoneDamping.toFixed(3)}]`, 20, 20);
 
     const basePlotY = H - 30;
     const plotH = H - 55;
@@ -466,19 +467,19 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#FBBF24';
     ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.fillText('ω₀ (Frec. Propia)', omega0X - 35, basePlotY + 15);
+    ctx.fillText(isEn ? 'ω₀ (Natural Freq)' : 'ω₀ (Frec. Propia)', omega0X - 35, basePlotY + 15);
 
     ctx.fillStyle = '#E2E8F0';
     ctx.fillText(
       geophoneDamping === 0.707
-        ? '✓ Amortiguamiento Crítico (h=0.707): Respuesta plana óptima'
+        ? (isEn ? '✓ Optimal Critical Damping (h=0.707): Flat response' : '✓ Amortiguamiento Crítico (h=0.707): Respuesta plana óptima')
         : geophoneDamping < 0.707
-        ? '⚠️ Sub-amortiguado (h<0.707): Pico resonante e inestabilidad'
-        : 'ℹ️ Sobre-amortiguado (h>0.707): Caída de sensibilidad',
+        ? (isEn ? '⚠️ Under-damped (h<0.707): Resonant peak & ringing' : '⚠️ Sub-amortiguado (h<0.707): Pico resonante e inestabilidad')
+        : (isEn ? 'ℹ️ Over-damped (h>0.707): Sensitivity drop-off' : 'ℹ️ Sobre-amortiguado (h>0.707): Caída de sensibilidad'),
       omega0X + 15,
       48
     );
-  }, [activeTab, geophoneDamping]);
+  }, [activeTab, geophoneDamping, lang]);
 
   // ==========================================================================
   // CANVAS DRAWING: CAUCHY-RIEMANN ORTHOGONAL STREAMLINES & EQUIPOTENTIALS
@@ -500,7 +501,7 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#64748B';
     ctx.font = 'bold 10px "JetBrains Mono", monospace';
-    ctx.fillText('Flujo Potencial 2D: Líneas Equipotenciales (Oro) ⊥ Líneas de Corriente (Azul)', 20, 22);
+    ctx.fillText(isEn ? '2D Potential Flow: Equipotential Lines (Gold) ⊥ Streamlines (Blue)' : 'Flujo Potencial 2D: Líneas Equipotenciales (Oro) ⊥ Líneas de Corriente (Azul)', 20, 22);
 
     // Draw Streamlines psi(x,y) = const and Equipotentials phi(x,y) = const
     if (complexFlowMode === 'dipole') {
@@ -557,8 +558,8 @@ export default function PhysicsToolkit({ lang = 'es', onOpenBooking }) {
 
     ctx.fillStyle = '#CBD5E1';
     ctx.font = 'bold 9px "JetBrains Mono", monospace';
-    ctx.fillText('Condición de Cauchy-Riemann: ∇φ · ∇ψ = (∂φ/∂x)(∂ψ/∂x) + (∂φ/∂y)(∂ψ/∂y) = 0 (Ortogonalidad Exacta)', 20, H - 12);
-  }, [activeTab, complexFlowMode]);
+    ctx.fillText(isEn ? 'Cauchy-Riemann Condition: ∇φ · ∇ψ = (∂φ/∂x)(∂ψ/∂x) + (∂φ/∂y)(∂ψ/∂y) = 0 (Exact Orthogonality)' : 'Condición de Cauchy-Riemann: ∇φ · ∇ψ = (∂φ/∂x)(∂ψ/∂x) + (∂φ/∂y)(∂ψ/∂y) = 0 (Ortogonalidad Exacta)', 20, H - 12);
+  }, [activeTab, complexFlowMode, lang]);
 
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">

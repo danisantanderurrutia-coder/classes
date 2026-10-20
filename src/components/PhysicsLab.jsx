@@ -129,10 +129,10 @@ export const LAB_PROBLEMS = [
         'A block of mass m₁ = 6.0 kg rests on an incline of θ = 30° with friction coefficient μ = 0.20, connected via a massless cord to a hanging mass m₂ = 6.0 kg (g = 9.81 m/s²). What is the system acceleration as m₂ descends?',
       presetValues: { m1: 6.0, m2: 6.0, angle: 30, mu: 0.20 },
       options: [
-        { id: 'a', text: 'a = 1.60 m/s²', correct: true },
-        { id: 'b', text: 'a = 2.45 m/s² (Olvidando el roce)', correct: false },
-        { id: 'c', text: 'a = 0.00 m/s² (Bloqueado)', correct: false },
-        { id: 'd', text: 'a = 3.27 m/s²', correct: false }
+        { id: 'a', textEs: 'a = 1.60 m/s²', textEn: 'a = 1.60 m/s²', text: 'a = 1.60 m/s²', correct: true },
+        { id: 'b', textEs: 'a = 2.45 m/s² (Olvidando el roce)', textEn: 'a = 2.45 m/s² (Neglecting friction)', text: 'a = 2.45 m/s²', correct: false },
+        { id: 'c', textEs: 'a = 0.00 m/s² (Bloqueado por roce estático)', textEn: 'a = 0.00 m/s² (Locked by static friction)', text: 'a = 0.00 m/s²', correct: false },
+        { id: 'd', textEs: 'a = 3.27 m/s²', textEn: 'a = 3.27 m/s²', text: 'a = 3.27 m/s²', correct: false }
       ],
       hintEs:
         'Plantea el DCL: m₂ tira a favor con m₂·g = 58.86 N. En contra tiran la componente del peso m₁·g·sin(30°) = 29.43 N y el roce f_r = μ·m₁·g·cos(30°) ≈ 10.19 N. Divide la fuerza neta entre la masa total (m₁ + m₂ = 12 kg).',
@@ -236,10 +236,10 @@ export const LAB_PROBLEMS = [
         'A projectile is launched in vacuum (γ = 0) with v₀ = 30 m/s at θ = 45° on Earth (g = 9.81 m/s²). What is its horizontal range R and the derivative dy/dx at the exact peak altitude?',
       presetValues: { v0: 30, angle: 45, g: 9.81, drag: 0.0 },
       options: [
-        { id: 'a', text: 'R = 91.74 m  y  dy/dx = 0', correct: true },
-        { id: 'b', text: 'R = 45.87 m  y  dy/dx = 1', correct: false },
-        { id: 'c', text: 'R = 91.74 m  y  dy/dx = -9.81', correct: false },
-        { id: 'd', text: 'R = 64.87 m  y  dy/dx = 0', correct: false }
+        { id: 'a', textEs: 'R = 91.74 m  y  dy/dx = 0 (en el vértice)', textEn: 'R = 91.74 m  and  dy/dx = 0 (at vertex)', text: 'R = 91.74 m, dy/dx = 0', correct: true },
+        { id: 'b', textEs: 'R = 45.87 m  y  dy/dx = 1', textEn: 'R = 45.87 m  and  dy/dx = 1', text: 'R = 45.87 m, dy/dx = 1', correct: false },
+        { id: 'c', textEs: 'R = 91.74 m  y  dy/dx = -9.81', textEn: 'R = 91.74 m  and  dy/dx = -9.81', text: 'R = 91.74 m, dy/dx = -9.81', correct: false },
+        { id: 'd', textEs: 'R = 64.87 m  y  dy/dx = 0', textEn: 'R = 64.87 m  and  dy/dx = 0', text: 'R = 64.87 m, dy/dx = 0', correct: false }
       ],
       hintEs:
         'Usa R = (v₀² · sin(90°)) / g. En el ápice de la trayectoria, la componente vertical de la velocidad vᵧ se anula instantáneamente.',
@@ -330,7 +330,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Polinomio característico (λ²·M + λ·c + k = 0) y solución sub-amortiguada:',
           labelEn: '3. Characteristic polynomial (λ²·M + λ·c + k = 0) & underdamped solution:',
-          eq: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)   con   γ = c/(2M) , ω_d = √(k/M - γ²)'
+          eq: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)',
+          eqEs: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)   con   γ = c/(2M) , ω_d = √(k/M - γ²)',
+          eqEn: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)   with   γ = c/(2M) , ω_d = √(k/M - γ²)'
         }
       ]
     },
@@ -341,10 +343,10 @@ export const LAB_PROBLEMS = [
         'On a beam of length L = 10 m rests a machine of mass M = 80 kg at position x_L = 7.5 m from left support A (use g = 9.81 m/s²). What are the vertical support reactions R_A and R_B?',
       presetValues: { loadPos: 7.5, mass: 80, k: 160, damping: 16 },
       options: [
-        { id: 'a', text: 'R_A = 196.2 N  y  R_B = 588.6 N', correct: true },
-        { id: 'b', text: 'R_A = 392.4 N  y  R_B = 392.4 N', correct: false },
-        { id: 'c', text: 'R_A = 588.6 N  y  R_B = 196.2 N', correct: false },
-        { id: 'd', text: 'R_A = 245.0 N  y  R_B = 539.8 N', correct: false }
+        { id: 'a', textEs: 'R_A = 196.2 N  y  R_B = 588.6 N', textEn: 'R_A = 196.2 N  and  R_B = 588.6 N', text: 'R_A = 196.2 N, R_B = 588.6 N', correct: true },
+        { id: 'b', textEs: 'R_A = 392.4 N  y  R_B = 392.4 N', textEn: 'R_A = 392.4 N  and  R_B = 392.4 N', text: 'R_A = 392.4 N, R_B = 392.4 N', correct: false },
+        { id: 'c', textEs: 'R_A = 588.6 N  y  R_B = 196.2 N', textEn: 'R_A = 588.6 N  and  R_B = 196.2 N', text: 'R_A = 588.6 N, R_B = 196.2 N', correct: false },
+        { id: 'd', textEs: 'R_A = 245.0 N  y  R_B = 539.8 N', textEn: 'R_A = 245.0 N  and  R_B = 539.8 N', text: 'R_A = 245.0 N, R_B = 539.8 N', correct: false }
       ],
       hintEs:
         'Toma sumatoria de torques respecto al apoyo izquierdo A: ∑M_A = R_B·(10 m) - (80 · 9.81 N)·(7.5 m) = 0. Como la carga está a 3/4 del camino hacia B, B soporta 3/4 del peso total.',
@@ -446,10 +448,10 @@ export const LAB_PROBLEMS = [
         'An ion beam enters a velocity selector where the electric field is E = 60 V/m (downward) and the perpendicular magnetic field is B = 2.0 T. What speed v₀ must the ions have to pass straight through the central slit?',
       presetValues: { E: 60, B: 2.0, v0: 30, qSign: 1 },
       options: [
-        { id: 'a', text: 'v₀ = 30 m/s', correct: true },
-        { id: 'b', text: 'v₀ = 120 m/s', correct: false },
-        { id: 'c', text: 'v₀ = 15 m/s', correct: false },
-        { id: 'd', text: 'Depende de si la carga q es positiva o negativa', correct: false }
+        { id: 'a', textEs: 'v₀ = 30 m/s (Independiente de la carga q)', textEn: 'v₀ = 30 m/s (Independent of charge q)', text: 'v₀ = 30 m/s', correct: true },
+        { id: 'b', textEs: 'v₀ = 120 m/s', textEn: 'v₀ = 120 m/s', text: 'v₀ = 120 m/s', correct: false },
+        { id: 'c', textEs: 'v₀ = 15 m/s', textEn: 'v₀ = 15 m/s', text: 'v₀ = 15 m/s', correct: false },
+        { id: 'd', textEs: 'Depende de si la carga q es positiva o negativa', textEn: 'Depends on whether charge q is positive or negative', text: 'Depends on charge sign', correct: false }
       ],
       hintEs:
         'Para que el ion viaje en línea recta horizontal, la sumatoria de fuerzas verticales en el DCL debe ser cero: |F_E| = |F_B|  ⇒  |q|·E = |q|·v₀·B.',
@@ -551,10 +553,10 @@ export const LAB_PROBLEMS = [
         'One mole (n = 1) of an ideal gas expands isothermally at T = 400 K from V₁ = 2.5 L to V₂ = 5.0 L (R = 8.314 J/(mol·K)). How much work W does the gas perform, and what is ΔU?',
       presetValues: { V1: 2.5, V2: 5.0, T: 400, processType: 1 },
       options: [
-        { id: 'a', text: 'W = +2305 J   y   ΔU = 0 J', correct: true },
-        { id: 'b', text: 'W = +3326 J   y   ΔU = +3326 J', correct: false },
-        { id: 'c', text: 'W = -2305 J   y   ΔU = 0 J', correct: false },
-        { id: 'd', text: 'W = +1663 J   y   ΔU = -1663 J', correct: false }
+        { id: 'a', textEs: 'W = +2305 J   y   ΔU = 0 J (Expansión isotérmica)', textEn: 'W = +2305 J   and   ΔU = 0 J (Isothermal expansion)', text: 'W = +2305 J, ΔU = 0 J', correct: true },
+        { id: 'b', textEs: 'W = +3326 J   y   ΔU = +3326 J', textEn: 'W = +3326 J   and   ΔU = +3326 J', text: 'W = +3326 J, ΔU = +3326 J', correct: false },
+        { id: 'c', textEs: 'W = -2305 J   y   ΔU = 0 J', textEn: 'W = -2305 J   and   ΔU = 0 J', text: 'W = -2305 J, ΔU = 0 J', correct: false },
+        { id: 'd', textEs: 'W = +1663 J   y   ΔU = -1663 J', textEn: 'W = +1663 J   and   ΔU = -1663 J', text: 'W = +1663 J, ΔU = -1663 J', correct: false }
       ],
       hintEs:
         'En un gas ideal la energía interna U depende exclusivamente de la temperatura T. Como T = 400 K es constante, ΔU = 0. Usa la integral W = n·R·T·ln(V₂/V₁) con ln(2) ≈ 0.6931.',
@@ -624,7 +626,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Conservación de la componente horizontal del vector de onda (kₓ):',
           labelEn: '3. Conservation of horizontal wavevector component (kₓ):',
-          eq: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)   con   kᵢ = 2π·f / vᵢ = ω / vᵢ'
+          eq: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)',
+          eqEs: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)   con   kᵢ = 2π·f / vᵢ = ω / vᵢ',
+          eqEn: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)   with   kᵢ = 2π·f / vᵢ = ω / vᵢ'
         }
       ]
     },
@@ -656,10 +660,10 @@ export const LAB_PROBLEMS = [
         'In a seismic survey, a P-wave travels through an upper clay layer at v₁ = 2.0 km/s and hits a faster granite basement with v₂ = 4.0 km/s. What is the critical angle θ_c at which total internal reflection and a head wave occur?',
       presetValues: { theta1: 30, v1: 2.0, v2: 4.0, freq: 2.5 },
       options: [
-        { id: 'a', text: 'θ_c = 30.0°', correct: true },
-        { id: 'b', text: 'θ_c = 45.0°', correct: false },
-        { id: 'c', text: 'θ_c = 60.0°', correct: false },
-        { id: 'd', text: 'No existe ángulo crítico cuando v₂ > v₁', correct: false }
+        { id: 'a', textEs: 'θ_c = 30.0° (sin θ_c = 2.0 / 4.0 = 0.50)', textEn: 'θ_c = 30.0° (sin θ_c = 2.0 / 4.0 = 0.50)', text: 'θ_c = 30.0°', correct: true },
+        { id: 'b', textEs: 'θ_c = 45.0°', textEn: 'θ_c = 45.0°', text: 'θ_c = 45.0°', correct: false },
+        { id: 'c', textEs: 'θ_c = 60.0°', textEn: 'θ_c = 60.0°', text: 'θ_c = 60.0°', correct: false },
+        { id: 'd', textEs: 'No existe ángulo crítico cuando v₂ > v₁', textEn: 'No critical angle exists when v₂ > v₁', text: 'No critical angle', correct: false }
       ],
       hintEs:
         'El ángulo crítico ocurre cuando el rayo refractado sale rasante a la interfaz (θ₂ = 90°, por lo que sin(θ₂) = 1). Aplica sin(θ_c) = v₁ / v₂.',
@@ -750,7 +754,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Criterio de independencia de la trayectoria (Campo Conservativo):',
           labelEn: '3. Path independence criterion (Conservative Field):',
-          eq: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (para cualquier curva cerrada simple C)'
+          eq: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0',
+          eqEs: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (para cualquier curva cerrada simple C)',
+          eqEn: 'curl(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (for any simple closed curve C)'
         }
       ]
     },
@@ -761,10 +767,10 @@ export const LAB_PROBLEMS = [
         'Given the vector field F⃗(x, y) = (-3y, 3x), calculate the closed line circulation ∮_C F⃗·dr along a circle of radius R = 2.0 m oriented counterclockwise, applying Green’s Theorem.',
       presetValues: { omega: 3.0, kDiv: 0.0, radius: 2.0, particles: 25 },
       options: [
-        { id: 'a', text: '∮ F·dr = 24π ≈ 75.40 J', correct: true },
-        { id: 'b', text: '∮ F·dr = 0 J (campo conservativo)', correct: false },
-        { id: 'c', text: '∮ F·dr = 12π ≈ 37.70 J', correct: false },
-        { id: 'd', text: '∮ F·dr = 6π ≈ 18.85 J', correct: false }
+        { id: 'a', textEs: '∮ F·dr = 24π ≈ 75.40 J (rot F = 6 k̂)', textEn: '∮ F·dr = 24π ≈ 75.40 J (curl F = 6 k̂)', text: '∮ F·dr = 24π ≈ 75.40 J', correct: true },
+        { id: 'b', textEs: '∮ F·dr = 0 J (campo conservativo)', textEn: '∮ F·dr = 0 J (conservative field)', text: '∮ F·dr = 0 J', correct: false },
+        { id: 'c', textEs: '∮ F·dr = 12π ≈ 37.70 J', textEn: '∮ F·dr = 12π ≈ 37.70 J', text: '∮ F·dr = 12π ≈ 37.70 J', correct: false },
+        { id: 'd', textEs: '∮ F·dr = 6π ≈ 18.85 J', textEn: '∮ F·dr = 6π ≈ 18.85 J', text: '∮ F·dr = 6π ≈ 18.85 J', correct: false }
       ],
       hintEs:
         'Aplica el Teorema de Green: ∮_C F·dr = ∬_D (∂Q/∂x - ∂P/∂y) dA. Aquí P = -3y y Q = 3x. El rotacional escalar es constante: ∂Q/∂x - ∂P/∂y = 3 - (-3) = 6.',
@@ -868,10 +874,10 @@ export const LAB_PROBLEMS = [
         'In a planet’s orbit with semi-major axis a and eccentricity e around a star of mass M, the relativistic correction yields a perihelion advance of Δφ = 6π·G·M / [c²·a·(1 - e²)] rad/rev. If the eccentricity increases from e = 0.2 to e = 0.6 keeping a and M constant, by what factor is the precession Δφ multiplied?',
       presetValues: { mass: 1.0, eccentricity: 0.6, grFactor: 1.5, semiMajor: 2.8 },
       options: [
-        { id: 'a', text: 'Factor = 1.50 (Aumenta un 50%)', correct: true },
-        { id: 'b', text: 'Factor = 1.00 (No depende de e)', correct: false },
-        { id: 'c', text: 'Factor = 0.67 (Disminuye)', correct: false },
-        { id: 'd', text: 'Factor = 3.00 (Se triplica)', correct: false }
+        { id: 'a', textEs: 'Factor = 1.50 (Aumenta un 50% por excentricidad)', textEn: 'Factor = 1.50 (Increases by 50% via eccentricity)', text: 'Factor = 1.50', correct: true },
+        { id: 'b', textEs: 'Factor = 1.00 (No depende de e)', textEn: 'Factor = 1.00 (Independent of e)', text: 'Factor = 1.00', correct: false },
+        { id: 'c', textEs: 'Factor = 0.67 (Disminuye)', textEn: 'Factor = 0.67 (Decreases)', text: 'Factor = 0.67', correct: false },
+        { id: 'd', textEs: 'Factor = 3.00 (Se triplica)', textEn: 'Factor = 3.00 (Triples)', text: 'Factor = 3.00', correct: false }
       ],
       hintEs:
         'Nota que Δφ es inversamente proporcional a (1 - e²). Calcula (1 - 0.2²) y (1 - 0.6²) y evalúa el cociente (1 - 0.2²) / (1 - 0.6²).',
@@ -975,10 +981,10 @@ export const LAB_PROBLEMS = [
         'Two identical masses m₁ = m₂ = 2.0 kg oscillate frictionlessly connected to fixed walls with outer springs k = 18.0 N/m and a central coupling spring k₁₂ = 10.0 N/m. What is the angular frequency of the anti-phase mode (ω₂) and in-phase mode (ω₁)?',
       presetValues: { m1: 2.0, m2: 2.0, kOuter: 18.0, kCoupling: 10.0, mode: 2 },
       options: [
-        { id: 'a', text: 'ω₁ = 3.00 rad/s  y  ω₂ = 4.36 rad/s', correct: true },
-        { id: 'b', text: 'ω₁ = 3.00 rad/s  y  ω₂ = 3.00 rad/s', correct: false },
-        { id: 'c', text: 'ω₁ = 2.50 rad/s  y  ω₂ = 5.00 rad/s', correct: false },
-        { id: 'd', text: 'ω₁ = 4.36 rad/s  y  ω₂ = 3.00 rad/s', correct: false }
+        { id: 'a', textEs: 'ω₁ = 3.00 rad/s (fase)  y  ω₂ = 4.36 rad/s (antifase)', textEn: 'ω₁ = 3.00 rad/s (in-phase)  and  ω₂ = 4.36 rad/s (anti-phase)', text: 'ω₁ = 3.00 rad/s, ω₂ = 4.36 rad/s', correct: true },
+        { id: 'b', textEs: 'ω₁ = 3.00 rad/s  y  ω₂ = 3.00 rad/s', textEn: 'ω₁ = 3.00 rad/s  and  ω₂ = 3.00 rad/s', text: 'ω₁ = 3.00 rad/s, ω₂ = 3.00 rad/s', correct: false },
+        { id: 'c', textEs: 'ω₁ = 2.50 rad/s  y  ω₂ = 5.00 rad/s', textEn: 'ω₁ = 2.50 rad/s  and  ω₂ = 5.00 rad/s', text: 'ω₁ = 2.50 rad/s, ω₂ = 5.00 rad/s', correct: false },
+        { id: 'd', textEs: 'ω₁ = 4.36 rad/s  y  ω₂ = 3.00 rad/s', textEn: 'ω₁ = 4.36 rad/s  and  ω₂ = 3.00 rad/s', text: 'ω₁ = 4.36 rad/s, ω₂ = 3.00 rad/s', correct: false }
       ],
       hintEs:
         'Para masas iguales, el modo en fase no estira el resorte central: ω₁ = √(k/m). El modo en antifase estira el resorte central el doble: ω₂ = √((k + 2k₁₂)/m).',
@@ -1043,7 +1049,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Parámetro de Coriolis f en función de la latitud φ:',
           labelEn: '1. Coriolis parameter f as a function of latitude φ:',
-          eq: 'f = 2 · Ω_Tierra · sin(φ)   con   Ω_Tierra = 7.292 × 10⁻⁵ rad/s'
+          eq: 'f = 2 · Ω · sin(φ)',
+          eqEs: 'f = 2 · Ω_Tierra · sin(φ)   con   Ω_Tierra = 7.292 × 10⁻⁵ rad/s',
+          eqEn: 'f = 2 · Ω_Earth · sin(φ)   with   Ω_Earth = 7.292 × 10⁻⁵ rad/s'
         },
         {
           labelEs: '2. Sistema lineal 2×2 del equilibrio horizontal (Fuerza P + Coriolis = 0):',
@@ -1085,10 +1093,10 @@ export const LAB_PROBLEMS = [
         'At latitude φ = 45° N in the Northern Hemisphere (f = 1.031×10⁻⁴ s⁻¹), a weather front has a pressure drop of ΔP = 16.0 hPa across a horizontal distance Δn = 100 km in air of density ρ = 1.20 kg/m³. What is the resulting geostrophic wind speed v_g?',
       presetValues: { deltaP: 16.0, latitude: 45, hemisphere: 1, rho: 1.20 },
       options: [
-        { id: 'a', text: 'v_g ≈ 129.3 m/s (≈ 465 km/h, Corriente en Chorro / Jet Stream)', correct: true },
-        { id: 'b', text: 'v_g ≈ 12.9 m/s (Brisa moderada)', correct: false },
-        { id: 'c', text: 'v_g ≈ 0.0 m/s (El viento se detiene por Coriolis)', correct: false },
-        { id: 'd', text: 'v_g ≈ 550.0 m/s (Supersónico)', correct: false }
+        { id: 'a', textEs: 'v_g ≈ 129.3 m/s (≈ 465 km/h, Corriente en Chorro / Jet Stream)', textEn: 'v_g ≈ 129.3 m/s (≈ 465 km/h, Jet Stream Core)', text: 'v_g ≈ 129.3 m/s', correct: true },
+        { id: 'b', textEs: 'v_g ≈ 12.9 m/s (Brisa moderada de superficie)', textEn: 'v_g ≈ 12.9 m/s (Moderate surface breeze)', text: 'v_g ≈ 12.9 m/s', correct: false },
+        { id: 'c', textEs: 'v_g ≈ 0.0 m/s (El viento se anula por Coriolis)', textEn: 'v_g ≈ 0.0 m/s (Wind canceled by Coriolis)', text: 'v_g ≈ 0.0 m/s', correct: false },
+        { id: 'd', textEs: 'v_g ≈ 550.0 m/s (Régimen supersónico)', textEn: 'v_g ≈ 550.0 m/s (Supersonic regime)', text: 'v_g ≈ 550.0 m/s', correct: false }
       ],
       hintEs:
         'Convierte ΔP a Pascales (16.0 hPa = 1600 Pa) y Δn a metros (100 km = 100,000 m). Aplica la fórmula v_g = (1 / (ρ · f)) · (ΔP / Δn).',
@@ -1153,7 +1161,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Tensor de Momento Sísmico de Doble Par (Double Couple):',
           labelEn: '1. Double Couple Seismic Moment Tensor:',
-          eq: 'M_ij = M₀ (u_i n_j + u_j n_i)   donde u⃗ = slip, n̂ = normal de falla, Tr(M) = 0'
+          eq: 'M_ij = M₀ (u_i n_j + u_j n_i)',
+          eqEs: 'M_ij = M₀ (u_i n_j + u_j n_i)   donde u⃗ = slip, n̂ = normal de falla, Tr(M) = 0',
+          eqEn: 'M_ij = M₀ (u_i n_j + u_j n_i)   where u⃗ = slip, n̂ = fault normal, Tr(M) = 0'
         },
         {
           labelEs: '2. Relación de Kanamori para Magnitud de Momento (Mw):',
@@ -1163,7 +1173,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Descomposición Espectral en Ejes Principales (P, T, B):',
           labelEn: '3. Spectral Decomposition into Principal Axes (P, T, B):',
-          eq: 'P⃗ = (n̂ - u⃗)/√2 (Compresión Máxima)   ;   T⃗ = (n̂ + u⃗)/√2 (Tracción Máxima)'
+          eq: 'P⃗ = (n̂ - u⃗)/√2   ;   T⃗ = (n̂ + u⃗)/√2',
+          eqEs: 'P⃗ = (n̂ - u⃗)/√2 (Compresión Máxima)   ;   T⃗ = (n̂ + u⃗)/√2 (Tracción Máxima)',
+          eqEn: 'P⃗ = (n̂ - u⃗)/√2 (Maximum Compression)   ;   T⃗ = (n̂ + u⃗)/√2 (Maximum Tension)'
         }
       ]
     },
@@ -1195,10 +1207,10 @@ export const LAB_PROBLEMS = [
         'In a Chilean subduction megathrust earthquake with Mw = 8.8 (M₀ ≈ 1.995 × 10²² N·m) and rupture area A = 400 km × 150 km in crust with μ = 3.5×10¹⁰ Pa, what is the mean coseismic fault slip D?',
       presetValues: { strike: 15, dip: 18, rake: 90, magnitude: 8.8 },
       options: [
-        { id: 'a', text: 'D ≈ 9.5 m (Deslizamiento cosísmico masivo característico de Mw 8.8)', correct: true },
-        { id: 'b', text: 'D ≈ 0.95 m (Deslizamiento menor)', correct: false },
-        { id: 'c', text: 'D ≈ 95.0 m (Físicamente inconsistente)', correct: false },
-        { id: 'd', text: 'D ≈ 0.10 m (Régimen de microsismicidad)', correct: false }
+        { id: 'a', textEs: 'D ≈ 9.5 m (Deslizamiento cosísmico masivo característico de Mw 8.8)', textEn: 'D ≈ 9.5 m (Massive coseismic slip typical of Mw 8.8 megathrust)', text: 'D ≈ 9.5 m', correct: true },
+        { id: 'b', textEs: 'D ≈ 0.95 m (Deslizamiento subestimado)', textEn: 'D ≈ 0.95 m (Underestimated slip)', text: 'D ≈ 0.95 m', correct: false },
+        { id: 'c', textEs: 'D ≈ 95.0 m (Físicamente inconsistente)', textEn: 'D ≈ 95.0 m (Physically inconsistent)', text: 'D ≈ 95.0 m', correct: false },
+        { id: 'd', textEs: 'D ≈ 0.10 m (Régimen de microsismicidad)', textEn: 'D ≈ 0.10 m (Microseismicity regime)', text: 'D ≈ 0.10 m', correct: false }
       ],
       hintEs: 'Aplica la relación fundamental del momento sísmico escalar: M₀ = μ · A · D. Despeja el deslizamiento medio D = M₀ / (μ · A).',
       hintEn: 'Apply the fundamental scalar seismic moment relation: M₀ = μ · A · D. Isolate mean slip D = M₀ / (μ · A).',
@@ -1292,7 +1304,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Tensor de Gradiente Gravimétrico (Segundas Derivadas Cruzadas):',
           labelEn: '3. Gravity Gradient Tensor (Cross Second Derivatives):',
-          eq: 'Γ_ij = ∂²U / ∂x_i ∂x_j   con   Tr(Γ) = ∇²U = 4π G ρ (Ecuación diferencial local)'
+          eq: 'Γ_ij = ∂²U / ∂x_i ∂x_j',
+          eqEs: 'Γ_ij = ∂²U / ∂x_i ∂x_j   con   Tr(Γ) = ∇²U = 4π G ρ (Ecuación diferencial local)',
+          eqEn: 'Γ_ij = ∂²U / ∂x_i ∂x_j   with   Tr(Γ) = ∇²U = 4π G ρ (Local Poisson field PDE)'
         }
       ]
     },
@@ -1303,10 +1317,10 @@ export const LAB_PROBLEMS = [
         'In the Central Andes at elevation h = 4000 m (crustal density ρ_c = 2670 kg/m³, mantle ρ_m = 3300 kg/m³), what is the thickness b of the crustal root penetrating the mantle under Airy isostasy?',
       presetValues: { mountainHeight: 4000, crustDensity: 2670, mantleDensity: 3300, crustThickness: 35 },
       options: [
-        { id: 'a', text: 'b ≈ 17.0 km (Profunda raíz de baja densidad que genera anomalía de Bouguer negativa)', correct: true },
-        { id: 'b', text: 'b ≈ 4.0 km (Igual a la altura superficial)', correct: false },
-        { id: 'c', text: 'b ≈ 35.0 km (Corteza basal duplicada sin compensación)', correct: false },
-        { id: 'd', text: 'b ≈ 0.5 km (Topografía no compensada)', correct: false }
+        { id: 'a', textEs: 'b ≈ 17.0 km (Profunda raíz cortical que genera anomalía de Bouguer negativa)', textEn: 'b ≈ 17.0 km (Deep crustal root producing negative Bouguer anomaly)', text: 'b ≈ 17.0 km', correct: true },
+        { id: 'b', textEs: 'b ≈ 4.0 km (Igual a la elevación superficial h)', textEn: 'b ≈ 4.0 km (Equal to surface elevation h)', text: 'b ≈ 4.0 km', correct: false },
+        { id: 'c', textEs: 'b ≈ 35.0 km (Corteza basal sobrecompensada)', textEn: 'b ≈ 35.0 km (Overcompensated basal crust)', text: 'b ≈ 35.0 km', correct: false },
+        { id: 'd', textEs: 'b ≈ 0.5 km (Topografía no compensada)', textEn: 'b ≈ 0.5 km (Uncompensated topography)', text: 'b ≈ 0.5 km', correct: false }
       ],
       hintEs: 'Aplica el balance isostático de masas a nivel de compensación: b = h · [ρ_c / (ρ_m - ρ_c)]. El contraste de densidades es Δρ = 630 kg/m³.',
       hintEn: 'Apply the isostatic mass balance at compensation depth: b = h · [ρ_c / (ρ_m - ρ_c)]. The density contrast is Δρ = 630 kg/m³.',
@@ -1368,7 +1382,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Desviación superficial a 45° de la corriente inducida por viento:',
           labelEn: '1. Surface current 45° deflection under wind stress:',
-          eq: 'V₀ = τ₀ / (ρ √( |f| A_z ))   con   θ_sup = ±45° (Izquierda en Chile, Derecha en Hem. Norte)'
+          eq: 'V₀ = τ₀ / (ρ √( |f| A_z ))',
+          eqEs: 'V₀ = τ₀ / (ρ √( |f| A_z ))   con   θ_sup = ±45° (Izquierda en Chile, Derecha en Hem. Norte)',
+          eqEn: 'V₀ = τ₀ / (ρ √( |f| A_z ))   with   θ_surf = ±45° (Left in Chile/SH, Right in NH)'
         },
         {
           labelEs: '2. Transporte Neto Integrado de Masa de Ekman (M_E):',
@@ -1389,7 +1405,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Sistema de EDOs acopladas unificadas en variable compleja V = u + iv:',
           labelEn: '1. Coupled viscous ODE system unified via complex velocity V = u + iv:',
-          eq: 'A_z d²V/dz² - i f V = 0   con condición de borde   A_z dV/dz|_{z=0} = τ₀/ρ'
+          eq: 'A_z d²V/dz² - i f V = 0',
+          eqEs: 'A_z d²V/dz² - i f V = 0   con condición de borde   A_z dV/dz|_{z=0} = τ₀/ρ',
+          eqEn: 'A_z d²V/dz² - i f V = 0   with boundary condition   A_z dV/dz|_{z=0} = τ₀/ρ'
         },
         {
           labelEs: '2. Solución analítica exponencial amortiguada (Espiral):',
@@ -1410,10 +1428,10 @@ export const LAB_PROBLEMS = [
         'Off the coast of Valparaíso (φ = -33°S, f = -7.94×10⁻⁵ s⁻¹), a southerly wind produces surface stress τ₀ = 0.228 Pa in seawater (ρ = 1025 kg/m³). What is the net Ekman transport M_E magnitude, and in what direction does the surface water mass move?',
       presetValues: { windSpeed: 12, latitude: -33, eddyViscosity: 0.05 },
       options: [
-        { id: 'a', text: 'M_E ≈ 2.80 m²/s hacia el Oeste (mar adentro a 90° a la izquierda), induciendo surgencia costera', correct: true },
-        { id: 'b', text: 'M_E ≈ 2.80 m²/s hacia el Este (hacia la costa), provocando hundimiento', correct: false },
-        { id: 'c', text: 'M_E ≈ 0.23 m²/s hacia el Norte (paralelo exacto al viento)', correct: false },
-        { id: 'd', text: 'M_E ≈ 28.5 m²/s hacia el Sur (en contra del viento)', correct: false }
+        { id: 'a', textEs: 'M_E ≈ 2.80 m²/s hacia el Oeste (mar adentro a 90° a la izquierda), induciendo surgencia costera', textEn: 'M_E ≈ 2.80 m²/s Westward (offshore 90° to the left), driving coastal upwelling', text: 'M_E ≈ 2.80 m²/s Westward', correct: true },
+        { id: 'b', textEs: 'M_E ≈ 2.80 m²/s hacia el Este (hacia la costa), provocando hundimiento', textEn: 'M_E ≈ 2.80 m²/s Eastward (onshore), driving downwelling', text: 'M_E ≈ 2.80 m²/s Eastward', correct: false },
+        { id: 'c', textEs: 'M_E ≈ 0.23 m²/s hacia el Norte (paralelo exacto al viento)', textEn: 'M_E ≈ 0.23 m²/s Northward (parallel to wind)', text: 'M_E ≈ 0.23 m²/s Northward', correct: false },
+        { id: 'd', textEs: 'M_E ≈ 28.5 m²/s hacia el Sur (en contra del viento)', textEn: 'M_E ≈ 28.5 m²/s Southward (against wind)', text: 'M_E ≈ 28.5 m²/s Southward', correct: false }
       ],
       hintEs: 'La magnitud del transporte neto integrado es M_E = τ₀ / (ρ · |f|). En el Hemisferio Sur, la fuerza de Coriolis desvía el transporte neto a 90° a la izquierda de la dirección del viento.',
       hintEn: 'Net integrated transport magnitude is M_E = τ₀ / (ρ · |f|). In the Southern Hemisphere, Coriolis deflects net transport 90° to the left of wind direction.',
@@ -1481,7 +1499,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Fórmula de resistividad aparente de Cagniard:',
           labelEn: '2. Cagniard apparent resistivity formula:',
-          eq: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (con T = 1/f)'
+          eq: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|²',
+          eqEs: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (con T = 1/f)',
+          eqEn: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (with T = 1/f)'
         },
         {
           labelEs: '3. Fórmula práctica de profundidad de penetración (Skin Depth):',
@@ -1507,7 +1527,9 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Ecuación diferencial no lineal de Riccati para subsuelo estratificado:',
           labelEn: '3. Nonlinear Riccati differential equation for stratified ground:',
-          eq: 'dZ/dz - (σ / μ₀) Z² = i ω   (Recursión de capas para inversión tomográfica)'
+          eq: 'dZ/dz - (σ / μ₀) Z² = i ω',
+          eqEs: 'dZ/dz - (σ / μ₀) Z² = i ω   (Recursión de capas para inversión tomográfica)',
+          eqEn: 'dZ/dz - (σ / μ₀) Z² = i ω   (Layer recursion for tomographic inversion)'
         }
       ]
     },
@@ -1518,10 +1540,10 @@ export const LAB_PROBLEMS = [
         'In a magnetotelluric survey over a geothermal clay cap of resistivity ρ₁ = 16 Ω·m, an EM natural signal of frequency f = 4 Hz is measured. What is the subsurface skin depth δ?',
       presetValues: { frequency: 4, resTop: 16, resBottom: 600, layerThickness: 250 },
       options: [
-        { id: 'a', text: 'δ ≈ 1006 m (Aproximadamente 1.0 km de penetración de la onda EM)', correct: true },
-        { id: 'b', text: 'δ ≈ 200 m (Atenuación excesiva inmediata)', correct: false },
-        { id: 'c', text: 'δ ≈ 5030 m (Sobreestimación por omisión de frecuencia)', correct: false },
-        { id: 'd', text: 'δ ≈ 64 m (Escala errónea)', correct: false }
+        { id: 'a', textEs: 'δ ≈ 1006 m (Aproximadamente 1.0 km de penetración de la onda EM)', textEn: 'δ ≈ 1006 m (Approximately 1.0 km EM wave skin depth)', text: 'δ ≈ 1006 m', correct: true },
+        { id: 'b', textEs: 'δ ≈ 200 m (Atenuación excesiva inmediata)', textEn: 'δ ≈ 200 m (Excessive immediate attenuation)', text: 'δ ≈ 200 m', correct: false },
+        { id: 'c', textEs: 'δ ≈ 5030 m (Sobreestimación por omisión de frecuencia)', textEn: 'δ ≈ 5030 m (Overestimate from omitted frequency)', text: 'δ ≈ 5030 m', correct: false },
+        { id: 'd', textEs: 'δ ≈ 64 m (Escala dimensional errónea)', textEn: 'δ ≈ 64 m (Incorrect dimensional scale)', text: 'δ ≈ 64 m', correct: false }
       ],
       hintEs: 'Aplica la aproximación práctica para el Skin Depth electromagnético cuasi-estacionario: δ ≈ 503 · √(ρ / f).',
       hintEn: 'Apply the practical quasi-stationary electromagnetic skin depth formula: δ ≈ 503 · √(ρ / f).',
@@ -1721,6 +1743,7 @@ export default function PhysicsLab({
   // LIVE TELEMETRY & PHYSICS COMPUTATIONS PER PROBLEM
   // ==========================================================================
   const computeTelemetry = () => {
+    const isEn = lang === 'en';
     const g = 9.81;
     if (selectedId === 'newtonian') {
       const { m1, m2, angle, mu } = safeParams;
@@ -1751,10 +1774,10 @@ export default function PhysicsLab({
       const T = m2 * (g - a);
       return {
         items: [
-          { label: 'a (Aceleración)', value: `${a.toFixed(2)} m/s²` },
-          { label: 'T (Tensión cuerda)', value: `${T.toFixed(1)} N` },
-          { label: 'N (Fuerza Normal)', value: `${N.toFixed(1)} N` },
-          { label: '|f_r| (Roce activo)', value: `${Math.abs(fFriction).toFixed(1)} N` }
+          { label: isEn ? 'a (Acceleration)' : 'a (Aceleración)', value: `${a.toFixed(2)} m/s²` },
+          { label: isEn ? 'T (String Tension)' : 'T (Tensión cuerda)', value: `${T.toFixed(1)} N` },
+          { label: isEn ? 'N (Normal Force)' : 'N (Fuerza Normal)', value: `${N.toFixed(1)} N` },
+          { label: isEn ? '|f_r| (Active Friction)' : '|f_r| (Roce activo)', value: `${Math.abs(fFriction).toFixed(1)} N` }
         ],
         status: lang === 'en' ? stateEn : stateEs,
         raw: { a, T, N, Fgx, fFriction, fsMax }
@@ -1787,10 +1810,10 @@ export default function PhysicsLab({
       const dydx = vx > 0.01 ? vy / vx : 0;
       return {
         items: [
-          { label: 'Alcance Ideal (γ=0)', value: `${idealRange.toFixed(1)} m` },
-          { label: 'Altura Máx Ideal', value: `${idealPeak.toFixed(1)} m` },
-          { label: 'Pendiente dy/dx (t)', value: `${dydx.toFixed(2)}` },
-          { label: '|v(t)| Instantánea', value: `${Math.hypot(vx, vy).toFixed(1)} m/s` }
+          { label: isEn ? 'Ideal Range (γ=0)' : 'Alcance Ideal (γ=0)', value: `${idealRange.toFixed(1)} m` },
+          { label: isEn ? 'Ideal Max Height' : 'Altura Máx Ideal', value: `${idealPeak.toFixed(1)} m` },
+          { label: isEn ? 'Slope dy/dx (t)' : 'Pendiente dy/dx (t)', value: `${dydx.toFixed(2)}` },
+          { label: isEn ? 'Instantaneous |v(t)|' : '|v(t)| Instantánea', value: `${Math.hypot(vx, vy).toFixed(1)} m/s` }
         ],
         status:
           drag > 0
@@ -1818,10 +1841,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Reacción R_A (Izq)', value: `${RA.toFixed(1)} N` },
-          { label: 'Reacción R_B (Der)', value: `${RB.toFixed(1)} N` },
-          { label: 'Momento Máx M_max', value: `${Mmax.toFixed(0)} N·m` },
-          { label: 'Frecuencia ω₀', value: `${omega0.toFixed(2)} rad/s` }
+          { label: isEn ? 'Reaction R_A (Left)' : 'Reacción R_A (Izq)', value: `${RA.toFixed(1)} N` },
+          { label: isEn ? 'Reaction R_B (Right)' : 'Reacción R_B (Der)', value: `${RB.toFixed(1)} N` },
+          { label: isEn ? 'Max Moment M_max' : 'Momento Máx M_max', value: `${Mmax.toFixed(0)} N·m` },
+          { label: isEn ? 'Frequency ω₀' : 'Frecuencia ω₀', value: `${omega0.toFixed(2)} rad/s` }
         ],
         status:
           discrim > 0.05
@@ -1845,10 +1868,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Velocidad Filtro (E/B)', value: `${vFilter.toFixed(1)} m/s` },
-          { label: 'Fuerza Eléctrica F_E', value: `${FE.toFixed(1)} uN` },
-          { label: 'Fuerza Magnética F_B', value: `${FB.toFixed(1)} uN` },
-          { label: 'Fuerza Neta F_y', value: `${Fnet.toFixed(1)} uN` }
+          { label: isEn ? 'Filter Velocity (E/B)' : 'Velocidad Filtro (E/B)', value: `${vFilter.toFixed(1)} m/s` },
+          { label: isEn ? 'Electric Force F_E' : 'Fuerza Eléctrica F_E', value: `${FE.toFixed(1)} µN` },
+          { label: isEn ? 'Magnetic Force F_B' : 'Fuerza Magnética F_B', value: `${FB.toFixed(1)} µN` },
+          { label: isEn ? 'Net Force F_y' : 'Fuerza Neta F_y', value: `${Fnet.toFixed(1)} µN` }
         ],
         status: isBalanced
           ? lang === 'en'
@@ -1892,10 +1915,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Trabajo W = ∫P dV', value: `${W.toFixed(0)} J` },
-          { label: 'Cambio Energía ΔU', value: `${dU.toFixed(0)} J` },
-          { label: 'Calor Transferido Q', value: `${Q.toFixed(0)} J` },
-          { label: 'Presión Inicial P₁', value: `${(P1 / 100).toFixed(1)} bar` }
+          { label: isEn ? 'Work W = ∫P dV' : 'Trabajo W = ∫P dV', value: `${W.toFixed(0)} J` },
+          { label: isEn ? 'Energy Change ΔU' : 'Cambio Energía ΔU', value: `${dU.toFixed(0)} J` },
+          { label: isEn ? 'Heat Transferred Q' : 'Calor Transferido Q', value: `${Q.toFixed(0)} J` },
+          { label: isEn ? 'Initial Pressure P₁' : 'Presión Inicial P₁', value: `${(P1 / 100).toFixed(1)} bar` }
         ],
         status:
           processType === 1
@@ -1918,10 +1941,10 @@ export default function PhysicsLab({
       const isConservative = Math.abs(curlVal) < 0.01;
       return {
         items: [
-          { label: '∇×F⃗ (Rotacional)', value: `${curlVal.toFixed(2)} k̂` },
-          { label: '∇·F⃗ (Divergencia)', value: `${divVal.toFixed(2)}` },
-          { label: '∮ F⃗·dr⃗ (Circulación)', value: `${circulation.toFixed(2)} J` },
-          { label: 'Área del Bucle (πR²)', value: `${area.toFixed(2)} m²` }
+          { label: isEn ? '∇×F⃗ (Curl / Vorticity)' : '∇×F⃗ (Rotacional)', value: `${curlVal.toFixed(2)} k̂` },
+          { label: isEn ? '∇·F⃗ (Divergence)' : '∇·F⃗ (Divergencia)', value: `${divVal.toFixed(2)}` },
+          { label: isEn ? '∮ F⃗·dr⃗ (Circulation)' : '∮ F⃗·dr⃗ (Circulación)', value: `${circulation.toFixed(2)} J` },
+          { label: isEn ? 'Loop Area (πR²)' : 'Área del Bucle (πR²)', value: `${area.toFixed(2)} m²` }
         ],
         status: isConservative
           ? lang === 'en'
@@ -1959,10 +1982,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'ω₁ (Modo en Fase)', value: `${w1.toFixed(2)} rad/s` },
-          { label: 'ω₂ (Modo en Antifase)', value: `${w2.toFixed(2)} rad/s` },
-          { label: 'f₁ (Frecuencia 1)', value: `${f1.toFixed(2)} Hz` },
-          { label: 'f₂ (Frecuencia 2)', value: `${f2.toFixed(2)} Hz` }
+          { label: isEn ? 'ω₁ (In-Phase Mode)' : 'ω₁ (Modo en Fase)', value: `${w1.toFixed(2)} rad/s` },
+          { label: isEn ? 'ω₂ (Anti-Phase Mode)' : 'ω₂ (Modo en Antifase)', value: `${w2.toFixed(2)} rad/s` },
+          { label: isEn ? 'f₁ (Frequency 1)' : 'f₁ (Frecuencia 1)', value: `${f1.toFixed(2)} Hz` },
+          { label: isEn ? 'f₂ (Frequency 2)' : 'f₂ (Frecuencia 2)', value: `${f2.toFixed(2)} Hz` }
         ],
         status: lang === 'en' ? modeDescEn : modeDescEs,
         raw: { m1, m2, kOuter, kCoupling, mode, w1, w2, f1, f2, beatFreq }
@@ -1987,10 +2010,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'v_g (Viento Geostrófico)', value: `${vg.toFixed(1)} m/s` },
-          { label: 'v_g en km/h', value: `${vgKmh.toFixed(1)} km/h` },
-          { label: 'Parámetro f (Coriolis)', value: `${(Math.abs(fCoriolis) * 1e4).toFixed(2)}×10⁻⁴ s⁻¹` },
-          { label: 'Gradiente ∇P', value: `${(gradP * 1000).toFixed(2)} mPa/m` }
+          { label: isEn ? 'v_g (Geostrophic Wind)' : 'v_g (Viento Geostrófico)', value: `${vg.toFixed(1)} m/s` },
+          { label: isEn ? 'v_g in km/h' : 'v_g en km/h', value: `${vgKmh.toFixed(1)} km/h` },
+          { label: isEn ? 'Coriolis Parameter f' : 'Parámetro f (Coriolis)', value: `${(Math.abs(fCoriolis) * 1e4).toFixed(2)}×10⁻⁴ s⁻¹` },
+          { label: isEn ? 'Pressure Gradient ∇P' : 'Gradiente ∇P', value: `${(gradP * 1000).toFixed(2)} mPa/m` }
         ],
         status: lang === 'en' ? statusEn : statusEs,
         raw: { deltaP, latitude, hemisphere, rho, fCoriolis, gradP, vg, vgKmh }
@@ -2005,10 +2028,10 @@ export default function PhysicsLab({
       const isNewtonian = grFactor < 0.01;
       return {
         items: [
-          { label: 'Δφ (Precesión / órbita)', value: isNewtonian ? '0.00° (Newton)' : `${deltaPhiDeg.toFixed(2)}°` },
-          { label: 'Perihelio (r_mín)', value: `${rMin.toFixed(2)} UA` },
-          { label: 'Afelio (r_máx)', value: `${rMax.toFixed(2)} UA` },
-          { label: 'Excentricidad (e)', value: `${eccentricity.toFixed(2)}` }
+          { label: isEn ? 'Δφ (Precession / orbit)' : 'Δφ (Precesión / órbita)', value: isNewtonian ? (isEn ? '0.00° (Newtonian)' : '0.00° (Newton)') : `${deltaPhiDeg.toFixed(2)}°` },
+          { label: isEn ? 'Perihelion (r_min)' : 'Perihelio (r_mín)', value: `${rMin.toFixed(2)} AU` },
+          { label: isEn ? 'Aphelion (r_max)' : 'Afelio (r_máx)', value: `${rMax.toFixed(2)} AU` },
+          { label: isEn ? 'Eccentricity (e)' : 'Excentricidad (e)', value: `${eccentricity.toFixed(2)}` }
         ],
         status: isNewtonian
           ? lang === 'en'
@@ -2042,10 +2065,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Magnitud Mw', value: `${magnitude.toFixed(1)}` },
-          { label: 'Momento M₀', value: `${m0Sci.toFixed(2)}×10^${m0Exp} N·m` },
-          { label: 'Razón v_P / v_S', value: `√3 ≈ 1.73 (${vP} / ${vS} km/s)` },
-          { label: 'Régimen Falla', value: lang === 'en' ? regimeEn : regimeEs }
+          { label: isEn ? 'Moment Magnitude Mw' : 'Magnitud Mw', value: `${magnitude.toFixed(1)}` },
+          { label: isEn ? 'Seismic Moment M₀' : 'Momento M₀', value: `${m0Sci.toFixed(2)}×10^${m0Exp} N·m` },
+          { label: isEn ? 'Ratio v_P / v_S' : 'Razón v_P / v_S', value: `√3 ≈ 1.73 (${vP} / ${vS} km/s)` },
+          { label: isEn ? 'Fault Regime' : 'Régimen Falla', value: isEn ? regimeEn : regimeEs }
         ],
         status: lang === 'en'
           ? `Strike φ=${strike}°, Dip δ=${dip}°, Rake λ=${rake}° (${regimeEn})`
@@ -2067,10 +2090,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Raíz Cortical (b)', value: `${rootKm.toFixed(1)} km en Manto` },
-          { label: 'Espesor Total Corteza', value: `${totalCrustKm.toFixed(1)} km (Moho)` },
-          { label: 'Anomalía de Bouguer', value: `${bouguerAnomalyMgal.toFixed(0)} mGal` },
-          { label: 'Corrección Bouguer', value: `-${bouguerSlabMgal.toFixed(0)} mGal` }
+          { label: isEn ? 'Crustal Root (b)' : 'Raíz Cortical (b)', value: `${rootKm.toFixed(1)} km ${isEn ? 'in Mantle' : 'en Manto'}` },
+          { label: isEn ? 'Total Crust Thickness' : 'Espesor Total Corteza', value: `${totalCrustKm.toFixed(1)} km (Moho)` },
+          { label: isEn ? 'Bouguer Anomaly' : 'Anomalía de Bouguer', value: `${bouguerAnomalyMgal.toFixed(0)} mGal` },
+          { label: isEn ? 'Bouguer Correction' : 'Corrección Bouguer', value: `-${bouguerSlabMgal.toFixed(0)} mGal` }
         ],
         status: lang === 'en'
           ? `Airy Isostasy Active: Mountain +${mountainHeight}m balanced by ${rootKm.toFixed(1)}km root`
@@ -2100,10 +2123,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Profundidad de Ekman (D_E)', value: `${ekmanDepth.toFixed(1)} m` },
-          { label: 'Velocidad Superficie (V₀)', value: `${v0.toFixed(2)} m/s` },
-          { label: 'Transporte Neto Ekman', value: `${ekmanTransport.toFixed(2)} m²/s` },
-          { label: 'Tensión Viento (τ₀)', value: `${tau0.toFixed(3)} Pa` }
+          { label: isEn ? 'Ekman Depth (D_E)' : 'Profundidad de Ekman (D_E)', value: `${ekmanDepth.toFixed(1)} m` },
+          { label: isEn ? 'Surface Velocity (V₀)' : 'Velocidad Superficie (V₀)', value: `${v0.toFixed(2)} m/s` },
+          { label: isEn ? 'Net Ekman Transport' : 'Transporte Neto Ekman', value: `${ekmanTransport.toFixed(2)} m²/s` },
+          { label: isEn ? 'Wind Stress (τ₀)' : 'Tensión Viento (τ₀)', value: `${tau0.toFixed(3)} Pa` }
         ],
         status: lang === 'en'
           ? `${latitude < 0 ? 'Chile / Southern Hemisphere' : 'Northern Hemisphere'}: Net 90° transport ${dirEn}`
@@ -2125,10 +2148,10 @@ export default function PhysicsLab({
 
       return {
         items: [
-          { label: 'Skin Depth Capa 1 (δ₁)', value: `${skinDepth1.toFixed(0)} m` },
-          { label: 'Resistividad Aparente (ρ_a)', value: `${appRes.toFixed(1)} Ω·m` },
-          { label: 'Período de Onda (T)', value: `${period >= 1 ? period.toFixed(2) + ' s' : (period * 1000).toFixed(0) + ' ms'}` },
-          { label: 'Penetración Relativa', value: `${skinDepth1 > layerThickness ? 'Penetra al basamento' : 'Confinada en Capa 1'}` }
+          { label: isEn ? 'Skin Depth Layer 1 (δ₁)' : 'Skin Depth Capa 1 (δ₁)', value: `${skinDepth1.toFixed(0)} m` },
+          { label: isEn ? 'Apparent Resistivity (ρ_a)' : 'Resistividad Aparente (ρ_a)', value: `${appRes.toFixed(1)} Ω·m` },
+          { label: isEn ? 'Wave Period (T)' : 'Período de Onda (T)', value: `${period >= 1 ? period.toFixed(2) + ' s' : (period * 1000).toFixed(0) + ' ms'}` },
+          { label: isEn ? 'Relative Penetration' : 'Penetración Relativa', value: skinDepth1 > layerThickness ? (isEn ? 'Penetrating basement' : 'Penetra al basamento') : (isEn ? 'Confined to Layer 1' : 'Confinada en Capa 1') }
         ],
         status: lang === 'en'
           ? `f=${fVal.toFixed(1)} Hz: Skin Depth δ=${skinDepth1.toFixed(0)}m in Layer 1 (${skinDepth1 > layerThickness ? 'Penetrating deeper layer' : 'Shallow confinement'})`
@@ -2148,10 +2171,10 @@ export default function PhysicsLab({
 
     return {
       items: [
-        { label: 'Ángulo Incidente θ₁', value: `${Number(theta1).toFixed(1)}°` },
-        { label: 'Ángulo Refractado θ₂', value: isTIR ? 'Reflexión Total' : `${Number(theta2).toFixed(1)}°` },
-        { label: 'Ángulo Crítico θ_c', value: hasCrit && thetaCrit !== null ? `${Number(thetaCrit).toFixed(1)}°` : 'N/A (v₁≥v₂)' },
-        { label: 'Relación v₂ / v₁', value: `${(v2 / v1).toFixed(2)}` }
+        { label: isEn ? 'Incident Angle θ₁' : 'Ángulo Incidente θ₁', value: `${Number(theta1).toFixed(1)}°` },
+        { label: isEn ? 'Refracted Angle θ₂' : 'Ángulo Refractado θ₂', value: isTIR ? (isEn ? 'Total Internal Reflection' : 'Reflexión Total') : `${Number(theta2).toFixed(1)}°` },
+        { label: isEn ? 'Critical Angle θ_c' : 'Ángulo Crítico θ_c', value: hasCrit && thetaCrit !== null ? `${Number(thetaCrit).toFixed(1)}°` : 'N/A (v₁≥v₂)' },
+        { label: isEn ? 'Velocity Ratio v₂ / v₁' : 'Relación v₂ / v₁', value: `${(v2 / v1).toFixed(2)}` }
       ],
       status: isTIR
         ? lang === 'en'
@@ -2173,6 +2196,7 @@ export default function PhysicsLab({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const isEn = lang === 'en';
     const W = canvas.width;
     const H = canvas.height;
 
@@ -2540,7 +2564,7 @@ export default function PhysicsLab({
       ctx.stroke();
       ctx.fillStyle = '#38BDF8';
       ctx.font = '11px "JetBrains Mono", monospace';
-      ctx.fillText('Diagrama Momento Flector M(x)', beamLeft, diagTop + 55);
+      ctx.fillText(isEn ? 'Bending Moment Diagram M(x)' : 'Diagrama Momento Flector M(x)', beamLeft, diagTop + 55);
 
       if (showDCL) {
         const fScale = 0.11;
@@ -2572,12 +2596,12 @@ export default function PhysicsLab({
       ctx.fillRect(plateLeft, topPlateY - 12, plateRight - plateLeft, 12);
       ctx.fillStyle = '#FCA5A5';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText('+ + + +  Placa Superior (+)  →  E⃗ apunta hacia abajo  + + + +', plateLeft + 25, topPlateY - 2);
+      ctx.fillText(isEn ? '+ + + +  Top Plate (+)  →  E⃗ points downward  + + + +' : '+ + + +  Placa Superior (+)  →  E⃗ apunta hacia abajo  + + + +', plateLeft + 25, topPlateY - 2);
 
       ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
       ctx.fillRect(plateLeft, botPlateY, plateRight - plateLeft, 12);
       ctx.fillStyle = '#93C5FD';
-      ctx.fillText('- - - -  Placa Inferior (-)   |   Campo B⃗ (⊗ entrando)  - - - -', plateLeft + 25, botPlateY + 10);
+      ctx.fillText(isEn ? '- - - -  Bottom Plate (-)   |   B⃗ Field (⊗ into page)  - - - -' : '- - - -  Placa Inferior (-)   |   Campo B⃗ (⊗ entrando)  - - - -', plateLeft + 25, botPlateY + 10);
 
       // Draw B-field crosses (into page)
       ctx.fillStyle = 'rgba(168, 85, 247, 0.35)';
@@ -2701,8 +2725,8 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#94A3B8';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText('P (Presión)', plotX + 8, plotY - plotH + 12);
-      ctx.fillText('V (Volumen) →', plotX + plotW - 95, plotY + 18);
+      ctx.fillText(isEn ? 'P (Pressure)' : 'P (Presión)', plotX + 8, plotY - plotH + 12);
+      ctx.fillText(isEn ? 'V (Volume) →' : 'V (Volumen) →', plotX + plotW - 95, plotY + 18);
 
       const vToX = (v) => plotX + (v / 8.5) * plotW;
       const pToY = (v) => {
@@ -2781,9 +2805,9 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#93C5FD';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText(`Estrato 1 (v₁ = ${v1} km/s)`, 18, 48);
+      ctx.fillText(isEn ? `Layer 1 (v₁ = ${v1} km/s)` : `Estrato 1 (v₁ = ${v1} km/s)`, 18, 48);
       ctx.fillStyle = '#FCA5A5';
-      ctx.fillText(`Estrato 2 (v₂ = ${v2} km/s)`, 18, H - 18);
+      ctx.fillText(isEn ? `Layer 2 (v₂ = ${v2} km/s)` : `Estrato 2 (v₂ = ${v2} km/s)`, 18, H - 18);
 
       const rayLen = 135;
       const incStartX = hitX - rayLen * Math.sin(rad1);
@@ -2928,9 +2952,9 @@ export default function PhysicsLab({
       // Label Curve C and Area D
       ctx.fillStyle = '#FBBF24';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText(`Curva C (R=${radius}m)`, midX + rPix * 0.72, midY - rPix * 0.72 - 6);
+      ctx.fillText(isEn ? `Curve C (R=${radius}m)` : `Curva C (R=${radius}m)`, midX + rPix * 0.72, midY - rPix * 0.72 - 6);
       ctx.fillStyle = '#C7D2FE';
-      ctx.fillText(`Área D: ∬(∇×F) dA = ${circulation.toFixed(1)} J`, midX - 95, midY + 4);
+      ctx.fillText(isEn ? `Area D: ∬(∇×F) dA = ${circulation.toFixed(1)} J` : `Área D: ∬(∇×F) dA = ${circulation.toFixed(1)} J`, midX - 95, midY + 4);
       ctx.restore();
 
       // Animated tracer particles following flow
@@ -2966,7 +2990,7 @@ export default function PhysicsLab({
         ctx.arc(px, py, 6, 0, Math.PI * 2);
         ctx.fill();
 
-        drawArrow(ctx, px, py, px + txScreen * 45, py + tyScreen * 45, '#F59E0B', 'd r⃗ (tangente)', 2.5);
+        drawArrow(ctx, px, py, px + txScreen * 45, py + tyScreen * 45, '#F59E0B', isEn ? 'd r⃗ (tangent)' : 'd r⃗ (tangente)', 2.5);
 
         const fScreenX = fx * 18;
         const fScreenY = -fy * 18;
@@ -2991,7 +3015,7 @@ export default function PhysicsLab({
           ctx.restore();
           ctx.fillStyle = '#F472B6';
           ctx.font = 'bold 10px "JetBrains Mono", monospace';
-          ctx.fillText('Paleta: ∇×F⃗ rota', midX - 45, midY + 28);
+          ctx.fillText(isEn ? 'Paddle: ∇×F⃗ curls' : 'Paleta: ∇×F⃗ rota', midX - 45, midY + 28);
         }
       }
     }
@@ -3098,7 +3122,7 @@ export default function PhysicsLab({
         ctx.restore();
         ctx.fillStyle = '#FBBF24';
         ctx.font = 'bold 10px "JetBrains Mono", monospace';
-        ctx.fillText(`r_mín = ${rMin.toFixed(2)} UA`, midX + rMin * scale * 0.45, midY - 6);
+        ctx.fillText(isEn ? `r_min = ${rMin.toFixed(2)} AU` : `r_mín = ${rMin.toFixed(2)} UA`, midX + rMin * scale * 0.45, midY - 6);
       }
 
       // Inset plot on the right: Effective Potential V_eff(r)
@@ -3289,9 +3313,9 @@ export default function PhysicsLab({
 
       ctx.font = 'bold 13px "JetBrains Mono", monospace';
       ctx.fillStyle = '#EF4444';
-      ctx.fillText('L (Baja Presión - Ciclón)', W / 2 - 80, isobarSpacing - 8);
+      ctx.fillText(isEn ? 'L (Low Pressure - Cyclone)' : 'L (Baja Presión - Ciclón)', W / 2 - 80, isobarSpacing - 8);
       ctx.fillStyle = '#38BDF8';
-      ctx.fillText('H (Alta Presión - Anticiclón)', W / 2 - 85, H - 15);
+      ctx.fillText(isEn ? 'H (High Pressure - Anticyclone)' : 'H (Alta Presión - Anticiclón)', W / 2 - 85, H - 15);
 
       const windDir = hemisphere >= 0 ? 1 : -1;
       const speedNorm = Math.min(6, Math.max(0.8, (vg / 35)));
@@ -3323,7 +3347,7 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#FFFFFF';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText('Parcela Aire', parcelX - 35, parcelY - 18);
+      ctx.fillText(isEn ? 'Air Parcel' : 'Parcela Aire', parcelX - 35, parcelY - 18);
 
       const vVecLen = Math.min(85, Math.max(30, speedNorm * 32));
       drawArrow(ctx, parcelX, parcelY, parcelX + windDir * vVecLen, parcelY, '#34D399', `v⃗_g (${vgKmh.toFixed(0)} km/h)`, 3);
@@ -3343,11 +3367,11 @@ export default function PhysicsLab({
 
         ctx.fillStyle = '#10B981';
         ctx.font = 'bold 10px "JetBrains Mono", monospace';
-        ctx.fillText('Equilibrio Geostrófico:', parcelX + 52, parcelY - 16);
+        ctx.fillText(isEn ? 'Geostrophic Equilibrium:' : 'Equilibrio Geostrófico:', parcelX + 52, parcelY - 16);
         ctx.fillStyle = '#E2E8F0';
         ctx.font = '9px "JetBrains Mono", monospace';
         ctx.fillText('F⃗_P + F⃗_Cor = 0⃗', parcelX + 52, parcelY);
-        ctx.fillText(hemisphere >= 0 ? 'Desviación Der. (NH)' : 'Desviación Izq. (SH)', parcelX + 52, parcelY + 16);
+        ctx.fillText(hemisphere >= 0 ? (isEn ? 'Right Deflection (NH)' : 'Desviación Der. (NH)') : (isEn ? 'Left Deflection (SH)' : 'Desviación Izq. (SH)'), parcelX + 52, parcelY + 16);
       }
     }
 
@@ -3475,7 +3499,7 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#EF4444';
       ctx.font = 'bold 11px "JetBrains Mono", monospace';
-      ctx.fillText('Proyección Estereográfica', bbCenterX - 65, H - 25);
+      ctx.fillText(isEn ? 'Stereographic Projection' : 'Proyección Estereográfica', bbCenterX - 65, H - 25);
       ctx.fillStyle = '#94A3B8';
       ctx.font = '9px "JetBrains Mono", monospace';
       ctx.fillText(`φ=${strike}°  δ=${dip}°  λ=${rake}°`, bbCenterX - 55, H - 12);
@@ -3528,14 +3552,14 @@ export default function PhysicsLab({
 
       ctx.font = 'bold 9px "JetBrains Mono", monospace';
       ctx.fillStyle = '#38BDF8';
-      ctx.fillText(`Onda P (v_P=6.0 km/s)`, faultX + pRadius * 0.7 + 4, faultY - pRadius * 0.7);
+      ctx.fillText(isEn ? `P Wave (v_P=6.0 km/s)` : `Onda P (v_P=6.0 km/s)`, faultX + pRadius * 0.7 + 4, faultY - pRadius * 0.7);
       ctx.fillStyle = '#FBBF24';
-      ctx.fillText(`Onda S (v_S=3.5 km/s)`, faultX + sRadius * 0.7 + 4, faultY + sRadius * 0.7);
+      ctx.fillText(isEn ? `S Wave (v_S=3.5 km/s)` : `Onda S (v_S=3.5 km/s)`, faultX + sRadius * 0.7 + 4, faultY + sRadius * 0.7);
 
       ctx.fillStyle = '#E2E8F0';
       ctx.font = 'bold 9px "JetBrains Mono", monospace';
-      ctx.fillText('Bloque Techo', faultX - 75, faultY - 55);
-      ctx.fillText('Bloque Piso', faultX + 25, faultY + 65);
+      ctx.fillText(isEn ? 'Hanging Wall' : 'Bloque Techo', faultX - 75, faultY - 55);
+      ctx.fillText(isEn ? 'Footwall' : 'Bloque Piso', faultX + 25, faultY + 65);
 
       if (showDCL) {
         const slipSign = rake >= 0 ? -1 : 1;
@@ -3547,7 +3571,7 @@ export default function PhysicsLab({
         const nDy = 35 * Math.cos(dipRad);
         drawArrow(ctx, faultX, faultY, faultX + nDx, faultY + nDy, '#C084FC', 'n̂ (Normal)', 2.5);
 
-        drawArrow(ctx, faultX + 70, faultY, faultX + 20, faultY, '#EF4444', 'P⃗ (Compresión)', 2);
+        drawArrow(ctx, faultX + 70, faultY, faultX + 20, faultY, '#EF4444', isEn ? 'P⃗ (Compression)' : 'P⃗ (Compresión)', 2);
         drawArrow(ctx, faultX - 70, faultY, faultX - 20, faultY, '#EF4444', 'P⃗', 2);
       }
 
@@ -3608,9 +3632,9 @@ export default function PhysicsLab({
       // Legend
       ctx.fillStyle = '#FBBF24';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText(`Δg_FA (Aire Libre): +${freeAirMgal.toFixed(0)} mGal`, profileStartX + 8, 22);
+      ctx.fillText(isEn ? `Δg_FA (Free-Air): +${freeAirMgal.toFixed(0)} mGal` : `Δg_FA (Aire Libre): +${freeAirMgal.toFixed(0)} mGal`, profileStartX + 8, 22);
       ctx.fillStyle = '#38BDF8';
-      ctx.fillText(`Δg_B (Bouguer): ${bouguerAnomalyMgal.toFixed(0)} mGal (Mínimo Andino)`, profileStartX + 8, 36);
+      ctx.fillText(isEn ? `Δg_B (Bouguer): ${bouguerAnomalyMgal.toFixed(0)} mGal (Andean Minimum)` : `Δg_B (Bouguer): ${bouguerAnomalyMgal.toFixed(0)} mGal (Mínimo Andino)`, profileStartX + 8, 36);
 
       // Bottom Section: Crustal Cross-Section & Moho Root
       const groundY = 165;
@@ -3657,17 +3681,17 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#FFFFFF';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText(`Cordillera (+${mountainHeight}m)`, W / 2 - 50, seaY - 24);
-      ctx.fillText(`Corteza (ρ_c = ${crustDensity} kg/m³)`, profileStartX + 12, normalMohoY - 12);
-      ctx.fillText(`Manto Superior (ρ_m = ${mantleDensity} kg/m³)`, profileStartX + 12, H - 22);
+      ctx.fillText(isEn ? `Mountain Range (+${mountainHeight}m)` : `Cordillera (+${mountainHeight}m)`, W / 2 - 50, seaY - 24);
+      ctx.fillText(isEn ? `Crust (ρ_c = ${crustDensity} kg/m³)` : `Corteza (ρ_c = ${crustDensity} kg/m³)`, profileStartX + 12, normalMohoY - 12);
+      ctx.fillText(isEn ? `Upper Mantle (ρ_m = ${mantleDensity} kg/m³)` : `Manto Superior (ρ_m = ${mantleDensity} kg/m³)`, profileStartX + 12, H - 22);
 
       ctx.fillStyle = '#F59E0B';
       ctx.font = 'bold 9px "JetBrains Mono", monospace';
-      ctx.fillText(`Discontinuidad de Moho (Raíz b = ${rootKm.toFixed(1)} km)`, W / 2 - 95, normalMohoY + rootScale + 14);
+      ctx.fillText(isEn ? `Moho Discontinuity (Airy Root b = ${rootKm.toFixed(1)} km)` : `Discontinuidad de Moho (Raíz b = ${rootKm.toFixed(1)} km)`, W / 2 - 95, normalMohoY + rootScale + 14);
 
       if (showDCL) {
-        drawArrow(ctx, W / 2, seaY - 25, W / 2, seaY + 15, '#EF4444', 'Peso Topografía', 2.5);
-        drawArrow(ctx, W / 2, normalMohoY + rootScale + 10, W / 2, normalMohoY + 20, '#10B981', 'Empuje Isostático', 2.5);
+        drawArrow(ctx, W / 2, seaY - 25, W / 2, seaY + 15, '#EF4444', isEn ? 'Topographic Load' : 'Peso Topografía', 2.5);
+        drawArrow(ctx, W / 2, normalMohoY + rootScale + 10, W / 2, normalMohoY + 20, '#10B981', isEn ? 'Isostatic Buoyancy' : 'Empuje Isostático', 2.5);
       }
 
       ctx.restore();
@@ -3703,7 +3727,7 @@ export default function PhysicsLab({
         ctx.fillText(`-${(normZ * ekmanDepth).toFixed(0)}m`, 82, ly + 3);
       }
 
-      drawArrow(ctx, 0, -25, 0, -60, '#34D399', `Viento W=${windSpeed} m/s`, 3);
+      drawArrow(ctx, 0, -25, 0, -60, '#34D399', isEn ? `Wind W=${windSpeed} m/s` : `Viento W=${windSpeed} m/s`, 3);
 
       const deflAngle = isSouth ? (-Math.PI / 2 - Math.PI / 4) : (-Math.PI / 2 + Math.PI / 4);
 
@@ -3728,7 +3752,7 @@ export default function PhysicsLab({
       ctx.stroke();
 
       const transX = isSouth ? -90 : 90;
-      drawArrow(ctx, 0, 50, transX, 50, '#C084FC', `Transporte Neto 90° (${ekmanTransport.toFixed(1)} m²/s)`, 3.5);
+      drawArrow(ctx, 0, 50, transX, 50, '#C084FC', isEn ? `Net Transport 90° (${ekmanTransport.toFixed(1)} m²/s)` : `Transporte Neto 90° (${ekmanTransport.toFixed(1)} m²/s)`, 3.5);
 
       ctx.restore();
 
@@ -3759,9 +3783,9 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#FFFFFF';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText(isSouth ? 'Costa de Chile' : 'Costa Continental', coastLeft + coastW - 85, coastTop + 20);
+      ctx.fillText(isSouth ? (isEn ? 'Chile Coast' : 'Costa de Chile') : (isEn ? 'Continental Coast' : 'Costa Continental'), coastLeft + coastW - 85, coastTop + 20);
 
-      drawArrow(ctx, coastLeft + coastW - 55, coastTop + 14, coastLeft + 15, coastTop + 14, '#C084FC', 'Mar Adentro (Oeste)', 2.5);
+      drawArrow(ctx, coastLeft + coastW - 55, coastTop + 14, coastLeft + 15, coastTop + 14, '#C084FC', isEn ? 'Offshore (West)' : 'Mar Adentro (Oeste)', 2.5);
 
       ctx.strokeStyle = '#06B6D4';
       ctx.lineWidth = 3;
@@ -3782,10 +3806,10 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#06B6D4';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText('Surgencia Humboldt', coastLeft + 10, coastTop + coastH - 12);
+      ctx.fillText(isEn ? 'Humboldt Upwelling' : 'Surgencia Humboldt', coastLeft + 10, coastTop + coastH - 12);
       ctx.fillStyle = '#94A3B8';
       ctx.font = '9px "JetBrains Mono", monospace';
-      ctx.fillText('Aguas frías ricas en nutrientes', coastLeft + 10, coastTop + coastH);
+      ctx.fillText(isEn ? 'Cold nutrient-rich waters' : 'Aguas frías ricas en nutrientes', coastLeft + 10, coastTop + coastH);
 
       if (showDCL) {
         ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
@@ -3794,7 +3818,7 @@ export default function PhysicsLab({
         ctx.strokeRect(coastLeft + 10, coastTop + 35, 125, 48);
         ctx.fillStyle = '#06B6D4';
         ctx.font = 'bold 9px "JetBrains Mono", monospace';
-        ctx.fillText('Balance de Ekman:', coastLeft + 16, coastTop + 48);
+        ctx.fillText(isEn ? 'Ekman Balance:' : 'Balance de Ekman:', coastLeft + 16, coastTop + 48);
         ctx.fillStyle = '#E2E8F0';
         ctx.fillText('A_z (∂²V/∂z²) = if V', coastLeft + 16, coastTop + 62);
         ctx.fillText(`D_E = ${ekmanDepth.toFixed(1)} m`, coastLeft + 16, coastTop + 76);
@@ -3827,9 +3851,9 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#38BDF8';
       ctx.font = 'bold 10px "JetBrains Mono", monospace';
-      ctx.fillText(`Capa 1: ρ₁ = ${resTop} Ω·m (h₁ = ${layerThickness}m)`, strataLeft + 8, 42);
+      ctx.fillText(isEn ? `Layer 1: ρ₁ = ${resTop} Ω·m (h₁ = ${layerThickness}m)` : `Capa 1: ρ₁ = ${resTop} Ω·m (h₁ = ${layerThickness}m)`, strataLeft + 8, 42);
       ctx.fillStyle = '#C084FC';
-      ctx.fillText(`Basamento: ρ₂ = ${resBottom} Ω·m`, strataLeft + 8, 25 + layer1Height + 20);
+      ctx.fillText(isEn ? `Basement: ρ₂ = ${resBottom} Ω·m` : `Basamento: ρ₂ = ${resBottom} Ω·m`, strataLeft + 8, 25 + layer1Height + 20);
 
       const waveMidX = strataLeft + strataW / 2 + 20;
       const skinDepthPx = Math.min(strataH - 10, (skinDepth1 / 1000) * strataH * 0.7);
@@ -3898,9 +3922,9 @@ export default function PhysicsLab({
 
       ctx.fillStyle = '#94A3B8';
       ctx.font = 'bold 9px "JetBrains Mono", monospace';
-      ctx.fillText('Curva de Resistividad Aparente', plotLeft + 10, plotTop + 16);
+      ctx.fillText(isEn ? 'Apparent Resistivity Curve' : 'Curva de Resistividad Aparente', plotLeft + 10, plotTop + 16);
       ctx.fillText('ρ_a (Ω·m)', plotLeft + 10, plotTop + 30);
-      ctx.fillText('log T (Período) →', plotLeft + plotW - 105, plotTop + plotH - 6);
+      ctx.fillText(isEn ? 'log T (Period) →' : 'log T (Período) →', plotLeft + plotW - 105, plotTop + plotH - 6);
 
       ctx.strokeStyle = '#10B981';
       ctx.lineWidth = 2.5;
@@ -4308,7 +4332,7 @@ export default function PhysicsLab({
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
                       <pre className="font-mono text-xs sm:text-sm text-slate-900 font-bold whitespace-pre-wrap overflow-x-auto bg-white p-2.5 rounded-xl border border-slate-200">
-                        {f.eq}
+                        {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
                       </pre>
                     </div>
                   ))}
@@ -4339,7 +4363,7 @@ export default function PhysicsLab({
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
                       <pre className="font-mono text-xs sm:text-sm text-emerald-950 font-bold whitespace-pre-wrap overflow-x-auto bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-200/80">
-                        {f.eq}
+                        {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
                       </pre>
                     </div>
                   ))}
@@ -4404,7 +4428,7 @@ export default function PhysicsLab({
                   >
                     <span>
                       <span className="uppercase mr-2 text-slate-400">{opt.id})</span>
-                      {opt.text}
+                      {lang === 'en' ? (opt.textEn || opt.text) : (opt.textEs || opt.text)}
                     </span>
                     {isSelected && (
                       <span className="text-xs px-2 py-0.5 rounded font-bold">
@@ -4603,7 +4627,7 @@ export default function PhysicsLab({
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
                         <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
-                          {f.eq}
+                          {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
                         </pre>
                       </div>
                     ))}
@@ -4627,7 +4651,7 @@ export default function PhysicsLab({
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
                         <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
-                          {f.eq}
+                          {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
                         </pre>
                       </div>
                     ))}
@@ -4661,7 +4685,7 @@ export default function PhysicsLab({
                       >
                         <span>
                           <span className="uppercase mr-1.5 opacity-60">{opt.id})</span>
-                          {opt.text}
+                          {lang === 'en' ? (opt.textEn || opt.text) : (opt.textEs || opt.text)}
                         </span>
                         {opt.correct && <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">✓ Correct</span>}
                       </div>

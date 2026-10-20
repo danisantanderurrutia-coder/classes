@@ -128,7 +128,7 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             <line x1="45" y1="145" x2="315" y2="145" stroke="#38BDF8" strokeWidth="1" />
             <line x1="45" y1="141" x2="45" y2="149" stroke="#38BDF8" strokeWidth="1" />
             <line x1="315" y1="141" x2="315" y2="149" stroke="#38BDF8" strokeWidth="1" />
-            <text x="270" y="155" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">R_vacío</text>
+            <text x="270" y="155" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'R_vacuum' : 'R_vacío'}</text>
 
             {/* Exercise Formula / Target Callout */}
             <rect x="8" y="8" width="205" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1" />
@@ -323,8 +323,8 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
 
             {/* Layer Boundary (Refractor at z = 40m) */}
             <line x1="20" y1="105" x2="340" y2="105" stroke="#EF4444" strokeWidth="1.5" strokeDasharray="4,2" />
-            <text x="25" y="75" fill="#38BDF8" fontSize="10" fontFamily="JetBrains Mono">Capa 1: v₁=2.0 km/s</text>
-            <text x="25" y="130" fill="#EF4444" fontSize="10" fontFamily="JetBrains Mono">Capa 2: v₂=4.0 km/s</text>
+            <text x="25" y="75" fill="#38BDF8" fontSize="10" fontFamily="JetBrains Mono">{isEn ? 'Layer 1: v₁=2.0 km/s' : 'Capa 1: v₁=2.0 km/s'}</text>
+            <text x="25" y="130" fill="#EF4444" fontSize="10" fontFamily="JetBrains Mono">{isEn ? 'Layer 2: v₂=4.0 km/s' : 'Capa 2: v₂=4.0 km/s'}</text>
 
             {/* Seismic Source (Explosion / Hammer) */}
             <circle cx="60" cy="50" r="5" fill="#F59E0B" />
@@ -522,7 +522,7 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             <polygon points="152,52 145,49 145,55" fill="#38BDF8" />
             <line x1="266" y1="52" x2="248" y2="52" stroke="#34D399" strokeWidth="2" />
             <polygon points="244,52 251,49 251,55" fill="#34D399" />
-            <text x="198" y="55" textAnchor="middle" fill="#C084FC" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">Modo Antifase</text>
+            <text x="198" y="55" textAnchor="middle" fill="#C084FC" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? 'Anti-Phase Mode' : 'Modo Antifase'}</text>
 
             {/* Exercise Callout */}
             <rect x="8" y="8" width="215" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(192, 132, 252, 0.4)" strokeWidth="1" />
@@ -549,11 +549,11 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
 
             {/* Isobars */}
             <line x1="20" y1="42" x2="340" y2="42" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1.5" />
-            <text x="25" y="38" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1004 hPa (Baja - L)</text>
+            <text x="25" y="38" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">{isEn ? '1004 hPa (Low - L)' : '1004 hPa (Baja - L)'}</text>
             <line x1="20" y1="85" x2="340" y2="85" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1.5" strokeDasharray="3,3" />
             <text x="25" y="81" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1012 hPa</text>
             <line x1="20" y1="128" x2="340" y2="128" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1.5" />
-            <text x="25" y="124" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">1020 hPa (Alta - H)</text>
+            <text x="25" y="124" fill="#64748B" fontSize="9" fontFamily="JetBrains Mono">{isEn ? '1020 hPa (High - H)' : '1020 hPa (Alta - H)'}</text>
 
             {/* Air parcel */}
             <circle cx="180" cy="85" r="10" fill="rgba(251, 191, 36, 0.3)" stroke="#FBBF24" strokeWidth="2" />
@@ -607,17 +607,17 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             </g>
             <circle cx="85" cy="85" r="42" fill="none" stroke="#FFFFFF" strokeWidth="2" />
             <text x="85" y="89" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">P</text>
-            <text x="85" y="142" textAnchor="middle" fill="#94A3B8" fontSize="9" fontFamily="JetBrains Mono">Mecanismo Focal</text>
+            <text x="85" y="142" textAnchor="middle" fill="#94A3B8" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'Focal Mechanism' : 'Mecanismo Focal'}</text>
 
             {/* Expanding P and S Wavefronts on Right */}
             <circle cx="245" cy="85" r="5" fill="#EF4444" />
-            <text x="245" y="74" textAnchor="middle" fill="#EF4444" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Hipocentro</text>
+            <text x="245" y="74" textAnchor="middle" fill="#EF4444" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? 'Hypocenter' : 'Hipocentro'}</text>
 
             <circle cx="245" cy="85" r="32" fill="none" stroke="#FBBF24" strokeWidth="2" />
-            <text x="282" y="80" fill="#FBBF24" fontSize="9" fontFamily="JetBrains Mono">Onda S</text>
+            <text x="282" y="80" fill="#FBBF24" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'S-Wave' : 'Onda S'}</text>
 
             <circle cx="245" cy="85" r="54" fill="none" stroke="#38BDF8" strokeWidth="1.8" strokeDasharray="4,4" />
-            <text x="303" y="72" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">Onda P</text>
+            <text x="303" y="72" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'P-Wave' : 'Onda P'}</text>
 
             {/* Exercise Callout */}
             <rect x="8" y="8" width="220" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(244, 63, 94, 0.4)" strokeWidth="1" />
@@ -640,12 +640,12 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             {/* Topography and Airy Root */}
             {/* Mantle */}
             <rect x="20" y="85" width="320" height="60" fill="#1E1B4B" />
-            <text x="25" y="140" fill="#818CF8" fontSize="9" fontFamily="JetBrains Mono">Manto (ρ_m=3300)</text>
+            <text x="25" y="140" fill="#818CF8" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'Mantle (ρ_m=3300)' : 'Manto (ρ_m=3300)'}</text>
 
             {/* Crust with mountain and root */}
             <path d="M 20,85 L 120,85 Q 180,48 240,85 L 340,85 L 340,115 L 240,115 Q 180,140 120,115 L 20,115 Z" fill="#334155" stroke="#64748B" strokeWidth="1.5" />
             <text x="155" y="62" fill="#FFFFFF" fontSize="10" fontFamily="JetBrains Mono" fontWeight="bold">Andes (+4000m)</text>
-            <text x="155" y="125" fill="#F59E0B" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Raíz b=17km</text>
+            <text x="155" y="125" fill="#F59E0B" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? 'Root b=17km' : 'Raíz b=17km'}</text>
 
             {/* Bouguer Anomaly Curve (Negative Trough) */}
             <path d="M 30,36 Q 180,48 330,36" fill="none" stroke="#38BDF8" strokeWidth="2" />
@@ -677,7 +677,7 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             {/* Wind Vector */}
             <line x1="110" y1="55" x2="110" y2="35" stroke="#34D399" strokeWidth="2.5" />
             <polygon points="110,30 106,38 114,38" fill="#34D399" />
-            <text x="118" y="38" fill="#34D399" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Viento</text>
+            <text x="118" y="38" fill="#34D399" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? 'Wind' : 'Viento'}</text>
 
             {/* Current Spiral Vectors */}
             <line x1="110" y1="55" x2="75" y2="46" stroke="#0284C7" strokeWidth="2.5" />
@@ -688,16 +688,16 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
             {/* Net Transport Vector 90° */}
             <line x1="110" y1="90" x2="45" y2="90" stroke="#C084FC" strokeWidth="3" />
             <polygon points="40,90 48,86 48,94" fill="#C084FC" />
-            <text x="40" y="104" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Transporte 90°</text>
+            <text x="40" y="104" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? '90° Transport' : 'Transporte 90°'}</text>
 
             {/* Upwelling schematic on the Right */}
             <path d="M 240,45 L 330,45 L 330,145 L 290,145 Q 260,110 240,45 Z" fill="#334155" stroke="#64748B" strokeWidth="1.5" />
-            <text x="270" y="70" fill="#FFFFFF" fontSize="9" fontFamily="JetBrains Mono">Costa Chile</text>
+            <text x="270" y="70" fill="#FFFFFF" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'Chile Coast' : 'Costa Chile'}</text>
             
             {/* Upwelling Arrow */}
             <path d="M 230,135 Q 240,95 210,65" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
             <polygon points="208,60 216,66 211,71" fill="#06B6D4" />
-            <text x="175" y="125" fill="#06B6D4" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">Surgencia</text>
+            <text x="175" y="125" fill="#06B6D4" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">{isEn ? 'Upwelling' : 'Surgencia'}</text>
 
             {/* Exercise Callout */}
             <rect x="8" y="8" width="205" height="22" rx="5" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(6, 182, 212, 0.4)" strokeWidth="1" />
@@ -719,9 +719,9 @@ export function ProblemThumbnail({ problemId, lang = 'es' }) {
 
             {/* Subsurface Layers */}
             <rect x="25" y="45" width="200" height="42" fill="#1E293B" stroke="#475569" strokeWidth="1.2" />
-            <text x="32" y="60" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">Capa 1: ρ₁=20 Ω·m</text>
+            <text x="32" y="60" fill="#38BDF8" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'Layer 1: ρ₁=20 Ω·m' : 'Capa 1: ρ₁=20 Ω·m'}</text>
             <rect x="25" y="87" width="200" height="55" fill="#0F172A" stroke="#475569" strokeWidth="1.2" />
-            <text x="32" y="105" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono">Basamento: ρ₂=500 Ω·m</text>
+            <text x="32" y="105" fill="#C084FC" fontSize="9" fontFamily="JetBrains Mono">{isEn ? 'Basement: ρ₂=500 Ω·m' : 'Basamento: ρ₂=500 Ω·m'}</text>
 
             {/* Attenuating EM Wave */}
             <path d="M 125,45 Q 155,55 125,65 Q 105,75 125,85 Q 138,95 125,105 Q 118,115 125,125 Q 128,135 125,142" fill="none" stroke="#F59E0B" strokeWidth="2.2" />

@@ -1983,11 +1983,27 @@ export default function SolarSystem({
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.2, 85000);
     camera.position.set(0, 48, 70);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: 'high-performance',
-      stencil: false,
-    });
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: 'high-performance',
+        stencil: false,
+      });
+    } catch (e) {
+      console.warn('WebGL is not supported or failed to initialize:', e);
+      const fallback = document.createElement('div');
+      fallback.className = 'w-full h-full flex flex-col items-center justify-center text-slate-400 bg-slate-950 p-6 text-center select-none';
+      fallback.innerHTML = `
+        <div class="text-4xl mb-3">🪐</div>
+        <p class="font-mono text-sm text-slate-300 mb-1">WebGL 3D Solar System</p>
+        <p class="text-xs text-slate-500">Hardware acceleration or WebGL is required to render the interactive 3D planetary model.</p>
+      `;
+      container.appendChild(fallback);
+      return () => {
+        if (container.contains(fallback)) container.removeChild(fallback);
+      };
+    }
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.outputColorSpace = THREE.SRGBColorSpace;

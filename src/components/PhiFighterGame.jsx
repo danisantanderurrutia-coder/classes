@@ -286,7 +286,7 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
               ? "fixed inset-0 z-[99999] w-screen h-screen bg-black flex flex-col overflow-hidden"
               : "w-full bg-black rounded-2xl border-2 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden relative group transition-all"
           }
-          style={isFullscreen ? { height: '100vh', width: '100vw' } : { height: '740px', minHeight: '560px', maxHeight: '88vh' }}
+          style={isFullscreen ? { height: '100vh', width: '100vw' } : { height: '820px', minHeight: '620px', maxHeight: '90vh' }}
         >
           {/* Fullscreen Floating Header Bar */}
           {isFullscreen && (

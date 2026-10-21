@@ -1832,6 +1832,141 @@
       margin: 0.15em 0 !important;
     }
 
+
+    /* =========================================================================
+       EXTERNAL AVIONICS BEZEL LAYOUT (OUTSIDE THE 3D SPACE VIEWPORT)
+       ========================================================================= */
+    body:not(.cinema-active) #webgl-canvas,
+    body:not(.cinema-active) #vector-canvas,
+    body:not(.cinema-active) #cockpit-view,
+    body:not(.cinema-active) #damage-flash,
+    body:not(.cinema-active) #singularity-vignette {
+      top: 46px !important;
+      height: calc(100% - 148px) !important;
+    }
+
+    body:not(.cinema-active) #flight-crosshair {
+      top: calc(46px + (100% - 148px) * 0.5) !important;
+    }
+
+    body:not(.cinema-active) #hud {
+      padding: 0 !important;
+    }
+
+    body:not(.cinema-active) #hud::before {
+      top: 56px !important;
+      left: 12px !important;
+    }
+
+    body:not(.cinema-active) #hud::after {
+      bottom: 112px !important;
+      right: 12px !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar {
+      height: 46px !important;
+      min-height: 46px !important;
+      flex-wrap: nowrap !important;
+      border-radius: 0 !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-bottom: 2px solid rgba(0, 240, 255, 0.4) !important;
+      background: linear-gradient(180deg, #0b111e 0%, #050811 100%) !important;
+      padding: 4px 10px !important;
+      gap: 6px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.9) !important;
+      overflow-x: auto !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .phi-icon-badge {
+      width: 26px !important;
+      height: 26px !important;
+      font-size: 1.15rem !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .avionics-bank {
+      padding: 2px 4px !important;
+      gap: 3px !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .bank-label {
+      font-size: 0.52rem !important;
+      padding: 0 2px !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .imperial-switch {
+      padding: 3px 6px !important;
+      font-size: 0.55rem !important;
+      letter-spacing: 0.5px !important;
+      gap: 4px !important;
+      white-space: nowrap !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar #btn-open-physics {
+      padding: 4px 8px !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .sector-progress-box {
+      min-width: 155px !important;
+      max-width: 210px !important;
+      gap: 2px !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .sector-title {
+      font-size: 0.60rem !important;
+      letter-spacing: 0.8px !important;
+      white-space: nowrap !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .progress-label {
+      font-size: 0.56rem !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .title-group h2 {
+      font-size: 0.76rem !important;
+      letter-spacing: 1.5px !important;
+      white-space: nowrap !important;
+    }
+
+    body:not(.cinema-active) .imperial-top-bar .title-group p {
+      font-size: 0.52rem !important;
+      letter-spacing: 0.8px !important;
+      white-space: nowrap !important;
+    }
+
+    body:not(.cinema-active) .imperial-bottom-bar {
+      height: 102px !important;
+      min-height: 102px !important;
+      background: linear-gradient(180deg, #060b16 0%, #020409 100%) !important;
+      border-top: 2px solid rgba(0, 240, 255, 0.45) !important;
+      padding: 6px 12px !important;
+      gap: 10px !important;
+      align-items: stretch !important;
+      box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.95) !important;
+    }
+
+    body:not(.cinema-active) .imperial-panel-bay {
+      padding: 5px 12px !important;
+      border-radius: 5px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      background: linear-gradient(180deg, rgba(16, 24, 39, 0.95) 0%, rgba(8, 12, 22, 0.98) 100%) !important;
+    }
+
+    body:not(.cinema-active) .panel-bay-header {
+      font-size: 0.64rem !important;
+      margin-bottom: 2px !important;
+      padding-bottom: 2px !important;
+    }
+
+    body:not(.cinema-active) .tele-stat-row {
+      font-size: 0.68rem !important;
+      line-height: 1.18 !important;
+      margin: 0 !important;
+      padding: 1px 0 !important;
+    }
 </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
@@ -3461,9 +3596,11 @@
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x010206, 0.0022);
 
-    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2500);
+    const getViewW = () => container.clientWidth || window.innerWidth;
+    const getViewH = () => container.clientHeight || window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(65, getViewW() / getViewH(), 0.1, 2500);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(getViewW(), getViewH());
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
@@ -5458,8 +5595,8 @@
       if (lockedTarget && showForceVectors) {
         const sp = lockedTarget.position.clone().project(camera);
         if (sp.z < 1) {
-          const px = (sp.x * 0.5 + 0.5) * window.innerWidth;
-          const py = (-sp.y * 0.5 + 0.5) * window.innerHeight;
+          const px = (sp.x * 0.5 + 0.5) * getViewW();
+          const py = (-sp.y * 0.5 + 0.5) * getViewH();
 
           vecCtx.save();
           vecCtx.strokeStyle = '#ef4444';
@@ -5998,8 +6135,8 @@
       if (!breakdownActive) return;
       const sp = breakdownTargetPos.clone().project(camera);
       if (sp.z > 1) return;
-      const px = (sp.x * 0.5 + 0.5) * window.innerWidth;
-      const py = (-sp.y * 0.5 + 0.5) * window.innerHeight;
+      const px = (sp.x * 0.5 + 0.5) * getViewW();
+      const py = (-sp.y * 0.5 + 0.5) * getViewH();
 
       const data = SECTOR_PHYSICS_BREAKDOWNS[currentSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
       const timer = breakdownTimer;
@@ -6231,8 +6368,8 @@
     const vecCtx = vectorCanvas.getContext('2d');
 
     function resizeVectorCanvas() {
-      vectorCanvas.width = window.innerWidth;
-      vectorCanvas.height = window.innerHeight;
+      vectorCanvas.width = getViewW();
+      vectorCanvas.height = getViewH();
     }
     resizeVectorCanvas();
     window.addEventListener('resize', resizeVectorCanvas);
@@ -7453,12 +7590,12 @@
         targetScreenPos.project(camera);
 
         if (targetScreenPos.z < 1) {
-          const sx = (targetScreenPos.x * 0.5 + 0.5) * window.innerWidth;
-          const sy = (-targetScreenPos.y * 0.5 + 0.5) * window.innerHeight;
+          const sx = (targetScreenPos.x * 0.5 + 0.5) * getViewW();
+          const sy = (-targetScreenPos.y * 0.5 + 0.5) * getViewH();
 
           targetBracket.style.display = 'block';
-          targetBracket.style.left = `${sx}px`;
-          targetBracket.style.top = `${sy}px`;
+          targetBracket.style.left = `${(container.offsetLeft || 0) + sx}px`;
+          targetBracket.style.top = `${(container.offsetTop || 0) + sy}px`;
           targetBracket.setAttribute('data-distance', `${nearestTarget.userData.name ? nearestTarget.userData.name + ' // ' : ''}${Math.round(minDist * 10)} m`);
           return;
         }
@@ -7523,13 +7660,17 @@
 
     window.addEventListener('mousemove', (e) => {
       hasMovedMouseInSector = true;
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      const rect = container.getBoundingClientRect();
+      const w = rect.width || window.innerWidth;
+      const h = rect.height || window.innerHeight;
+      mouse.x = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / w) * 2 - 1));
+      mouse.y = Math.max(-1, Math.min(1, -((e.clientY - rect.top) / h) * 2 + 1));
     });
 
     window.addEventListener('click', (e) => {
       if (breakdownActive) return;
-      if (e.clientY > 80 && e.clientY < window.innerHeight - 130) {
+      const rect = container.getBoundingClientRect();
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
         fireLasers();
       }
     });
@@ -7757,8 +7898,8 @@
 
         // UPDATE SCREEN-SPACE FORCE VECTORS (NEW VISUAL PHYSICS ENGINE)
         shipScreenPos.copy(shipRoot.position).project(camera);
-        const shipPx = (shipScreenPos.x * 0.5 + 0.5) * window.innerWidth;
-        const shipPy = (-shipScreenPos.y * 0.5 + 0.5) * window.innerHeight;
+        const shipPx = (shipScreenPos.x * 0.5 + 0.5) * getViewW();
+        const shipPy = (-shipScreenPos.y * 0.5 + 0.5) * getViewH();
 
         // Vector 1: Gravitational Force (Red)
         drawForceVector(shipPx, shipPy, gravityForce.x * 2.8, -gravityForce.y * 2.8, '#ef4444', `Fg: ${gravityForce.length().toFixed(1)} kN`);
@@ -7816,12 +7957,12 @@
         camera.position.copy(shipRoot.position);
         camera.rotation.copy(shipRoot.rotation);
       } else {
-        // 2nd-order spring-damper camera chase with Dutch banking tilt
-        const chaseOffset = new THREE.Vector3(0, 1.8, 6.4);
+        // 2nd-order spring-damper camera chase with Dutch banking tilt & full bottom clearance
+        const chaseOffset = new THREE.Vector3(0, 1.35, 6.5);
         chaseOffset.applyQuaternion(shipRoot.quaternion);
         chaseOffset.add(shipRoot.position);
         camera.position.lerp(chaseOffset, 0.14);
-        camera.lookAt(shipRoot.position.x, shipRoot.position.y + 0.25, shipRoot.position.z - 25);
+        camera.lookAt(shipRoot.position.x, shipRoot.position.y - 0.2, shipRoot.position.z - 25);
 
         // Camera banking tilt during lateral high-G turns
         const cameraRoll = -shipVelocity.x * 0.012;
@@ -8804,11 +8945,20 @@
       }
     }, { passive: false });
 
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    function syncMainViewport() {
+      const w = getViewW();
+      const h = getViewH();
+      if (w > 10 && h > 10) {
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+        resizeVectorCanvas();
+      }
+    }
+    window.addEventListener('resize', syncMainViewport);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(syncMainViewport).observe(container);
+    }
   </script>
 </body>
 </html>

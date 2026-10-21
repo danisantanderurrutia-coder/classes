@@ -950,31 +950,34 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       {/* FLOATING CAPSULE HEADER (DYNAMIC ISLAND / RAYCAST STYLE)  */}
       {/* ========================================================= */}
       <header className="fixed top-3 sm:top-4 left-0 right-0 z-40 px-2 sm:px-6 pointer-events-none transition-all duration-300">
-        <div className="max-w-6xl mx-auto h-16 px-4 sm:px-6 rounded-full bg-black/90 border border-white/20 backdrop-blur-2xl shadow-2xl shadow-black/90 flex items-center justify-between gap-2 sm:gap-4 pointer-events-auto ring-1 ring-white/10">
+        <div className="max-w-7xl mx-auto min-h-[4.25rem] py-2 px-3 sm:px-6 rounded-2xl sm:rounded-full bg-black/90 border border-white/20 backdrop-blur-2xl shadow-2xl shadow-black/90 flex items-center justify-between gap-2 sm:gap-4 pointer-events-auto ring-1 ring-white/10">
           
           {/* Identity Badge */}
           <button 
             onClick={() => navigateTo('landing')}
             className="flex items-center gap-2.5 group text-left cursor-pointer shrink-0"
           >
-            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center font-mono text-sm font-bold group-hover:bg-white/20 transition-all shrink-0">
+            <div className="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center font-mono text-sm font-bold group-hover:bg-white/20 transition-all shrink-0">
               Φ
             </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap leading-tight">
+            <div className="flex flex-col justify-center">
+              <span className="font-extrabold text-xs sm:text-sm tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap leading-none mb-0.5">
                 MATH &amp; PHYSICS CLASSES
               </span>
-              <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-tight">
-                Daniel S. Santander Urrutia • Double M.Sc. &amp; Geophysicist
+              <span className="text-[11px] font-semibold text-slate-200 tracking-tight whitespace-nowrap leading-none mb-0.5">
+                Daniel S. Santander Urrutia
+              </span>
+              <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-none">
+                Double M.Sc. &amp; Geophysicist
               </span>
             </div>
           </button>
 
           {/* Pill Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-mono font-medium">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-xs font-mono font-medium">
             <button
               onClick={() => navigateTo('lab')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'lab'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -986,7 +989,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('courses')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'courses'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -998,7 +1001,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('tutor')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'tutor'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -1010,7 +1013,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('piad')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'piad'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -1022,7 +1025,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('library')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'library'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -1034,7 +1037,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('precios')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'precios'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -1046,7 +1049,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
             <button
               onClick={() => navigateTo('contact')}
-              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'contact'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'

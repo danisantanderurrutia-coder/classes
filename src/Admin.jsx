@@ -1091,7 +1091,8 @@ export default function Admin({ onBack }) {
   const [pipelineView, setPipelineView] = useState('kanban');
 
   // Marketing & Social Studio State
-  const [adminInstaLang, setAdminInstaLang] = useState('en');
+  const [adminInstaLang, setAdminInstaLang] = useState('es');
+  const [adminInstaCaptionMode, setAdminInstaCaptionMode] = useState('referral');
   const [copiedMarketingKey, setCopiedMarketingKey] = useState(null);
 
   const handleCopyMarketing = (key, text) => {
@@ -3406,17 +3407,6 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                 <div className="inline-flex items-center gap-1 p-1 bg-slate-950 border border-slate-800 rounded-xl">
                   <button
                     type="button"
-                    onClick={() => setAdminInstaLang('en')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                      adminInstaLang === 'en'
-                        ? 'bg-sky-500 text-slate-950 shadow'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    🇬🇧 English Version
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => setAdminInstaLang('es')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                       adminInstaLang === 'es'
@@ -3425,6 +3415,17 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     }`}
                   >
                     🇪🇸 Versión en Español
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAdminInstaLang('en')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                      adminInstaLang === 'en'
+                        ? 'bg-sky-500 text-slate-950 shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🇬🇧 English Version
                   </button>
                 </div>
               </div>
@@ -3436,13 +3437,13 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                   <div className="relative group rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square shadow-2xl">
                     <img
                       key={adminInstaLang}
-                      src={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                      src={adminInstaLang === 'es' ? './instagram_post_es.jpg?v=spacetime' : './instagram_post_en.jpg?v=spacetime'}
                       alt={`Instagram Post Preview (${adminInstaLang.toUpperCase()})`}
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                       <a
-                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg?v=spacetime' : './instagram_post_en.jpg?v=spacetime'}
                         target="_blank"
                         rel="noreferrer"
                         className="px-4 py-2 rounded-xl bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-900 transition-all"
@@ -3462,7 +3463,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
                     <div className="flex items-center gap-2">
                       <a
-                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg?v=spacetime' : './instagram_post_en.jpg?v=spacetime'}
                         download={adminInstaLang === 'es' ? 'Daniel_S_Santander_Urrutia_Instagram_Post_ES_2160x2160.jpg' : 'Daniel_S_Santander_Urrutia_Instagram_Post_EN_2160x2160.jpg'}
                         className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-mono text-xs font-bold transition-all shadow-md shadow-pink-500/20"
                       >
@@ -3470,7 +3471,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                         <span>Descargar Imagen ({adminInstaLang.toUpperCase()} 2160px)</span>
                       </a>
                       <a
-                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg?v=spacetime' : './instagram_post_en.jpg?v=spacetime'}
                         target="_blank"
                         rel="noreferrer"
                         className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all"
@@ -3484,14 +3485,61 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
                 {/* Right: Caption & Copywriting Copilot (7 cols) */}
                 <div className="lg:col-span-7 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-pink-400">
-                      {adminInstaLang === 'en' ? '📝 Ready-to-Post Instagram Caption (English)' : '📝 Texto Listo para Publicar (Español)'}
-                    </span>
+                  {/* Caption Mode Switcher */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-1.5 bg-slate-950 border border-slate-800 rounded-xl">
+                    <div className="inline-flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setAdminInstaCaptionMode('referral')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                          adminInstaCaptionMode === 'referral'
+                            ? 'bg-rose-500 text-white shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        🤝 Red de Contactos / Búsqueda Laboral
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAdminInstaCaptionMode('pitch')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                          adminInstaCaptionMode === 'pitch'
+                            ? 'bg-pink-500 text-white shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        🎯 Pitch Académico Formal
+                      </button>
+                    </div>
+
                     <button
                       type="button"
                       onClick={() => {
-                        const captionEn = `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
+                        const captionReferralEn = `Hi everyone! 👋
+
+I’m offering private university tutoring (Physics, Calculus, Linear Algebra) and B.Sc. / M.Sc. thesis guidance while I look for a job :) If you know anyone who might need this, let me know!
+
+🔬 Focused on deep physical intuition, rigorous derivations, and 14 interactive 3D physics simulators.
+📍 Available 1-on-1 online worldwide & in-person in Hannover.
+
+👉 Free 20-min diagnostic & interactive simulators:
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #Hannover #MathTutor`;
+
+                        const captionReferralEs = `¡Hola a todos! 👋
+
+Estoy abriendo cupos para clases particulares universitarias (Física, Cálculo, Álgebra Lineal) y asesoría en tesis de pregrado/máster mientras busco trabajo :) Si saben de alguien a quien le pueda servir, ¡se agradece mucho si le avisan o comparten el dato!
+
+🔬 Enfoque en intuición física profunda, demostraciones formales y 14 simuladores 3D interactivos.
+📍 Clases 1 a 1 online para todo el mundo y presenciales en Hannover.
+
+👉 Detalles y sesión diagnóstica gratuita:
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`;
+
+                        const captionPitchEn = `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
 
 Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
 
@@ -3509,7 +3557,7 @@ I offer specialized 1-on-1 mentorship designed to bridge the gap between abstrac
 
 #UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`;
 
-                        const captionEs = `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
+                        const captionPitchEs = `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
 
 ¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
 
@@ -3527,19 +3575,50 @@ Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a 
 
 #FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`;
 
-                        handleCopyMarketing(adminInstaLang === 'en' ? 'caption_en' : 'caption_es', adminInstaLang === 'en' ? captionEn : captionEs);
+                        const textToCopy = adminInstaCaptionMode === 'referral'
+                          ? (adminInstaLang === 'en' ? captionReferralEn : captionReferralEs)
+                          : (adminInstaLang === 'en' ? captionPitchEn : captionPitchEs);
+
+                        handleCopyMarketing(`caption_${adminInstaCaptionMode}_${adminInstaLang}`, textToCopy);
                       }}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 border border-pink-400/30 font-mono text-xs font-bold transition-all cursor-pointer"
                     >
-                      {copiedMarketingKey === (adminInstaLang === 'en' ? 'caption_en' : 'caption_es') ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedMarketingKey === (adminInstaLang === 'en' ? 'caption_en' : 'caption_es') ? '¡Copiado!' : 'Copiar Texto Completo'}</span>
+                      {copiedMarketingKey === `caption_${adminInstaCaptionMode}_${adminInstaLang}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedMarketingKey === `caption_${adminInstaCaptionMode}_${adminInstaLang}` ? '¡Copiado!' : 'Copiar Texto'}</span>
                     </button>
                   </div>
 
                   {/* Caption Text Box */}
                   <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 whitespace-pre-line leading-relaxed max-h-[380px] overflow-y-auto">
-                    {adminInstaLang === 'en' ? (
-                      `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
+                    {adminInstaCaptionMode === 'referral' ? (
+                      adminInstaLang === 'en' ? (
+                        `Hi everyone! 👋
+
+I’m offering private university tutoring (Physics, Calculus, Linear Algebra) and B.Sc. / M.Sc. thesis guidance while I look for a job :) If you know anyone who might need this, let me know!
+
+🔬 Focused on deep physical intuition, rigorous derivations, and 14 interactive 3D physics simulators.
+📍 Available 1-on-1 online worldwide & in-person in Hannover.
+
+👉 Free 20-min diagnostic & interactive simulators:
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #Hannover #MathTutor`
+                      ) : (
+                        `¡Hola a todos! 👋
+
+Estoy abriendo cupos para clases particulares universitarias (Física, Cálculo, Álgebra Lineal) y asesoría en tesis de pregrado/máster mientras busco trabajo :) Si saben de alguien a quien le pueda servir, ¡se agradece mucho si le avisan o comparten el dato!
+
+🔬 Enfoque en intuición física profunda, demostraciones formales y 14 simuladores 3D interactivos.
+📍 Clases 1 a 1 online para todo el mundo y presenciales en Hannover.
+
+👉 Detalles y sesión diagnóstica gratuita:
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`
+                      )
+                    ) : (
+                      adminInstaLang === 'en' ? (
+                        `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
 
 Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
 
@@ -3556,8 +3635,8 @@ I offer specialized 1-on-1 mentorship designed to bridge the gap between abstrac
 🔗 danisantanderurrutia-coder.github.io/classes
 
 #UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`
-                    ) : (
-                      `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
+                      ) : (
+                        `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
 
 ¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
 
@@ -3574,6 +3653,7 @@ Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a 
 🔗 danisantanderurrutia-coder.github.io/classes
 
 #FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`
+                      )
                     )}
                   </div>
 

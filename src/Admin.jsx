@@ -78,6 +78,15 @@ const PAYMENT_METHODS = [
 
 const WHATSAPP_SUBJECT_PRESETS = [
   {
+    id: 'mentes_curiosas',
+    tier: 'ib',
+    nameEs: 'Mentes Curiosas: Niños y Jóvenes (Geometría, Lógica y Física Lúdica)',
+    nameEn: 'Curious Minds: Young Inquirers (Geometry, Logic & Playful Science)',
+    simUrl: `${BASE_SITE_URL}?src=wa-curious#courses`,
+    simLabelEs: 'nuestro planetario 3D interactivo y simuladores visuales de física',
+    simLabelEn: 'our interactive 3D solar system and visual physics simulators'
+  },
+  {
     id: 'calculo',
     tier: 'ib',
     nameEs: 'Cálculo I, II y III / Análisis (Nivel 1)',
@@ -132,13 +141,13 @@ const WHATSAPP_SUBJECT_PRESETS = [
     simLabelEn: 'the Poiseuille Flow, Geostrophic Wind & Seismic Waves simulators on my site'
   },
   {
-    id: 'python_ia',
+    id: 'python_modeling',
     tier: 'master',
-    nameEs: 'Python Científico (NumPy/SciPy) + IA Productiva (Nivel 3)',
-    nameEn: 'Scientific Python (NumPy/SciPy) + Productive AI (Tier 3)',
+    nameEs: 'Python Científico (NumPy/SciPy) y Modelación Numérica (Nivel 3)',
+    nameEn: 'Scientific Python (NumPy/SciPy) & Numerical Modeling (Tier 3)',
     simUrl: `${BASE_SITE_URL}?src=wa-python#piad`,
-    simLabelEs: 'mi metodología PIAD™ para diseñar y verificar código científico en Python con IA',
-    simLabelEn: 'my PIAD™ workflow for designing and verifying scientific Python code with AI'
+    simLabelEs: 'mi metodología PIAD™ para modelación y verificación de código científico en Python',
+    simLabelEn: 'my PIAD™ workflow for modeling and verifying scientific Python code'
   }
 ];
 
@@ -1107,6 +1116,7 @@ export default function Admin({ onBack }) {
   // Live Pricing State (synced with localStorage so Admin can tweak rates live)
   const [liveTiers, setLiveTiers] = useState(() => getCurrencyTiers());
   const [priceSavedBanner, setPriceSavedBanner] = useState(false);
+  const [simBaseEur, setSimBaseEur] = useState(25);
 
   // Monthly Revenue Goal in EUR
   const [monthlyGoalEur, setMonthlyGoalEur] = useState(() => {
@@ -1372,6 +1382,50 @@ export default function Admin({ onBack }) {
     setTimeout(() => setPriceSavedBanner(false), 3000);
   };
 
+  const handleApplyPonderanteSimulation = () => {
+    const base = Math.max(10, Number(simBaseEur) || 25);
+    const updated = { ...liveTiers };
+    for (const code of Object.keys(updated)) {
+      const t = updated[code];
+      const pond = t.ponderante || 1.0;
+      let newIb = 25;
+      if (code === 'EUR') {
+        newIb = Math.round(base);
+      } else if (code === 'CHF') {
+        newIb = Math.round(base * pond);
+      } else if (code === 'GBP') {
+        newIb = Math.round((base * pond) / 1.18);
+      } else if (code === 'USD') {
+        newIb = Math.round((base * pond) / 0.92);
+      } else if (code === 'CLP') {
+        newIb = Math.round(((base * pond) / 0.00098) / 1000) * 1000;
+      }
+
+      const newBachelor = code === 'CLP' ? Math.round((newIb * 1.15) / 1000) * 1000 : Math.round(newIb * 1.16);
+      const newMaster = code === 'CLP' ? Math.round((newIb * 1.30) / 1000) * 1000 : Math.round(newIb * 1.40);
+
+      updated[code] = {
+        ...t,
+        rates: {
+          ib: newIb,
+          bachelor: newBachelor,
+          mechanics: newBachelor,
+          master: newMaster
+        },
+        packs8h: {
+          ib: Math.round(newIb * 8 * 0.85),
+          bachelor: Math.round(newBachelor * 8 * 0.85),
+          mechanics: Math.round(newBachelor * 8 * 0.85),
+          master: Math.round(newMaster * 8 * 0.85)
+        }
+      };
+    }
+    setLiveTiers(updated);
+    saveCustomCurrencyRates(updated);
+    setPriceSavedBanner(true);
+    setTimeout(() => setPriceSavedBanner(false), 4000);
+  };
+
   // Channels & Street Handlers
   const markChannelPostedToday = (id) => {
     const today = new Date().toISOString().split('T')[0];
@@ -1531,6 +1585,35 @@ I want to be crystal clear: running short on funds should never stop you from ma
 Tell me which subject you are taking, which exam is coming up, and what your current situation looks like: we can arrange a flexible solidarity agreement or partial scholarship that fits your reality.
 
 What time works best for a calm 10-minute chat on Google Meet today or tomorrow?`;
+  } else if (selectedWaSubject.id === 'mentes_curiosas') {
+    generatedWhatsAppMessage =
+      waLang === 'es'
+        ? `¡Hola${waStudentName ? ` ${waStudentName}` : ''}! Qué tal, te habla Daniel S. Santander Urrutia (Geofísico de la U. de Chile y Doble M.Sc. en Alemania).
+
+¡Me alegra muchísimo tu mensaje! Tengo un espacio formativo diseñado especialmente para niños y jóvenes con alta curiosidad e interés por las matemáticas y las ciencias naturales.
+
+Lejos de la repetición mecánica o la presión de notas del colegio, aquí trabajamos la intuición geométrica espacial, la lógica deductiva, el porqué de los números primos y física intuitiva (como las órbitas planetarias y la gravedad de Kepler) a través de los simuladores interactivos de mi propia plataforma:
+${selectedWaSubject.simUrl}
+
+💰 *Valores (${waMode === 'inperson' ? 'Presencial en Hannover' : 'Online en vivo por Meet'}):*
+• *Individual (1-a-1):* ${formatMoney(waFinalHourly, waCurrency)}/h
+• *Pack Formativo de 8h (-15% dcto.):* ${formatMoney(waPackHourly, waCurrency)}/h (${formatMoney(waPackHourly * 8, waCurrency)} total)
+${waG2.studentDiscountPct > 0 ? `• *Grupo de 2 niños/hermanos/amigos (-${waG2.studentDiscountPct}% c/u):* ${formatMoney(waG2.perStudentHourly, waCurrency)}/h cada uno` : ''}
+
+Podemos coordinar una *videollamada breve de 15 minutos sin costo* para conocernos, conversar con tu hijo/a y ver qué temas le apasionan más. ¿Qué día y horario les acomodaría?`
+        : `Hi${waStudentName ? ` ${waStudentName}` : ''}! This is Daniel S. Santander Urrutia (Geophysicist & Double European M.Sc. in Germany).
+
+I am delighted by your message! I run a mentorship track tailored specifically for curious children and teenagers who love asking deep questions about mathematics and nature.
+
+Far from rote memorization or school pressure, we explore spatial geometric intuition, first-principles logic, the secret patterns of prime numbers, and hands-on physics (like Keplerian orbits and gravity) through the interactive simulators on my platform:
+${selectedWaSubject.simUrl}
+
+💰 *Tuition Rates (${waMode === 'inperson' ? 'In-Person in Hannover' : 'Live Online via Meet'}):*
+• *Solo (1-on-1):* ${formatMoney(waFinalHourly, waCurrency)}/h
+• *8-Hour Learning Bundle (15% off):* ${formatMoney(waPackHourly, waCurrency)}/h (${formatMoney(waPackHourly * 8, waCurrency)} total)
+${waG2.studentDiscountPct > 0 ? `• *Pair (2 siblings or friends, -${waG2.studentDiscountPct}% each):* ${formatMoney(waG2.perStudentHourly, waCurrency)}/h per student` : ''}
+
+We can schedule a *free 15-minute introductory video call* to meet, chat with your child, and discover what scientific topics spark their interest most. What days and times work best for you?`;
   } else {
     generatedWhatsAppMessage =
       waLang === 'es'
@@ -1598,14 +1681,14 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
-                  Mission Control • Daniel S. Santander Urrutia
+                  Tu Cockpit Principal • Daniel S. Santander Urrutia
                 </span>
                 <span className="font-mono text-[10px] text-slate-400 hidden sm:inline">
-                  $20.000 CLP / €25 Base • 3 Escalones por Materia
+                  Ponderante Base EUR = 1.00x • Clases Universitarias &amp; Mentes Curiosas
                 </span>
               </div>
               <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
-                Centro de Comando: Precios, Captación &amp; Conversión STEM
+                Centro de Comando: Tarifas, Alumnos &amp; Conversión
               </h1>
             </div>
           </div>
@@ -1739,8 +1822,8 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
         {/* Navigation Tabs (hidden on print) */}
         <div className="no-print flex flex-wrap gap-2 border-b border-slate-800/80 pb-4">
           {[
-            { id: 'strategy', label: '1. Precios por Materia (Editor en Vivo)', icon: Sliders },
-            { id: 'whatsapp', label: '2. Cerrador Rápido WhatsApp (60s)', icon: MessageSquare },
+            { id: 'strategy', label: '1. Tarifas & Ponderantes Económicos (Base 1.00x)', icon: Sliders },
+            { id: 'whatsapp', label: '2. Cerrador WhatsApp (Cálculo, Mentes Curiosas, IB)', icon: MessageSquare },
             { id: 'crm', label: '3. Pipeline CRM & Control de Horas/Pagos', icon: Columns },
             { id: 'classifieds', label: '4. Checklist de Posteo (Físicos & Digitales)', icon: CheckCircle2 },
             { id: 'flyer', label: '5. Generador Flyer A4 Imprimible & Calle', icon: Printer },
@@ -1826,13 +1909,107 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                 ))}
               </div>
 
+              {/* ================================================================= */}
+              {/* PONDERANTES ECONÓMICOS POR PAÍS (BASE EURO = 1.00x) & SIMULADOR    */}
+              {/* ================================================================= */}
+              <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900/90 to-slate-950 border border-sky-500/30 space-y-5">
+                <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800/80 pb-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-mono text-[11px] uppercase tracking-widest text-sky-400 font-bold">
+                        Ponderantes Económicos por País
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-300 font-mono text-[10px] font-bold">
+                        Base EUR = 1.00x
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-white">
+                      Relación de Precios según Capacidad de Gasto por País
+                    </h3>
+                    <p className="text-xs text-slate-400 max-w-2xl leading-relaxed mt-1">
+                      Tomando el Euro como valor ponderante base de <strong>1.00x</strong> (lo que se cobra en Alemania y Europa), cada país tiene su ponderante respectivo que indica <em>cuántas veces se multiplica el valor de acuerdo a lo que pueden gastar</em> sus estudiantes y familias.
+                    </p>
+                  </div>
+
+                  {/* Simulator Box */}
+                  <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-700/80 space-y-3 font-mono text-xs">
+                    <div className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
+                      <Sliders className="w-3.5 h-3.5" />
+                      <span>Simulador Rápido por Ponderante</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-400 text-[11px]">Base EUR: €</span>
+                      <input
+                        type="number"
+                        min="15"
+                        max="80"
+                        value={simBaseEur}
+                        onChange={(e) => setSimBaseEur(Number(e.target.value) || 25)}
+                        className="w-16 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-sky-500/50 text-white font-bold text-center"
+                      />
+                      <span className="text-[11px] text-slate-400">/h Nivel 1</span>
+                      <button
+                        onClick={handleApplyPonderanteSimulation}
+                        className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[11px] transition-all cursor-pointer shadow-sm shadow-sky-600/30"
+                      >
+                        ⚡ Aplicar a la Web
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Calcula CHF (1.65x), CLP (0.80x), GBP (1.15x) y USD (1.10x) al instante.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5 Currency Cards with Ponderante Multipliers */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-mono text-xs">
+                  {Object.values(liveTiers).map((tier) => {
+                    const isBase = tier.code === 'EUR';
+                    const pond = tier.ponderante || 1.0;
+                    return (
+                      <div
+                        key={tier.code}
+                        className={`p-3.5 rounded-2xl border transition-all ${
+                          isBase
+                            ? 'bg-sky-950/30 border-sky-500/40'
+                            : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-base">{tier.flag}</span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            isBase
+                              ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
+                              : pond > 1.0
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          }`}>
+                            {pond.toFixed(2)}x
+                          </span>
+                        </div>
+                        <div className="font-bold text-white text-xs mb-1">
+                          {tier.code} — {tier.labelEs.split('•')[1] || tier.code}
+                        </div>
+                        <div className="text-[11px] text-emerald-400 font-extrabold mb-1.5">
+                          {formatMoney(tier.rates.ib, tier.code)}/h
+                        </div>
+                        <p className="text-[10px] font-sans text-slate-400 leading-tight">
+                          {tier.ponderanteDescEs}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Live Editable Pricing Table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-800 text-[11px] font-mono text-slate-400 uppercase">
                       <th className="py-3.5 px-4">País / Moneda</th>
-                      <th className="py-3.5 px-4">🟢 Nivel 1: Cálculo, Física I &amp; IB (1h)</th>
+                      <th className="py-3.5 px-4">Ponderante</th>
+                      <th className="py-3.5 px-4">🟢 Nivel 1: Cálculo, Física I &amp; Mentes Curiosas (1h)</th>
                       <th className="py-3.5 px-4">🔵 Nivel 2: Álgebra, EDOs &amp; Mecánica (1h)</th>
                       <th className="py-3.5 px-4">🟣 Nivel 3: Fluidos, Geofísica &amp; Python (1h)</th>
                       <th className="py-3.5 px-4">Extra Presencial /h</th>
@@ -1843,11 +2020,23 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     {Object.values(liveTiers).map((tier) => {
                       const pack8hTier1 = Math.round(tier.rates.ib * 8 * 0.85);
                       const perHourPack = Math.round(tier.rates.ib * 0.85);
+                      const pond = tier.ponderante || 1.0;
                       return (
                         <tr key={tier.code} className="hover:bg-slate-800/30">
                           <td className="py-3.5 px-4 font-mono font-bold text-white whitespace-nowrap">
                             <span className="mr-2 text-base">{tier.flag}</span>
                             {tier.code} — {tier.labelEs.split('•')[1] || tier.code}
+                          </td>
+                          <td className="py-3.5 px-4 font-mono">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              tier.code === 'EUR'
+                                ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
+                                : pond > 1.0
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                            }`}>
+                              {pond.toFixed(2)}x
+                            </span>
                           </td>
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-1.5 font-mono">

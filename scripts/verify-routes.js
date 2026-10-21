@@ -1,6 +1,7 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
@@ -40,13 +41,15 @@ const server = http.createServer((req, res) => {
 await new Promise(resolve => server.listen(4173, resolve));
 console.log('HTTP Server listening at http://localhost:4173');
 
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chrome-test-'));
 const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const debugPort = 9222;
+const debugPort = 9225;
 
 const chrome = spawn(chromePath, [
   '--headless=new',
   '--disable-gpu',
   `--remote-debugging-port=${debugPort}`,
+  `--user-data-dir=${tmpDir}`,
   '--no-first-run',
   '--no-default-browser-check',
   'about:blank'

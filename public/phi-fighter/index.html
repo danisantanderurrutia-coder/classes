@@ -1996,6 +1996,7 @@
       <div class="cinema-tag-row">
         <span class="cinema-alert-badge">PHYSICS CLIMAX ANALYSIS</span>
         <span class="cinema-sector-badge" id="cb-sector-title">SECTOR 1: SUN & HELIOSPHERE</span>
+        <button id="cb-btn-close" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.6); color:#fca5a5; border-radius:4px; padding:3px 10px; font-family:'Orbitron', sans-serif; font-size:0.68rem; font-weight:bold; cursor:pointer; margin-left:auto; transition:all 0.15s ease;">✕ SKIP [ESC]</button>
       </div>
       <h2 class="cinema-title" id="cb-phenomenon-title">SOLAR RADIATIVE FLUX & PHOTON MOMENTUM</h2>
       
@@ -2236,8 +2237,11 @@
             <span class="led-dot" id="diff-led-dot" style="background:#38bdf8;"></span>DIFF: <span id="ui-diff-badge">PILOT</span>
           </button>
         </div>
-        <button class="imperial-switch amber active" id="btn-open-physics" style="padding: 6px 14px; font-weight:bold;">
-          <span class="led-dot"></span>PHYSICS [P]
+        <button class="imperial-switch amber" id="btn-open-physics" style="padding: 5px 11px; font-weight:bold;" title="Open Astrophysics Codex [O]">
+          <span class="led-dot" style="background:#f59e0b;"></span>CODEX [O]
+        </button>
+        <button class="imperial-switch" id="btn-pause-game" style="padding: 5px 12px; font-weight:bold; border-color:#38bdf8;" title="Pause Combat Simulation [P / ESC]">
+          <span class="led-dot" id="pause-led-dot" style="background:#38bdf8;"></span>PAUSE [P]
         </button>
       </div>
     </div>
@@ -2363,6 +2367,10 @@
           <button class="dossier-pill-btn" data-species="zabrak">ZABRAK</button>
           <button class="dossier-pill-btn" data-species="cyborg">CYBORG</button>
           <button class="dossier-pill-btn" data-species="pantoran">PANTORAN</button>
+          <button class="dossier-pill-btn" data-species="einstein" style="border-color:#f59e0b; color:#fde047;">👴 EINSTEIN</button>
+          <button class="dossier-pill-btn" data-species="curie" style="border-color:#10b981; color:#6ee7b7;">👩‍🔬 CURIE</button>
+          <button class="dossier-pill-btn" data-species="newton" style="border-color:#a855f7; color:#d8b4fe;">🍎 NEWTON</button>
+          <button class="dossier-pill-btn" data-species="schrodinger" style="border-color:#00f0ff; color:#67e8f9;">🐱 GATO SCHRÖDINGER</button>
         </div>
       </div>
 
@@ -2387,6 +2395,9 @@
           <button class="dossier-pill-btn" data-suit="crimson">CRIMSON GUARD</button>
           <button class="dossier-pill-btn" data-suit="admiral">ADMIRAL WHITE</button>
           <button class="dossier-pill-btn" data-suit="shadow">SHADOW SPEC-OPS</button>
+          <button class="dossier-pill-btn" data-suit="relativity" style="border-color:#f59e0b; color:#fde047;">RELATIVITY TWEED</button>
+          <button class="dossier-pill-btn" data-suit="radium" style="border-color:#10b981; color:#6ee7b7;">RADIUM LABCOAT</button>
+          <button class="dossier-pill-btn" data-suit="quantum" style="border-color:#00f0ff; color:#67e8f9;">QUANTUM STATE</button>
         </div>
       </div>
 
@@ -2624,17 +2635,44 @@
 
   <!-- 4. SECTOR CLEARED MODAL -->
   <div class="fullscreen-modal" id="sector-cleared-modal">
-    <h1 class="modal-headline victory">SECTOR CLEARED!</h1>
+    <h1 class="modal-headline victory" id="cleared-headline">SECTOR CLEARED!</h1>
     <p class="modal-sub" id="cleared-subtitle">
       Orbital hazards neutralised. Hyperdrive spooling for celestial jump coordinates.
     </p>
-    <div class="modal-stats-box">
+
+    <!-- Star Rating Performance & Rank -->
+    <div id="victory-rating-box" style="display:none; text-align:center; margin: 2px 0 10px 0;">
+      <div id="victory-star-display" style="font-size: 2.2rem; letter-spacing: 6px; text-shadow: 0 0 20px #f59e0b; margin-bottom: 2px;">⭐⭐⭐⭐⭐</div>
+      <div id="victory-rating-rank" style="font-family:'Orbitron', sans-serif; font-size: 0.86rem; color: #38bdf8; letter-spacing: 2px; font-weight: bold;">
+        RANK: 5/5 STARS &bull; SUPREME ASTROPHYSICIST & FLEET ADMIRAL
+      </div>
+    </div>
+
+    <!-- Victory Starfighter & Pilot Showcase -->
+    <div id="victory-showcase-box" style="display:none; width: 100%; max-width: 620px; background: rgba(10, 18, 32, 0.9); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 8px; padding: 12px 18px; margin: 8px auto; align-items: center; justify-content: space-around; gap: 14px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <canvas id="victory-avatar-canvas" width="68" height="68" style="width:68px; height:68px; border-radius:6px; border:1px solid #38bdf8; background:#020612;"></canvas>
+        <div style="text-align:left;">
+          <div style="font-family:'Orbitron', sans-serif; font-size:0.68rem; color:#94a3b8; letter-spacing:1px;">COMMANDING PILOT</div>
+          <div style="font-family:'Orbitron', sans-serif; font-size:0.95rem; font-weight:bold; color:#f8fafc;" id="victory-pilot-name">Daniel</div>
+          <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:#38bdf8;" id="victory-pilot-species">CHISS &bull; OBSIDIAN</div>
+        </div>
+      </div>
+      <div style="width:1px; height:50px; background:#1e293b;"></div>
+      <div style="text-align:left;">
+        <div style="font-family:'Orbitron', sans-serif; font-size:0.68rem; color:#94a3b8; letter-spacing:1px;">VICTORY STARFIGHTER</div>
+        <div style="font-family:'Orbitron', sans-serif; font-size:0.95rem; font-weight:bold; color:#f59e0b;" id="victory-ship-name">TIE/LN OBSIDIAN ELITE</div>
+        <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:#10b981;" id="victory-ship-class">HEAVY SUPERIORITY FIGHTER</div>
+      </div>
+    </div>
+
+    <div class="modal-stats-box" id="cleared-stats-box">
       <div class="modal-stat-unit">
-        <div>SECTOR SCORE</div>
+        <div id="cleared-score-title">SECTOR SCORE</div>
         <div id="cleared-score-stat">0</div>
       </div>
       <div class="modal-stat-unit">
-        <div>NEXT DESTINATION</div>
+        <div id="cleared-dest-title">NEXT DESTINATION</div>
         <div id="cleared-next-planet" style="color:var(--amber-glow);">EARTH</div>
       </div>
     </div>
@@ -2648,21 +2686,21 @@
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
         <span style="font-size:1.6rem;">🎓</span>
         <div>
-          <div style="font-family:'Orbitron', sans-serif; font-size:0.95rem; font-weight:bold; color:var(--amber-glow); letter-spacing:1.5px;">
-            ¿QUIERES CLASES PARTICULARES DE FÍSICA, MATEMÁTICAS O PROGRAMACIÓN?
+          <div style="font-family:'Orbitron', sans-serif; font-size:0.92rem; font-weight:bold; color:var(--amber-glow); letter-spacing:1.5px;" id="tutoring-card-title">
+            INTERESTED IN PRIVATE 1-ON-1 LESSONS IN PHYSICS, MATH OR PROGRAMMING?
           </div>
-          <div style="font-size:0.75rem; color:#cbd5e1; margin-top:3px; font-family:'Share Tech Mono', monospace; line-height:1.45;">
-            Aprende a programar simulaciones 3D como este juego o domina tus asignaturas con clases personalizadas de <strong>Daniel Santander (Classes)</strong>.
+          <div style="font-size:0.74rem; color:#cbd5e1; margin-top:3px; font-family:'Share Tech Mono', monospace; line-height:1.45;" id="tutoring-card-desc">
+            Learn to build 3D WebGL simulations like this game or master your university STEM coursework with private 1-on-1 tutoring by <strong>Daniel Santander (Classes)</strong>.
           </div>
         </div>
       </div>
 
       <div class="classes-action-buttons">
-        <a id="btn-wa-contact" href="https://wa.me/4917676497440?text=Hola%20Daniel,%20acabo%20de%20completar%20Phi-Fighter%20y%20me%20gustar%C3%ADa%20consultar%20por%20clases%20particulares!" target="_blank" class="classes-btn whatsapp">
-          📱 CONTACTAR POR WHATSAPP (+49 176 76497440)
+        <a id="btn-wa-contact" href="https://wa.me/4917676497440" target="_blank" class="classes-btn whatsapp">
+          📱 CONTACT VIA WHATSAPP (+49 176 76497440)
         </a>
         <button class="classes-btn email" id="btn-open-contact-modal">
-          ✉️ ENVIAR MENSAJE DIRECTO
+          ✉️ SEND DIRECT MESSAGE
         </button>
       </div>
     </div>
@@ -2670,7 +2708,7 @@
     <!-- Victory Actions -->
     <div style="display:flex; gap:12px; justify-content:center; width:100%; max-width:680px; flex-wrap:wrap; margin-top:14px;">
       <button class="master-btn" id="btn-download-skin" style="display:none; background:#0284c7; border-color:#38bdf8;">
-        🏆 DESCARGAR CREDENCIAL DE PILOTO [PNG]
+        🏆 DOWNLOAD PILOT CREDENTIAL [PNG]
       </button>
       <button class="master-btn" id="btn-next-sector">
         ENGAGE HYPERDRIVE 🌌
@@ -2682,40 +2720,40 @@
   <div id="contact-modal">
     <div class="contact-form-box">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-family:'Orbitron', sans-serif; font-size:1.0rem; color:#f59e0b; font-weight:bold; letter-spacing:2px;">
-          🎓 SOLICITAR CLASES // DANIEL SANTANDER
+        <div style="font-family:'Orbitron', sans-serif; font-size:1.0rem; color:#f59e0b; font-weight:bold; letter-spacing:2px;" id="contact-form-title">
+          🎓 REQUEST CLASSES // DANIEL SANTANDER
         </div>
         <button id="btn-close-contact-modal" style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;">✕</button>
       </div>
-      <p style="font-size:0.75rem; color:#cbd5e1; margin:0; line-height:1.4;">
-        Envía tu consulta directamente al Prof. Daniel Santander (Classes) o escríbele a <strong>danisantander.urrutia@gmail.com</strong>.
+      <p style="font-size:0.75rem; color:#cbd5e1; margin:0; line-height:1.4;" id="contact-form-desc">
+        Send an inquiry directly to Prof. Daniel Santander (Classes) or email <strong>danisantander.urrutia@gmail.com</strong>.
       </p>
       <div>
-        <label class="dossier-field-label">TU NOMBRE</label>
-        <input type="text" id="contact-name" class="contact-input-field" placeholder="Tu nombre...">
+        <label class="dossier-field-label" id="contact-label-name">YOUR NAME</label>
+        <input type="text" id="contact-name" class="contact-input-field" placeholder="Your name...">
       </div>
       <div>
-        <label class="dossier-field-label">CORREO ELECTRÓNICO</label>
-        <input type="email" id="contact-email" class="contact-input-field" placeholder="tu-email@ejemplo.com">
+        <label class="dossier-field-label" id="contact-label-email">EMAIL ADDRESS</label>
+        <input type="email" id="contact-email" class="contact-input-field" placeholder="your-email@example.com">
       </div>
       <div>
-        <label class="dossier-field-label">TELÉFONO / WHATSAPP</label>
-        <input type="text" id="contact-phone" class="contact-input-field" placeholder="+56 9... / +49...">
+        <label class="dossier-field-label" id="contact-label-phone">PHONE / WHATSAPP</label>
+        <input type="text" id="contact-phone" class="contact-input-field" placeholder="+1... / +56... / +49...">
       </div>
       <div>
-        <label class="dossier-field-label">MATERIA O ASIGNATURA DE INTERÉS</label>
+        <label class="dossier-field-label" id="contact-label-subject">SUBJECT OF INTEREST</label>
         <select id="contact-subject" class="contact-input-field" style="background:#1e293b; color:#ffffff;">
-          <option value="Física Mecánica (Cinemática, Dinámica, Gravitación)">Física Mecánica (Cinemática, Dinámica, Gravitación)</option>
-          <option value="Electromagnetismo y Astrofísica">Electromagnetismo y Astrofísica</option>
-          <option value="Cálculo Diferencial, Integral y Álgebra">Cálculo Diferencial, Integral y Álgebra</option>
-          <option value="Programación 3D Web (Three.js, WebGL, Python)">Programación 3D Web (Three.js, WebGL, Python)</option>
-          <option value="Preparación Universitaria General">Preparación Universitaria General</option>
-          <option value="Otro">Otro</option>
+          <option value="Physics Mechanics (Kinematics, Dynamics, Gravitation)">Physics Mechanics (Kinematics, Dynamics, Gravitation)</option>
+          <option value="Electromagnetism & Astrophysics">Electromagnetism & Astrophysics</option>
+          <option value="Differential, Integral Calculus & Linear Algebra">Differential, Integral Calculus & Linear Algebra</option>
+          <option value="3D Web & Game Programming (Three.js, WebGL, Python)">3D Web & Game Programming (Three.js, WebGL, Python)</option>
+          <option value="General University STEM Preparation">General University STEM Preparation</option>
+          <option value="Other">Other</option>
         </select>
       </div>
       <div>
-        <label class="dossier-field-label">MENSAJE O CONSULTA</label>
-        <textarea id="contact-message" class="contact-input-field" rows="3" placeholder="¿En qué te gustaría que te ayude?"></textarea>
+        <label class="dossier-field-label" id="contact-label-message">MESSAGE OR INQUIRY</label>
+        <textarea id="contact-message" class="contact-input-field" rows="3" placeholder="How can I help you?"></textarea>
       </div>
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
         <button class="classes-btn email" id="btn-send-contact-email" style="flex:1; justify-content:center;">
@@ -2744,6 +2782,48 @@
     <button class="master-btn" id="btn-restart">
       REDEPLOY INTERCEPTOR 🔄
     </button>
+  </div>
+
+  <!-- Tactical Pause Modal -->
+  <div class="fullscreen-modal" id="pause-modal" style="background: rgba(2, 6, 23, 0.90); backdrop-filter: blur(20px);">
+    <div style="background: linear-gradient(180deg, #0f172a 0%, #030712 100%); border: 1px solid rgba(0, 240, 255, 0.4); border-top: 3px solid #00f0ff; border-radius: 8px; padding: 26px 34px; max-width: 560px; width: 92%; box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 30px rgba(0, 240, 255, 0.25); text-align: center;">
+      <div style="font-family:'Orbitron', sans-serif; font-size: 1.55rem; font-weight: 900; letter-spacing: 3.5px; color: #f8fafc; margin-bottom: 4px;">
+        ⏸️ TACTICAL FLIGHT PAUSED
+      </div>
+      <div style="font-family:'Share Tech Mono', monospace; font-size: 0.82rem; color: #38bdf8; letter-spacing: 1.5px; margin-bottom: 18px;" id="pause-status-line">
+        SIMULATION SUSPENDED // COMBAT HALTED
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:20px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.8); border: 1px solid #1e293b; border-radius: 6px; padding: 12px 16px;">
+        <div>
+          <div style="font-size:0.65rem; color:#64748b; font-family:'Orbitron', sans-serif;">SCORE</div>
+          <div style="font-size:1.3rem; font-weight:bold; color:#00f0ff; font-family:'Share Tech Mono', monospace;" id="pause-score-stat">00000</div>
+        </div>
+        <div>
+          <div style="font-size:0.65rem; color:#64748b; font-family:'Orbitron', sans-serif;">SHIELDS</div>
+          <div style="font-size:1.3rem; font-weight:bold; color:#10b981; font-family:'Share Tech Mono', monospace;" id="pause-shield-stat">100%</div>
+        </div>
+        <div>
+          <div style="font-size:0.65rem; color:#64748b; font-family:'Orbitron', sans-serif;">MISSILES</div>
+          <div style="font-size:1.3rem; font-weight:bold; color:#ef4444; font-family:'Share Tech Mono', monospace;" id="pause-missile-stat">4/4</div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:9px; width:100%; max-width:380px; margin:0 auto;">
+        <button class="master-btn" id="btn-resume-game" style="padding: 12px 28px; font-size: 0.95rem; font-weight:bold;">
+          ▶️ RESUME MISSION [P / ESC]
+        </button>
+        <button class="hud-btn" id="btn-pause-restart-sector" style="padding: 10px 18px; font-weight:bold;">
+          🔄 RESTART SECTOR
+        </button>
+        <button class="hud-btn" id="btn-pause-open-codex" style="padding: 10px 18px; border-color:#f59e0b; color:#f59e0b; font-weight:bold;">
+          ⚛️ ASTROPHYSICS CODEX [O]
+        </button>
+        <button class="hud-btn" id="btn-pause-quit-hangar" style="padding: 10px 18px; border-color:#ef4444; color:#ef4444; font-weight:bold;">
+          🛸 RETURN TO HANGAR & DOSSIER
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- 6. PHYSICS ACADEMY & CODEX MODAL -->
@@ -4103,6 +4183,93 @@
     document.getElementById('btn-open-physics').addEventListener('click', togglePhysicsModal);
     document.getElementById('btn-close-physics').addEventListener('click', togglePhysicsModal);
 
+    // Tactical Pause Controller
+    let isGamePaused = false;
+    function togglePauseGame() {
+      if (isGameOver || introActive || transformationInProgress) return;
+      isGamePaused = !isGamePaused;
+      const pauseModal = document.getElementById('pause-modal');
+      const pauseBtn = document.getElementById('btn-pause-game');
+      const pauseLed = document.getElementById('pause-led-dot');
+
+      if (isGamePaused) {
+        if (pauseModal) pauseModal.style.display = 'flex';
+        if (pauseBtn) pauseBtn.classList.add('active');
+        if (pauseLed) {
+          pauseLed.style.background = '#ef4444';
+          pauseLed.style.boxShadow = '0 0 8px #ef4444';
+        }
+
+        const scoreStat = document.getElementById('pause-score-stat');
+        if (scoreStat) scoreStat.innerText = String(score).padStart(5, '0');
+        const shieldStat = document.getElementById('pause-shield-stat');
+        if (shieldStat) shieldStat.innerText = `${Math.round(playerShields)}%`;
+        const missileStat = document.getElementById('pause-missile-stat');
+        if (missileStat) missileStat.innerText = `${playerMissiles}/${maxMissiles}`;
+
+        stopEngineSound();
+        playMechanicalStepSound(300);
+      } else {
+        if (pauseModal) pauseModal.style.display = 'none';
+        if (pauseBtn) pauseBtn.classList.remove('active');
+        if (pauseLed) {
+          pauseLed.style.background = '#38bdf8';
+          pauseLed.style.boxShadow = 'none';
+        }
+
+        clock.getDelta(); // flush delta so resumption is seamless
+        playMechanicalStepSound(520);
+      }
+    }
+
+    const btnPauseGame = document.getElementById('btn-pause-game');
+    if (btnPauseGame) btnPauseGame.addEventListener('click', togglePauseGame);
+
+    const btnResumeGame = document.getElementById('btn-resume-game');
+    if (btnResumeGame) btnResumeGame.addEventListener('click', togglePauseGame);
+
+    const btnPauseRestart = document.getElementById('btn-pause-restart-sector');
+    if (btnPauseRestart) {
+      btnPauseRestart.addEventListener('click', () => {
+        if (isGamePaused) togglePauseGame();
+        destroyedInSector = 0;
+        playerShields = 100;
+        shipRoot.position.set(0, 0, 0);
+        shipRoot.rotation.set(0, 0, 0);
+        shipRoot.quaternion.identity();
+        shipVelocity.set(0, 0, 0);
+        for (let a of asteroids) scene.remove(a);
+        asteroids.length = 0;
+        for (let i = 0; i < 20; i++) spawnAsteroid(-35 - i * 7);
+        for (let e of enemies) scene.remove(e);
+        enemies.length = 0;
+        const s = SECTORS[currentSectorIdx];
+        for (let i = 0; i < s.enemyCount; i++) spawnSectorEnemy(-80 - i * 30);
+        document.getElementById('hud-progress-fill').style.width = '0%';
+        document.getElementById('hud-progress-label').innerText = `QUOTA: 0 / ${s.quota} CLEARED`;
+        showNotification(`SECTOR ${s.level} RESTARTED // COMBAT READY`, '#38bdf8');
+      });
+    }
+
+    const btnPauseOpenCodex = document.getElementById('btn-pause-open-codex');
+    if (btnPauseOpenCodex) {
+      btnPauseOpenCodex.addEventListener('click', () => {
+        if (isGamePaused) togglePauseGame();
+        togglePhysicsModal();
+      });
+    }
+
+    const btnPauseQuitHangar = document.getElementById('btn-pause-quit-hangar');
+    if (btnPauseQuitHangar) {
+      btnPauseQuitHangar.addEventListener('click', () => {
+        if (isGamePaused) togglePauseGame();
+        introActive = true;
+        document.getElementById('intro-screen').style.display = 'flex';
+        document.body.classList.remove('cinema-active');
+        showNotification('RETURNED TO IMPERIAL HANGAR', '#f59e0b');
+      });
+    }
+
     // =========================================================================
     // 4. CELESTIAL PLANETARY BODIES & BLACK HOLE ACCRETION DISK
     // =========================================================================
@@ -4205,8 +4372,9 @@
     const rightWingGroup = new THREE.Group();
     const engineFlames = [];
 
-    // Dedicated 3D Holographic Phi Glyph System (Luminescent Holographic Badge)
+    // Dedicated 3D Holographic Phi Glyph System (Disabled to keep hangar and flight view clean)
     const phiGlyphGroup = new THREE.Group();
+    phiGlyphGroup.visible = false;
     const phiRingMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff
     });
@@ -4263,9 +4431,8 @@
     const haloParticles = new THREE.Points(haloParticleGeo, haloParticleMat);
     phiGlyphGroup.add(haloParticles);
 
-    // Independent 3D Sacred Hologram floating majestically in the hangar
-    scene.add(phiGlyphGroup);
-    phiGlyphGroup.position.set(0.8, 1.8, -1.8);
+    // Independent 3D Sacred Hologram (Hidden to prevent floating logo behind starfighters)
+    phiGlyphGroup.visible = false;
 
     // 3D Hexagonal Deflector Shield Bubble
     const shieldGeo = new THREE.IcosahedronGeometry(2.9, 2);
@@ -5698,7 +5865,6 @@
           asteroids.push(frag);
         }
 
-        speakTactical('asteroidFragmented', false);
         registerTargetKill(60, false, astPos);
       } else {
         // Complete pulverization
@@ -5731,7 +5897,7 @@
     const laserMat = new THREE.MeshBasicMaterial({ color: 0x00ff66 });
 
     function fireLasers() {
-      if (isGameOver) return;
+      if (isGameOver || introActive || transformationInProgress || breakdownActive || slingshotActive) return;
       playLaserSound(false);
 
       const l1 = new THREE.Mesh(laserGeo, laserMat);
@@ -5863,7 +6029,7 @@
     }
 
     function fireHomingMissile() {
-      if (isGameOver || introActive || breakdownActive) return;
+      if (isGameOver || introActive || transformationInProgress || breakdownActive || slingshotActive) return;
       if (playerMissiles <= 0) {
         showNotification('ORDNANCE EXHAUSTED // FABRICATING NEXT WARHEAD...', '#ef4444');
         return;
@@ -5978,17 +6144,24 @@
       }
     }
 
+    let notificationTimer = null;
     function showNotification(text, color = '#00ff66') {
       const banner = document.getElementById('notification-banner');
+      if (!banner) return;
+      if (notificationTimer) {
+        clearTimeout(notificationTimer);
+        notificationTimer = null;
+      }
       banner.innerText = text;
       banner.style.color = color;
       banner.style.textShadow = `0 0 12px ${color}`;
       banner.style.opacity = '1';
       banner.style.transform = 'translateX(-50%) translateY(-10px)';
-      setTimeout(() => {
+      notificationTimer = setTimeout(() => {
         banner.style.opacity = '0';
         banner.style.transform = 'translateX(-50%) translateY(0px)';
-      }, 900);
+        notificationTimer = null;
+      }, 1800);
     }
 
     // =========================================================================
@@ -6631,10 +6804,60 @@
         advanceToNextSector();
       } else {
         document.body.classList.remove('cinema-active');
-        document.querySelector('#sector-cleared-modal h1').innerText = 'CAMPAIGN COMPLETE // ALL 10 SECTORS SECURED';
+        const headlineEl = document.getElementById('cleared-headline') || document.querySelector('#sector-cleared-modal h1');
+        if (headlineEl) headlineEl.innerText = '🏆 YOU WON! // CAMPAIGN COMPLETE';
         document.getElementById('cleared-subtitle').innerText = `Outstanding piloting, Commander ${playerPilot.name.toUpperCase()}! You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.`;
-        document.getElementById('cleared-score-stat').innerText = score;
+        document.getElementById('cleared-score-stat').innerText = `${score} PTS`;
         document.getElementById('cleared-next-planet').innerText = 'SOLAR SYSTEM SECURED';
+
+        // 1 to 5 Star Rating Performance
+        let starCount = 3;
+        if (gameDifficulty === 'easy') {
+          starCount = score >= 35000 ? 3 : (score >= 20000 ? 2 : 1);
+        } else if (gameDifficulty === 'medium') {
+          starCount = score >= 45000 ? 4 : (score >= 25000 ? 3 : 2);
+        } else {
+          starCount = score >= 55000 ? 5 : (score >= 35000 ? 4 : 3);
+        }
+
+        const ratingBox = document.getElementById('victory-rating-box');
+        if (ratingBox) {
+          ratingBox.style.display = 'block';
+          const starDisplay = document.getElementById('victory-star-display');
+          if (starDisplay) {
+            starDisplay.innerText = '⭐'.repeat(starCount) + '☆'.repeat(5 - starCount);
+          }
+          const rankDisplay = document.getElementById('victory-rating-rank');
+          const rankTitles = {
+            5: 'RATING: 5/5 STARS • SUPREME ASTROPHYSICIST & FLEET ADMIRAL',
+            4: 'RATING: 4/5 STARS • MASTER RELATIVISTIC FIGHTER ACE',
+            3: 'RATING: 3/5 STARS • EXPERIENCED ORBITAL FLIGHT COMMANDER',
+            2: 'RATING: 2/5 STARS • SENIOR SYSTEM DEFENDER',
+            1: 'RATING: 1/5 STARS • CERTIFIED SPACE CADET'
+          };
+          if (rankDisplay) rankDisplay.innerText = rankTitles[starCount];
+        }
+
+        // Victory Pilot Skin & Starfighter Showcase
+        const showcaseBox = document.getElementById('victory-showcase-box');
+        if (showcaseBox) {
+          showcaseBox.style.display = 'flex';
+          const vCanvas = document.getElementById('victory-avatar-canvas');
+          if (vCanvas) {
+            const vCtx = vCanvas.getContext('2d');
+            vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
+            drawAvatar(vCtx, playerPilot, vCanvas.width, vCanvas.height, 0, 0, { isCockpitCam: false });
+          }
+          const vPilotName = document.getElementById('victory-pilot-name');
+          if (vPilotName) vPilotName.innerText = playerPilot.name.toUpperCase();
+          const vPilotSpecies = document.getElementById('victory-pilot-species');
+          if (vPilotSpecies) vPilotSpecies.innerText = `${playerPilot.species.toUpperCase()} • ${playerPilot.suit.toUpperCase()}`;
+          const currentShip = STARFIGHTERS[selectedFighterId] || STARFIGHTERS['obsidian'];
+          const vShipName = document.getElementById('victory-ship-name');
+          if (vShipName) vShipName.innerText = currentShip.name.toUpperCase();
+          const vShipClass = document.getElementById('victory-ship-class');
+          if (vShipClass) vShipClass.innerText = currentShip.role.toUpperCase();
+        }
 
         // Starfighter Unlock Progression upon Campaign Clear
         let newUnlocks = [];
@@ -6680,7 +6903,10 @@
         // Update WhatsApp message with player pilot name and score
         const waBtn = document.getElementById('btn-wa-contact');
         if (waBtn) {
-          const msg = encodeURIComponent(`Hola Daniel! Acabo de completar Project Phi-Fighter con el piloto "${playerPilot.name}" y un puntaje de ${score} PTS. Me gustaría consultar por clases particulares de Física / Matemáticas / Programación (Classes).`);
+          const isEs = (typeof playerPilot !== 'undefined' && playerPilot && playerPilot.voiceLang === 'es');
+          const msg = isEs
+            ? encodeURIComponent(`Hola Daniel! Acabo de ganar la campaña de Project Phi-Fighter con el piloto "${playerPilot.name}" y ${score} PTS (${starCount}/5 estrellas). Me gustaría consultar por clases particulares de Física / Matemáticas / Programación (Classes).`)
+            : encodeURIComponent(`Hello Daniel! I just won the Project Phi-Fighter campaign with pilot "${playerPilot.name}" and ${score} PTS (${starCount}/5 stars). I would like to inquire about private 1-on-1 tutoring in Physics / Math / Programming (Classes).`);
           waBtn.href = `https://wa.me/4917676497440?text=${msg}`;
         }
 
@@ -6768,10 +6994,18 @@
       }, 600);
     }
 
-    document.getElementById('cb-btn-continue').addEventListener('click', () => {
-      if (breakdownActive && breakdownTimer < 2.0) return;
-      endCinematicBreakdown();
-    });
+    const cbBtnContinue = document.getElementById('cb-btn-continue');
+    if (cbBtnContinue) {
+      cbBtnContinue.addEventListener('click', () => {
+        endCinematicBreakdown();
+      });
+    }
+    const cbBtnClose = document.getElementById('cb-btn-close');
+    if (cbBtnClose) {
+      cbBtnClose.addEventListener('click', () => {
+        endCinematicBreakdown();
+      });
+    }
 
     document.getElementById('btn-next-sector').addEventListener('click', () => {
       document.getElementById('sector-cleared-modal').style.display = 'none';
@@ -6952,6 +7186,12 @@
         suitDark = '#94a3b8'; suitMid = '#e2e8f0'; suitLight = '#f8fafc'; trimColor = '#f59e0b';
       } else if (cfg.suit === 'shadow') {
         suitDark = '#050505'; suitMid = '#18181b'; suitLight = '#27272a'; trimColor = '#10b981';
+      } else if (cfg.suit === 'relativity') {
+        suitDark = '#1c1917'; suitMid = '#44403c'; suitLight = '#78716c'; trimColor = '#f59e0b';
+      } else if (cfg.suit === 'radium') {
+        suitDark = '#022c22'; suitMid = '#064e3b'; suitLight = '#047857'; trimColor = '#10b981';
+      } else if (cfg.suit === 'quantum') {
+        suitDark = '#082f49'; suitMid = '#0e7490'; suitLight = '#0284c7'; trimColor = '#d946ef';
       }
 
       // Torso polygon
@@ -6997,7 +7237,7 @@
       ctx.lineTo(cx + 40 * scale, cy + 55 * scale);
       ctx.stroke();
 
-      // Chest Unit / Rank Plaque
+      // Chest Unit / Rank Plaque / Physicist Insignia
       if (cfg.suit === 'admiral') {
         // Grand Admiral Rank Plaque: 3 Red tiles, 3 Blue tiles
         ctx.fillStyle = '#334155';
@@ -7008,6 +7248,62 @@
           ctx.fillStyle = '#3b82f6';
           ctx.fillRect(cx - 21 * scale + i * 15 * scale, cy + 95 * scale, 12 * scale, 6 * scale);
         }
+      } else if (cfg.suit === 'relativity') {
+        // Einsteinian Curvature Vest / Golden Geodesic Chain
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 75 * scale, 22 * scale, 0.2 * Math.PI, 0.8 * Math.PI);
+        ctx.stroke();
+        // Golden pocketwatch / E=mc² badge
+        ctx.fillStyle = '#1c1917';
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 96 * scale, 14 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.font = `bold ${8 * scale}px "Orbitron", serif`;
+        ctx.fillStyle = '#fde047';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('E=mc²', cx, cy + 96 * scale);
+      } else if (cfg.suit === 'radium') {
+        // Radium Luminescent Seal
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+        ctx.beginPath();
+        ctx.arc(cx, cy + 94 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#064e3b';
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 94 * scale, 14 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.font = `bold ${9 * scale}px "Orbitron", sans-serif`;
+        ctx.fillStyle = '#6ee7b7';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('²²⁶Ra', cx, cy + 94 * scale);
+      } else if (cfg.suit === 'quantum') {
+        // Quantum State Wave Function Psi (Ψ)
+        ctx.fillStyle = 'rgba(6, 182, 212, 0.25)';
+        ctx.beginPath();
+        ctx.arc(cx, cy + 94 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#082f49';
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 94 * scale, 14 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.font = `bold ${11 * scale}px "Orbitron", serif`;
+        ctx.fillStyle = '#a5f3fc';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('|Ψ⟩', cx, cy + 94 * scale);
       } else {
         // Imperial Avionics Life-Support Unit
         ctx.fillStyle = '#0f172a';
@@ -7070,8 +7366,8 @@
       ctx.fillStyle = faceGrad;
       ctx.fill();
 
-      // Ears (if not Twi'lek)
-      if (cfg.species !== 'twilek') {
+      // Ears (if not Twi'lek and not Schrödinger Cat)
+      if (cfg.species !== 'twilek' && cfg.species !== 'schrodinger') {
         ctx.fillStyle = skin;
         ctx.beginPath();
         ctx.ellipse(cx - 44 * scale, cy - 6 * scale, 6 * scale, 14 * scale, -0.15, 0, Math.PI * 2);
@@ -7081,7 +7377,7 @@
         ctx.fill();
       }
 
-      // 6. SPECIES DETAILS
+      // 6. SPECIES DETAILS & FAMOUS PHYSICIST ACCESSORIES
       if (cfg.species === 'zabrak') {
         // Horns
         const hornAngles = [-0.65, -0.32, 0, 0.32, 0.65];
@@ -7149,9 +7445,120 @@
           ctx.arc(cx + 3 * scale, ry, 1.8 * scale, 0, Math.PI * 2);
           ctx.fill();
         }
+      } else if (cfg.species === 'schrodinger') {
+        // Schrödinger Cat: Pointed feline ears with soft pink inner fur
+        // Left Ear
+        ctx.fillStyle = skin;
+        ctx.beginPath();
+        ctx.moveTo(cx - 44 * scale, cy - 48 * scale);
+        ctx.lineTo(cx - 48 * scale, cy - 102 * scale);
+        ctx.lineTo(cx - 14 * scale, cy - 68 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.stroke();
+
+        ctx.fillStyle = '#f472b6';
+        ctx.beginPath();
+        ctx.moveTo(cx - 40 * scale, cy - 54 * scale);
+        ctx.lineTo(cx - 44 * scale, cy - 94 * scale);
+        ctx.lineTo(cx - 20 * scale, cy - 68 * scale);
+        ctx.closePath();
+        ctx.fill();
+
+        // Right Ear
+        ctx.fillStyle = skin;
+        ctx.beginPath();
+        ctx.moveTo(cx + 44 * scale, cy - 48 * scale);
+        ctx.lineTo(cx + 48 * scale, cy - 102 * scale);
+        ctx.lineTo(cx + 14 * scale, cy - 68 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.stroke();
+
+        ctx.fillStyle = '#f472b6';
+        ctx.beginPath();
+        ctx.moveTo(cx + 40 * scale, cy - 54 * scale);
+        ctx.lineTo(cx + 44 * scale, cy - 94 * scale);
+        ctx.lineTo(cx + 20 * scale, cy - 68 * scale);
+        ctx.closePath();
+        ctx.fill();
+
+        // Dual-state Quantum Superposition Wave Halo
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy - 42 * scale, 58 * scale, 1.1 * Math.PI, 1.9 * Math.PI);
+        ctx.stroke();
+      } else if (cfg.species === 'curie') {
+        // Marie Curie: Glowing Radium Brooch at the throat collar
+        const radGlow = ctx.createRadialGradient(cx, cy + 50 * scale, 2 * scale, cx, cy + 50 * scale, 22 * scale);
+        radGlow.addColorStop(0, 'rgba(16, 185, 129, 0.85)');
+        radGlow.addColorStop(0.5, 'rgba(16, 185, 129, 0.35)');
+        radGlow.addColorStop(1, 'rgba(16, 185, 129, 0)');
+        ctx.fillStyle = radGlow;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 50 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#10b981';
+        ctx.strokeStyle = '#a7f3d0';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 50 * scale, 6 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      } else if (cfg.species === 'newton') {
+        // Isaac Newton: White lace jabot / linen cravat ruffles
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.moveTo(cx - 14 * scale, cy + 42 * scale);
+        ctx.lineTo(cx + 14 * scale, cy + 42 * scale);
+        ctx.lineTo(cx + 18 * scale, cy + 62 * scale);
+        ctx.lineTo(cx, cy + 74 * scale);
+        ctx.lineTo(cx - 18 * scale, cy + 62 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1 * scale;
+        ctx.stroke();
+
+        // Ruffle shadow tiers
+        ctx.strokeStyle = '#94a3b8';
+        ctx.beginPath();
+        ctx.moveTo(cx - 12 * scale, cy + 50 * scale);
+        ctx.lineTo(cx + 12 * scale, cy + 50 * scale);
+        ctx.moveTo(cx - 10 * scale, cy + 58 * scale);
+        ctx.lineTo(cx + 10 * scale, cy + 58 * scale);
+        ctx.stroke();
+
+        // Optics Prism Pin on Lapel
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.beginPath();
+        ctx.moveTo(cx + 34 * scale, cy + 80 * scale);
+        ctx.lineTo(cx + 44 * scale, cy + 96 * scale);
+        ctx.lineTo(cx + 24 * scale, cy + 96 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1 * scale;
+        ctx.stroke();
+        // Rainbow refraction beam
+        const rbColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#a855f7'];
+        for (let r = 0; r < rbColors.length; r++) {
+          ctx.strokeStyle = rbColors[r];
+          ctx.lineWidth = 1 * scale;
+          ctx.beginPath();
+          ctx.moveTo(cx + 38 * scale, cy + 90 * scale);
+          ctx.lineTo(cx + 56 * scale, cy + 86 * scale + r * 2.5 * scale);
+          ctx.stroke();
+        }
       }
 
-      // 7. HAIR
+      // 7. HAIR & COIFFURE
       if (cfg.species === 'chiss') {
         ctx.fillStyle = '#090d16';
         ctx.beginPath();
@@ -7173,18 +7580,117 @@
         ctx.bezierCurveTo(cx + 25 * scale, cy - 55 * scale, cx - 25 * scale, cy - 55 * scale, cx - 44 * scale, cy - 35 * scale);
         ctx.closePath();
         ctx.fill();
+      } else if (cfg.species === 'einstein') {
+        // Albert Einstein: Iconic voluminous wild shock of white hair radiating outward!
+        ctx.fillStyle = '#f8fafc';
+        // Left side wild puff
+        ctx.beginPath();
+        ctx.arc(cx - 46 * scale, cy - 45 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.arc(cx - 52 * scale, cy - 25 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.arc(cx - 42 * scale, cy - 65 * scale, 22 * scale, 0, Math.PI * 2);
+        // Top wild mane
+        ctx.arc(cx - 20 * scale, cy - 78 * scale, 20 * scale, 0, Math.PI * 2);
+        ctx.arc(cx, cy - 84 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 20 * scale, cy - 78 * scale, 20 * scale, 0, Math.PI * 2);
+        // Right side wild puff
+        ctx.arc(cx + 42 * scale, cy - 65 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 46 * scale, cy - 45 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 52 * scale, cy - 25 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Shading strands
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx - 36 * scale, cy - 48 * scale, 16 * scale, 0.8 * Math.PI, 1.6 * Math.PI);
+        ctx.arc(cx + 36 * scale, cy - 48 * scale, 16 * scale, 1.4 * Math.PI, 2.2 * Math.PI);
+        ctx.stroke();
+
+        // Receding forehead line
+        ctx.fillStyle = skin;
+        ctx.beginPath();
+        ctx.arc(cx, cy - 45 * scale, 28 * scale, 0.85 * Math.PI, 0.15 * Math.PI, true);
+        ctx.fill();
+      } else if (cfg.species === 'curie') {
+        // Marie Curie: Victorian Belle Époque swept-up dark chestnut chignon
+        ctx.fillStyle = '#291c14';
+        // High coiled bun atop crown
+        ctx.beginPath();
+        ctx.arc(cx, cy - 80 * scale, 24 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        // Hair waves framing the sides and forehead
+        ctx.beginPath();
+        ctx.moveTo(cx - 44 * scale, cy - 30 * scale);
+        ctx.bezierCurveTo(cx - 48 * scale, cy - 76 * scale, cx + 48 * scale, cy - 76 * scale, cx + 44 * scale, cy - 30 * scale);
+        ctx.bezierCurveTo(cx + 32 * scale, cy - 56 * scale, cx - 32 * scale, cy - 56 * scale, cx - 44 * scale, cy - 30 * scale);
+        ctx.closePath();
+        ctx.fill();
+
+        // Delicate silver hairpins
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 18 * scale, cy - 78 * scale);
+        ctx.lineTo(cx + 18 * scale, cy - 78 * scale);
+        ctx.stroke();
+      } else if (cfg.species === 'newton') {
+        // Isaac Newton: Grand cascading silver-grey baroque wig curls down past shoulders
+        ctx.fillStyle = '#e2e8f0';
+        // Left cascading wig curls
+        ctx.beginPath();
+        ctx.arc(cx - 46 * scale, cy - 50 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.arc(cx - 50 * scale, cy - 25 * scale, 19 * scale, 0, Math.PI * 2);
+        ctx.arc(cx - 46 * scale, cy + 2 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.arc(cx - 42 * scale, cy + 28 * scale, 16 * scale, 0, Math.PI * 2);
+        // Right cascading wig curls
+        ctx.arc(cx + 46 * scale, cy - 50 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 50 * scale, cy - 25 * scale, 19 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 46 * scale, cy + 2 * scale, 18 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 42 * scale, cy + 28 * scale, 16 * scale, 0, Math.PI * 2);
+        // Crown wig volume
+        ctx.arc(cx, cy - 74 * scale, 22 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Shading curl contours
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx - 46 * scale, cy - 25 * scale, 14 * scale, 0.4 * Math.PI, 1.6 * Math.PI);
+        ctx.arc(cx + 46 * scale, cy - 25 * scale, 14 * scale, 1.4 * Math.PI, 2.6 * Math.PI);
+        ctx.stroke();
+      } else if (cfg.species === 'schrodinger') {
+        // Feline crest fur tuft between cat ears
+        ctx.fillStyle = '#64748b';
+        ctx.beginPath();
+        ctx.moveTo(cx - 16 * scale, cy - 65 * scale);
+        ctx.lineTo(cx, cy - 78 * scale);
+        ctx.lineTo(cx + 16 * scale, cy - 65 * scale);
+        ctx.closePath();
+        ctx.fill();
       }
 
       // 8. EYES & NOSE & MOUTH
       // Eyebrows
-      ctx.strokeStyle = '#0f172a';
-      ctx.lineWidth = 2.5 * scale;
-      ctx.beginPath();
-      ctx.moveTo(cx - 30 * scale, cy - 22 * scale);
-      ctx.lineTo(cx - 10 * scale, cy - 18 * scale);
-      ctx.moveTo(cx + 30 * scale, cy - 22 * scale);
-      ctx.lineTo(cx + 10 * scale, cy - 18 * scale);
-      ctx.stroke();
+      if (cfg.species === 'einstein') {
+        // Albert Einstein: Bushy white unruly eyebrows
+        ctx.strokeStyle = '#f8fafc';
+        ctx.lineWidth = 4 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 32 * scale, cy - 22 * scale);
+        ctx.quadraticCurveTo(cx - 20 * scale, cy - 28 * scale, cx - 8 * scale, cy - 20 * scale);
+        ctx.moveTo(cx + 32 * scale, cy - 22 * scale);
+        ctx.quadraticCurveTo(cx + 20 * scale, cy - 28 * scale, cx + 8 * scale, cy - 20 * scale);
+        ctx.stroke();
+      } else {
+        ctx.strokeStyle = (cfg.species === 'newton' ? '#94a3b8' : '#0f172a');
+        ctx.lineWidth = 2.5 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 30 * scale, cy - 22 * scale);
+        ctx.lineTo(cx - 10 * scale, cy - 18 * scale);
+        ctx.moveTo(cx + 30 * scale, cy - 22 * scale);
+        ctx.lineTo(cx + 10 * scale, cy - 18 * scale);
+        ctx.stroke();
+      }
 
       // Eyes
       if (animState && animState.isBlinking) {
@@ -7247,8 +7753,28 @@
         ctx.beginPath();
         ctx.arc(cx + 18 * scale, cy - 10 * scale, 2.5 * scale, 0, Math.PI * 2);
         ctx.fill();
+      } else if (cfg.species === 'schrodinger') {
+        // Schrödinger Cat: Glowing Almond Eyes with Vertical Slit Pupils
+        const drawCatEye = (ex) => {
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          ctx.ellipse(ex, cy - 10 * scale, 8 * scale, 5 * scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Vertical slit pupil
+          ctx.fillStyle = '#020617';
+          ctx.beginPath();
+          ctx.ellipse(ex, cy - 10 * scale, 1.8 * scale, 4.5 * scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Catchlight
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(ex - 2 * scale, cy - 11.5 * scale, 1.2 * scale, 0, Math.PI * 2);
+          ctx.fill();
+        };
+        drawCatEye(cx - 18 * scale);
+        drawCatEye(cx + 18 * scale);
       } else {
-        const irisColor = (cfg.species === 'zabrak' ? '#f59e0b' : (cfg.species === 'twilek' ? '#06b6d4' : '#fbbf24'));
+        const irisColor = (cfg.species === 'zabrak' ? '#f59e0b' : (cfg.species === 'twilek' ? '#06b6d4' : (cfg.species === 'einstein' ? '#78350f' : (cfg.species === 'curie' ? '#0284c7' : (cfg.species === 'newton' ? '#38bdf8' : '#fbbf24')))));
         const drawEye = (ex) => {
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
@@ -7271,17 +7797,67 @@
         drawEye(cx + 18 * scale);
       }
 
-      // Nose
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.lineWidth = 1.8 * scale;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - 6 * scale);
-      ctx.lineTo(cx, cy + 9 * scale);
-      ctx.lineTo(cx + 4 * scale, cy + 9 * scale);
-      ctx.stroke();
+      // Nose & Muzzle
+      if (cfg.species === 'schrodinger') {
+        // Cat pink nose pad
+        ctx.fillStyle = '#f472b6';
+        ctx.beginPath();
+        ctx.moveTo(cx - 5 * scale, cy + 4 * scale);
+        ctx.lineTo(cx + 5 * scale, cy + 4 * scale);
+        ctx.lineTo(cx, cy + 9 * scale);
+        ctx.closePath();
+        ctx.fill();
 
-      // Mouth
-      if (animState && animState.mouthOpen > 0.08) {
+        // Cat whiskers!
+        ctx.strokeStyle = '#f8fafc';
+        ctx.lineWidth = 1.2 * scale;
+        // Left whiskers
+        ctx.beginPath();
+        ctx.moveTo(cx - 8 * scale, cy + 7 * scale); ctx.lineTo(cx - 38 * scale, cy + 3 * scale);
+        ctx.moveTo(cx - 8 * scale, cy + 10 * scale); ctx.lineTo(cx - 40 * scale, cy + 11 * scale);
+        ctx.moveTo(cx - 8 * scale, cy + 13 * scale); ctx.lineTo(cx - 36 * scale, cy + 19 * scale);
+        // Right whiskers
+        ctx.moveTo(cx + 8 * scale, cy + 7 * scale); ctx.lineTo(cx + 38 * scale, cy + 3 * scale);
+        ctx.moveTo(cx + 8 * scale, cy + 10 * scale); ctx.lineTo(cx + 40 * scale, cy + 11 * scale);
+        ctx.moveTo(cx + 8 * scale, cy + 13 * scale); ctx.lineTo(cx + 36 * scale, cy + 19 * scale);
+        ctx.stroke();
+      } else {
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 6 * scale);
+        ctx.lineTo(cx, cy + 9 * scale);
+        ctx.lineTo(cx + 4 * scale, cy + 9 * scale);
+        ctx.stroke();
+      }
+
+      // Mouth / Mustache
+      if (cfg.species === 'einstein') {
+        // Albert Einstein: Iconic bushy white walrus mustache
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + 10 * scale);
+        ctx.bezierCurveTo(cx - 14 * scale, cy + 10 * scale, cx - 26 * scale, cy + 18 * scale, cx - 28 * scale, cy + 28 * scale);
+        ctx.bezierCurveTo(cx - 20 * scale, cy + 24 * scale, cx - 10 * scale, cy + 22 * scale, cx, cy + 23 * scale);
+        ctx.bezierCurveTo(cx + 10 * scale, cy + 22 * scale, cx + 20 * scale, cy + 24 * scale, cx + 28 * scale, cy + 28 * scale);
+        ctx.bezierCurveTo(cx + 26 * scale, cy + 18 * scale, cx + 14 * scale, cy + 10 * scale, cx, cy + 10 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1.2 * scale;
+        ctx.stroke();
+      } else if (cfg.species === 'schrodinger') {
+        // Feline split mouth (ω shape)
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + 9 * scale);
+        ctx.lineTo(cx, cy + 15 * scale);
+        ctx.moveTo(cx - 8 * scale, cy + 20 * scale);
+        ctx.quadraticCurveTo(cx - 4 * scale, cy + 22 * scale, cx, cy + 15 * scale);
+        ctx.quadraticCurveTo(cx + 4 * scale, cy + 22 * scale, cx + 8 * scale, cy + 20 * scale);
+        ctx.stroke();
+      } else if (animState && animState.mouthOpen > 0.08) {
         const mH = Math.max(2, animState.mouthOpen * 5.2 * scale);
         ctx.fillStyle = '#0f172a';
         ctx.beginPath();
@@ -7618,13 +8194,17 @@
         const spBadge = document.getElementById('avatar-species-badge');
         if (spBadge) spBadge.innerText = sp.toUpperCase();
 
-        // Auto-assign matching species canonical skin pigment
+        // Auto-assign matching species canonical skin pigment & default attire
         const defaultSkins = {
           chiss: '#1d4ed8',
           twilek: '#06b6d4',
           zabrak: '#dc2626',
           cyborg: '#f8fafc',
-          pantoran: '#a855f7'
+          pantoran: '#a855f7',
+          einstein: '#f8fafc',
+          curie: '#fed7aa',
+          newton: '#ffedd5',
+          schrodinger: '#94a3b8'
         };
         if (defaultSkins[sp]) {
           playerPilot.skinColor = defaultSkins[sp];
@@ -7632,6 +8212,39 @@
             s.classList.toggle('active', s.dataset.color.toLowerCase() === defaultSkins[sp].toLowerCase());
           });
         }
+
+        // Physicist signature suits & callsigsn defaults
+        if (sp === 'einstein') {
+          playerPilot.suit = 'relativity';
+          if (!nameInput.value || nameInput.value === 'Cadet' || nameInput.value === 'Daniel') {
+            playerPilot.name = 'Albert Einstein';
+            nameInput.value = 'Albert Einstein';
+          }
+        } else if (sp === 'curie') {
+          playerPilot.suit = 'radium';
+          if (!nameInput.value || nameInput.value === 'Cadet' || nameInput.value === 'Daniel') {
+            playerPilot.name = 'Marie Curie';
+            nameInput.value = 'Marie Curie';
+          }
+        } else if (sp === 'newton') {
+          playerPilot.suit = 'relativity';
+          if (!nameInput.value || nameInput.value === 'Cadet' || nameInput.value === 'Daniel') {
+            playerPilot.name = 'Isaac Newton';
+            nameInput.value = 'Isaac Newton';
+          }
+        } else if (sp === 'schrodinger') {
+          playerPilot.suit = 'quantum';
+          if (!nameInput.value || nameInput.value === 'Cadet' || nameInput.value === 'Daniel') {
+            playerPilot.name = 'Schrödinger';
+            nameInput.value = 'Schrödinger';
+          }
+        }
+
+        // Sync suit pill buttons to matching active state
+        document.querySelectorAll('#suit-selector-group .dossier-pill-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.suit === playerPilot.suit);
+        });
+
         refreshAvatarPreview();
         playMechanicalStepSound(420);
       });
@@ -7993,10 +8606,8 @@
     buildHangarFleet();
     refreshShipSelectorUI();
 
-    // 3D Sacred Phi Crest floating gracefully above the starfighter in the right showroom
-    phiGlyphGroup.scale.set(0.24, 0.24, 0.24);
-    phiGlyphGroup.position.set(-3.0, 3.1, -0.2);
-    phiGlyphGroup.visible = true;
+    // Phi crest disabled to maintain clean starfighter inspection viewport
+    phiGlyphGroup.visible = false;
 
     // Start with cinema scope bars active on intro!
     document.body.classList.add('cinema-active');
@@ -8283,11 +8894,10 @@
       if (k === 'd' || k === 'arrowright') keys.d = true;
       if (k === ' ' || e.code === 'Space') {
         if (breakdownActive) {
-          if (breakdownTimer >= 2.0) {
-            endCinematicBreakdown();
-          }
+          endCinematicBreakdown();
           return;
         }
+        if (isGameOver || introActive || transformationInProgress || slingshotActive) return;
         fireLasers();
       }
       if (k === 'x' || k === 'f') {
@@ -8303,8 +8913,24 @@
         showForceVectors = !showForceVectors;
         document.getElementById('vector-badge-text').innerText = showForceVectors ? 'ON' : 'OFF';
       }
-      if (k === 'p' || (e.key === 'Escape' && isPhysicsModalOpen)) {
+      if (k === 'p') {
+        togglePauseGame();
+      }
+      if (k === 'o') {
         togglePhysicsModal();
+      }
+      if (e.key === 'Escape') {
+        if (isPhysicsModalOpen) {
+          togglePhysicsModal();
+        } else if (typeof isFleetMuseumOpen !== 'undefined' && isFleetMuseumOpen) {
+          closeFleetMuseum();
+        } else if (breakdownActive) {
+          endCinematicBreakdown();
+        } else if (isGamePaused) {
+          togglePauseGame();
+        } else if (!introActive && !isGameOver) {
+          togglePauseGame();
+        }
       }
       if (k === 'r') {
         const cycle = ['postpunk', 'chillwave', 'off'];
@@ -8332,7 +8958,10 @@
     });
 
     window.addEventListener('click', (e) => {
-      if (breakdownActive) return;
+      if (isGameOver || introActive || transformationInProgress || breakdownActive || slingshotActive) return;
+      if (e.target.closest('button, .hud-interactive, .imperial-panel-bay, .fullscreen-modal, #pilot-dossier-panel, #physics-modal, #fleet-museum-modal, #intro-screen, .imperial-top-bar, .imperial-bottom-bar, #sector-cleared-modal, #game-over-modal, #pause-modal')) {
+        return;
+      }
       const rect = container.getBoundingClientRect();
       if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
         fireLasers();
@@ -8378,6 +9007,10 @@
 
     function animate() {
       requestAnimationFrame(animate);
+      if (isGamePaused) {
+        renderer.render(scene, camera);
+        return;
+      }
       const delta = clock.getDelta();
       const time = clock.getElapsedTime();
 
@@ -8392,16 +9025,9 @@
 
         const continueBtn = document.getElementById('cb-btn-continue');
         if (continueBtn) {
-          if (breakdownTimer < 2.0) {
-            const rem = Math.ceil(2.0 - breakdownTimer);
-            continueBtn.innerText = `ANALYZING TELEMETRY... (${rem}s)`;
-            continueBtn.style.opacity = '0.5';
-            continueBtn.style.pointerEvents = 'none';
-          } else {
-            continueBtn.innerText = 'ENGAGE HYPERDRIVE [SPACE / CLICK] 🌌';
-            continueBtn.style.opacity = '1.0';
-            continueBtn.style.pointerEvents = 'auto';
-          }
+          continueBtn.innerText = 'ENGAGE HYPERDRIVE [SPACE / CLICK] 🌌';
+          continueBtn.style.opacity = '1.0';
+          continueBtn.style.pointerEvents = 'auto';
         }
 
         const orbitAngle = breakdownTimer * 0.75;
@@ -8540,12 +9166,15 @@
         moonMesh.position.z = planetMesh.position.z + Math.sin(time * 0.15) * 32;
       }
 
+      // Subtle vertical oscillation representing dynamic spacetime curvature / gravitational wave undulation
+      const spacetimeCurvatureWave = Math.sin(time * 0.95) * 0.72;
+
       // Anchor celestial background with gentle astronomical parallax so the planet never drifts out of view
       if (!introActive && planetMesh) {
         celestialGroup.position.x = shipRoot.position.x * 0.90;
-        celestialGroup.position.y = shipRoot.position.y * 0.90;
+        celestialGroup.position.y = shipRoot.position.y * 0.90 + spacetimeCurvatureWave;
       } else {
-        celestialGroup.position.set(0, 0, 0);
+        celestialGroup.position.set(0, spacetimeCurvatureWave * 0.5, 0);
       }
 
       // Update Spacetime Curvature Grid (Einstein Funnel cradling the planet's mass in world space)
@@ -8564,7 +9193,10 @@
           const px = posAttr.getX(i);
           const pz = posAttr.getZ(i);
           const distSq = px * px + pz * pz;
-          const dip = -massFactor / (Math.sqrt(distSq) + 6.5);
+          const dist = Math.sqrt(distSq);
+          // Einstein gravitational funnel with metric ripple
+          const ripple = Math.sin(dist * 0.14 - time * 2.0) * 0.38 * Math.exp(-dist * 0.018);
+          const dip = (-massFactor / (dist + 6.5)) + ripple;
           posAttr.setY(i, dip);
         }
         posAttr.needsUpdate = true;

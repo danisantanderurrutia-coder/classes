@@ -44,7 +44,8 @@ import {
   Repeat,
   Gamepad2,
   Music,
-  Handshake
+  Handshake,
+  Lock
 } from 'lucide-react';
 import { PLANET_SUBJECTS } from './data/planetSubjects';
 const SolarSystem = lazy(() => import('./components/SolarSystem'));
@@ -1966,9 +1967,27 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         >
                           <span>{c.flag}</span>
                           <span>{c.code}</span>
+                          <span className={`text-[10px] px-1 rounded font-semibold ${currency === c.code ? 'bg-white/20 text-sky-200' : 'bg-slate-200/80 text-slate-500'}`}>
+                            {c.ponderante ? `${c.ponderante.toFixed(2)}x` : '1.00x'}
+                          </span>
                         </button>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Ponderante Explanation Sub-bar (EUR Base = 1.00x) */}
+                  <div className="mb-6 pb-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-md bg-sky-50 text-sky-800 border border-sky-200 font-bold">
+                        {lang === 'en' ? 'Ponderant Factor:' : 'Ponderante de Precio:'} {activeTier.ponderante ? `${activeTier.ponderante.toFixed(2)}x` : '1.00x'}
+                      </span>
+                      <span className="text-slate-600">
+                        {lang === 'en' ? activeTier.ponderanteDescEn : activeTier.ponderanteDescEs}
+                      </span>
+                    </div>
+                    <span className="text-slate-400 text-[10px]">
+                      {lang === 'en' ? 'Base Standard: EUR (€) = 1.00x' : 'Estándar Base: EUR (€) = 1.00x'}
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
@@ -2185,7 +2204,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                               : (lang === 'en' ? `Per Student (${calcStudents} classmates)` : `Por Estudiante (${calcStudents} colegas)`)}
                           </span>
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-slate-700">
-                            {activeTier.flag} {activeTier.code}
+                            {activeTier.flag} {activeTier.code} ({activeTier.ponderante ? `${activeTier.ponderante.toFixed(2)}x` : '1.00x'})
                           </span>
                         </div>
                         <div className="flex items-baseline gap-2 mb-2">
@@ -2914,27 +2933,35 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       </main>
 
       {/* --- FOOTER (ACROSS ALL PAGES) --- */}
-      <footer className="border-t border-slate-200 bg-white py-12 text-xs font-mono text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      <footer className="border-t border-slate-200 bg-white py-12 text-xs font-mono text-slate-500 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 relative">
+          {/* Left: Mentor Identity & Credentials */}
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap justify-center md:justify-start">
             <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700 cursor-pointer">[Φ] DANIEL S. SANTANDER URRUTIA</button>
             <span>•</span>
-            <span>{lang === 'en' ? 'Geophysicist &amp; Double M.Sc.' : 'Geofísico y Doble M.Sc.'}</span>
+            <span>{lang === 'en' ? 'Geophysicist & Double M.Sc.' : 'Geofísico y Doble M.Sc.'}</span>
             <span>•</span>
-            <a href="tel:+4917676497440" className="hover:text-emerald-700">+49 176 7649 7440</a>
+            <a href="tel:+4917676497440" className="hover:text-emerald-700 whitespace-nowrap">+49 176 7649 7440</a>
           </div>
-          <div className="flex items-center gap-2 text-center sm:text-right">
-            <p>
-              © 2026 Daniel S. Santander Urrutia • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}
-            </p>
+
+          {/* Center: Discreet Lock Icon (Horizontally Centered in Page) */}
+          <div className="order-first md:order-none md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center justify-center">
             <button
               type="button"
               onClick={handleOpenAdminGate}
-              aria-label={lang === 'en' ? 'Internal Console' : 'Consola interna'}
-              className="text-[11px] text-slate-300 hover:text-slate-500 transition-colors px-1 cursor-pointer select-none"
+              aria-label={lang === 'en' ? 'Private access' : 'Acceso privado'}
+              title={lang === 'en' ? 'Private access' : 'Acceso privado'}
+              className="p-1.5 text-slate-300 hover:text-slate-600 transition-colors cursor-pointer select-none rounded focus:outline-none"
             >
-              π
+              <Lock className="w-3.5 h-3.5" />
             </button>
+          </div>
+
+          {/* Right: Framework & Copyright Notice (Displaced to the right) */}
+          <div className="text-center md:text-right max-w-xl">
+            <p>
+              © 2026 Daniel S. Santander Urrutia • {lang === 'en' ? 'Taught under the PIAD Method™ Framework (Open & Digital Inquiry)' : 'Enseñanza bajo el marco del Método PIAD™ (Indagación Abierta y Digital)'} • {lang === 'en' ? 'Hannover & Online Worldwide' : 'Hannover y Online en todo el mundo'}
+            </p>
           </div>
         </div>
       </footer>

@@ -10,11 +10,12 @@ export const CUSTOM_PRICING_STORAGE_KEY = 'ds_custom_pricing_v1';
 // - 'bachelor' (Tier 2: Álgebra Lineal, EDOs, Mecánica Analítica, Electromagnetismo)
 // - 'master' (Tier 3: Física Atmosférica, Suelos & Hidrología, Python Científico, Tesis & Proyectos)
 export const COURSE_TIER_MAP = {
-  // Tier 1 • Fundamentos, Cálculo, Plan Común & Aficionados
+  // Tier 1 • Fundamentos, Cálculo, Plan Común, Mentes Curiosas & Aficionados
   klausur: 'ib',
   math_bachelor: 'ib',
   physics_bachelor: 'ib',
   quantum_curious: 'ib',
+  curious_minds: 'ib',
   ib: 'ib',
 
   // Tier 2 • Ingeniería Intermedia & Física Aplicada
@@ -32,12 +33,12 @@ export const COURSE_TIER_MAP = {
 export const SUBJECT_COMPLEXITY_TIERS = [
   {
     id: 'ib',
-    badgeEs: 'Nivel 1 • Fundamentos & Plan Común',
-    badgeEn: 'Tier 1 • Foundations & Calculus',
-    shortEs: 'Cálculo, Física Base & IB',
-    shortEn: 'Calculus, Physics I & IB',
-    coursesEs: 'Cálculo I–III, Matemática Base, Física General, Cuántica para Curiosos, IB Diploma',
-    coursesEn: 'Calculus I–III, Foundational Math, General Physics, Quantum Concepts, IB Diploma'
+    badgeEs: 'Nivel 1 • Fundamentos & Mentes Curiosas',
+    badgeEn: 'Tier 1 • Foundations & Curious Minds',
+    shortEs: 'Cálculo, Física Base & Niños Curiosos',
+    shortEn: 'Calculus, Physics I & Young Inquirers',
+    coursesEs: 'Cálculo I–III, Matemática Base, Mentes Curiosas (Niños y Jóvenes 9–15 años), Cuántica para Curiosos, IB Diploma',
+    coursesEn: 'Calculus I–III, Foundational Math, Curious Minds (Young Inquirers ages 9–15), Quantum Concepts, IB Diploma'
   },
   {
     id: 'bachelor',
@@ -71,6 +72,10 @@ export const DEFAULT_CURRENCY_TIERS = {
     tierNameEn: 'European Traction Anchor (Germany / Spain / NL)',
     tierNameEs: 'Ancla Europea de Alta Tracción (Alemania / España / NL)',
     pppIndex: '1.00x (Base EUR)',
+    ponderante: 1.00,
+    ponderanteLabel: '1.00x (Base EUR)',
+    ponderanteDescEs: 'Referencia base (1.00x): Es la tarifa estándar cobrada en Alemania y Europa Central.',
+    ponderanteDescEn: 'Base reference (1.00x): The standard baseline rate charged in Germany and Central Europe.',
     eurRate: 1.0,
     inPersonSurchargePerHour: 8,
     rates: {
@@ -102,6 +107,10 @@ export const DEFAULT_CURRENCY_TIERS = {
     tierNameEn: 'Chile Calibrated by Subject Complexity (FCFM / UC / USM)',
     tierNameEs: 'Chile Escalado por Complejidad de Ramo (FCFM / UC / USM)',
     pppIndex: '0.80x (Ajuste Real Chile)',
+    ponderante: 0.80,
+    ponderanteLabel: '0.80x (Ajuste Real Chile)',
+    ponderanteDescEs: 'Ponderante 0.80x: Calibrado a la capacidad de gasto de familias y universitarios en Chile ($20.000 CLP/h equivale al 80% del esfuerzo europeo).',
+    ponderanteDescEn: 'Weight 0.80x: Calibrated to Chilean university affordability ($20,000 CLP/h represents ~80% of European effort).',
     eurRate: 0.00098, // ~1.020 CLP = 1 EUR
     inPersonSurchargePerHour: 6000,
     rates: {
@@ -133,6 +142,10 @@ export const DEFAULT_CURRENCY_TIERS = {
     tierNameEn: 'Switzerland High Purchasing Power Tier (ETH / EPFL / IB)',
     tierNameEs: 'Suiza Alta Capacidad de Pago (ETH / EPFL / IB)',
     pppIndex: '1.65x (Premium CHF)',
+    ponderante: 1.65,
+    ponderanteLabel: '1.65x (Poder Adquisitivo Suiza)',
+    ponderanteDescEs: 'Ponderante 1.65x: Capacidad de gasto ~1.65 veces mayor que Alemania. 42 CHF/h es muy barato para Suiza y te rinde ~€45/h.',
+    ponderanteDescEn: 'Weight 1.65x: Purchasing power ~1.65x higher than Germany. 42 CHF/h is a bargain in Switzerland while yielding ~€45/h.',
     eurRate: 1.06,
     inPersonSurchargePerHour: 12,
     rates: {
@@ -164,6 +177,10 @@ export const DEFAULT_CURRENCY_TIERS = {
     tierNameEn: 'UK Academic Tier (A-Levels / IB / B.Sc.)',
     tierNameEs: 'Reino Unido Competitivo (A-Levels / IB / Grado)',
     pppIndex: '1.15x (GBP)',
+    ponderante: 1.15,
+    ponderanteLabel: '1.15x (GBP UK)',
+    ponderanteDescEs: 'Ponderante 1.15x: Calibrado al mercado académico británico en libras (£24/h = ~€28/h).',
+    ponderanteDescEn: 'Weight 1.15x: Calibrated to the UK academic market in British pounds (£24/h = ~€28/h).',
     eurRate: 1.18,
     inPersonSurchargePerHour: 8,
     rates: {
@@ -195,6 +212,10 @@ export const DEFAULT_CURRENCY_TIERS = {
     tierNameEn: 'Global / Expat Tier (USD)',
     tierNameEs: 'Internacional / Expat (USD)',
     pppIndex: '1.10x (USD)',
+    ponderante: 1.10,
+    ponderanteLabel: '1.10x (USD Global)',
+    ponderanteDescEs: 'Ponderante 1.10x: Tarifa para colegios internacionales, familias expat y estudiantes en EE.UU. ($28 USD/h).',
+    ponderanteDescEn: 'Weight 1.10x: Standard rate for international schools, expat families, and US students ($28 USD/h).',
     eurRate: 0.92,
     inPersonSurchargePerHour: 10,
     rates: {

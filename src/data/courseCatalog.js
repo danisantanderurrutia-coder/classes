@@ -7,11 +7,22 @@ export const COURSE_FILTER_TABS = [
     icon: '🌌',
     labelEn: 'All Subjects',
     labelEs: 'Todas las Materias',
-    count: 12,
-    badgeEn: 'Full 12-Course Spectrum',
-    badgeEs: '12 Materias',
+    count: 13,
+    badgeEn: 'Full 13-Course Spectrum',
+    badgeEs: '13 Materias',
     activeClass: 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-slate-900/20',
     countClass: 'bg-white/20 text-white'
+  },
+  {
+    id: 'curious_kids',
+    icon: '🌱',
+    labelEn: 'Curious Minds (Young Inquirers)',
+    labelEs: 'Mentes Curiosas (Niños y Jóvenes)',
+    count: 1,
+    badgeEn: 'Ages 9–15 • Mathematical Intuition & Playful Science',
+    badgeEs: '9 a 15 Años • Intuición Matemática & Ciencia Lúdica',
+    activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20 ring-2 ring-emerald-500/30',
+    countClass: 'bg-white/25 text-white'
   },
   {
     id: 'math',
@@ -537,6 +548,43 @@ export const ACADEMIC_COURSES = [
     image: "./images/stock/photo-1497633762265-9d179a990aa6-700.webp",
     simulationImage: "/images/course-calculus.webp",
     color: "#059669"
+  },
+  {
+    id: "curious_minds",
+    planetId: "earth",
+    code: "EXPLORE-101",
+    titleEn: "Advanced Mathematical Thinking & Natural Sciences for Curious Young Minds",
+    titleEs: "Pensamiento Matemático Avanzado y Ciencias Naturales para Mentes Curiosas (Niños y Jóvenes)",
+    facultyEn: "Early Scientific Inquiry • Visual Geometry, Logic, Space & Playful Physics",
+    facultyEs: "Iniciación Científica Temprana • Geometría Visual, Lógica, Espacio y Física Lúdica",
+    targetEn: "Curious boys and girls (approx. 9–15 years) who ask deep questions, enjoy puzzles, and want to truly understand why numbers, geometry, and nature work the way they do.",
+    targetEs: "Niños y jóvenes curiosos (aprox. 9 a 15 años) que hacen preguntas profundas, disfrutan los acertijos y quieren entender de verdad el porqué de los números, la geometría y la naturaleza.",
+    rateHourly: 50,
+    packagePrice: 360,
+    packageHours: 8,
+    category: "curious_kids",
+    syllabusEn: [
+      "Visual Geometry & Spatial Intuition: Angles, polygons, polyhedra, and why the sphere maximizes volume",
+      "The Secret Patterns of Numbers: Prime numbers as cosmic atoms, clock modular arithmetic, and Fibonacci spirals",
+      "Kepler, Gravity & Space: Why planets orbit instead of falling, and how pendulums keep time",
+      "First-Principles Problem Solving: Solving puzzles by breaking them down into simple, unbreakable truths",
+      "Intuitive Hands-on Simulations: Exploring our interactive 3D Solar System and visual physics experiments"
+    ],
+    syllabusEs: [
+      "Geometría Visual e Intuición Espacial: Ángulos, polígonos, poliedros y por qué la esfera maximiza el volumen",
+      "Los Patrones Secretos de los Números: Primos como átomos cósmicos, relojes modulares y espirales de Fibonacci",
+      "Kepler, Gravedad y el Espacio: Por qué los planetas orbitan sin caerse y cómo los péndulos miden el tiempo",
+      "Deducción desde Primeros Principios: Resolver acertijos descomponiéndolos en verdades fundamentales sin memorizar",
+      "Simulaciones Lúdicas en Vivo: Exploración del Sistema Solar 3D interactivo y experimentos visuales de física"
+    ],
+    keywordsEn: ["Curious Minds", "Visual Geometry", "Prime Numbers", "Planetary Orbits", "First Principles", "Logic Puzzles"],
+    keywordsEs: ["Mentes Curiosas", "Geometría Visual", "Números Primos", "Órbitas Planetarias", "Primeros Principios", "Acertijos Lógicos"],
+    skriptKeywords: ["Curious Minds", "Visual Geometry", "Prime Numbers", "Planetary Orbits", "First Principles", "Logic Puzzles"],
+    badgeEn: "Ages 9–15 • Curious Minds",
+    badgeEs: "9 a 15 Años • Mentes Curiosas",
+    image: "./images/stock/photo-1509228468518-180dd4864904-700.webp",
+    simulationImage: "/images/hero-universe.webp",
+    color: "#10B981"
   }
 ];
 
@@ -738,7 +786,8 @@ export const COURSE_LAB_MAPPING = {
   quantum_curious: 'relativity',
   computational: 'intro_physics',
   thesis_projects: 'seismology_beachball',
-  ib: 'electromagnetism'
+  ib: 'electromagnetism',
+  curious_minds: 'intro_physics'
 };
 
 // Official Spanish-speaking countries (ISO 3166-1 alpha-2)

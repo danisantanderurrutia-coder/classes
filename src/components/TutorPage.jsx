@@ -40,6 +40,12 @@ const InstagramIcon = ({ className = "w-4 h-4" }) => (
 
 export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
   const [copiedLink, setCopiedLink] = useState(false);
+  const [instaLang, setInstaLang] = useState(lang === 'es' ? 'es' : 'en');
+
+  const currentInstaImg = instaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg';
+  const currentInstaDownload = instaLang === 'es' 
+    ? 'Daniel_S_Santander_Urrutia_Instagram_Post_ES_2160x2160.jpg'
+    : 'Daniel_S_Santander_Urrutia_Instagram_Post_EN_2160x2160.jpg';
 
   const handleCopyLink = () => {
     const shareUrl = 'https://danisantanderurrutia-coder.github.io/classes/';
@@ -468,7 +474,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
             </button>
           </div>
 
-          {/* 2-Column Grid: Web Card (1200x630) & Instagram Post (1080x1080) */}
+          {/* 2-Column Grid: Web Card (2400x1260) & Instagram Post (2160x2160) */}
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Card: Web Banner (Open Graph / WhatsApp / LinkedIn) - 7 cols */}
@@ -480,14 +486,14 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                     <span>{lang === 'en' ? 'Web Social Card (Open Graph)' : 'Tarjeta Social Web (Open Graph)'}</span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-400/30 font-bold">
-                    1200 × 630 px • 1.91:1
+                    2400 × 1260 px • Ultra HD (1.91:1)
                   </span>
                 </div>
 
                 <p className="text-xs text-slate-400 font-sans leading-relaxed">
                   {lang === 'en'
-                    ? 'Optimized banner generated for instant rich previews when pasting links on WhatsApp, LinkedIn, Telegram, and Twitter/X.'
-                    : 'Banner optimizado para vistas previas instantáneas al pegar el enlace en WhatsApp, LinkedIn, Telegram y Twitter/X.'}
+                    ? 'Optimized high-resolution banner generated for instant rich previews when pasting links on WhatsApp, LinkedIn, Telegram, and Twitter/X.'
+                    : 'Banner oficial en ultra alta resolución para vistas previas instantáneas al pegar el enlace en WhatsApp, LinkedIn, Telegram y Twitter/X.'}
                 </p>
 
                 {/* Image Preview Container */}
@@ -516,7 +522,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
               <div className="flex flex-wrap items-center gap-2.5 pt-2">
                 <a
                   href="./og_banner_preview.jpg"
-                  download="Daniel_S_Santander_Urrutia_Social_Card_1200x630.jpg"
+                  download="Daniel_S_Santander_Urrutia_Social_Card_2400x1260.jpg"
                   className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all shadow-md shadow-sky-500/20"
                 >
                   <Download className="w-4 h-4" />
@@ -535,7 +541,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
               </div>
             </div>
 
-            {/* Right Card: Instagram Post (Square 1080x1080) - 5 cols */}
+            {/* Right Card: Instagram Post (Square 2160x2160 Ultra HD) - 5 cols */}
             <div className="lg:col-span-5 bg-slate-950/80 rounded-2xl p-5 border border-slate-800 space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -544,33 +550,65 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                     <span>{lang === 'en' ? 'Instagram Square Post' : 'Post Cuadrado para Instagram'}</span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-500/10 text-pink-400 border border-pink-400/30 font-bold">
-                    1080 × 1080 px • 1:1
+                    2160 × 2160 px • Ultra HD (1:1)
                   </span>
                 </div>
 
+                {/* Language Switcher Tabs for Instagram Card */}
+                <div className="flex items-center justify-between gap-2 pt-1 pb-0.5">
+                  <span className="text-[11px] font-mono text-slate-400 font-semibold">
+                    {lang === 'en' ? 'Select Language Version:' : 'Seleccionar Idioma:'}
+                  </span>
+                  <div className="inline-flex items-center gap-1 p-1 bg-slate-900 border border-slate-800 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setInstaLang('en')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                        instaLang === 'en'
+                          ? 'bg-sky-500 text-slate-950 shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      🇬🇧 English
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setInstaLang('es')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                        instaLang === 'es'
+                          ? 'bg-sky-500 text-slate-950 shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      🇪🇸 Español
+                    </button>
+                  </div>
+                </div>
+
                 <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                  {lang === 'en'
-                    ? 'High-impact 1:1 graphic with mentor credentials, 14 simulators, PIAD method™, and clear call to action for feeds and stories.'
-                    : 'Gráfico 1:1 de alto impacto con credenciales, 14 simuladores, método PIAD™ y llamada a la acción para feed e historias.'}
+                  {instaLang === 'en'
+                    ? 'Ultra-sharp 2160×2160 Retina post in pure English: PIAD Method™, 14 simulators, partial credit mastery, and free diagnostic session.'
+                    : 'Gráfico 2160×2160 Retina en español: Método PIAD™, 14 simuladores, resolución paso a paso y sesión diagnóstica gratuita.'}
                 </p>
 
                 {/* Image Preview Container */}
-                <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-square max-w-[340px] mx-auto">
+                <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-square max-w-[340px] mx-auto shadow-inner">
                   <img
-                    src="./instagram_post_preview.jpg"
-                    alt="Math & Physics Classes • Instagram Post Preview"
+                    key={currentInstaImg}
+                    src={currentInstaImg}
+                    alt={`Math & Physics Classes • Instagram Post Preview (${instaLang.toUpperCase()})`}
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <a
-                      href="./instagram_post_preview.jpg"
+                      href={currentInstaImg}
                       target="_blank"
                       rel="noreferrer"
                       className="px-3.5 py-1.5 rounded-lg bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-1.5 hover:bg-slate-900"
                     >
                       <Eye className="w-3.5 h-3.5 text-pink-400" />
-                      <span>{lang === 'en' ? 'View Full Resolution' : 'Ver en Alta Resolución'}</span>
+                      <span>{lang === 'en' ? 'View 2160px Full Res' : 'Ver en 2160px Ultra HD'}</span>
                     </a>
                   </div>
                 </div>
@@ -579,15 +617,19 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-2.5 pt-2">
                 <a
-                  href="./instagram_post_preview.jpg"
-                  download="Daniel_S_Santander_Urrutia_Instagram_Post_1080x1080.jpg"
+                  href={currentInstaImg}
+                  download={currentInstaDownload}
                   className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-mono text-xs font-bold transition-all shadow-md shadow-pink-500/20"
                 >
                   <Download className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Download Instagram Post' : 'Descargar Post Instagram'}</span>
+                  <span>
+                    {lang === 'en'
+                      ? `Download (${instaLang.toUpperCase()} 2160px)`
+                      : `Descargar (${instaLang.toUpperCase()} 2160px)`}
+                  </span>
                 </a>
                 <a
-                  href="./instagram_post_preview.jpg"
+                  href={currentInstaImg}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs font-bold border border-slate-700 transition-all"

@@ -1021,6 +1021,93 @@
       padding: 30px 24px;
       transition: opacity 0.6s ease;
     }
+
+    /* Intro Controls & Mode Selectors */
+    .intro-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+
+    .control-subgroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .control-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: #94a3b8;
+    }
+
+    .diff-btn-group {
+      display: flex;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid #283347;
+      border-radius: 6px;
+      padding: 3px;
+      gap: 4px;
+      backdrop-filter: blur(8px);
+    }
+
+    .diff-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      padding: 6px 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .diff-btn:hover {
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .diff-btn.active {
+      background: #1e293b;
+      border-color: #00f0ff;
+      color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+      font-weight: bold;
+    }
+
+    .diff-btn[data-diff="easy"].active {
+      border-color: #10b981;
+      color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+    }
+
+    .diff-btn[data-diff="hard"].active {
+      border-color: #ef4444;
+      color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+    }
+
+    /* 4K Vector Holographic Logo Overlay */
+    #intro-vector-hologram {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 440px;
+      height: 440px;
+      pointer-events: none;
+      z-index: 92;
+      transition: opacity 0.5s ease;
+      filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.45));
+    }
   </style>
 </head>
 <body>
@@ -1221,6 +1308,12 @@
           <button class="imperial-switch" id="btn-toggle-cam">
             <span class="led-dot"></span>VIEW [C]
           </button>
+          <button class="imperial-switch danger" id="btn-fire-missile" title="Right-Click or Press [X] to fire guided missile">
+            <span class="led-dot" style="background:#ef4444;"></span>MISSILE [X]: <span id="ui-missile-count">4/4</span>
+          </button>
+          <button class="imperial-switch" id="btn-toggle-diff" title="Click or Press [T] to cycle difficulty">
+            <span class="led-dot" id="diff-led-dot" style="background:#38bdf8;"></span>DIFF: <span id="ui-diff-badge">PILOT</span>
+          </button>
         </div>
         <button class="imperial-switch amber active" id="btn-open-physics" style="padding: 6px 14px; font-weight:bold;">
           <span class="led-dot"></span>PHYSICS [P]
@@ -1298,11 +1391,11 @@
 
   <!-- 3. INTRO SCREEN (CINEMATIC OPEN STAGE) -->
   <div id="intro-screen" style="display:flex;">
-    <div style="margin-top: 25px;">
+    <div style="margin-top: 18px;">
       <div style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:4px; color:#f59e0b; margin-bottom:4px;">
         GLYPH IDENTIFIER: GREEK LETTER Φ (PHI) // VALUE: 1.6180339...
       </div>
-      <h1 class="modal-headline" style="color:#ffffff; font-size:2.5rem; margin:0; text-shadow: 0 4px 25px rgba(0,240,255,0.6);">
+      <h1 class="modal-headline" style="color:#ffffff; font-size:2.4rem; margin:0; text-shadow: 0 4px 25px rgba(0,240,255,0.6);">
         PROJECT PHI-FIGHTER
       </h1>
       <p style="font-size:0.72rem; color:#94a3b8; letter-spacing:2px; margin-top:4px;">
@@ -1310,18 +1403,92 @@
       </p>
     </div>
 
-    <!-- Center is open so the glowing 3D Phi Glyph is 100% visible! -->
+    <!-- Center Vector Holographic Emblem (4K Ultra-Sharp SVG Overlay) -->
+    <div id="intro-vector-hologram">
+      <svg viewBox="0 0 500 500" width="100%" height="100%" style="overflow:visible;">
+        <defs>
+          <filter id="holo-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f59e0b" />
+            <stop offset="50%" stop-color="#fef08a" />
+            <stop offset="100%" stop-color="#d97706" />
+          </linearGradient>
+          <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f0ff" />
+            <stop offset="100%" stop-color="#38bdf8" />
+          </linearGradient>
+        </defs>
+        <!-- Outer Golden Ratio Calibration Compass -->
+        <circle cx="250" cy="250" r="225" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 8" fill="none" opacity="0.65" />
+        <circle cx="250" cy="250" r="205" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="14 4" fill="none" opacity="0.55" />
+        <circle cx="250" cy="250" r="165" stroke="#00f0ff" stroke-width="2.5" fill="none" opacity="0.85" filter="url(#holo-glow)" />
+        
+        <!-- Golden Logarithmic Spiral Arc (phi = 1.618) -->
+        <path d="M 250,250 A 25 25 0 0 1 275,250 A 40 40 0 0 1 250,290 A 65 65 0 0 1 185,250 A 105 105 0 0 1 250,145 A 170 170 0 0 1 420,250" 
+              stroke="url(#gold-grad)" stroke-width="2.5" fill="none" opacity="0.8" stroke-dasharray="3 3" filter="url(#holo-glow)" />
+
+        <!-- Degree Markings / Axis Crosshairs -->
+        <line x1="25" y1="250" x2="475" y2="250" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
+        <line x1="250" y1="25" x2="250" y2="475" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
+        
+        <!-- Precision Greek Letter Phi Glyph (4K Ultra-Sharp Vector) -->
+        <g id="svg-phi-glyph" filter="url(#holo-glow)">
+          <!-- Main Ovoid Ring -->
+          <ellipse cx="250" cy="250" rx="112" ry="112" stroke="url(#cyan-grad)" stroke-width="14" fill="none" />
+          <!-- Central Vertical Spine -->
+          <line x1="250" y1="65" x2="250" y2="435" stroke="url(#cyan-grad)" stroke-width="14" stroke-linecap="round" />
+          <!-- Top Serif Cap -->
+          <line x1="205" y1="65" x2="295" y2="65" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
+          <!-- Bottom Serif Cap -->
+          <line x1="205" y1="435" x2="295" y2="435" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
+        </g>
+
+        <!-- Mathematical Telemetry Tags -->
+        <text x="250" y="470" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="11" fill="#f59e0b" letter-spacing="3">Φ = (1 + √5) / 2 = 1.6180339887...</text>
+        <text x="250" y="42" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="#38bdf8" letter-spacing="2">SACRED RATIO HARMONICS // 4K VECTOR HUD</text>
+      </svg>
+    </div>
+
+    <!-- Center is open so the 3D Phi Glyph is visible behind the HUD -->
     <div style="pointer-events:none; flex:1;"></div>
 
-    <div style="margin-bottom: 25px; display:flex; flex-direction:column; align-items:center; gap:12px;">
-      <p style="font-size:0.85rem; color:#cbd5e1; max-width:680px; line-height:1.5; margin:0; text-shadow:0 2px 10px rgba(0,0,0,0.9);">
+    <div style="margin-bottom: 18px; display:flex; flex-direction:column; align-items:center; gap:8px;">
+      <p style="font-size:0.82rem; color:#cbd5e1; max-width:680px; line-height:1.45; margin:0; text-shadow:0 2px 10px rgba(0,0,0,0.9);">
         Observe the golden-ratio mathematical symbol <strong>Φ (Phi)</strong> as it mechanically disengages its vertical axis, extends heavy carbon pylon booms, and unfolds into the deep-space Imperial TIE Interceptor.
       </p>
-      <button class="master-btn" id="btn-launch" style="padding: 14px 44px; font-size:0.96rem;">
+
+      <!-- Selector Rows for Difficulty & Logo Style -->
+      <div class="intro-controls-row">
+        <div class="control-subgroup">
+          <span class="control-label">LOGO RENDER ALTERNATIVE:</span>
+          <div class="diff-btn-group" id="logo-mode-group">
+            <button class="diff-btn active" data-logomode="hybrid">1. CYBER HYBRID (4K+3D)</button>
+            <button class="diff-btn" data-logomode="vector">2. 4K VECTOR SCHEMATIC</button>
+            <button class="diff-btn" data-logomode="pbr3d">3. TITANIUM GOLD 3D</button>
+          </div>
+        </div>
+
+        <div class="control-subgroup">
+          <span class="control-label">COMBAT DIFFICULTY:</span>
+          <div class="diff-btn-group" id="difficulty-group">
+            <button class="diff-btn" data-diff="easy">CADET (EASY - STATIC)</button>
+            <button class="diff-btn active" data-diff="medium">PILOT (MEDIUM - CHILL)</button>
+            <button class="diff-btn" data-diff="hard">ACE (HARD - AGGRESSIVE)</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="master-btn" id="btn-launch" style="padding: 13px 44px; font-size:0.95rem;">
         INITIATE METAMORPHOSIS & LAUNCH 🚀
       </button>
       <div style="font-size:0.65rem; color:#64748b; letter-spacing:1.5px;">
-        10 PLANETARY SECTORS &bull; RELATIVISTIC MECHANICS &bull; DOGFIGHTING AI ONLINE
+        GUIDED CONCUSSION MISSILES [X / R-CLICK] &bull; 10 SECTORS &bull; SELECT DIFFICULTY ABOVE
       </div>
     </div>
   </div>
@@ -2006,6 +2173,52 @@
       noise.start(t);
     }
 
+    function playMissileLaunchSound() {
+      if (!audioReady || !audioCtx || audioCtx.state !== 'running') return;
+      const t = audioCtx.currentTime;
+      // Pneumatic launch thrust
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(440, t);
+      osc.frequency.exponentialRampToValueAtTime(75, t + 0.38);
+      gain.gain.setValueAtTime(0.42, t);
+      gain.gain.exponentialRampToValueAtTime(0.01, t + 0.38);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.39);
+
+      // Rocket ignition hiss
+      const bufSize = Math.floor(audioCtx.sampleRate * 0.4);
+      const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.14));
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      const nGain = audioCtx.createGain();
+      nGain.gain.setValueAtTime(0.48, t);
+      nGain.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
+      noise.connect(nGain);
+      nGain.connect(audioCtx.destination);
+      noise.start(t);
+    }
+
+    function playLockBeep() {
+      if (!audioReady || !audioCtx || audioCtx.state !== 'running') return;
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1180, t);
+      gain.gain.setValueAtTime(0.12, t);
+      gain.gain.exponentialRampToValueAtTime(0.005, t + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.09);
+    }
+
     // =========================================================================
     // 2. LEVEL PROGRESSION & PLANETARY SECTORS (INCLUDING BLACK HOLE CLIMAX)
     // =========================================================================
@@ -2596,44 +2809,71 @@
     const rightWingGroup = new THREE.Group();
     const engineFlames = [];
 
-    // Dedicated 3D Holographic Phi Glyph System (Bold Mathematical Geometry)
+    // Dedicated 3D Holographic Phi Glyph System (Ultra-High Resolution PBR Titanium & Gold)
     const phiGlyphGroup = new THREE.Group();
     const phiRingMat = new THREE.MeshStandardMaterial({
       color: 0x00f0ff,
-      emissive: 0x00f0ff,
-      emissiveIntensity: 1.25,
-      metalness: 0.1,
-      roughness: 0.1
+      emissive: 0x005577,
+      emissiveIntensity: 0.85,
+      metalness: 0.85,
+      roughness: 0.15
     });
-    const phiRingMesh = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.18, 32, 96), phiRingMat);
+    // High-resolution subdivision (48 x 128)
+    const phiRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.24, 48, 128), phiRingMat);
     phiGlyphGroup.add(phiRingMesh);
 
-    const phiSpineMat = new THREE.MeshStandardMaterial({
-      color: 0x00f0ff,
-      emissive: 0x00f0ff,
-      emissiveIntensity: 1.25,
-      metalness: 0.1,
-      roughness: 0.1
-    });
-    const phiSpineMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 5.6, 32), phiSpineMat);
+    const phiSpineMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 5.8, 48), phiRingMat);
     phiGlyphGroup.add(phiSpineMesh);
 
-    // Serif Caps (Authentic Greek Mathematical Glyph Styling)
-    const serifCapGeo = new THREE.BoxGeometry(0.9, 0.12, 0.35);
-    const topCap = new THREE.Mesh(serifCapGeo, phiSpineMat);
-    topCap.position.set(0, 2.8, 0);
+    // Beveled Serif Caps (Precision Greek Mathematical Glyph Styling)
+    const serifCapGeo = new THREE.BoxGeometry(1.2, 0.22, 0.45);
+    const topCap = new THREE.Mesh(serifCapGeo, phiRingMat);
+    topCap.position.set(0, 2.9, 0);
     phiGlyphGroup.add(topCap);
-    const bottomCap = new THREE.Mesh(serifCapGeo, phiSpineMat);
-    bottomCap.position.set(0, -2.8, 0);
+    const bottomCap = new THREE.Mesh(serifCapGeo, phiRingMat);
+    bottomCap.position.set(0, -2.9, 0);
     phiGlyphGroup.add(bottomCap);
 
-    const phiAmberMat = new THREE.MeshBasicMaterial({
+    // Outer Golden Ratio Ring (Substantially thicker 0.08 tube so it never pixelates or aliases!)
+    const phiAmberMat = new THREE.MeshStandardMaterial({
       color: 0xf59e0b,
+      emissive: 0xd97706,
+      emissiveIntensity: 0.7,
+      metalness: 0.9,
+      roughness: 0.15
+    });
+    const phiAmberRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.08, 24, 128), phiAmberMat);
+    phiGlyphGroup.add(phiAmberRingMesh);
+
+    // Dynamic Glint Lights for 3D metallic highlights
+    const phiGlintLight1 = new THREE.PointLight(0x00f0ff, 2.5, 14);
+    phiGlintLight1.position.set(-2.2, 2.2, -3.2);
+    phiGlyphGroup.add(phiGlintLight1);
+
+    const phiGlintLight2 = new THREE.PointLight(0xf59e0b, 2.2, 14);
+    phiGlintLight2.position.set(2.2, -2.2, -3.2);
+    phiGlyphGroup.add(phiGlintLight2);
+
+    // Orbiting Golden Stardust Sparkle Points
+    const haloParticleGeo = new THREE.BufferGeometry();
+    const haloCount = 160;
+    const haloPositions = new Float32Array(haloCount * 3);
+    for (let i = 0; i < haloCount; i++) {
+      const a = (i / haloCount) * Math.PI * 2;
+      const r = 2.65 + (Math.random() - 0.5) * 0.25;
+      haloPositions[i * 3] = Math.cos(a) * r;
+      haloPositions[i * 3 + 1] = Math.sin(a) * r;
+      haloPositions[i * 3 + 2] = (Math.random() - 0.5) * 0.35;
+    }
+    haloParticleGeo.setAttribute('position', new THREE.BufferAttribute(haloPositions, 3));
+    const haloParticleMat = new THREE.PointsMaterial({
+      color: 0xfef08a,
+      size: 0.08,
       transparent: true,
       opacity: 0.85
     });
-    const phiAmberRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.45, 0.03, 16, 96), phiAmberMat);
-    phiGlyphGroup.add(phiAmberRingMesh);
+    const haloParticles = new THREE.Points(haloParticleGeo, haloParticleMat);
+    phiGlyphGroup.add(haloParticles);
 
     centralPodGroup.add(phiGlyphGroup);
 
@@ -3254,15 +3494,18 @@
       const bolt = new THREE.Mesh(enemyLaserGeo, enemyLaserMat);
       bolt.position.copy(pos).add(new THREE.Vector3(0, 0, 1.2));
 
-      // Aim toward player starfighter with lead & dogfight dispersion
-      const target = shipRoot.position.clone().addScaledVector(shipVelocity, 0.22);
-      target.x += (Math.random() - 0.5) * 4.0;
-      target.y += (Math.random() - 0.5) * 3.0;
+      // Aim toward player starfighter with lead & dogfight dispersion based on difficulty
+      const leadFactor = (gameDifficulty === 'easy' ? 0.04 : (gameDifficulty === 'medium' ? 0.15 : 0.24));
+      const target = shipRoot.position.clone().addScaledVector(shipVelocity, leadFactor);
+
+      const spread = (gameDifficulty === 'easy' ? 8.5 : (gameDifficulty === 'medium' ? 4.5 : 2.0));
+      target.x += (Math.random() - 0.5) * spread;
+      target.y += (Math.random() - 0.5) * spread;
 
       const dir = target.clone().sub(bolt.position).normalize();
       bolt.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir);
       bolt.userData = {
-        velocity: dir.multiplyScalar(88)
+        velocity: dir.multiplyScalar(gameDifficulty === 'easy' ? 65 : (gameDifficulty === 'medium' ? 80 : 92))
       };
 
       scene.add(bolt);
@@ -3330,6 +3573,206 @@
       }
     }
 
+    // =========================================================================
+    // 6.5. GUIDED CONCUSSION MISSILES & DIFFICULTY / LOGO SYSTEMS
+    // =========================================================================
+    let gameDifficulty = 'medium'; // 'easy' | 'medium' | 'hard'
+    let currentLogoMode = 'hybrid'; // 'hybrid' | 'vector' | 'pbr3d'
+
+    function setDifficulty(level) {
+      gameDifficulty = level;
+      document.querySelectorAll('#difficulty-group .diff-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.diff === level);
+      });
+      const badge = document.getElementById('ui-diff-badge');
+      const led = document.getElementById('diff-led-dot');
+      if (badge) {
+        badge.innerText = level.toUpperCase();
+        if (level === 'easy') {
+          badge.style.color = '#10b981';
+          if (led) led.style.background = '#10b981';
+        } else if (level === 'medium') {
+          badge.style.color = '#38bdf8';
+          if (led) led.style.background = '#38bdf8';
+        } else {
+          badge.style.color = '#ef4444';
+          if (led) led.style.background = '#ef4444';
+        }
+      }
+      showNotification(`COMBAT INTENSITY SET TO: ${level.toUpperCase()}`, level === 'easy' ? '#10b981' : (level === 'medium' ? '#38bdf8' : '#ef4444'));
+    }
+
+    function setLogoMode(mode) {
+      currentLogoMode = mode;
+      document.querySelectorAll('#logo-mode-group .diff-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.logomode === mode);
+      });
+      const holo = document.getElementById('intro-vector-hologram');
+      if (mode === 'vector') {
+        if (holo) holo.style.display = 'block';
+        phiGlyphGroup.visible = false;
+      } else if (mode === 'pbr3d') {
+        if (holo) holo.style.display = 'none';
+        phiGlyphGroup.visible = true;
+      } else {
+        // hybrid
+        if (holo) holo.style.display = 'block';
+        phiGlyphGroup.visible = true;
+      }
+      showNotification(`LOGO RENDER MODE: ${mode.toUpperCase()}`, '#f59e0b');
+    }
+
+    // Guided Concussion Missile Ordnance
+    let playerMissiles = 4;
+    const maxPlayerMissiles = 4;
+    let missileReloadTimer = 0;
+    const activeMissiles = [];
+    let lockedTarget = null;
+    let lastLockBeepTime = 0;
+
+    const missileBodyGeo = new THREE.CylinderGeometry(0.1, 0.12, 1.4, 12);
+    missileBodyGeo.rotateX(Math.PI / 2);
+    const missileHeadGeo = new THREE.ConeGeometry(0.12, 0.45, 12);
+    missileHeadGeo.rotateX(-Math.PI / 2);
+    const missileFinGeo = new THREE.BoxGeometry(0.55, 0.03, 0.35);
+
+    const missileMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
+    const missileWarheadMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xb91c1c, emissiveIntensity: 0.7 });
+    const missilePlumeMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+
+    function buildMissileMesh() {
+      const grp = new THREE.Group();
+      const body = new THREE.Mesh(missileBodyGeo, missileMat);
+      grp.add(body);
+      const head = new THREE.Mesh(missileHeadGeo, missileWarheadMat);
+      head.position.set(0, 0, -0.85);
+      grp.add(head);
+      const fin1 = new THREE.Mesh(missileFinGeo, missileMat);
+      fin1.position.set(0, 0, 0.48);
+      grp.add(fin1);
+      const fin2 = fin1.clone();
+      fin2.rotation.z = Math.PI / 2;
+      grp.add(fin2);
+      const plume = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.65, 8), missilePlumeMat);
+      plume.rotateX(Math.PI / 2);
+      plume.position.set(0, 0, 0.95);
+      grp.add(plume);
+      return grp;
+    }
+
+    function fireHomingMissile() {
+      if (isGameOver || introActive || breakdownActive) return;
+      if (playerMissiles <= 0) {
+        showNotification('ORDNANCE EXHAUSTED // FABRICATING NEXT WARHEAD...', '#ef4444');
+        return;
+      }
+      playerMissiles--;
+      updateMissileUI();
+
+      playMissileLaunchSound();
+
+      const missile = buildMissileMesh();
+      const side = (playerMissiles % 2 === 0 ? 1 : -1);
+      missile.position.copy(shipRoot.position).add(new THREE.Vector3(side * 1.5, -0.4, -1.2));
+
+      const initDir = new THREE.Vector3(0, 0, -1);
+      if (lockedTarget && lockedTarget.position) {
+        initDir.copy(lockedTarget.position).sub(missile.position).normalize();
+      }
+
+      missile.userData = {
+        dir: initDir,
+        target: lockedTarget,
+        speed: 48,
+        lifetime: 0,
+        maxLife: 6.0
+      };
+
+      scene.add(missile);
+      activeMissiles.push(missile);
+
+      const tgtName = lockedTarget ? (lockedTarget.userData.name || 'HOSTILE') : 'RADAR PURSUIT';
+      showNotification(`CONCUSSION MISSILE LAUNCHED // LOCK: ${tgtName}`, '#f59e0b');
+    }
+
+    function updateMissileUI() {
+      const el = document.getElementById('ui-missile-count');
+      if (el) el.innerText = `${playerMissiles}/${maxPlayerMissiles}`;
+    }
+
+    function updateMissileLock(time) {
+      if (introActive || isGameOver || breakdownActive) {
+        lockedTarget = null;
+        return;
+      }
+
+      let bestTarget = null;
+      let bestDist = 260; // Max lock range
+
+      // Check all active enemies
+      for (let en of enemies) {
+        if (!en.parent) continue;
+        const d = shipRoot.position.distanceTo(en.position);
+        if (d < bestDist && en.position.z < shipRoot.position.z) {
+          const toTarget = en.position.clone().sub(shipRoot.position).normalize();
+          if (toTarget.dot(new THREE.Vector3(0, 0, -1)) > 0.55) {
+            bestDist = d;
+            bestTarget = en;
+          }
+        }
+      }
+
+      // If no enemies in cone, check asteroids
+      if (!bestTarget) {
+        for (let ast of asteroids) {
+          if (!ast.parent) continue;
+          const d = shipRoot.position.distanceTo(ast.position);
+          if (d < 160 && ast.position.z < shipRoot.position.z) {
+            const toTarget = ast.position.clone().sub(shipRoot.position).normalize();
+            if (toTarget.dot(new THREE.Vector3(0, 0, -1)) > 0.75) {
+              bestTarget = ast;
+              break;
+            }
+          }
+        }
+      }
+
+      lockedTarget = bestTarget;
+
+      // Draw lock-on diamond reticle on canvas if visible
+      if (lockedTarget && showForceVectors) {
+        const sp = lockedTarget.position.clone().project(camera);
+        if (sp.z < 1) {
+          const px = (sp.x * 0.5 + 0.5) * window.innerWidth;
+          const py = (-sp.y * 0.5 + 0.5) * window.innerHeight;
+
+          vecCtx.save();
+          vecCtx.strokeStyle = '#ef4444';
+          vecCtx.lineWidth = 2.0;
+
+          const s = 18 + Math.sin(time * 12) * 3;
+          vecCtx.beginPath();
+          vecCtx.moveTo(px, py - s);
+          vecCtx.lineTo(px + s, py);
+          vecCtx.lineTo(px, py + s);
+          vecCtx.lineTo(px - s, py);
+          vecCtx.closePath();
+          vecCtx.stroke();
+
+          vecCtx.font = '10px "Orbitron", monospace';
+          vecCtx.fillStyle = '#ef4444';
+          const distM = Math.round(shipRoot.position.distanceTo(lockedTarget.position));
+          vecCtx.fillText(`[ LOCK: ${distM}m ]`, px + s + 6, py + 4);
+          vecCtx.restore();
+
+          if (time - lastLockBeepTime > 0.85) {
+            lastLockBeepTime = time;
+            playLockBeep();
+          }
+        }
+      }
+    }
+
     // Explosions
     const explosionParticles = [];
     const shardGeo = new THREE.TetrahedronGeometry(0.35);
@@ -3374,6 +3817,10 @@
       if (isGameOver) return;
       playImpactSound();
 
+      let effectiveDmg = amount;
+      if (gameDifficulty === 'easy') effectiveDmg = Math.round(amount * 0.45);
+      else if (gameDifficulty === 'medium') effectiveDmg = Math.round(amount * 0.8);
+
       if (playerShields > 0) {
         flashPlayerShields();
       }
@@ -3383,9 +3830,9 @@
       setTimeout(() => flash.style.opacity = '0', 160);
 
       if (playerShields > 0) {
-        playerShields = Math.max(0, playerShields - amount);
+        playerShields = Math.max(0, playerShields - effectiveDmg);
       } else {
-        playerHull = Math.max(0, playerHull - amount);
+        playerHull = Math.max(0, playerHull - effectiveDmg);
       }
 
       document.getElementById('ui-shields-stat').innerText = `${playerShields}%`;
@@ -4264,6 +4711,14 @@
         }
         fireLasers();
       }
+      if (k === 'x' || k === 'f') {
+        fireHomingMissile();
+      }
+      if (k === 't') {
+        const cycle = ['easy', 'medium', 'hard'];
+        const nextIdx = (cycle.indexOf(gameDifficulty) + 1) % cycle.length;
+        setDifficulty(cycle[nextIdx]);
+      }
       if (k === 'c') setCameraView(!isCockpitView);
       if (k === 'v') {
         showForceVectors = !showForceVectors;
@@ -4298,6 +4753,45 @@
       if (e.clientY > 80 && e.clientY < window.innerHeight - 130) {
         fireLasers();
       }
+    });
+
+    // Right-Click fires Guided Concussion Missile
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      if (!isGameOver && !introActive && !breakdownActive) {
+        fireHomingMissile();
+      }
+    });
+
+    // Wire Cockpit Ordnance & Difficulty Toggles
+    const btnMissile = document.getElementById('btn-fire-missile');
+    if (btnMissile) {
+      btnMissile.addEventListener('click', () => fireHomingMissile());
+    }
+
+    const btnDiffToggle = document.getElementById('btn-toggle-diff');
+    if (btnDiffToggle) {
+      btnDiffToggle.addEventListener('click', () => {
+        const cycle = ['easy', 'medium', 'hard'];
+        const nextIdx = (cycle.indexOf(gameDifficulty) + 1) % cycle.length;
+        setDifficulty(cycle[nextIdx]);
+      });
+    }
+
+    // Wire Difficulty Selector Buttons on Intro
+    document.querySelectorAll('#difficulty-group .diff-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const diff = e.currentTarget.dataset.diff;
+        setDifficulty(diff);
+      });
+    });
+
+    // Wire Logo Mode Selector Buttons on Intro
+    document.querySelectorAll('#logo-mode-group .diff-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const mode = e.currentTarget.dataset.logomode;
+        setLogoMode(mode);
+      });
     });
 
     // =========================================================================
@@ -4489,6 +4983,13 @@
           // Floating cinematic steadicam in front of 3D Phi glyph
           phiGlyphGroup.rotation.z = Math.sin(time * 1.4) * 0.08;
           phiAmberRingMesh.rotation.z = -time * 0.45;
+          if (typeof haloParticles !== 'undefined' && haloParticles) haloParticles.rotation.z = time * 0.22;
+          if (typeof phiGlintLight1 !== 'undefined' && phiGlintLight1) {
+            phiGlintLight1.position.set(Math.sin(time * 1.8) * 2.8, Math.cos(time * 1.8) * 2.8, -3.2);
+          }
+          if (typeof phiGlintLight2 !== 'undefined' && phiGlintLight2) {
+            phiGlintLight2.position.set(-Math.sin(time * 1.4) * 2.8, -Math.cos(time * 1.4) * 2.8, -3.2);
+          }
           camera.position.set(Math.sin(time * 0.7) * 0.35, 0.1 + Math.cos(time * 0.9) * 0.15, -7.8);
           camera.lookAt(0, 0, 0);
         }
@@ -4516,19 +5017,115 @@
         }
       }
 
+      // Update Missile Lock-On Reticle and Recharge
+      updateMissileLock(time);
+      if (playerMissiles < maxPlayerMissiles) {
+        missileReloadTimer += delta;
+        const reloadDuration = (gameDifficulty === 'easy' ? 3.0 : 4.8);
+        if (missileReloadTimer >= reloadDuration) {
+          missileReloadTimer = 0;
+          playerMissiles++;
+          updateMissileUI();
+          showNotification('MISSILE FABRICATED // READY [X]', '#00f0ff');
+        }
+      }
+
+      // UPDATE GUIDED CONCUSSION MISSILES
+      for (let i = activeMissiles.length - 1; i >= 0; i--) {
+        const m = activeMissiles[i];
+        m.userData.lifetime += delta;
+
+        // Proportional Navigation Guidance
+        const tgt = m.userData.target;
+        if (tgt && tgt.parent) {
+          const toTgt = tgt.position.clone().sub(m.position).normalize();
+          m.userData.dir.lerp(toTgt, delta * 5.4).normalize();
+        }
+
+        m.userData.speed = Math.min(135, m.userData.speed + delta * 52);
+        m.position.addScaledVector(m.userData.dir, m.userData.speed * delta);
+        m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, -1), m.userData.dir);
+
+        let detonated = false;
+
+        // Check impact against Enemies
+        for (let j = enemies.length - 1; j >= 0; j--) {
+          const en = enemies[j];
+          if (m.position.distanceTo(en.position) < en.userData.radius + 1.6) {
+            triggerExplosion(m.position, true);
+            detonated = true;
+
+            // Heavy splash/ordnance damage
+            en.userData.health -= 120;
+            if (en.userData.health <= 0) {
+              const enPos = en.position.clone();
+              scene.remove(en);
+              enemies.splice(j, 1);
+              registerTargetKill(en.userData.points || 250, true, enPos);
+              if (destroyedInSector < currentSector.quota) {
+                spawnSectorEnemy(-150);
+              }
+            } else {
+              showNotification(`CONCUSSION IMPACT // ENEMY HP: ${en.userData.health}`, '#ff0055');
+            }
+            break;
+          }
+        }
+
+        // Check impact against Asteroids
+        if (!detonated) {
+          for (let k = asteroids.length - 1; k >= 0; k--) {
+            const ast = asteroids[k];
+            if (m.position.distanceTo(ast.position) < ast.userData.radius + 1.4) {
+              const astPos = ast.position.clone();
+              triggerExplosion(m.position, false);
+              detonated = true;
+              scene.remove(ast);
+              asteroids.splice(k, 1);
+              registerTargetKill(100, false, astPos);
+              spawnAsteroid(-140);
+              break;
+            }
+          }
+        }
+
+        if (detonated || m.userData.lifetime > m.userData.maxLife || m.position.z < shipRoot.position.z - 360) {
+          scene.remove(m);
+          activeMissiles.splice(i, 1);
+        }
+      }
+
       // UPDATE ENEMY REBEL STARSHIPS (SECTORS 1-10)
       document.getElementById('ui-hostiles-stat').innerText = `${enemies.length} Active`;
       for (let i = enemies.length - 1; i >= 0; i--) {
         const en = enemies[i];
-        en.position.z += en.userData.speedZ * delta;
+        en.position.z += en.userData.speedZ * delta * (gameDifficulty === 'easy' ? 0.75 : 1.0);
 
-        // 3D Sinusoidal dogfight weaving, strafing and evasion
         const ud = en.userData;
-        const targetX = shipRoot.position.x + Math.sin(time * ud.weaveSpeedX + ud.weavePhaseX) * ud.weaveAmpX;
-        const targetY = shipRoot.position.y + Math.cos(time * ud.weaveSpeedY + ud.weavePhaseY) * ud.weaveAmpY;
+        let targetX = shipRoot.position.x;
+        let targetY = shipRoot.position.y;
+        let shotCooldown = 2.0;
 
-        const vx = (targetX - en.position.x) * ud.agility * 2.2;
-        const vy = (targetY - en.position.y) * ud.agility * 2.2;
+        if (gameDifficulty === 'easy') {
+          // EASY: No weaving, completely static/straight flight trajectory!
+          targetX = shipRoot.position.x;
+          targetY = shipRoot.position.y;
+          shotCooldown = 4.2;
+        } else if (gameDifficulty === 'medium') {
+          // MEDIUM (CHILL): Gentle smooth swaying
+          targetX += Math.sin(time * ud.weaveSpeedX * 0.45 + ud.weavePhaseX) * (ud.weaveAmpX * 0.38);
+          targetY += Math.cos(time * ud.weaveSpeedY * 0.45 + ud.weavePhaseY) * (ud.weaveAmpY * 0.32);
+          shotCooldown = 2.8;
+        } else {
+          // HARD (ACE): Full dynamic high-frequency dogfight weaving
+          targetX += Math.sin(time * ud.weaveSpeedX + ud.weavePhaseX) * ud.weaveAmpX;
+          targetY += Math.cos(time * ud.weaveSpeedY + ud.weavePhaseY) * ud.weaveAmpY;
+          shotCooldown = 1.8;
+        }
+
+        const agilityFactor = (gameDifficulty === 'easy' ? 0.35 : (gameDifficulty === 'medium' ? 1.0 : 2.2));
+        const vx = (targetX - en.position.x) * ud.agility * agilityFactor;
+        const vy = (targetY - en.position.y) * ud.agility * agilityFactor;
 
         en.position.x += vx * delta;
         en.position.y += vy * delta;
@@ -4538,10 +5135,10 @@
         const targetPitch = vy * 0.025;
         en.rotation.z += (targetRoll - en.rotation.z) * 6 * delta;
         en.rotation.x += (targetPitch - en.rotation.x) * 6 * delta;
-        en.rotation.y = Math.sin(time * ud.weaveSpeedX) * 0.22;
+        en.rotation.y = Math.sin(time * (gameDifficulty === 'easy' ? 0 : ud.weaveSpeedX)) * 0.22;
 
         // Hostile Blaster Fire (fires aimed burst if in front of player)
-        if (time - ud.lastShotTime > 2.0 && en.position.z < shipRoot.position.z - 15) {
+        if (time - ud.lastShotTime > shotCooldown && en.position.z < shipRoot.position.z - 15) {
           ud.lastShotTime = time;
           enemyFireLaser(en.position);
         }

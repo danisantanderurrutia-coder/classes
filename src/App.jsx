@@ -52,6 +52,7 @@ import { ProblemThumbnail } from './components/LabThumbnails';
 import PIADMethod from './components/PIADMethod';
 import PhysicsToolkit from './components/PhysicsToolkit';
 import { TutorPage } from './components/TutorPage';
+import PhiFighterGame from './components/PhiFighterGame';
 import {
   CURRENCY_TIERS,
   SUBJECT_COMPLEXITY_TIERS,
@@ -999,7 +1000,7 @@ export default function App() {
     } catch {}
   }, []);
 
-  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'precios' | 'contact'
+  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'precios' | 'contact' | 'game'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
@@ -1102,7 +1103,7 @@ export default function App() {
         setCurrentPage('tutor');
       } else if (['precios', 'calculator'].includes(hash)) {
         setCurrentPage('precios');
-      } else if (['landing', 'lab', 'courses', 'tutor', 'piad', 'library', 'contact'].includes(hash)) {
+      } else if (['landing', 'lab', 'courses', 'tutor', 'piad', 'library', 'contact', 'game'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
         setCurrentPage('landing');
@@ -1362,6 +1363,18 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </button>
 
             <button
+              onClick={() => navigateTo('game')}
+              className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                currentPage === 'game'
+                  ? 'bg-amber-400 text-slate-950 font-bold shadow-md shadow-amber-400/30'
+                  : 'text-amber-300 hover:text-white hover:bg-amber-400/15 border border-amber-400/30'
+              }`}
+            >
+              <Gamepad2 className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+              <span>{lang === 'en' ? 'Game' : 'Game'}</span>
+            </button>
+
+            <button
               onClick={() => navigateTo('contact')}
               className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                 currentPage === 'contact'
@@ -1450,6 +1463,13 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         >
           <Calculator className="w-3.5 h-3.5" />
           <span>{lang === 'en' ? 'Pricing' : 'Precios'}</span>
+        </button>
+        <button
+          onClick={() => navigateTo('game')}
+          className={`p-1 flex flex-col items-center gap-0.5 ${currentPage === 'game' ? 'text-amber-400 font-bold' : 'text-amber-300/80 hover:text-white'}`}
+        >
+          <Gamepad2 className="w-3.5 h-3.5" />
+          <span>Game</span>
         </button>
         <button
           onClick={() => navigateTo('contact')}
@@ -3590,6 +3610,17 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         {/* ========================================================= */}
         {currentPage === 'piad' && (
           <PIADMethod
+            lang={lang}
+            onNavigate={navigateTo}
+            onOpenBooking={handleOpenBooking}
+          />
+        )}
+
+        {/* ========================================================= */}
+        {/* PAGE 9: INTERACTIVE 3D ARCADE GAME (PROJECT PHI-FIGHTER) */}
+        {/* ========================================================= */}
+        {currentPage === 'game' && (
+          <PhiFighterGame
             lang={lang}
             onNavigate={navigateTo}
             onOpenBooking={handleOpenBooking}

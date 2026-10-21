@@ -1162,6 +1162,20 @@
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
     }
 
+    .dossier-pill-btn.locked {
+      opacity: 0.55;
+      border: 1px dashed #475569;
+      color: #64748b;
+      background: rgba(15, 23, 42, 0.6);
+      cursor: pointer;
+    }
+
+    .dossier-pill-btn.locked:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
     .skin-swatch-row {
       display: flex;
       gap: 7px;
@@ -1421,7 +1435,304 @@
       transition: opacity 0.5s ease;
       filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.45));
     }
-  </style>
+  
+/* =========================================================================
+   FLEET HANGAR & SHIP MUSEUM MODAL (3D INSPECTOR)
+   ========================================================================= */
+#fleet-museum-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: radial-gradient(circle at 60% 40%, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 18, 0.99) 100%) !important;
+  backdrop-filter: blur(24px) !important;
+  z-index: 99999 !important;
+  display: none;
+  flex-direction: column;
+  color: #e2e8f0;
+  font-family: 'Share Tech Mono', monospace;
+  overflow: hidden;
+}
+
+.museum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  background: rgba(10, 15, 26, 0.92);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.museum-header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 3px;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.museum-header-sub {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  letter-spacing: 1.5px;
+  margin-top: 3px;
+}
+
+.museum-close-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.museum-close-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.museum-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 65px);
+}
+
+.museum-sidebar {
+  width: 360px;
+  background: rgba(10, 15, 26, 0.85);
+  border-right: 1px solid rgba(30, 41, 59, 0.85);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.museum-tabs {
+  display: flex;
+  border-bottom: 1px solid #1e293b;
+  background: rgba(2, 6, 18, 0.6);
+}
+
+.museum-tab-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.museum-tab-btn.active {
+  color: #f59e0b;
+  border-bottom-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.museum-ship-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.museum-ship-card {
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.museum-ship-card:hover {
+  border-color: #38bdf8;
+  background: rgba(14, 165, 233, 0.12);
+  transform: translateX(4px);
+}
+
+.museum-ship-card.active {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.18);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+}
+
+.museum-ship-card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  color: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.museum-ship-card-role {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.museum-ship-badge {
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.badge-unlocked { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+.badge-locked { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+.badge-encountered { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
+
+.museum-stage-col {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: radial-gradient(circle at 50% 45%, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+  overflow: hidden;
+}
+
+#fleet-museum-3d-canvas {
+  width: 100% !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  min-height: 200px !important;
+  display: block;
+  cursor: grab;
+}
+
+#fleet-museum-3d-canvas:active {
+  cursor: grabbing;
+}
+
+.museum-stage-overlay-controls {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.museum-stage-pill {
+  pointer-events: auto;
+  background: rgba(10, 15, 26, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: #38bdf8;
+  backdrop-filter: blur(6px);
+}
+
+.museum-dossier-card {
+  height: 230px;
+  background: rgba(10, 15, 26, 0.94);
+  border-top: 1px solid rgba(30, 41, 59, 0.9);
+  padding: 14px 24px;
+  display: flex;
+  gap: 24px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.museum-dossier-col-main {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.museum-dossier-col-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-left: 1px solid rgba(51, 65, 85, 0.5);
+  padding-left: 20px;
+}
+
+.museum-stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.museum-stat-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.museum-stat-bar-track {
+  width: 100%;
+  height: 5px;
+  background: #1e293b;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.museum-stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.museum-nav-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.museum-nav-btn {
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid #0284c7;
+  color: #38bdf8;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.museum-nav-btn:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+</style>
 </head>
 <body>
 
@@ -1616,10 +1927,10 @@
         <div class="avionics-bank">
           <span class="bank-label">HUD:</span>
           <button class="imperial-switch active" id="btn-toggle-vectors">
-            <span class="led-dot"></span>VECTORS [V]
+            <span class="led-dot"></span>VECTORS: <span id="vector-badge-text" style="color:var(--emerald-laser);">ON</span> [V]
           </button>
           <button class="imperial-switch" id="btn-toggle-cam">
-            <span class="led-dot"></span>VIEW [C]
+            <span class="led-dot"></span><span id="cam-badge-text">3RD PERSON</span> [C]
           </button>
           <button class="imperial-switch danger" id="btn-fire-missile" title="Right-Click or Press [X] to fire guided missile">
             <span class="led-dot" style="background:#ef4444;"></span>MISSILE [X]: <span id="ui-missile-count">4/4</span>
@@ -1775,7 +2086,25 @@
         </div>
       </div>
 
-      <!-- Difficulty & Logo Render Mode in Dossier -->
+      <!-- Starfighter Fleet Showroom Selector -->
+      <div class="dossier-field-group" style="margin-top:2px; padding-top:8px; border-top:1px solid #1e293b;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <label class="dossier-field-label">SELECT STARFIGHTER</label>
+          <span id="hangar-unlocked-status" style="font-size:0.62rem; color:#f59e0b; font-family:'Share Tech Mono', monospace;">2 / 5 UNLOCKED</span>
+        </div>
+        <div class="dossier-selector-pills" id="starfighter-selector-group">
+          <button class="dossier-pill-btn active" data-fighter="obsidian">⚫ OBSIDIAN</button>
+          <button class="dossier-pill-btn" data-fighter="fleet_white">⚪ FLEET WHITE</button>
+          <button class="dossier-pill-btn locked" data-fighter="crimson" id="pill-ship-crimson">🔴 CRIMSON 🔒</button>
+          <button class="dossier-pill-btn locked" data-fighter="shadow" id="pill-ship-shadow">🟢 SHADOW 🔒</button>
+          <button class="dossier-pill-btn locked" data-fighter="advanced" id="pill-ship-advanced">⭐ ADVANCED x1 🔒</button>
+        </div>
+        <div id="selected-ship-desc" style="font-size:0.62rem; color:#38bdf8; font-family:'Share Tech Mono', monospace; margin-top:2px;">
+          CONFIG: Obsidian Black &bull; Polished Metallic Chrome Edges
+        </div>
+      </div>
+
+      <!-- Difficulty in Dossier -->
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:2px; padding-top:8px; border-top:1px solid #1e293b;">
         <div class="dossier-field-group">
           <label class="dossier-field-label">COMBAT DIFFICULTY</label>
@@ -1785,83 +2114,174 @@
             <button class="diff-btn" data-diff="hard">ACE (HARD)</button>
           </div>
         </div>
-        <div class="dossier-field-group">
-          <label class="dossier-field-label">LOGO RENDER STYLE</label>
-          <div class="diff-btn-group" id="logo-mode-group">
-            <button class="diff-btn active" data-logomode="hybrid">1. HYBRID</button>
-            <button class="diff-btn" data-logomode="vector">2. 4K VECTOR</button>
-            <button class="diff-btn" data-logomode="pbr3d">3. 3D GOLD</button>
-          </div>
-        </div>
       </div>
 
       <!-- Bounty Reward Teaser -->
       <div class="dossier-bounty-badge">
-        🎖️ <strong>OFFICIAL GRADUATION REWARD:</strong> Survive all 10 planetary sectors &amp; defeat the Singularity to unlock and download your custom Pilot Dossier &amp; Skin as an official 1024×1024 image!
+        🎖️ <strong>STARFIGHTER UNLOCK PROGRESSION:</strong> Clear campaign on CADET (Easy) to unlock Crimson Interceptor, on PILOT (Medium) for Shadow Spec-Ops, and on ACE (Hard) for Vader's TIE Advanced x1!
       </div>
 
       <!-- Enlist and Launch Button -->
       <button class="master-btn" id="btn-launch" style="width:100%; padding:13px; font-size:0.92rem; margin-top:4px;">
         ENLIST PILOT &amp; LAUNCH MISSION 🚀
       </button>
+      <button class="dossier-pill-btn" id="btn-open-fleet-museum-dossier" style="position:relative; z-index:50; pointer-events:auto;" style="width:100%; margin-top:8px; padding:10px; background:linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(30, 41, 59, 0.8) 100%); border:1px solid #0284c7; color:#38bdf8; font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:1.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span>🛸</span> <span>ABRIR HANGAR ESPACIAL &amp; MUSEO (15 NAVES)</span>
+      </button>
     </div>
 
-    <!-- Right Column: 3D Viewport Backdrop Stage -->
+    <!-- Right Column: 3D Hangar Bay Inspection Viewport -->
     <div id="intro-stage-view">
-      <div style="pointer-events:none;">
-        <div style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:4px; color:#f59e0b; margin-bottom:4px;">
-          PROJECT PHI-FIGHTER // GREEK LETTER Φ
+      <div style="pointer-events:none; background:rgba(10, 15, 26, 0.72); padding:10px 18px; border-radius:6px; border:1px solid rgba(245, 158, 11, 0.4); backdrop-filter:blur(6px); text-align:right;">
+        <div id="hangar-ship-title" style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:3px; color:#f59e0b; font-weight:bold;">
+          IMPERIAL HANGAR // TIE-PHI OBSIDIAN
         </div>
-        <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:#94a3b8; letter-spacing:2px;">
-          10 CELESTIAL SECTORS CAMPAIGN &bull; AUTONOMOUS DOGFIGHTING AI
+        <div id="hangar-ship-subtitle" style="font-family:'Share Tech Mono', monospace; font-size:0.68rem; color:#38bdf8; letter-spacing:1.5px; margin-top:2px;">
+          INSPECTION BAY 01 &bull; METALLIC CHROME EDGE HIGHLIGHTS
         </div>
       </div>
 
-      <!-- Center Vector Holographic Emblem (4K Ultra-Sharp SVG Overlay) -->
-      <div id="intro-vector-hologram" style="left:50%; top:50%; transform:translate(-50%, -50%);">
-        <svg viewBox="0 0 500 500" width="100%" height="100%" style="overflow:visible;">
-          <defs>
-            <filter id="holo-glow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="3.5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#f59e0b" />
-              <stop offset="50%" stop-color="#fef08a" />
-              <stop offset="100%" stop-color="#d97706" />
-            </linearGradient>
-            <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#00f0ff" />
-              <stop offset="100%" stop-color="#38bdf8" />
-            </linearGradient>
-          </defs>
-          <circle cx="250" cy="250" r="225" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 8" fill="none" opacity="0.65" />
-          <circle cx="250" cy="250" r="205" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="14 4" fill="none" opacity="0.55" />
-          <circle cx="250" cy="250" r="165" stroke="#00f0ff" stroke-width="2.5" fill="none" opacity="0.85" filter="url(#holo-glow)" />
-          
-          <path d="M 250,250 A 25 25 0 0 1 275,250 A 40 40 0 0 1 250,290 A 65 65 0 0 1 185,250 A 105 105 0 0 1 250,145 A 170 170 0 0 1 420,250" 
-                stroke="url(#gold-grad)" stroke-width="2.5" fill="none" opacity="0.8" stroke-dasharray="3 3" filter="url(#holo-glow)" />
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div style="font-size:0.68rem; color:#64748b; font-family:'Share Tech Mono', monospace; letter-spacing:1.5px; background:rgba(10, 15, 26, 0.72); padding:6px 14px; border-radius:4px; border:1px solid #1e293b;">
+          FLEET HANGAR ARMED &bull; SELECT FIGHTER OR LAUNCH MISSION
+        </div>
+        <button id="btn-open-fleet-museum-stage" style="pointer-events:auto; background:linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(10, 15, 26, 0.85) 100%); border:1px solid #f59e0b; color:#fbbf24; font-family:'Orbitron', sans-serif; font-size:0.72rem; letter-spacing:1.5px; padding:8px 16px; border-radius:4px; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 15px rgba(245, 158, 11, 0.3); transition:all 0.2s ease;">
+          <span>🛸</span> <span>INSPECCIONAR FLOTA 3D</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-          <line x1="25" y1="250" x2="475" y2="250" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
-          <line x1="250" y1="25" x2="250" y2="475" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
-          
-          <g id="svg-phi-glyph" filter="url(#holo-glow)">
-            <ellipse cx="250" cy="250" rx="112" ry="112" stroke="url(#cyan-grad)" stroke-width="14" fill="none" />
-            <line x1="250" y1="65" x2="250" y2="435" stroke="url(#cyan-grad)" stroke-width="14" stroke-linecap="round" />
-            <line x1="205" y1="65" x2="295" y2="65" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
-            <line x1="205" y1="435" x2="295" y2="435" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
-          </g>
+  <!-- FLEET HANGAR & 3D SHIP MUSEUM MODAL -->
+  <div id="fleet-museum-modal">
+    <div class="museum-header">
+      <div>
+        <div class="museum-header-title">
+          <span>🛸</span> <span>IMPERIAL STARSHIP ARCHIVES // HANGAR ESPACIAL</span>
+        </div>
+        <div class="museum-header-sub">
+          INSPECCIÓN HOLOGRÁFICA 3D &bull; TELEMETRÍA DE CASCO &bull; ESPECIFICACIONES DE COMBATE (15 NAVES)
+        </div>
+      </div>
+      <button class="museum-close-btn" id="btn-close-fleet-museum">✕ CERRAR HANGAR</button>
+    </div>
 
-          <text x="250" y="470" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="11" fill="#f59e0b" letter-spacing="3">Φ = 1.6180339887...</text>
-          <text x="250" y="42" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="#38bdf8" letter-spacing="2">SACRED RATIO HARMONICS // 4K VECTOR</text>
-        </svg>
+    <div class="museum-body">
+      <!-- Left Column: Ship Category Selector & List -->
+      <div class="museum-sidebar">
+        <div class="museum-tabs">
+          <button class="museum-tab-btn active" id="tab-museum-imperial">⭐ IMPERIALES (5)</button>
+          <button class="museum-tab-btn" id="tab-museum-rebel">⚔️ REBELDES / JEFES (10)</button>
+        </div>
+        <div class="museum-ship-list" id="museum-ship-list-container">
+          <!-- Populated dynamically via JS -->
+        </div>
       </div>
 
-      <div style="font-size:0.68rem; color:#64748b; font-family:'Share Tech Mono', monospace; letter-spacing:1.5px;">
-        ORDNANCE READY // RIGHT-CLICK OR [X] TO FIRE GUIDED MISSILES
+      <!-- Right Column: 3D Turntable Stage & Technical Dossier -->
+      <div class="museum-stage-col">
+        <div class="museum-stage-overlay-controls">
+          <div class="museum-stage-pill" id="museum-stage-status-pill">
+            🟢 OPERACIONAL // DESBLOQUEADO
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="museum-nav-btn" id="btn-museum-toggle-spin">🔄 AUTO-ROTACIÓN: ON</button>
+            <button class="museum-nav-btn" id="btn-museum-reset-cam">🎯 CENTRAR</button>
+          </div>
+        </div>
+
+        <canvas id="fleet-museum-3d-canvas"></canvas>
+
+        <!-- Bottom Technical Specs Dossier -->
+        <div class="museum-dossier-card">
+          <div class="museum-dossier-col-main">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div id="m-ship-class-tag" style="font-size:0.65rem; color:#f59e0b; letter-spacing:2px;">
+                  CAZA DE SUPERIORIDAD ESPACIAL
+                </div>
+                <h2 id="m-ship-name" style="font-family:'Orbitron', sans-serif; font-size:1.15rem; color:#f8fafc; letter-spacing:1.5px; margin:2px 0;">
+                  TIE-PHI OBSIDIAN INTERCEPTOR
+                </h2>
+                <div id="m-ship-maker" style="font-size:0.7rem; color:#38bdf8; font-family:'Share Tech Mono', monospace;">
+                  Sienar Fleet Systems // Refuerzo de Titanio Obsidiana
+                </div>
+              </div>
+              <div id="m-ship-badge-container">
+                <span class="museum-ship-badge badge-unlocked">DESBLOQUEADA</span>
+              </div>
+            </div>
+
+            <p id="m-ship-desc" style="font-size:0.75rem; color:#94a3b8; line-height:1.45; margin:6px 0;">
+              Caza de combate ágil con blindaje negro carbón y alerones biselados en cromo metálico.
+            </p>
+
+            <div style="background:rgba(2, 6, 18, 0.6); padding:8px 12px; border-radius:4px; border:1px solid rgba(14, 165, 233, 0.25); margin-top:2px;">
+              <div style="font-size:0.65rem; color:#38bdf8; letter-spacing:1.5px; font-weight:bold;">
+                FENÓMENO FÍSICO / TELEMETRÍA ORBITAL ASOCIADA:
+              </div>
+              <div id="m-ship-physics" style="font-size:0.72rem; color:#fbbf24; font-family:'Share Tech Mono', monospace; margin-top:2px;">
+                Φ = L_☉ / (4π r²) &bull; Presión de Radiación Fotónica
+              </div>
+            </div>
+
+            <div class="museum-nav-bar">
+              <button class="museum-nav-btn" id="btn-museum-prev-ship">◀ NAVE ANTERIOR</button>
+              <span id="museum-ship-index-counter" style="font-size:0.72rem; color:#64748b;">1 / 15</span>
+              <button class="museum-nav-btn" id="btn-museum-next-ship">SIGUIENTE NAVE ▶</button>
+            </div>
+          </div>
+
+          <div class="museum-dossier-col-stats">
+            <div style="font-size:0.68rem; color:#f59e0b; letter-spacing:2px; font-weight:bold;">
+              TELEMETRÍA DE RENDIMIENTO
+            </div>
+
+            <div class="museum-stat-row">
+              <div class="museum-stat-label-row">
+                <span>INTEGRIDAD DE CASCO</span>
+                <span id="m-stat-hp-val">100 HP</span>
+              </div>
+              <div class="museum-stat-bar-track">
+                <div class="museum-stat-bar-fill" id="m-stat-hp-bar" style="width:70%;"></div>
+              </div>
+            </div>
+
+            <div class="museum-stat-row">
+              <div class="museum-stat-label-row">
+                <span>VELOCIDAD SUBLUZ</span>
+                <span id="m-stat-speed-val">115 MGLT</span>
+              </div>
+              <div class="museum-stat-bar-track">
+                <div class="museum-stat-bar-fill" id="m-stat-speed-bar" style="width:80%; background:linear-gradient(90deg, #10b981, #34d399);"></div>
+              </div>
+            </div>
+
+            <div class="museum-stat-row">
+              <div class="museum-stat-label-row">
+                <span>MANIOBRABILIDAD / GIRO</span>
+                <span id="m-stat-agility-val">1.5 rad/s</span>
+              </div>
+              <div class="museum-stat-bar-track">
+                <div class="museum-stat-bar-fill" id="m-stat-agility-bar" style="width:75%; background:linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+              </div>
+            </div>
+
+            <div class="museum-stat-row">
+              <div class="museum-stat-label-row">
+                <span>POTENCIA DE FUEGO</span>
+                <span id="m-stat-firepower-val">Cañones Láser Gemelos L-s9.3</span>
+              </div>
+              <div class="museum-stat-bar-track">
+                <div class="museum-stat-bar-fill" id="m-stat-firepower-bar" style="width:85%; background:linear-gradient(90deg, #ef4444, #f87171);"></div>
+              </div>
+            </div>
+
+            <div id="m-ship-unlock-condition" style="font-size:0.65rem; color:#cbd5e1; margin-top:4px; padding:6px; background:rgba(30, 41, 59, 0.5); border-radius:4px; border-left:2px solid #38bdf8;">
+              ESTADO: Desbloqueada por defecto para nuevos pilotos.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1881,6 +2301,10 @@
         <div>NEXT DESTINATION</div>
         <div id="cleared-next-planet" style="color:var(--amber-glow);">EARTH</div>
       </div>
+    </div>
+
+    <!-- Starfighter Unlock Celebration Banner (Shown when earning new starfighters) -->
+    <div id="hangar-unlock-celebration" style="display:none; width:100%; max-width:620px; margin:10px auto; padding:12px 18px; background:linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(10, 15, 26, 0.95) 100%); border:1px solid #22c55e; border-radius:6px; box-shadow:0 0 20px rgba(34, 197, 94, 0.35); text-align:center;">
     </div>
 
     <!-- Classes Tutoring Promotion Box (Shown upon Campaign Completion) -->
@@ -2939,13 +3363,26 @@
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0x182438, 0.7);
+    // Lights (High-Luminance Studio Quality)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.2);
     scene.add(ambientLight);
 
-    const sunDirLight = new THREE.DirectionalLight(0xfff5eb, 2.4);
-    sunDirLight.position.set(60, 50, 70);
+    const sunDirLight = new THREE.DirectionalLight(0xffffff, 3.2);
+    sunDirLight.position.set(20, 35, -45);
     scene.add(sunDirLight);
+
+    // Hangar Bay Inspection Lights (Illuminates TIE Starfighter on Intro with vibrant studio lighting)
+    const hangarSpotLight = new THREE.DirectionalLight(0xffffff, 4.0);
+    hangarSpotLight.position.set(-3, 6, -10);
+    scene.add(hangarSpotLight);
+
+    const hangarFillLight = new THREE.DirectionalLight(0x38bdf8, 2.8);
+    hangarFillLight.position.set(-2, -3, -8);
+    scene.add(hangarFillLight);
+
+    const hangarRimLight = new THREE.DirectionalLight(0xf59e0b, 2.4);
+    hangarRimLight.position.set(2, 4, 6);
+    scene.add(hangarRimLight);
 
     // Procedural Planet Textures
     function generatePlanetTexture(type) {
@@ -3260,14 +3697,10 @@
     const rightWingGroup = new THREE.Group();
     const engineFlames = [];
 
-    // Dedicated 3D Holographic Phi Glyph System (Ultra-High Resolution PBR Titanium & Gold)
+    // Dedicated 3D Holographic Phi Glyph System (Luminescent Holographic Badge)
     const phiGlyphGroup = new THREE.Group();
-    const phiRingMat = new THREE.MeshStandardMaterial({
-      color: 0x00f0ff,
-      emissive: 0x005577,
-      emissiveIntensity: 0.85,
-      metalness: 0.85,
-      roughness: 0.15
+    const phiRingMat = new THREE.MeshBasicMaterial({
+      color: 0x00f0ff
     });
     // High-resolution subdivision (48 x 128)
     const phiRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.24, 48, 128), phiRingMat);
@@ -3285,13 +3718,9 @@
     bottomCap.position.set(0, -2.9, 0);
     phiGlyphGroup.add(bottomCap);
 
-    // Outer Golden Ratio Ring (Substantially thicker 0.08 tube so it never pixelates or aliases!)
-    const phiAmberMat = new THREE.MeshStandardMaterial({
-      color: 0xf59e0b,
-      emissive: 0xd97706,
-      emissiveIntensity: 0.7,
-      metalness: 0.9,
-      roughness: 0.15
+    // Outer Golden Ratio Ring (Self-illuminated amber glow)
+    const phiAmberMat = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b
     });
     const phiAmberRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.08, 24, 128), phiAmberMat);
     phiGlyphGroup.add(phiAmberRingMesh);
@@ -3326,7 +3755,9 @@
     const haloParticles = new THREE.Points(haloParticleGeo, haloParticleMat);
     phiGlyphGroup.add(haloParticles);
 
-    centralPodGroup.add(phiGlyphGroup);
+    // Independent 3D Sacred Hologram floating majestically in the hangar
+    scene.add(phiGlyphGroup);
+    phiGlyphGroup.position.set(0.8, 1.8, -1.8);
 
     // 3D Hexagonal Deflector Shield Bubble
     const shieldGeo = new THREE.IcosahedronGeometry(2.9, 2);
@@ -3344,22 +3775,309 @@
       playerShieldMesh.scale.set(1.12, 1.12, 1.12);
     }
 
-    function buildPhiFighterModel() {
-      const hullMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.25 });
-      const canopyGlassMat = new THREE.MeshStandardMaterial({ color: 0x020617, metalness: 0.95, roughness: 0.05, emissive: 0x00f0ff, emissiveIntensity: 0.2 });
-      const solarMat = new THREE.MeshStandardMaterial({ color: 0x090d16, metalness: 0.9, roughness: 0.15 });
-      const frameMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.75, roughness: 0.35 });
+    // =========================================================================
+    // STARFIGHTER FLEET CATALOG & UNLOCK SYSTEM
+    // =========================================================================
+    const STARFIGHTERS = {
+      obsidian: {
+        id: 'obsidian',
+        name: 'TIE/LN OBSIDIAN ELITE',
+        shortName: '⚫ OBSIDIAN',
+        class: 'Heavy Superiority Fighter',
+        tier: 'STANDARD ISSUE',
+        desc: 'Matte obsidian armor &bull; Polished metallic chrome beveled edges &bull; Crimson twin diodes',
+        unlockedByDefault: true,
+        hullColor: 0x111827,
+        solarColor: 0x030712,
+        frameColor: 0x334155,
+        edgeColor: 0xf1f5f9, // Gleaming silver chrome
+        canopyColor: 0x050814,
+        canopyEmissive: 0xef4444,
+        emissiveIntensity: 1.1,
+        flameColor: 0xef4444,
+        laserColor: 0xef4444,
+        diodeColor: 0xff1e27,
+        wingAngle: 0.0,
+        unlockCondition: 'DEFAULT ACCESS'
+      },
+      fleet_white: {
+        id: 'fleet_white',
+        name: 'TIE/IN IMPERIAL FLEET WHITE',
+        shortName: '⚪ FLEET WHITE',
+        class: 'Line Combat Fighter',
+        tier: 'STANDARD ISSUE',
+        desc: 'Classic Imperial naval grey/white &bull; Matte black solar cells &bull; Cyan twin ion emitters',
+        unlockedByDefault: true,
+        hullColor: 0xe2e8f0,
+        solarColor: 0x1e293b,
+        frameColor: 0xf8fafc,
+        edgeColor: 0x94a3b8, // Titanium contour lines
+        canopyColor: 0x020617,
+        canopyEmissive: 0x00f0ff,
+        emissiveIntensity: 1.1,
+        flameColor: 0x00f0ff,
+        laserColor: 0x00f0ff,
+        diodeColor: 0x00f0ff,
+        wingAngle: 0.0,
+        unlockCondition: 'DEFAULT ACCESS'
+      },
+      crimson: {
+        id: 'crimson',
+        name: 'TIE/IN CRIMSON ROYAL INTERCEPTOR',
+        shortName: '🔴 CRIMSON',
+        class: 'Emperor Royal Escort',
+        tier: 'CLASSIFIED PROTOCOL',
+        desc: 'Coruscant Royal Guard crimson hull &bull; High-output ion converters &bull; Ruby particle beams',
+        unlockedByDefault: false,
+        hullColor: 0xb91c1c,
+        solarColor: 0x450a0a,
+        frameColor: 0xfecaca,
+        edgeColor: 0xffe4e6, // Rose-gold chrome
+        canopyColor: 0x1c1917,
+        canopyEmissive: 0xff0033,
+        emissiveIntensity: 1.4,
+        flameColor: 0xff2244,
+        laserColor: 0xff2244,
+        diodeColor: 0xff2244,
+        wingAngle: 0.0,
+        requiredDifficulty: 'easy',
+        unlockCondition: 'CLEAR CAMPAIGN ON CADET (EASY)'
+      },
+      shadow: {
+        id: 'shadow',
+        name: 'TIE/PH SHADOW SPEC-OPS PHANTOM',
+        shortName: '🟢 SHADOW',
+        class: 'Stealth Infiltration Interceptor',
+        tier: 'BLACK OMNI SPEC-OPS',
+        desc: 'Radar-absorbent carbon fiber &bull; Emerald hyper-laser arrays &bull; Ion cloaking shroud',
+        unlockedByDefault: false,
+        hullColor: 0x18181b,
+        solarColor: 0x09090b,
+        frameColor: 0x27272a,
+        edgeColor: 0x34d399, // Luminescent emerald
+        canopyColor: 0x022c22,
+        canopyEmissive: 0x10b981,
+        emissiveIntensity: 1.5,
+        flameColor: 0x10b981,
+        laserColor: 0x10b981,
+        diodeColor: 0x10b981,
+        wingAngle: 0.0,
+        requiredDifficulty: 'medium',
+        unlockCondition: 'CLEAR CAMPAIGN ON PILOT (MEDIUM)'
+      },
+      advanced: {
+        id: 'advanced',
+        name: 'TIE ADVANCED x1 PROTOTYPE',
+        shortName: '⭐ ADVANCED x1',
+        class: 'Lord Vader Curved-Wing Prototype',
+        tier: 'LORD COMMANDER PROTOTYPE',
+        desc: 'Reinforced durasteel hull &bull; Angled inward-bent solar foils &bull; Sith ocular glow &bull; Purple hyperdrive ion plumes',
+        unlockedByDefault: false,
+        hullColor: 0x0f172a,
+        solarColor: 0x020617,
+        frameColor: 0x475569,
+        edgeColor: 0x38bdf8, // Plasma cyan chrome
+        canopyColor: 0x020617,
+        canopyEmissive: 0xf59e0b,
+        emissiveIntensity: 1.6,
+        flameColor: 0xa855f7,
+        laserColor: 0xef4444,
+        diodeColor: 0xef4444,
+        wingAngle: 0.42, // Bent inward S-foils!
+        requiredDifficulty: 'hard',
+        unlockCondition: 'CLEAR CAMPAIGN ON ACE (HARD)'
+      }
+    };
 
-      // Cockpit Pod
+    const STORAGE_KEY_STARFIGHTERS = 'phi_unlocked_starfighters_v1';
+
+    function getUnlockedShips() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_STARFIGHTERS);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.includes('obsidian') && list.includes('fleet_white')) {
+            return list;
+          }
+        }
+      } catch (e) {}
+      const def = ['obsidian', 'fleet_white'];
+      try { localStorage.setItem(STORAGE_KEY_STARFIGHTERS, JSON.stringify(def)); } catch(e){}
+      return def;
+    }
+
+    function unlockShip(shipId) {
+      if (!STARFIGHTERS[shipId]) return false;
+      const list = getUnlockedShips();
+      if (!list.includes(shipId)) {
+        list.push(shipId);
+        try {
+          localStorage.setItem(STORAGE_KEY_STARFIGHTERS, JSON.stringify(list));
+        } catch(e){}
+        return true;
+      }
+      return false;
+    }
+
+    let selectedFighterId = 'obsidian';
+    let shipHullMat = null;
+    let shipCanopyMat = null;
+    let shipSolarMat = null;
+    let shipFrameMat = null;
+    let shipEdgeMat = null;
+    let shipFlameMat = null;
+    let shipLaserDiodeMat = null;
+    let hangarFleetGroup = null;
+
+    function applyShipSkin(fighterId) {
+      const cfg = STARFIGHTERS[fighterId] || STARFIGHTERS.obsidian;
+      selectedFighterId = cfg.id;
+
+      if (shipHullMat) shipHullMat.color.setHex(cfg.hullColor);
+      if (shipSolarMat) shipSolarMat.color.setHex(cfg.solarColor);
+      if (shipFrameMat) shipFrameMat.color.setHex(cfg.frameColor);
+      if (shipEdgeMat) shipEdgeMat.color.setHex(cfg.edgeColor);
+      if (shipCanopyMat) {
+        shipCanopyMat.color.setHex(cfg.canopyColor);
+        shipCanopyMat.emissive.setHex(cfg.canopyEmissive);
+        shipCanopyMat.emissiveIntensity = cfg.emissiveIntensity;
+      }
+      if (shipFlameMat) shipFlameMat.color.setHex(cfg.flameColor);
+      if (shipLaserDiodeMat) shipLaserDiodeMat.color.setHex(cfg.diodeColor);
+      if (typeof laserMat !== 'undefined' && laserMat) laserMat.color.setHex(cfg.laserColor);
+
+      // S-Foil Angle (TIE Advanced x1 features bent inward wings!)
+      if (leftWingGroup && rightWingGroup) {
+        leftWingGroup.rotation.y = -cfg.wingAngle;
+        rightWingGroup.rotation.y = cfg.wingAngle;
+      }
+
+      // Update Hangar HUD headers
+      const titleEl = document.getElementById('hangar-ship-title');
+      if (titleEl) titleEl.innerText = `IMPERIAL HANGAR // ${cfg.name}`;
+
+      const subEl = document.getElementById('hangar-ship-subtitle');
+      if (subEl) subEl.innerHTML = `BAY 01 &bull; ${cfg.class.toUpperCase()} &bull; ${cfg.tier}`;
+
+      const descEl = document.getElementById('selected-ship-desc');
+      if (descEl) descEl.innerHTML = `CONFIG: ${cfg.desc}`;
+    }
+
+    function refreshShipSelectorUI() {
+      const unlocked = getUnlockedShips();
+      const statusEl = document.getElementById('hangar-unlocked-status');
+      if (statusEl) {
+        statusEl.innerText = `${unlocked.length} / 5 UNLOCKED`;
+      }
+
+      document.querySelectorAll('#starfighter-selector-group .dossier-pill-btn').forEach(btn => {
+        const shipId = btn.dataset.fighter;
+        const isUnlocked = unlocked.includes(shipId);
+        const cfg = STARFIGHTERS[shipId];
+
+        btn.classList.toggle('active', shipId === selectedFighterId);
+        btn.classList.toggle('locked', !isUnlocked);
+
+        if (cfg) {
+          btn.innerHTML = `${cfg.shortName} ${isUnlocked ? '' : '🔒'}`;
+        }
+      });
+    }
+
+    function buildPhiFighterModel() {
+      // High-detail PBR Materials with specular gloss and metallic chrome edge lines
+      shipHullMat = new THREE.MeshStandardMaterial({
+        color: 0x111827,
+        metalness: 0.55,
+        roughness: 0.28
+      });
+      shipCanopyMat = new THREE.MeshStandardMaterial({
+        color: 0x050814,
+        metalness: 0.92,
+        roughness: 0.08,
+        emissive: 0xef4444,
+        emissiveIntensity: 1.1
+      });
+      shipSolarMat = new THREE.MeshStandardMaterial({
+        color: 0x030712,
+        metalness: 0.35,
+        roughness: 0.38
+      });
+      shipFrameMat = new THREE.MeshStandardMaterial({
+        color: 0x334155,
+        metalness: 0.75,
+        roughness: 0.22
+      });
+      shipEdgeMat = new THREE.LineBasicMaterial({
+        color: 0xf1f5f9,
+        linewidth: 2
+      });
+      shipFlameMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+      shipLaserDiodeMat = new THREE.MeshBasicMaterial({ color: 0xff1133 });
+
+      const hullMat = shipHullMat;
+      const canopyGlassMat = shipCanopyMat;
+      const solarMat = shipSolarMat;
+      const frameMat = shipFrameMat;
+
+      // Direct Showroom Spotlights Attached to Starfighter (Guarantees Specular Highlights on Chrome Edges)
+      const shipShowroomLight = new THREE.PointLight(0xffffff, 4.8, 32);
+      shipShowroomLight.position.set(-1.0, 3.2, -4.5);
+      shipRoot.add(shipShowroomLight);
+
+      const shipBackfillLight = new THREE.PointLight(0x38bdf8, 3.2, 28);
+      shipBackfillLight.position.set(1.5, -2.0, 4.5);
+      shipRoot.add(shipBackfillLight);
+
+      const shipRimLight = new THREE.PointLight(0xf59e0b, 2.5, 25);
+      shipRimLight.position.set(-2.5, 2.0, 2.5);
+      shipRoot.add(shipRimLight);
+
+      // Central Pod (Cockpit)
       const podMesh = new THREE.Mesh(new THREE.SphereGeometry(0.9, 32, 32), hullMat);
       centralPodGroup.add(podMesh);
 
+      // Top Hatch with Outer Bolted Ring
+      const hatchMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.40, 0.08, 24), frameMat);
+      hatchMesh.position.set(0, 0.88, 0);
+      centralPodGroup.add(hatchMesh);
+      const hatchRing = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.03, 12, 24), frameMat);
+      hatchRing.rotation.x = Math.PI / 2;
+      hatchRing.position.set(0, 0.92, 0);
+      centralPodGroup.add(hatchRing);
+
+      // Front Viewport Canopy (Octagonal Imperial Viewport)
       const canopyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 0.2, 8), canopyGlassMat);
       canopyMesh.rotation.x = Math.PI / 2;
       canopyMesh.position.set(0, 0, -0.8);
       centralPodGroup.add(canopyMesh);
 
-      // Ion Engines
+      const canopyRing = new THREE.Mesh(new THREE.TorusGeometry(0.49, 0.035, 12, 32), frameMat);
+      canopyRing.position.set(0, 0, -0.88);
+      centralPodGroup.add(canopyRing);
+
+      // Twin Chin Laser Cannons with Glowing Red Diodes
+      const chinBarrelGeo = new THREE.CylinderGeometry(0.038, 0.038, 0.52, 12);
+      chinBarrelGeo.rotateX(Math.PI / 2);
+      const diodeGeo = new THREE.SphereGeometry(0.048, 12, 12);
+
+      const leftChinBarrel = new THREE.Mesh(chinBarrelGeo, frameMat);
+      leftChinBarrel.position.set(-0.2, -0.68, -0.72);
+      centralPodGroup.add(leftChinBarrel);
+
+      const leftDiode = new THREE.Mesh(diodeGeo, shipLaserDiodeMat);
+      leftDiode.position.set(-0.2, -0.68, -1.0);
+      centralPodGroup.add(leftDiode);
+
+      const rightChinBarrel = leftChinBarrel.clone();
+      rightChinBarrel.position.set(0.2, -0.68, -0.72);
+      centralPodGroup.add(rightChinBarrel);
+
+      const rightDiode = leftDiode.clone();
+      rightDiode.position.set(0.2, -0.68, -1.0);
+      centralPodGroup.add(rightDiode);
+
+      // Twin Ion Engines & Rims at Rear
       const engineGeo = new THREE.CylinderGeometry(0.14, 0.14, 0.25, 16);
       const engineRimMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9 });
       
@@ -3372,14 +4090,14 @@
       rightEngRim.position.set(0.28, 0, 0.85);
       centralPodGroup.add(rightEngRim);
 
-      // Ion Flames
+      // Ion Engine Flames
       const flameGeo = new THREE.ConeGeometry(0.12, 0.65, 12);
       flameGeo.rotateX(-Math.PI / 2);
-      const flameMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+      const flameMat = shipFlameMat;
 
       const flame1 = new THREE.Mesh(flameGeo, flameMat);
       flame1.position.set(-0.28, 0, 1.2);
-      flame1.visible = false; // Initially off during glyph state
+      flame1.visible = false;
       centralPodGroup.add(flame1);
       engineFlames.push(flame1);
 
@@ -3400,7 +4118,7 @@
       rightPylonMesh.position.set(0.5, 0, 0);
       rightPylonGroup.add(rightPylonMesh);
 
-      // Hexagonal Solar Arrays (Phi Wings)
+      // Hexagonal Solar Arrays with Polished Metallic Chrome Edges
       function buildHexSolarArray() {
         const wing = new THREE.Group();
         const hexShape = new THREE.Shape();
@@ -3414,25 +4132,232 @@
         }
         hexShape.closePath();
 
-        const hexMesh = new THREE.Mesh(new THREE.ExtrudeGeometry(hexShape, { depth: 0.08, bevelEnabled: false }), solarMat);
+        const hexGeo = new THREE.ExtrudeGeometry(hexShape, { depth: 0.08, bevelEnabled: false });
+        const hexMesh = new THREE.Mesh(hexGeo, solarMat);
         hexMesh.rotation.y = Math.PI / 2;
         wing.add(hexMesh);
 
+        // Polished Metallic Chrome Beveled Edges
+        const edgesGeo = new THREE.EdgesGeometry(hexGeo);
+        const edgeLines = new THREE.LineSegments(edgesGeo, shipEdgeMat);
+        edgeLines.rotation.y = Math.PI / 2;
+        wing.add(edgeLines);
+
+        // Frame Titanium Spokes
         const vertSpoke = new THREE.Mesh(new THREE.BoxGeometry(0.11, 4.4, 0.11), frameMat);
         wing.add(vertSpoke);
         const horizSpoke = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.11, 3.9), frameMat);
         wing.add(horizSpoke);
+
+        // Outer Wing Hub Cap
+        const hubCap = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.14, 24), frameMat);
+        hubCap.rotation.z = Math.PI / 2;
+        wing.add(hubCap);
+
         return wing;
       }
 
       leftWingGroup.add(buildHexSolarArray());
       rightWingGroup.add(buildHexSolarArray());
 
+      // Circular Illuminated Docking Pad for Showroom
+      const showroomFloorPad = new THREE.Mesh(
+        new THREE.CylinderGeometry(2.8, 2.9, 0.08, 32),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.85, roughness: 0.25 })
+      );
+      showroomFloorPad.position.y = -1.6;
+      showroomFloorPad.name = 'showroomFloorPad';
+      shipRoot.add(showroomFloorPad);
+
+      const showroomFloorRing = new THREE.Mesh(
+        new THREE.TorusGeometry(2.75, 0.04, 16, 48),
+        new THREE.MeshBasicMaterial({ color: 0x00f0ff })
+      );
+      showroomFloorRing.rotation.x = Math.PI / 2;
+      showroomFloorRing.position.y = -1.55;
+      showroomFloorRing.name = 'showroomFloorRing';
+      shipRoot.add(showroomFloorRing);
+
       shipRoot.add(centralPodGroup);
       shipRoot.add(leftPylonGroup);
       shipRoot.add(rightPylonGroup);
       shipRoot.add(leftWingGroup);
       shipRoot.add(rightWingGroup);
+    }
+
+    // =========================================================================
+    // BACKGROUND HANGAR DOCKING FLEET WITH FORCEFIELD CONTAINMENT
+    // =========================================================================
+    function createMiniatureFighter(cfg, isLocked) {
+      const group = new THREE.Group();
+
+      // Circular Docking Pad on Floor
+      const padGeo = new THREE.CylinderGeometry(1.65, 1.75, 0.12, 32);
+      const padMat = new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        metalness: 0.85,
+        roughness: 0.25
+      });
+      const pad = new THREE.Mesh(padGeo, padMat);
+      pad.position.y = -1.15;
+      group.add(pad);
+
+      // Glowing Neon Floor Ring
+      const ringGeo = new THREE.TorusGeometry(1.6, 0.045, 16, 48);
+      ringGeo.rotateX(Math.PI / 2);
+      const ringColor = isLocked ? 0xef4444 : (cfg.id === 'advanced' ? 0xf59e0b : 0x00f0ff);
+      const ringMat = new THREE.MeshBasicMaterial({ color: ringColor });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.y = -1.08;
+      group.add(ring);
+
+      // Miniature Starfighter Model (Scale 0.52)
+      const miniShip = new THREE.Group();
+      miniShip.scale.set(0.52, 0.52, 0.52);
+
+      const mHullMat = new THREE.MeshStandardMaterial({
+        color: cfg.hullColor,
+        metalness: 0.55,
+        roughness: 0.28
+      });
+      const mSolarMat = new THREE.MeshStandardMaterial({
+        color: cfg.solarColor,
+        metalness: 0.35,
+        roughness: 0.4
+      });
+      const mFrameMat = new THREE.MeshStandardMaterial({
+        color: cfg.frameColor,
+        metalness: 0.75,
+        roughness: 0.25
+      });
+      const mCanopyMat = new THREE.MeshStandardMaterial({
+        color: cfg.canopyColor,
+        metalness: 0.9,
+        roughness: 0.1,
+        emissive: cfg.canopyEmissive,
+        emissiveIntensity: cfg.emissiveIntensity
+      });
+      const mEdgeMat = new THREE.LineBasicMaterial({
+        color: cfg.edgeColor,
+        linewidth: 1
+      });
+
+      // Mini Cockpit Pod
+      const mPod = new THREE.Mesh(new THREE.SphereGeometry(0.9, 20, 20), mHullMat);
+      miniShip.add(mPod);
+
+      const mCanopy = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 0.2, 8), mCanopyMat);
+      mCanopy.rotation.x = Math.PI / 2;
+      mCanopy.position.set(0, 0, -0.8);
+      miniShip.add(mCanopy);
+
+      // Mini Pylons
+      const mPylonGeo = new THREE.CylinderGeometry(0.13, 0.13, 1.0, 12);
+      mPylonGeo.rotateZ(Math.PI / 2);
+      const mLeftPylon = new THREE.Mesh(mPylonGeo, mHullMat);
+      mLeftPylon.position.set(-1.0, 0, 0);
+      miniShip.add(mLeftPylon);
+      const mRightPylon = new THREE.Mesh(mPylonGeo, mHullMat);
+      mRightPylon.position.set(1.0, 0, 0);
+      miniShip.add(mRightPylon);
+
+      // Mini Hex Wings
+      function buildMiniWing() {
+        const w = new THREE.Group();
+        const hexShape = new THREE.Shape();
+        const r = 2.2;
+        for (let i = 0; i < 6; i++) {
+          const a = (i * Math.PI) / 3 + Math.PI / 6;
+          const x = r * Math.cos(a);
+          const y = r * Math.sin(a);
+          if (i === 0) hexShape.moveTo(x, y);
+          else hexShape.lineTo(x, y);
+        }
+        hexShape.closePath();
+        const hexGeo = new THREE.ExtrudeGeometry(hexShape, { depth: 0.08, bevelEnabled: false });
+        const hexMesh = new THREE.Mesh(hexGeo, mSolarMat);
+        hexMesh.rotation.y = Math.PI / 2;
+        w.add(hexMesh);
+
+        const edgesGeo = new THREE.EdgesGeometry(hexGeo);
+        const edgeLines = new THREE.LineSegments(edgesGeo, mEdgeMat);
+        edgeLines.rotation.y = Math.PI / 2;
+        w.add(edgeLines);
+
+        const vertSpoke = new THREE.Mesh(new THREE.BoxGeometry(0.11, 4.4, 0.11), mFrameMat);
+        w.add(vertSpoke);
+        const horizSpoke = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.11, 3.9), mFrameMat);
+        w.add(horizSpoke);
+        return w;
+      }
+
+      const leftW = buildMiniWing();
+      leftW.position.set(-1.8, 0, 0);
+      if (cfg.wingAngle) leftW.rotation.y = -cfg.wingAngle;
+      miniShip.add(leftW);
+
+      const rightW = buildMiniWing();
+      rightW.position.set(1.8, 0, 0);
+      if (cfg.wingAngle) rightW.rotation.y = cfg.wingAngle;
+      miniShip.add(rightW);
+
+      group.add(miniShip);
+
+      // Holographic Forcefield Barrier for Locked Starfighters
+      if (isLocked) {
+        const forcefieldGeo = new THREE.CylinderGeometry(1.4, 1.4, 2.4, 6, 2, true);
+        const forcefieldMat = new THREE.MeshBasicMaterial({
+          color: 0xef4444,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.38
+        });
+        const forcefield = new THREE.Mesh(forcefieldGeo, forcefieldMat);
+        forcefield.position.y = 0.1;
+        forcefield.userData = { isForcefield: true, baseOpacity: 0.38 };
+        group.add(forcefield);
+
+        // Floating Holographic Lock Emblem
+        const lockGeo = new THREE.RingGeometry(0.24, 0.32, 24);
+        const lockMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
+        const lockMesh = new THREE.Mesh(lockGeo, lockMat);
+        lockMesh.position.set(0, 1.55, 0);
+        group.add(lockMesh);
+      }
+
+      group.userData = {
+        shipId: cfg.id,
+        isLocked: isLocked,
+        miniShip: miniShip
+      };
+
+      return group;
+    }
+
+    function buildHangarFleet() {
+      if (!hangarFleetGroup) {
+        hangarFleetGroup = new THREE.Group();
+        scene.add(hangarFleetGroup);
+      }
+
+      // Clear existing background fleet
+      while (hangarFleetGroup.children.length > 0) {
+        hangarFleetGroup.remove(hangarFleetGroup.children[0]);
+      }
+
+      const unlocked = getUnlockedShips();
+      const allShips = Object.values(STARFIGHTERS);
+      const bgShips = allShips.filter(s => s.id !== selectedFighterId);
+
+      // 4 background docking platform positions aligned neatly inside the right showroom at Z = 5.2
+      const slotX = [-4.6, -3.4, -2.2, -1.0];
+
+      bgShips.forEach((shipCfg, idx) => {
+        const isLocked = !unlocked.includes(shipCfg.id);
+        const padObj = createMiniatureFighter(shipCfg, isLocked);
+        padObj.position.set(slotX[idx] || -2.8, -0.3, 5.2);
+        hangarFleetGroup.add(padObj);
+      });
     }
 
     buildPhiFighterModel();
@@ -4025,10 +4950,9 @@
     }
 
     // =========================================================================
-    // 6.5. GUIDED CONCUSSION MISSILES & DIFFICULTY / LOGO SYSTEMS
+    // 6.5. GUIDED CONCUSSION MISSILES & DIFFICULTY SYSTEM
     // =========================================================================
     let gameDifficulty = 'medium'; // 'easy' | 'medium' | 'hard'
-    let currentLogoMode = 'hybrid'; // 'hybrid' | 'vector' | 'pbr3d'
 
     function setDifficulty(level) {
       gameDifficulty = level;
@@ -4051,26 +4975,6 @@
         }
       }
       showNotification(`COMBAT INTENSITY SET TO: ${level.toUpperCase()}`, level === 'easy' ? '#10b981' : (level === 'medium' ? '#38bdf8' : '#ef4444'));
-    }
-
-    function setLogoMode(mode) {
-      currentLogoMode = mode;
-      document.querySelectorAll('#logo-mode-group .diff-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.logomode === mode);
-      });
-      const holo = document.getElementById('intro-vector-hologram');
-      if (mode === 'vector') {
-        if (holo) holo.style.display = 'block';
-        phiGlyphGroup.visible = false;
-      } else if (mode === 'pbr3d') {
-        if (holo) holo.style.display = 'none';
-        phiGlyphGroup.visible = true;
-      } else {
-        // hybrid
-        if (holo) holo.style.display = 'block';
-        phiGlyphGroup.visible = true;
-      }
-      showNotification(`LOGO RENDER MODE: ${mode.toUpperCase()}`, '#f59e0b');
     }
 
     // Guided Concussion Missile Ordnance
@@ -4111,6 +5015,51 @@
       return grp;
     }
 
+    // HIGH-PRECISION SMART HOMING MISSILE SEEKER & TARGET LOCK
+    function findBestMissileTarget(fromPos, wideSearch = true) {
+      let candidate = null;
+      let minScore = Infinity;
+
+      // Priority 1: Rebel Enemy Starships (anywhere in forward hemisphere, wide 140° angle!)
+      for (let en of enemies) {
+        if (!en.parent || (en.userData && en.userData.health <= 0)) continue;
+        const d = fromPos.distanceTo(en.position);
+        if (en.position.z < fromPos.z + 25) { // In front or alongside
+          const toTgt = en.position.clone().sub(fromPos).normalize();
+          const forwardDot = toTgt.dot(new THREE.Vector3(0, 0, -1));
+          if (wideSearch ? forwardDot > -0.35 : forwardDot > 0.25) {
+            // Score balances distance and forward angle
+            const score = d - (forwardDot * 100);
+            if (score < minScore) {
+              minScore = score;
+              candidate = en;
+            }
+          }
+        }
+      }
+
+      if (candidate) return candidate;
+
+      // Priority 2: Asteroids in forward flight path
+      for (let ast of asteroids) {
+        if (!ast.parent) continue;
+        const d = fromPos.distanceTo(ast.position);
+        if (ast.position.z < fromPos.z + 10 && d < 220) {
+          const toTgt = ast.position.clone().sub(fromPos).normalize();
+          const forwardDot = toTgt.dot(new THREE.Vector3(0, 0, -1));
+          if (forwardDot > -0.1) {
+            const score = d - (forwardDot * 60);
+            if (score < minScore) {
+              minScore = score;
+              candidate = ast;
+            }
+          }
+        }
+      }
+
+      return candidate;
+    }
+
     function fireHomingMissile() {
       if (isGameOver || introActive || breakdownActive) return;
       if (playerMissiles <= 0) {
@@ -4126,24 +5075,32 @@
       const side = (playerMissiles % 2 === 0 ? 1 : -1);
       missile.position.copy(shipRoot.position).add(new THREE.Vector3(side * 1.5, -0.4, -1.2));
 
+      // SMART AUTO-LOCK: Even if the player was NOT aiming at the enemy,
+      // the seeker head instantly locks onto the nearest hostile in the sector!
+      let target = lockedTarget;
+      if (!target || !target.parent || (target.userData && target.userData.health <= 0)) {
+        target = findBestMissileTarget(missile.position, true);
+      }
+
       const initDir = new THREE.Vector3(0, 0, -1);
-      if (lockedTarget && lockedTarget.position) {
-        initDir.copy(lockedTarget.position).sub(missile.position).normalize();
+      if (target && target.position) {
+        initDir.copy(target.position).sub(missile.position).normalize();
       }
 
       missile.userData = {
         dir: initDir,
-        target: lockedTarget,
-        speed: 48,
+        target: target,
+        speed: 52,
         lifetime: 0,
-        maxLife: 6.0
+        maxLife: 6.5,
+        smokeTimer: 0
       };
 
       scene.add(missile);
       activeMissiles.push(missile);
 
-      const tgtName = lockedTarget ? (lockedTarget.userData.name || 'HOSTILE') : 'RADAR PURSUIT';
-      showNotification(`CONCUSSION MISSILE LAUNCHED // LOCK: ${tgtName}`, '#f59e0b');
+      const tgtName = target ? (target.userData.name || 'HOSTILE') : 'RADAR PURSUIT';
+      showNotification(`🚀 CONCUSSION MISSILE LAUNCHED // LOCK: ${tgtName}`, '#f59e0b');
     }
 
     function updateMissileUI() {
@@ -4157,38 +5114,8 @@
         return;
       }
 
-      let bestTarget = null;
-      let bestDist = 260; // Max lock range
-
-      // Check all active enemies
-      for (let en of enemies) {
-        if (!en.parent) continue;
-        const d = shipRoot.position.distanceTo(en.position);
-        if (d < bestDist && en.position.z < shipRoot.position.z) {
-          const toTarget = en.position.clone().sub(shipRoot.position).normalize();
-          if (toTarget.dot(new THREE.Vector3(0, 0, -1)) > 0.55) {
-            bestDist = d;
-            bestTarget = en;
-          }
-        }
-      }
-
-      // If no enemies in cone, check asteroids
-      if (!bestTarget) {
-        for (let ast of asteroids) {
-          if (!ast.parent) continue;
-          const d = shipRoot.position.distanceTo(ast.position);
-          if (d < 160 && ast.position.z < shipRoot.position.z) {
-            const toTarget = ast.position.clone().sub(shipRoot.position).normalize();
-            if (toTarget.dot(new THREE.Vector3(0, 0, -1)) > 0.75) {
-              bestTarget = ast;
-              break;
-            }
-          }
-        }
-      }
-
-      lockedTarget = bestTarget;
+      // Automatically finds and brackets the best target in broad field of view!
+      lockedTarget = findBestMissileTarget(shipRoot.position, true);
 
       // Draw lock-on diamond reticle on canvas if visible
       if (lockedTarget && showForceVectors) {
@@ -4633,44 +5560,74 @@
 
       for (let mesh of breakdownDebrisGroup.children) {
         if (type === 'radiation') {
-          mesh.userData.vel.z += delta * 15;
-          mesh.userData.vel.multiplyScalar(0.99);
+          // Sector 1: Solar Photon Radiation Pressure (F_rad = Phi * A / c)
+          // Blows microscopic debris outwards away from the Sun (+Z) creating an ion comet tail!
+          mesh.userData.vel.z += delta * 28.0;
+          mesh.userData.vel.x += (Math.random() - 0.5) * delta * 6.0;
+          mesh.scale.multiplyScalar(0.992);
         } else if (type === 'precession') {
-          const curA = Math.atan2(mesh.userData.vel.z, mesh.userData.vel.x) + delta * 2.4;
+          // Sector 2: General Relativistic Perihelion Precession (Schwarzschild Geodesic Curvature)
+          // Debris arcs in precessing rosette orbits with relativistic deflection!
+          const curA = Math.atan2(mesh.userData.vel.z, mesh.userData.vel.x) + delta * 3.8;
           const spd = Math.hypot(mesh.userData.vel.x, mesh.userData.vel.z);
           mesh.userData.vel.x = Math.cos(curA) * spd;
           mesh.userData.vel.z = Math.sin(curA) * spd;
+          mesh.userData.vel.y += Math.sin(breakdownTimer * 6.0 + mesh.userData.seed) * delta * 8.0;
         } else if (type === 'superrotation') {
-          mesh.userData.vel.x += (mesh.position.y > 0 ? 1 : -1) * 24 * delta;
-          mesh.userData.vel.y += Math.sin(mesh.position.x * 2) * 6 * delta;
+          // Sector 3: Venusian Atmospheric Superrotation & Hydrostatic Pressure (dP/dr = -rho*g)
+          // 360 km/h zonal winds violently shear debris in opposing horizontal directions!
+          const latDir = (mesh.position.y > 0 ? 1 : -1);
+          mesh.userData.vel.x += latDir * 42.0 * delta;
+          mesh.scale.x = Math.min(3.2, mesh.scale.x + delta * 1.8); // Aerodynamic elongation
+          mesh.scale.y = Math.max(0.2, mesh.scale.y - delta * 0.8); // Vertical pressure compression
         } else if (type === 'tidallock') {
-          mesh.userData.rotVel.multiplyScalar(0.96);
-          mesh.userData.vel.multiplyScalar(0.98);
+          // Sector 4: Lunar Tidal Lock & Ballistic Scatter in Vacuum (T_orb = T_rot)
+          // Frictionless ballistic motion, major axis torques towards Moon gravity center
+          mesh.userData.rotVel.multiplyScalar(0.94);
+          mesh.userData.vel.y -= delta * 3.2; // Lunar gravity tug
         } else if (type === 'orbital') {
-          mesh.userData.vel.y -= delta * 11.5;
-          mesh.userData.vel.multiplyScalar(0.965);
+          // Sector 5: Earth Vis-Viva Geodesic & Atmospheric Ablation
+          // Lower debris enters hypersonic atmospheric drag, glowing and ablating
+          mesh.userData.vel.y -= delta * 18.0;
+          mesh.userData.vel.z += delta * 6.0;
+          mesh.userData.vel.multiplyScalar(0.95);
         } else if (type === 'angular') {
-          mesh.userData.rotVel.multiplyScalar(1.02);
+          // Sector 6: Mars/Phobos Roche Limit Rupture (d_Roche = 2.44 R (rho_M/rho_m)^1/3)
+          // Tidal gravity gradient exceeds cohesion, stretching debris vertically and splitting it!
+          mesh.scale.y += delta * 2.2;
+          mesh.scale.x = Math.max(0.15, mesh.scale.x - delta * 0.5);
+          mesh.userData.vel.y += (mesh.position.y > 0 ? 1 : -1) * delta * 16.0;
         } else if (type === 'nbody') {
-          const pert = Math.sin(mesh.userData.seed + breakdownTimer * 5) * 16 * delta;
-          mesh.userData.vel.x += pert;
-          mesh.userData.vel.y -= pert * 0.45;
+          // Sector 7: Ceres & Jupiter 3:1 Kirkwood Gap Chaotic Gravitational Perturbations
+          // Erratic, non-linear bursts eject debris into unpredictable chaotic vectors!
+          const chaosX = Math.sin(mesh.userData.seed * 3.0 + breakdownTimer * 9.0) * 32.0 * delta;
+          const chaosY = Math.cos(mesh.userData.seed * 2.0 + breakdownTimer * 7.0) * 22.0 * delta;
+          mesh.userData.vel.x += chaosX;
+          mesh.userData.vel.y += chaosY;
         } else if (type === 'lorentz') {
-          const q = mesh.userData.charge;
+          // Sector 8: Jovian Magnetosphere Lorentz Force (F = q(E + v x B))
+          // Ionized plasma debris enters helical cyclotron spirals along magnetic field lines!
+          const q = mesh.userData.charge || 1.0;
           const vx = mesh.userData.vel.x;
           const vz = mesh.userData.vel.z;
-          mesh.userData.vel.x += vz * q * 13 * delta;
-          mesh.userData.vel.z -= vx * q * 13 * delta;
+          mesh.userData.vel.x += vz * q * 26.0 * delta;
+          mesh.userData.vel.z -= vx * q * 26.0 * delta;
+          mesh.userData.vel.y += delta * 5.0; // Alignment with vertical Jovian flux tube
         } else if (type === 'ringshear') {
-          const r = Math.max(1.0, mesh.position.length());
-          const shear = -16.0 / (r * 0.7 + 1.0);
-          mesh.userData.vel.x += -mesh.userData.vel.z * shear * delta * 0.12;
-          mesh.userData.vel.z += mesh.userData.vel.x * shear * delta * 0.12;
+          // Sector 9: Saturn Ring Keplerian Differential Shear (dOmega/dr = -3/2 Omega/r)
+          // Inner debris speeds up while outer debris lags, stretching wreckage into a ring streak!
+          const rDist = Math.max(1.2, mesh.position.x);
+          const shearFactor = 32.0 / (Math.abs(rDist) + 1.0);
+          mesh.userData.vel.z -= (rDist > 0 ? 1 : -1) * shearFactor * delta;
+          mesh.scale.z += delta * 2.5; // Elongates along ring orbital arc
         } else if (type === 'relativity') {
-          mesh.scale.y += delta * 2.0;
-          mesh.scale.x = Math.max(0.08, mesh.scale.x - delta * 0.35);
-          mesh.scale.z = Math.max(0.08, mesh.scale.z - delta * 0.35);
-          mesh.userData.vel.multiplyScalar(0.935);
+          // Sector 10: Singularity Cygnus-X / Sag A* Extreme Spaghettification & Time Dilation
+          // Gravitational tidal gradient dFg/dr -> infinity stretches debris into thread-thin spaghetti!
+          mesh.scale.y += delta * 4.5;
+          mesh.scale.x = Math.max(0.04, mesh.scale.x - delta * 0.6);
+          mesh.scale.z = Math.max(0.04, mesh.scale.z - delta * 0.6);
+          mesh.userData.vel.multiplyScalar(0.91); // Relativistic time dilation slowing apparent motion!
+          mesh.userData.vel.y -= delta * 35.0; // Sucked down into the event horizon!
         }
 
         mesh.position.addScaledVector(mesh.userData.vel, delta);
@@ -4768,6 +5725,40 @@
         document.getElementById('cleared-subtitle').innerText = `Outstanding piloting, Commander ${playerPilot.name.toUpperCase()}! You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.`;
         document.getElementById('cleared-score-stat').innerText = score;
         document.getElementById('cleared-next-planet').innerText = 'SOLAR SYSTEM SECURED';
+
+        // Starfighter Unlock Progression upon Campaign Clear
+        let newUnlocks = [];
+        if (gameDifficulty === 'easy') {
+          if (unlockShip('crimson')) newUnlocks.push('🔴 CRIMSON GUARD INTERCEPTOR');
+        } else if (gameDifficulty === 'medium') {
+          if (unlockShip('crimson')) newUnlocks.push('🔴 CRIMSON GUARD INTERCEPTOR');
+          if (unlockShip('shadow')) newUnlocks.push('🟢 SHADOW SPEC-OPS PHANTOM');
+        } else if (gameDifficulty === 'hard') {
+          if (unlockShip('crimson')) newUnlocks.push('🔴 CRIMSON GUARD INTERCEPTOR');
+          if (unlockShip('shadow')) newUnlocks.push('🟢 SHADOW SPEC-OPS PHANTOM');
+          if (unlockShip('advanced')) newUnlocks.push('⭐ TIE ADVANCED x1 PROTOTYPE');
+        }
+
+        const unlockBanner = document.getElementById('hangar-unlock-celebration');
+        if (unlockBanner) {
+          if (newUnlocks.length > 0) {
+            unlockBanner.style.display = 'block';
+            unlockBanner.innerHTML = `
+              <div style="font-size:0.75rem; color:#22c55e; letter-spacing:2px; font-weight:bold; margin-bottom:4px;">
+                🎖️ NEW FLEET ASSET UNLOCKED (${gameDifficulty.toUpperCase()} VICTORY)
+              </div>
+              <div style="font-size:0.92rem; color:#f8fafc; font-weight:bold; font-family:'Orbitron', sans-serif;">
+                ${newUnlocks.join(' &nbsp;&bull;&nbsp; ')}
+              </div>
+              <div style="font-size:0.68rem; color:#94a3b8; margin-top:4px; font-family:'Share Tech Mono', monospace;">
+                Starfighter now available in your Imperial Showroom Hangar!
+              </div>
+            `;
+          } else {
+            unlockBanner.style.display = 'none';
+          }
+        }
+        refreshShipSelectorUI();
 
         // Display Tutoring Promotion and Skin Download Button
         const tutoringCard = document.getElementById('classes-tutoring-card');
@@ -5518,6 +6509,28 @@
       });
     });
 
+    // Starfighter Fleet Showroom Selector Listeners
+    document.querySelectorAll('#starfighter-selector-group .dossier-pill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const shipId = e.currentTarget.dataset.fighter;
+        const unlocked = getUnlockedShips();
+        const cfg = STARFIGHTERS[shipId];
+
+        if (!unlocked.includes(shipId)) {
+          playMechanicalStepSound(180);
+          showNotification(`STARFIGHTER LOCKED // ${cfg ? cfg.unlockCondition : 'LOCKED'}`, '#ef4444');
+          return;
+        }
+
+        selectedFighterId = shipId;
+        applyShipSkin(shipId);
+        buildHangarFleet();
+        refreshShipSelectorUI();
+        playMechanicalStepSound(520);
+        showNotification(`STARFIGHTER READY // ${cfg.name}`, '#38bdf8');
+      });
+    });
+
     const visorChip = document.getElementById('toggle-acc-visor');
     if (visorChip) {
       visorChip.addEventListener('click', () => {
@@ -5791,21 +6804,34 @@
     const morphFill = document.getElementById('morph-fill');
     const morphLabel = document.getElementById('morph-status-label');
 
-    // Initial State: Wings collapsed into flat vertical stem of Phi
-    leftPylonGroup.position.set(0.5, 0, 0); // Pylons tucked inside
-    rightPylonGroup.position.set(-0.5, 0, 0);
-    leftWingGroup.position.set(-0.15, 0, 0);
-    rightWingGroup.position.set(0.15, 0, 0);
-    leftWingGroup.scale.set(0.02, 1, 0.02); // Flat vertical blades
-    rightWingGroup.scale.set(0.02, 1, 0.02);
-    phiGlyphGroup.visible = true;
+    // Initial State: Wings fully deployed in showroom mode so player can inspect the starfighter
+    leftPylonGroup.position.set(0, 0, 0);
+    rightPylonGroup.position.set(0, 0, 0);
+    leftWingGroup.position.set(-1.8, 0, 0);
+    rightWingGroup.position.set(1.8, 0, 0);
+    leftWingGroup.scale.set(1, 1, 1);
+    rightWingGroup.scale.set(1, 1, 1);
 
-    // Split-Screen initial position: Ship positioned in right half stage
-    shipRoot.position.set(2.4, 0, 0);
+    for (let f of engineFlames) f.visible = false;
+
+    // Showroom Initial Position: 3D Starfighter centered in the RIGHT inspection bay (X = -3.0, NDC +0.33)
+    shipRoot.position.set(-3.0, -0.2, 0.0);
+    // 3/4 beauty angle: angled so both hexagonal wings, cockpit canopy, and chrome edges are clearly visible
+    shipRoot.rotation.set(0.06, 0.38, 0.02);
+
+    // Apply default ship and build background hangar fleet
+    applyShipSkin(selectedFighterId);
+    buildHangarFleet();
+    refreshShipSelectorUI();
+
+    // 3D Sacred Phi Crest floating gracefully above the starfighter in the right showroom
+    phiGlyphGroup.scale.set(0.24, 0.24, 0.24);
+    phiGlyphGroup.position.set(-3.0, 3.1, -0.2);
+    phiGlyphGroup.visible = true;
 
     // Start with cinema scope bars active on intro!
     document.body.classList.add('cinema-active');
-    camera.position.set(0, 0.1, -7.8);
+    camera.position.set(0, 0.15, -8.6);
     camera.lookAt(0, 0, 0);
 
     document.getElementById('btn-launch').addEventListener('click', () => {
@@ -5819,34 +6845,17 @@
       const dossier = document.getElementById('pilot-dossier-panel');
       if (dossier) dossier.classList.add('slide-out-left');
 
-      const holo = document.getElementById('intro-vector-hologram');
-      if (holo) {
-        holo.style.opacity = '0';
-        setTimeout(() => holo.style.display = 'none', 600);
+      const introScr = document.getElementById('intro-screen');
+      if (introScr) {
+        introScr.style.opacity = '0';
+        setTimeout(() => introScr.style.display = 'none', 650);
       }
-      setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 650);
 
-      // Smoothly animate ship from right (X=2.4) to screen center (X=0.0)
-      const centerDuration = 700;
-      const centerStart = performance.now();
-      const startX = shipRoot.position.x;
-      function animCenter(now) {
-        const p = Math.min(1, (now - centerStart) / centerDuration);
-        const ease = p * p * (3 - 2 * p);
-        shipRoot.position.x = startX * (1 - ease);
-        if (p < 1) {
-          requestAnimationFrame(animCenter);
-        } else {
-          shipRoot.position.x = 0;
-        }
-      }
-      requestAnimationFrame(animCenter);
-
-      phiGlyphGroup.visible = true;
       morphHud.style.display = 'flex';
 
-      // 4-Stage Progressive Cinematic Assembly Timeline (4.6 seconds total)
-      const totalDuration = 4600;
+      const startX = shipRoot.position.x; // -3.2 (Screen Right)
+      const startRotY = shipRoot.rotation.y;
+      const totalDuration = 3800;
       let startTime = null;
 
       function stepTransformation(timestamp) {
@@ -5859,9 +6868,42 @@
         const u = p;
         const s = u * u * u * (u * (u * 6 - 15) + 10);
 
+        // Continuous Glide from RIGHT (startX = -3.2) to CENTER (0.0) over first 38% of timeline
+        if (p < 0.38) {
+          const centerP = p / 0.38;
+          const ease = centerP * centerP * (3 - 2 * centerP);
+          shipRoot.position.x = startX * (1 - ease);
+          shipRoot.rotation.y = startRotY * (1 - ease);
+        } else {
+          shipRoot.position.x = 0;
+          shipRoot.rotation.y = 0;
+        }
+
+        if (p > 0.05) {
+          const pad = shipRoot.getObjectByName('showroomFloorPad');
+          if (pad) pad.visible = false;
+          const ring = shipRoot.getObjectByName('showroomFloorRing');
+          if (ring) ring.visible = false;
+        }
+
+        // Dissolve Phi Logo and Background Fleet as flight begins
+        if (phiGlyphGroup && p > 0.25) {
+          const fadeP = (p - 0.25) / 0.2;
+          if (fadeP < 1) {
+            phiGlyphGroup.scale.setScalar(1 + fadeP * 1.2);
+            phiRingMat.emissiveIntensity = 1.2 + fadeP * 2.5;
+          } else {
+            phiGlyphGroup.visible = false;
+          }
+        }
+
+        if (hangarFleetGroup && p > 0.3) {
+          hangarFleetGroup.visible = false;
+        }
+
         // Continuous Cinematic Bezier Camera Swoop from Front to Rear Chase View
-        const p0 = new THREE.Vector3(0, 0.1, -7.8);
-        const pCtrl = new THREE.Vector3(3.8, 2.6, -1.2);
+        const p0 = new THREE.Vector3(0, 0.15, -8.6);
+        const pCtrl = new THREE.Vector3(3.2, 2.4, -1.0);
         const pEnd = new THREE.Vector3(0, 1.8, 6.4);
 
         const ca = (1 - s) * (1 - s);
@@ -5875,40 +6917,20 @@
         );
         camera.lookAt(shipRoot.position.x, shipRoot.position.y + 0.15, shipRoot.position.z);
 
-        // PHASE 1: 0% - 25%: Decoupling Spine & Pylons Slide Outward
-        if (p < 0.25) {
-          const subP = p / 0.25;
-          morphLabel.innerText = 'STAGE 1: DECOUPLING Φ CENTRAL AXIS & SPINAL DISSOCIATION';
-          phiSpineMesh.scale.set(1 + subP * 1.8, 1 - subP * 0.75, 1);
-          phiRingMesh.scale.setScalar(1 + subP * 0.25);
-          phiRingMat.emissiveIntensity = 0.95 + subP * 1.6;
-          leftPylonGroup.position.x = 0.5 - subP * 0.5;
-          rightPylonGroup.position.x = -0.5 + subP * 0.5;
-          if (Math.random() < 0.08) playMechanicalStepSound(220);
+        // STAGE 1: 0% - 35%: Disengaging Docking Clamps & Center Catapult Alignment
+        if (p < 0.35) {
+          morphLabel.innerText = 'STAGE 1: DISENGAGING DOCKING CLAMPS // CENTERING ON CATAPULT AXIS';
+          if (Math.random() < 0.08) playMechanicalStepSound(240);
         }
-        // PHASE 2: 25% - 55%: Wings Traverse Along Telescoping Struts
-        else if (p < 0.55) {
-          const subP = (p - 0.25) / 0.3;
-          morphLabel.innerText = 'STAGE 2: EXTENDING WING STRUTS & TELESCOPING PYLONS';
-          phiGlyphGroup.visible = false;
-          leftWingGroup.position.x = -0.15 - subP * 1.65;
-          rightWingGroup.position.x = 0.15 + subP * 1.65;
-          leftWingGroup.scale.x = 0.02 + subP * 0.2;
-          rightWingGroup.scale.x = 0.02 + subP * 0.2;
-          if (Math.random() < 0.08) playMechanicalStepSound(340);
+        // STAGE 2: 35% - 70%: Avionics Online & Ion Manifold Spooling
+        else if (p < 0.70) {
+          morphLabel.innerText = 'STAGE 2: AVIONICS ONLINE // SPOOLING HIGH-ENERGY ION TURBINES';
+          if (Math.random() < 0.08) playMechanicalStepSound(380);
         }
-        // PHASE 3: 55% - 85%: Unfolding Hexagonal Solar Arrays
-        else if (p < 0.85) {
-          const subP = (p - 0.55) / 0.3;
-          morphLabel.innerText = 'STAGE 3: UNFOLDING HEX-CELL SOLAR ARRAYS (S-FOILS)';
-          leftWingGroup.scale.set(0.22 + subP * 0.78, 1, 0.22 + subP * 0.78);
-          rightWingGroup.scale.set(0.22 + subP * 0.78, 1, 0.22 + subP * 0.78);
-          if (Math.random() < 0.08) playMechanicalStepSound(480);
-        }
-        // PHASE 4: 85% - 100%: Ion Thruster Ignition & Camera Lock into Chase View
+        // STAGE 3: 70% - 100%: Ion Thruster Ignition & Catapult Launch
         else {
-          const subP = (p - 0.85) / 0.15;
-          morphLabel.innerText = 'STAGE 4: IGNITING TWIN ION MANIFOLDS // AVIONICS ONLINE';
+          const subP = (p - 0.70) / 0.30;
+          morphLabel.innerText = 'STAGE 3: FULL ION THRUSTER IGNITION // CATAPULT ORBITAL LAUNCH';
           for (let f of engineFlames) {
             f.visible = true;
             f.scale.setScalar(subP);
@@ -5923,6 +6945,14 @@
           setTimeout(() => morphHud.style.display = 'none', 400);
           introActive = false;
           transformationInProgress = false;
+          shipRoot.position.set(0, 0, 0);
+          shipRoot.rotation.set(0, 0, 0);
+          leftPylonGroup.position.set(0, 0, 0);
+          rightPylonGroup.position.set(0, 0, 0);
+          leftWingGroup.position.set(-1.8, 0, 0);
+          rightWingGroup.position.set(1.8, 0, 0);
+          leftWingGroup.scale.set(1, 1, 1);
+          rightWingGroup.scale.set(1, 1, 1);
           document.body.classList.remove('cinema-active');
           showNotification('FLIGHT CONTROL ONLINE // DEFEND THE SECTOR');
         }
@@ -6154,14 +7184,6 @@
       });
     });
 
-    // Wire Logo Mode Selector Buttons on Intro
-    document.querySelectorAll('#logo-mode-group .diff-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const mode = e.currentTarget.dataset.logomode;
-        setLogoMode(mode);
-      });
-    });
-
     // =========================================================================
     // 13. MAIN ANIMATION LOOP (PHYSICS, ENEMIES & BLACK HOLE GRAVITATIONAL PULL)
     // =========================================================================
@@ -6348,17 +7370,41 @@
       // Camera Positioning & Dynamic Lens FOV
       if (introActive) {
         if (!transformationInProgress) {
-          // Floating cinematic steadicam in front of 3D Phi glyph
-          phiGlyphGroup.rotation.z = Math.sin(time * 1.4) * 0.08;
-          phiAmberRingMesh.rotation.z = -time * 0.45;
-          if (typeof haloParticles !== 'undefined' && haloParticles) haloParticles.rotation.z = time * 0.22;
-          if (typeof phiGlintLight1 !== 'undefined' && phiGlintLight1) {
-            phiGlintLight1.position.set(Math.sin(time * 1.8) * 2.8, Math.cos(time * 1.8) * 2.8, -3.2);
+          // 3D Starfighter floating gracefully in the RIGHT inspection bay (X = -3.0, NDC +0.33)
+          shipRoot.position.set(-3.0, -0.2 + Math.sin(time * 0.9) * 0.08, 0.0);
+          // 3/4 beauty angle: angled so both hexagonal wings, cockpit canopy, and chrome edges are clearly visible
+          shipRoot.rotation.set(0.06, 0.38 + Math.sin(time * 0.6) * 0.05, 0.02);
+
+          // 3D Sacred Phi Crest floating gracefully above the starfighter in the right showroom
+          if (phiGlyphGroup && phiGlyphGroup.visible) {
+            phiGlyphGroup.scale.set(0.24, 0.24, 0.24);
+            phiGlyphGroup.position.set(-3.0, 3.1 + Math.sin(time * 1.1) * 0.05, -0.2);
+            phiGlyphGroup.rotation.z = Math.sin(time * 1.2) * 0.08;
+            phiAmberRingMesh.rotation.z = -time * 0.45;
+            if (typeof haloParticles !== 'undefined' && haloParticles) haloParticles.rotation.z = time * 0.22;
+            if (typeof phiGlintLight1 !== 'undefined' && phiGlintLight1) {
+              phiGlintLight1.position.set(-3.0 + Math.sin(time * 1.8) * 0.9, 3.1 + Math.cos(time * 1.8) * 0.9, -0.8);
+            }
+            if (typeof phiGlintLight2 !== 'undefined' && phiGlintLight2) {
+              phiGlintLight2.position.set(-3.0 - Math.sin(time * 1.4) * 0.9, 3.1 - Math.cos(time * 1.4) * 0.9, -0.8);
+            }
           }
-          if (typeof phiGlintLight2 !== 'undefined' && phiGlintLight2) {
-            phiGlintLight2.position.set(-Math.sin(time * 1.4) * 2.8, -Math.cos(time * 1.4) * 2.8, -3.2);
+
+          // Background Hangar Docking Fleet (gentle idle hover & forcefield pulses)
+          if (hangarFleetGroup && hangarFleetGroup.visible) {
+            hangarFleetGroup.children.forEach(pad => {
+              if (pad.userData && pad.userData.miniShip) {
+                pad.userData.miniShip.rotation.y = Math.sin(time * 0.8 + pad.position.x) * 0.15;
+              }
+              pad.children.forEach(child => {
+                if (child.userData && child.userData.isForcefield) {
+                  child.material.opacity = child.userData.baseOpacity + Math.sin(time * 3.5 + pad.position.x) * 0.12;
+                }
+              });
+            });
           }
-          camera.position.set(Math.sin(time * 0.7) * 0.35, 0.1 + Math.cos(time * 0.9) * 0.15, -7.8);
+
+          camera.position.set(0, 0.15, -8.6);
           camera.lookAt(0, 0, 0);
         }
       } else if (isCockpitView) {
@@ -6403,14 +7449,21 @@
         const m = activeMissiles[i];
         m.userData.lifetime += delta;
 
-        // Proportional Navigation Guidance
-        const tgt = m.userData.target;
-        if (tgt && tgt.parent) {
-          const toTgt = tgt.position.clone().sub(m.position).normalize();
-          m.userData.dir.lerp(toTgt, delta * 5.4).normalize();
+        // Dynamic In-Flight Target Tracking & Smart Retargeting
+        let tgt = m.userData.target;
+        if (!tgt || !tgt.parent || (tgt.userData && tgt.userData.health <= 0)) {
+          // Re-acquire another target in mid-flight if original died!
+          tgt = findBestMissileTarget(m.position, true);
+          m.userData.target = tgt;
         }
 
-        m.userData.speed = Math.min(135, m.userData.speed + delta * 52);
+        if (tgt && tgt.parent) {
+          const toTgt = tgt.position.clone().sub(m.position).normalize();
+          // High tracking agility: curves aggressively toward the target!
+          m.userData.dir.lerp(toTgt, Math.min(1.0, delta * 9.8)).normalize();
+        }
+
+        m.userData.speed = Math.min(150, m.userData.speed + delta * 65);
         m.position.addScaledVector(m.userData.dir, m.userData.speed * delta);
         m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, -1), m.userData.dir);
 
@@ -6430,6 +7483,7 @@
               scene.remove(en);
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
+              recordEncounteredShip(en.userData.type);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -6572,6 +7626,7 @@
               scene.remove(en);
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
+              recordEncounteredShip(en.userData.type);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -6648,6 +7703,663 @@
       renderer.render(scene, camera);
     }
 
+
+    // =========================================================================
+    // 14. IMPERIAL STARSHIP ARCHIVES // 3D FLEET HANGAR & MUSEUM
+    // =========================================================================
+    const STORAGE_KEY_ENCOUNTERED = 'phi_encountered_ships';
+
+    function getEncounteredShips() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_ENCOUNTERED);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list)) return list;
+        }
+      } catch (e) {}
+      // By default, sectors 1 & 2 are known from initial flight academy briefing
+      return ['eta2', 'awing'];
+    }
+
+    function recordEncounteredShip(type) {
+      if (!type) return;
+      try {
+        const list = getEncounteredShips();
+        if (!list.includes(type)) {
+          list.push(type);
+          localStorage.setItem(STORAGE_KEY_ENCOUNTERED, JSON.stringify(list));
+        }
+      } catch(e) {}
+    }
+
+    const FLEET_CATALOG = [
+      // IMPERIAL STARFIGHTERS (PLAYER)
+      {
+        id: 'obsidian',
+        category: 'imperial',
+        name: 'TIE-PHI OBSIDIAN INTERCEPTOR',
+        classTag: 'CAZA DE SUPERIORIDAD ESPACIAL // IMPERIAL',
+        maker: 'Sienar Fleet Systems // Edición Carbón Obsidiana',
+        role: 'Intercepción rápida y combate orbital de alta precisión.',
+        desc: 'Caza imperial insignia con blindaje negro carbón pulido y bordes metálicos en cromo brillante reflectante para óptima visibilidad en el vacío espacial.',
+        physics: 'Φ = L_☉ / (4π r²) • Resistencia al Flujo Radiativo y Propulsión Iónica',
+        hp: '100 HP', hpPct: 65,
+        speed: '115 MGLT', speedPct: 75,
+        agility: '1.5 rad/s', agilityPct: 75,
+        firepower: 'Láseres Gemelos L-s9.3 + 4 Misiles Conmoción', firepowerPct: 80,
+        unlockText: 'DESBLOQUEADA: Caza predeterminado para cadetes imperiales.'
+      },
+      {
+        id: 'fleet_white',
+        category: 'imperial',
+        name: 'TIE-PHI FLEET WHITE INTERCEPTOR',
+        classTag: 'PATRULLA DE FLOTA ESTELAR // IMPERIAL',
+        maker: 'Sienar Fleet Systems // Blindaje Blanco de Flota',
+        role: 'Escolta pesada de destructores estelares y patrulla.',
+        desc: 'Variante de alta visibilidad naval con blindaje blanco cerámico militar, cabina esférica clásica TIE y radiadores solares de duracero.',
+        physics: 'v_orb = √(G·M_⊕ / r) • Inserción Orbital Circular',
+        hp: '100 HP', hpPct: 65,
+        speed: '115 MGLT', speedPct: 75,
+        agility: '1.5 rad/s', agilityPct: 75,
+        firepower: 'Láseres Gemelos L-s9.3 + 4 Misiles Conmoción', firepowerPct: 80,
+        unlockText: 'DESBLOQUEADA: Disponible desde el hangar principal.'
+      },
+      {
+        id: 'crimson',
+        category: 'imperial',
+        name: 'TIE-PHI CRIMSON GUARD INTERCEPTOR',
+        classTag: 'ESCOLTA DE LA GUARDIA REAL // ÉLITE',
+        maker: 'Sienar Fleet Systems // Guardia del Emperador',
+        role: 'Intercepción de ataque rápido y escolta pretoriana.',
+        desc: 'Equipado con aleación carmesí ceremonial de la Guardia Real del Emperador, motores iónicos sobrecargados y deflectores de escudo reforzados.',
+        physics: 'F = q(E + v × B) • Escudos Magnetosféricos Ionizados',
+        hp: '120 HP', hpPct: 78,
+        speed: '125 MGLT', speedPct: 82,
+        agility: '2.0 rad/s', agilityPct: 85,
+        firepower: 'Láseres de Pulso de Iones Gemelos Reforzados', firepowerPct: 85,
+        unlockText: 'DESBLOQUEABLE: Supera la campaña en dificultad CADETE (Fácil).'
+      },
+      {
+        id: 'shadow',
+        category: 'imperial',
+        name: 'TIE-PHI SHADOW SPEC-OPS',
+        classTag: 'INFILTRADOR SIGILOSO DE OPERACIONES NEGRAS',
+        maker: 'Sienar Intelligence Skunkworks',
+        role: 'Reconocimiento táctico y ataques de precisión sigilosa.',
+        desc: 'Recubierto con polímero negro absorbente de radiación radar y sensores pasivos. Diseñado para atacar sin ser detectado en el espectro visual.',
+        physics: 'Δφ = (6π G M_☉) / (c² a (1-e²)) • Rutas de Inserción Relativista',
+        hp: '90 HP', hpPct: 58,
+        speed: '135 MGLT', speedPct: 90,
+        agility: '2.5 rad/s', agilityPct: 92,
+        firepower: 'Cañones Láser de Plasma Frío Silenciado', firepowerPct: 88,
+        unlockText: 'DESBLOQUEABLE: Supera la campaña en dificultad PILOTO (Medio).'
+      },
+      {
+        id: 'advanced',
+        category: 'imperial',
+        name: 'TIE ADVANCED x1 (LORD EDITION)',
+        classTag: 'PROTOTIPO DE COMANDO EXPERIMENTAL',
+        maker: 'Sienar Fleet Systems // Lord Vader Custom',
+        role: 'Superioridad espacial absoluta y liderazgo de flota.',
+        desc: 'El legendario prototipo de alas dobladas en ángulo, hiperimpulsor autónomo Clase 1 y doble generador de escudos deflectores militares.',
+        physics: 'r_s = 2GM / c² • Vórtice Gravitatorio de Singularidad',
+        hp: '160 HP', hpPct: 95,
+        speed: '145 MGLT', speedPct: 95,
+        agility: '2.8 rad/s', agilityPct: 96,
+        firepower: 'Cañones Pesados Turboláser Dobles L-s9.3', firepowerPct: 98,
+        unlockText: 'DESBLOQUEABLE: Supera la campaña en dificultad AS (Difícil).'
+      },
+
+      // REBEL ENEMY / BOSS FLEET (10 SHIPS)
+      {
+        id: 'eta2',
+        category: 'rebel',
+        name: 'ETA-2 REBEL ACTIS INTERCEPTOR',
+        classTag: 'INTERCEPTOR LIGERO DE CAZA // SECTOR 1',
+        maker: 'Kuat Systems Engineering',
+        role: 'Exploración rápida y dogfight en la corona solar.',
+        desc: 'Caza ultraligero con radiadores S-foils en las puntas de las alas, cúpula de droide astromecánico R2 socket y morro en cuña aerodinámica.',
+        physics: 'Sector 1 (Sol): Φ = L_☉ / (4π r²) • Dispersión por Presión Fotónica',
+        hp: '2 HP (Juego)', hpPct: 20,
+        speed: '130 MGLT', speedPct: 85,
+        agility: '1.5 rad/s', agilityPct: 80,
+        firepower: '2 Cañones Láser Gemelos + 2 Iones Secundarios', firepowerPct: 40,
+        unlockText: 'ENFRENTADO EN SECTOR 1 (EL SOL).'
+      },
+      {
+        id: 'awing',
+        category: 'rebel',
+        name: 'RZ-1 REBEL A-WING INTERCEPTOR',
+        classTag: 'INTERCEPTOR DE ALTA VELOCIDAD // SECTOR 2',
+        maker: 'Alliance Underground Engineering',
+        role: 'Ataques relámpago y distracción a velocidad extrema.',
+        desc: 'Fuselaje en cuña con dos turbinas gemelas Novaldex de gran aceleración y dos cañones láser pivotantes de 360 grados.',
+        physics: 'Sector 2 (Mercurio): Δφ = (6π G M_☉) / (c² a (1-e²)) • Precesión Relativista',
+        hp: '2 HP (Juego)', hpPct: 20,
+        speed: '150 MGLT', speedPct: 98,
+        agility: '2.4 rad/s', agilityPct: 98,
+        firepower: '2 Cañones Láser Pivotantes Borstel RG-9', firepowerPct: 45,
+        unlockText: 'ENFRENTADO EN SECTOR 2 (MERCURIO).'
+      },
+      {
+        id: 'bwing',
+        category: 'rebel',
+        name: 'A/SF-01 B-WING HEAVY FIGHTER',
+        classTag: 'ASALTO PESADO ANTICAPITAL // SECTOR 3',
+        maker: 'Slayn & Korpil',
+        role: 'Demolición de fragatas y estaciones espaciales.',
+        desc: 'Diseño asimétrico con cabina giroscópica autoestabilizada que mantiene el horizonte del piloto mientras el ala principal rota.',
+        physics: 'Sector 3 (Venus): dP/dr = -ρ·g • Superrotación Atmosférica y Cizalladura',
+        hp: '4 HP (Juego)', hpPct: 45,
+        speed: '90 MGLT', speedPct: 55,
+        agility: '1.1 rad/s', agilityPct: 55,
+        firepower: 'Cañón de Iones Pesado + Torpedos de Protones', firepowerPct: 75,
+        unlockText: 'ENFRENTADO EN SECTOR 3 (VENUS).'
+      },
+      {
+        id: 'ywing',
+        category: 'rebel',
+        name: 'BTL-A4 REBEL Y-WING BOMBER',
+        classTag: 'BOMBARDERO DE IONES PESADO // SECTOR 4',
+        maker: 'Koensayr Manufacturing',
+        role: 'Bombardeo orbital de superficie e inhabilitación de naves.',
+        desc: 'Cabina blindada con góndolas de motores despojadas de paneles cosméticos para mantenimiento rápido en campaña.',
+        physics: 'Sector 4 (Luna): T_orb = T_rot • Acoplamiento de Mareas y Gravedad en Vacío',
+        hp: '5 HP (Juego)', hpPct: 55,
+        speed: '80 MGLT', speedPct: 45,
+        agility: '0.9 rad/s', agilityPct: 48,
+        firepower: 'Torreta de Iones Doble + Lanzador de Protones', firepowerPct: 80,
+        unlockText: 'ENFRENTADO EN SECTOR 4 (LA LUNA).'
+      },
+      {
+        id: 'xwing',
+        category: 'rebel',
+        name: 'T-65B X-WING STARFIGHTER',
+        classTag: 'CAZA DE COMBATE MULTIPROPÓSITO // SECTOR 5',
+        maker: 'Incom Corporation',
+        role: 'Superioridad espacial y ataque a objetivos estratégicos.',
+        desc: 'El caza rebelde más icónico, con 4 alas en configuración S-foil móviles, 4 cañones láser Taim & Bak y socket R2.',
+        physics: 'Sector 5 (Tierra): v_orb = √(G·M_⊕ / r) • Geodésicas de Vis-Viva y Reentrada',
+        hp: '3 HP (Juego)', hpPct: 35,
+        speed: '100 MGLT', speedPct: 70,
+        agility: '1.4 rad/s', agilityPct: 72,
+        firepower: '4 Cañones Láser Taim & Bak KX9 + Torpedos', firepowerPct: 70,
+        unlockText: 'ENFRENTADO EN SECTOR 5 (LA TIERRA).'
+      },
+      {
+        id: 'v19',
+        category: 'rebel',
+        name: 'V-19 TORRENT TRI-FIGHTER',
+        classTag: 'CAZA TRIPLAZA DE ASALTO RÁPIDO // SECTOR 6',
+        maker: 'Slayn & Korpil',
+        role: 'Defensa de flotas y escolta con alas articuladas.',
+        desc: 'Posee dos alas laterales abatibles y una gran aleta dorsal articulada que rota 90 grados al entrar en modo de vuelo.',
+        physics: 'Sector 6 (Marte): d_Roche ≈ 2.44 R (ρ_M/ρ_m)^(1/3) • Ruptura por Límite de Roche',
+        hp: '3 HP (Juego)', hpPct: 35,
+        speed: '110 MGLT', speedPct: 75,
+        agility: '1.5 rad/s', agilityPct: 75,
+        firepower: '2 Cañones Láser de Alta Cadencia', firepowerPct: 60,
+        unlockText: 'ENFRENTADO EN SECTOR 6 (MARTE / FOBOS).'
+      },
+      {
+        id: 'arc170',
+        category: 'rebel',
+        name: 'ARC-170 HEAVY RECON STRIKE',
+        classTag: 'CAZA PESADO DE LARGO ALCANCE // SECTOR 7',
+        maker: 'Incom / Subpro Corporation',
+        role: 'Incursiones profundas en sectores no cartografiados.',
+        desc: 'Caza masivo con 3 tripulantes, alerones de enfriamiento sobredimensionados para hiperviajes y cañones montados en extremos alares.',
+        physics: 'Sector 7 (Ceres): F_i = ∑ G m_i m_j / r_ij² • Resonancias de Kirkwood de 3 Cuerpos',
+        hp: '5 HP (Juego)', hpPct: 60,
+        speed: '95 MGLT', speedPct: 65,
+        agility: '1.2 rad/s', agilityPct: 60,
+        firepower: 'Cañones Medios Gemelos + Torretas Traseras de Popa', firepowerPct: 82,
+        unlockText: 'ENFRENTADO EN SECTOR 7 (CINTURÓN DE ASTEROIDES).'
+      },
+      {
+        id: 'falcon',
+        category: 'rebel',
+        name: 'YT-1300 REBEL HEAVY FREIGHTER',
+        classTag: 'CARGUERO CORELLIANO HIPERMODIFICADO // SECTOR 8',
+        maker: 'Corellian Engineering Corporation (Modificado)',
+        role: 'Evasión de bloqueos e interdicción armada pesada.',
+        desc: 'El legendario Halcón Milenario: casco en forma de disco con mandíbulas de carga delanteras, cabina lateral desplazada y torretas cuádruples.',
+        physics: 'Sector 8 (Júpiter): F = q(E + v × B) • Resistencia a la Radiación Sincrotrón',
+        hp: '7 HP (Juego)', hpPct: 75,
+        speed: '105 MGLT', speedPct: 72,
+        agility: '0.8 rad/s', agilityPct: 45,
+        firepower: 'Baterías Láser Cuádruples AG-2G Dorsal y Ventral', firepowerPct: 90,
+        unlockText: 'ENFRENTADO EN SECTOR 8 (JÚPITER).'
+      },
+      {
+        id: 'nebulon',
+        category: 'rebel',
+        name: 'FRAGATA DE ESCOLTA NEBULON-B',
+        classTag: 'NAVE CAPITAL DE ESCOLTA Y MÉDICA // SECTOR 9',
+        maker: 'Kuat Drive Yards',
+        role: 'Soporte táctico de flota y defensa contra escuadrones.',
+        desc: 'Estructura cruciforme de 300 metros con una larga espina dorsal de interconexión, pods de turboláseres y hangares internos de cazas.',
+        physics: 'Sector 9 (Saturno): Ω(r) = √(GM / r³) • Cizalladura Diferencial Kepleriana',
+        hp: '10 HP (Juego)', hpPct: 88,
+        speed: '60 MGLT', speedPct: 35,
+        agility: '0.5 rad/s', agilityPct: 30,
+        firepower: '12 Turboláseres Militares + 12 Cañones Láser + 2 Rayos Tractores', firepowerPct: 94,
+        unlockText: 'ENFRENTADA EN SECTOR 9 (SATURNO).'
+      },
+      {
+        id: 'corvette',
+        category: 'rebel',
+        name: 'CR90 CORELLIAN CORVETTE (JEFE FINAL)',
+        classTag: 'CORBETA DE BLOQUEO NAVAL // SECTOR 10',
+        maker: 'Corellian Engineering Corporation',
+        role: 'Nave insignia de ruptura de bloqueos y comando militar.',
+        desc: 'Nave capital insignia con 11 gigantescos motores iónicos de popa dispuestos en racimo, puente martillo y baterías de turboláseres pesados dobles.',
+        physics: 'Sector 10 (Singularidad): r_s = 2GM/c² • Marea Infinita y Espaguetificación',
+        hp: '16 HP (Juego)', hpPct: 100,
+        speed: '75 MGLT', speedPct: 50,
+        agility: '0.35 rad/s', agilityPct: 25,
+        firepower: 'Baterías Dobles Turboláser Taim & Bak H9 en Torretas', firepowerPct: 100,
+        unlockText: 'ENFRENTADA EN SECTOR 10 (SINGULARIDAD / JEFE FINAL).'
+      }
+    ];
+
+    let museumActive = false;
+    let museumCurrentShipId = 'obsidian';
+    let museumCurrentCategory = 'imperial';
+    let museumScene, museumCamera, museumRenderer;
+    let museumShipGroup, museumPedestalGroup;
+    let museumAutoRotate = true;
+    let museumIsDragging = false;
+    let museumPrevPointerX = 0;
+    let museumPrevPointerY = 0;
+    let museumCamDist = 6.2;
+    let museumTargetRotY = 0.4;
+    let museumTargetRotX = 0.25;
+
+    function initFleetMuseum() {
+      const canvas = document.getElementById('fleet-museum-3d-canvas');
+      if (!canvas) return;
+
+      museumScene = new THREE.Scene();
+      museumCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+      museumCamera.position.set(0, 2.2, museumCamDist);
+
+      museumRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      museumRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      museumRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Studio Lighting for Ship Inspection
+      const ambLight = new THREE.AmbientLight(0xffffff, 0.85);
+      museumScene.add(ambLight);
+
+      const keySpot = new THREE.DirectionalLight(0xfff5ea, 1.8);
+      keySpot.position.set(5, 8, 7);
+      museumScene.add(keySpot);
+
+      const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 1.4);
+      rimLightCyan.position.set(-7, 3, -6);
+      museumScene.add(rimLightCyan);
+
+      const bottomRimAmber = new THREE.DirectionalLight(0xf59e0b, 1.0);
+      bottomRimAmber.position.set(0, -5, 4);
+      museumScene.add(bottomRimAmber);
+
+      // Docking Inspection Pedestal
+      museumPedestalGroup = new THREE.Group();
+      museumScene.add(museumPedestalGroup);
+
+      const baseGeo = new THREE.CylinderGeometry(3.6, 3.8, 0.25, 48);
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.2 });
+      const base = new THREE.Mesh(baseGeo, baseMat);
+      base.position.y = -1.6;
+      museumPedestalGroup.add(base);
+
+      const ringGeo = new THREE.TorusGeometry(3.6, 0.04, 16, 64);
+      ringGeo.rotateX(Math.PI / 2);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.y = -1.47;
+      museumPedestalGroup.add(ring);
+
+      const gridHelper = new THREE.GridHelper(7.2, 12, 0x00f0ff, 0x1e293b);
+      gridHelper.position.y = -1.46;
+      museumPedestalGroup.add(gridHelper);
+
+      // Ship Root
+      museumShipGroup = new THREE.Group();
+      museumScene.add(museumShipGroup);
+
+      // Mouse Drag & Touch Orbit Controls
+      canvas.addEventListener('pointerdown', (e) => {
+        museumIsDragging = true;
+        museumPrevPointerX = e.clientX;
+        museumPrevPointerY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (!museumIsDragging) return;
+        const dx = e.clientX - museumPrevPointerX;
+        const dy = e.clientY - museumPrevPointerY;
+        museumPrevPointerX = e.clientX;
+        museumPrevPointerY = e.clientY;
+
+        museumTargetRotY += dx * 0.008;
+        museumTargetRotX = Math.max(-0.6, Math.min(0.8, museumTargetRotX + dy * 0.008));
+      });
+
+      canvas.addEventListener('pointerup', (e) => {
+        museumIsDragging = false;
+        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+      });
+
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        museumCamDist = Math.max(3.0, Math.min(12.0, museumCamDist + e.deltaY * 0.006));
+      }, { passive: false });
+
+      // Buttons wiring
+      document.getElementById('btn-close-fleet-museum').addEventListener('click', closeFleetMuseum);
+      document.getElementById('btn-open-fleet-museum-dossier').addEventListener('click', openFleetMuseum);
+      const stageBtn = document.getElementById('btn-open-fleet-museum-stage');
+      if (stageBtn) stageBtn.addEventListener('click', openFleetMuseum);
+
+      document.getElementById('tab-museum-imperial').addEventListener('click', () => {
+        setMuseumCategory('imperial');
+      });
+      document.getElementById('tab-museum-rebel').addEventListener('click', () => {
+        setMuseumCategory('rebel');
+      });
+
+      document.getElementById('btn-museum-toggle-spin').addEventListener('click', () => {
+        museumAutoRotate = !museumAutoRotate;
+        document.getElementById('btn-museum-toggle-spin').innerText = museumAutoRotate ? '🔄 AUTO-ROTACIÓN: ON' : '⏸️ AUTO-ROTACIÓN: OFF';
+      });
+
+      document.getElementById('btn-museum-reset-cam').addEventListener('click', () => {
+        museumTargetRotX = 0.25;
+        museumTargetRotY = 0.4;
+        museumCamDist = 6.2;
+      });
+
+      document.getElementById('btn-museum-prev-ship').addEventListener('click', () => {
+        navigateMuseumShip(-1);
+      });
+      document.getElementById('btn-museum-next-ship').addEventListener('click', () => {
+        navigateMuseumShip(1);
+      });
+
+      window.addEventListener('resize', onMuseumResize);
+    }
+
+    function onMuseumResize() {
+      if (!museumActive || !museumRenderer || !museumCamera) return;
+      const canvas = document.getElementById('fleet-museum-3d-canvas');
+      if (!canvas) return;
+      const stage = canvas.parentElement;
+      const w = stage.clientWidth || (window.innerWidth - 360);
+      const h = (stage.clientHeight - 230) || (window.innerHeight - 295);
+      if (w > 10 && h > 10) {
+        museumCamera.aspect = w / h;
+        museumCamera.updateProjectionMatrix();
+        museumRenderer.setSize(w, h);
+      }
+    }
+
+    function openFleetMuseum() {
+      museumActive = true;
+      document.getElementById('fleet-museum-modal').style.display = 'flex';
+      if (!museumRenderer) {
+        initFleetMuseum();
+      }
+      onMuseumResize();
+      renderMuseumSidebarList();
+      loadFleetMuseumShip(museumCurrentShipId);
+      animateFleetMuseum();
+    }
+
+    function closeFleetMuseum() {
+      museumActive = false;
+      document.getElementById('fleet-museum-modal').style.display = 'none';
+    }
+
+    function setMuseumCategory(cat) {
+      museumCurrentCategory = cat;
+      document.getElementById('tab-museum-imperial').classList.toggle('active', cat === 'imperial');
+      document.getElementById('tab-museum-rebel').classList.toggle('active', cat === 'rebel');
+      renderMuseumSidebarList();
+
+      // Pick first ship in that category
+      const firstInCat = FLEET_CATALOG.find(s => s.category === cat);
+      if (firstInCat) {
+        loadFleetMuseumShip(firstInCat.id);
+      }
+    }
+
+    function renderMuseumSidebarList() {
+      const container = document.getElementById('museum-ship-list-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const unlockedPlayer = getUnlockedShips();
+      const encounteredEnemies = getEncounteredShips();
+
+      const filtered = FLEET_CATALOG.filter(s => s.category === museumCurrentCategory);
+
+      filtered.forEach(ship => {
+        const card = document.createElement('div');
+        card.className = `museum-ship-card ${ship.id === museumCurrentShipId ? 'active' : ''}`;
+        card.dataset.shipId = ship.id;
+
+        let isUnlocked = false;
+        let badgeClass = 'badge-unlocked';
+        let badgeText = 'DESBLOQUEADO';
+
+        if (ship.category === 'imperial') {
+          isUnlocked = unlockedPlayer.includes(ship.id);
+          badgeClass = isUnlocked ? 'badge-unlocked' : 'badge-locked';
+          badgeText = isUnlocked ? 'DESBLOQUEADA' : 'BLOQUEADA 🔒';
+        } else {
+          isUnlocked = encounteredEnemies.includes(ship.id);
+          badgeClass = isUnlocked ? 'badge-encountered' : 'badge-locked';
+          badgeText = isUnlocked ? 'ENFRENTADA 💥' : 'CLASIFICADA 📡';
+        }
+
+        card.innerHTML = `
+          <div class="museum-ship-card-title">
+            <span>${ship.name}</span>
+            <span class="museum-ship-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div class="museum-ship-card-role">${ship.classTag}</div>
+        `;
+
+        card.addEventListener('click', () => {
+          loadFleetMuseumShip(ship.id);
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function loadFleetMuseumShip(shipId) {
+      museumCurrentShipId = shipId;
+      const ship = FLEET_CATALOG.find(s => s.id === shipId) || FLEET_CATALOG[0];
+
+      // Update active cards
+      document.querySelectorAll('.museum-ship-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.shipId === shipId);
+      });
+
+      const unlockedPlayer = getUnlockedShips();
+      const encounteredEnemies = getEncounteredShips();
+      let isUnlocked = true;
+
+      if (ship.category === 'imperial') {
+        isUnlocked = unlockedPlayer.includes(ship.id);
+      } else {
+        isUnlocked = encounteredEnemies.includes(ship.id);
+      }
+
+      // Fill Technical Dossier
+      document.getElementById('m-ship-class-tag').innerText = ship.classTag;
+      document.getElementById('m-ship-name').innerText = ship.name;
+      document.getElementById('m-ship-maker').innerText = ship.maker;
+      document.getElementById('m-ship-desc').innerText = ship.desc;
+      document.getElementById('m-ship-physics').innerText = ship.physics;
+
+      document.getElementById('m-stat-hp-val').innerText = ship.hp;
+      document.getElementById('m-stat-hp-bar').style.width = `${ship.hpPct}%`;
+
+      document.getElementById('m-stat-speed-val').innerText = ship.speed;
+      document.getElementById('m-stat-speed-bar').style.width = `${ship.speedPct}%`;
+
+      document.getElementById('m-stat-agility-val').innerText = ship.agility;
+      document.getElementById('m-stat-agility-bar').style.width = `${ship.agilityPct}%`;
+
+      document.getElementById('m-stat-firepower-val').innerText = ship.firepower;
+      document.getElementById('m-stat-firepower-bar').style.width = `${ship.firepowerPct}%`;
+
+      document.getElementById('m-ship-unlock-condition').innerText = ship.unlockText;
+
+      const badgeCont = document.getElementById('m-ship-badge-container');
+      const pillStatus = document.getElementById('museum-stage-status-pill');
+
+      if (ship.category === 'imperial') {
+        if (isUnlocked) {
+          badgeCont.innerHTML = '<span class="museum-ship-badge badge-unlocked">🟢 DESBLOQUEADA PARA COMBATE</span>';
+          pillStatus.innerText = '🟢 ESTADO: TOTALMENTE OPERACIONAL Y DESBLOQUEADA';
+          pillStatus.style.borderColor = '#22c55e';
+          pillStatus.style.color = '#22c55e';
+        } else {
+          badgeCont.innerHTML = '<span class="museum-ship-badge badge-locked">🔒 BLOQUEADA // REQUIERE CAMPAÑA</span>';
+          pillStatus.innerText = '🔒 ESTADO: BLOQUEADA EN PROTOCOLO DE SEGURIDAD';
+          pillStatus.style.borderColor = '#ef4444';
+          pillStatus.style.color = '#ef4444';
+        }
+      } else {
+        if (isUnlocked) {
+          badgeCont.innerHTML = '<span class="museum-ship-badge badge-encountered">💥 TELEMETRÍA REGISTRADA // DERROTADA</span>';
+          pillStatus.innerText = '💥 ESTADO: NAVE ENFRENTADA // REGISTRO DE VUELO ANALIZADO';
+          pillStatus.style.borderColor = '#38bdf8';
+          pillStatus.style.color = '#38bdf8';
+        } else {
+          badgeCont.innerHTML = '<span class="museum-ship-badge badge-locked">📡 ARCHIVO CLASIFICADO // SECTOR ENIGMA</span>';
+          pillStatus.innerText = '📡 ESTADO: ENIGMA // NAVE NO ENFRENTADA AÚN EN CAMPAÑA';
+          pillStatus.style.borderColor = '#f59e0b';
+          pillStatus.style.color = '#f59e0b';
+        }
+      }
+
+      // Update index counter
+      const curIdx = FLEET_CATALOG.findIndex(s => s.id === shipId) + 1;
+      document.getElementById('museum-ship-index-counter').innerText = `${curIdx} / ${FLEET_CATALOG.length}`;
+
+      // Build 3D Mesh for Inspection Platform!
+      while (museumShipGroup.children.length > 0) {
+        museumShipGroup.remove(museumShipGroup.children[0]);
+      }
+
+      let rawMesh = null;
+      if (ship.category === 'imperial') {
+        const cfg = STARFIGHTERS[ship.id] || STARFIGHTERS.obsidian;
+        // Build mini starfighter
+        rawMesh = createMiniatureFighter(cfg, false);
+      } else {
+        // Rebel warship
+        switch (ship.id) {
+          case 'eta2': rawMesh = buildEta2Mesh(); break;
+          case 'awing': rawMesh = buildAWingMesh(); break;
+          case 'bwing': rawMesh = buildBWingMesh(); break;
+          case 'ywing': rawMesh = buildYWingMesh(); break;
+          case 'xwing': rawMesh = buildXWingMesh(); break;
+          case 'v19': rawMesh = buildV19TorrentMesh(); break;
+          case 'arc170': rawMesh = buildArc170Mesh(); break;
+          case 'falcon': rawMesh = buildFalconMesh(); break;
+          case 'nebulon': rawMesh = buildNebulonFrigateMesh(); break;
+          case 'corvette': rawMesh = buildCorvetteMesh(); break;
+          default: rawMesh = buildXWingMesh(); break;
+        }
+      }
+
+      if (rawMesh) {
+        // Center at (0, 0, 0) and normalize scale so all ships fit perfectly!
+        const box = new THREE.Box3().setFromObject(rawMesh);
+        const sphere = new THREE.Sphere();
+        box.getBoundingSphere(sphere);
+
+        rawMesh.position.sub(sphere.center);
+
+        // Ideal showroom view radius
+        const targetRadius = 2.4;
+        const scale = targetRadius / Math.max(0.6, sphere.radius || 1.0);
+        rawMesh.scale.setScalar(scale);
+
+        // If locked/classified, display with cool holographic tactical wireframe!
+        if (!isUnlocked) {
+          const meshes = [];
+          rawMesh.traverse(child => { if (child.isMesh) meshes.push(child); });
+          const holoColor = ship.category === 'imperial' ? 0xef4444 : 0x00f0ff;
+          meshes.forEach(child => {
+            child.material = new THREE.MeshBasicMaterial({
+              color: holoColor,
+              wireframe: true,
+              transparent: true,
+              opacity: 0.65
+            });
+          });
+
+          // Add a holographic security containment shield sphere around the locked ship
+          const shieldGeo = new THREE.SphereGeometry(2.6, 24, 24);
+          const shieldMat = new THREE.MeshBasicMaterial({
+            color: holoColor,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+          });
+          const shield = new THREE.Mesh(shieldGeo, shieldMat);
+          rawMesh.add(shield);
+        }
+
+        museumShipGroup.add(rawMesh);
+      }
+    }
+
+    function navigateMuseumShip(dir) {
+      const idx = FLEET_CATALOG.findIndex(s => s.id === museumCurrentShipId);
+      let nextIdx = idx + dir;
+      if (nextIdx < 0) nextIdx = FLEET_CATALOG.length - 1;
+      if (nextIdx >= FLEET_CATALOG.length) nextIdx = 0;
+
+      const nextShip = FLEET_CATALOG[nextIdx];
+      if (nextShip.category !== museumCurrentCategory) {
+        setMuseumCategory(nextShip.category);
+      }
+      loadFleetMuseumShip(nextShip.id);
+    }
+
+    function animateFleetMuseum() {
+      if (!museumActive) return;
+      requestAnimationFrame(animateFleetMuseum);
+
+      if (museumAutoRotate && !museumIsDragging) {
+        museumTargetRotY += 0.012;
+      }
+
+      museumShipGroup.rotation.y += (museumTargetRotY - museumShipGroup.rotation.y) * 0.12;
+      museumShipGroup.rotation.x += (museumTargetRotX - museumShipGroup.rotation.x) * 0.12;
+
+      // Orbit camera positioning
+      museumCamera.position.set(0, 1.8, museumCamDist);
+      museumCamera.lookAt(0, 0, 0);
+
+      // Pedestal slow spin
+      museumPedestalGroup.rotation.y += 0.003;
+
+      museumRenderer.render(museumScene, museumCamera);
+    }
+
+
+    initFleetMuseum();
     animate();
 
     // Resize Handler

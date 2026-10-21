@@ -311,7 +311,7 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
           <div className="flex-1 w-full h-full relative">
             <iframe
               key={iframeKey}
-              src={getAssetUrl('/phi-fighter/index.html')}
+              src={`${getAssetUrl('/phi-fighter/index.html')}?lang=${lang}`}
               className="w-full h-full border-0 block"
               title={lang === 'en' ? 'Project Phi-Fighter 3D Game' : 'Proyecto Phi-Fighter: Juego 3D'}
               allow="autoplay; fullscreen"

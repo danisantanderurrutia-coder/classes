@@ -162,7 +162,7 @@ def create_sun_spacetime_background(W, H):
 
     return base
 
-def generate_card(lang='es', filename='public/instagram_post_preview.jpg'):
+def :
     # 1. Base Sun + Spacetime Curvature Grid Background
     base = create_sun_spacetime_background(W, H)
 
@@ -395,4 +395,4 @@ generate_card(lang='en', filename='public/instagram_post_en.jpg')
 # Generate Spanish version
 generate_card(lang='es', filename='public/instagram_post_es.jpg')
 # Default preview to Spanish
-generate_card(lang='es', filename='public/instagram_post_preview.jpg')
+

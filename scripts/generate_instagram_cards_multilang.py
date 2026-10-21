@@ -27,33 +27,144 @@ def wrap_text(text, max_w, font, draw_ctx):
 def draw_card_box(d, bbox, fill=(15, 23, 42, 215), border=(255, 255, 255, 45), radius=40, width=2):
     d.rounded_rectangle(bbox, radius=radius, fill=fill, outline=border, width=width)
 
-def generate_card(lang='en', filename='public/instagram_post_preview.jpg'):
-    # 1. Base Universe Background
-    bg_path = 'public/images/hero-universe.jpg'
-    if os.path.exists(bg_path):
-        bg = Image.open(bg_path).convert('RGBA')
-        bg = ImageOps.fit(bg, (W, H), method=Image.Resampling.LANCZOS)
-    else:
-        bg = Image.new('RGBA', (W, H), (10, 15, 30, 255))
+def create_sun_spacetime_background(W, H):
+    # Deep obsidian cosmic base
+    base = Image.new('RGBA', (W, H), (6, 9, 18, 255))
+    
+    # 1. Distant Starfield with stellar magnitude distribution
+    import random
+    random.seed(42)  # Consistent aesthetic starfield
+    d_stars = ImageDraw.Draw(base)
+    for _ in range(400):
+        sx = random.randint(0, W)
+        sy = random.randint(0, H)
+        s_size = random.choice([1, 1, 2, 2, 3, 4])
+        s_brightness = random.randint(120, 255)
+        color_choice = random.choice([
+            (s_brightness, s_brightness, s_brightness),
+            (int(s_brightness * 0.8), int(s_brightness * 0.9), s_brightness),
+            (s_brightness, int(s_brightness * 0.9), int(s_brightness * 0.7))
+        ])
+        d_stars.ellipse([(sx, sy), (sx + s_size, sy + s_size)], fill=color_choice)
 
-    # Dark gradient overlay for extreme text contrast and deep cosmic feel
-    overlay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    draw_ov = ImageDraw.Draw(overlay)
+    # 2. 3D Perspective Spacetime Curvature Grid (Einstein Gravitational Funnel)
+    grid_img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d_grid = ImageDraw.Draw(grid_img)
+
+    focal = 1250.0
+    cam_y = 680.0
+    center_z = 1150.0
+
+    def project(x, y, z):
+        dist_z = z + 500.0
+        if dist_z <= 50:
+            return None
+        scale = focal / dist_z
+        sx = W / 2 + x * scale
+        sy = H * 0.50 - (y - cam_y) * scale
+        return (sx, sy)
+
+    def get_funnel_y(x, z):
+        dx = x
+        dz = z - center_z
+        r = math.sqrt(dx * dx + dz * dz)
+        return -72000.0 / (r**0.84 + 130.0)
+
+    # Longitudinal geodesic grid lines (cyan/laser)
+    for x in range(-1800, 1801, 75):
+        pts = []
+        for z in range(250, 2550, 30):
+            y = get_funnel_y(x, z)
+            p = project(x, y, z)
+            if p and -150 <= p[0] <= W + 150 and -150 <= p[1] <= H + 150:
+                pts.append(p)
+        if len(pts) > 1:
+            dist_c = abs(x) / 1800.0
+            alpha = int(max(25, min(190, (1.0 - dist_c * 0.65) * 175)))
+            d_grid.line(pts, fill=(0, 240, 255, alpha), width=3)
+
+    # Transverse geodesic grid lines
+    for z in range(300, 2500, 70):
+        pts = []
+        for x in range(-1800, 1801, 30):
+            y = get_funnel_y(x, z)
+            p = project(x, y, z)
+            if p and -150 <= p[0] <= W + 150 and -150 <= p[1] <= H + 150:
+                pts.append(p)
+        if len(pts) > 1:
+            dist_z = abs(z - center_z) / 1300.0
+            alpha = int(max(25, min(180, (1.0 - dist_z * 0.6) * 165)))
+            d_grid.line(pts, fill=(0, 225, 255, alpha), width=3)
+
+    # Concentric circular orbital rings around the gravitational funnel throat
+    for r in [90, 160, 250, 360, 500, 680, 900, 1180, 1500]:
+        pts = []
+        for deg in range(0, 361, 4):
+            rad = math.radians(deg)
+            x = r * math.cos(rad)
+            z = center_z + r * math.sin(rad)
+            y = get_funnel_y(x, z)
+            p = project(x, y, z)
+            if p:
+                pts.append(p)
+        if len(pts) > 2:
+            alpha = int(max(40, min(240, (1.0 - (r / 1600.0)) * 235)))
+            d_grid.line(pts, fill=(0, 255, 220, alpha), width=4 if r < 600 else 3)
+
+    # Composite Grid onto Base
+    base = Image.alpha_composite(base, grid_img)
+
+    # 3. The Brilliant Celestial Sun (Einstein Gravitational Source)
+    sun_x = W // 2
+    sun_y = 860
+
+    # Solar Corona & Plasma Halos
+    sun_layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d_sun = ImageDraw.Draw(sun_layer)
+
+    # Massive deep crimson & orange outer atmosphere (R ~ 750px)
+    d_sun.ellipse([(sun_x - 750, sun_y - 750), (sun_x + 750, sun_y + 750)], fill=(234, 88, 12, 45))
+    # Radiant amber/gold mid corona (R ~ 460px)
+    d_sun.ellipse([(sun_x - 460, sun_y - 460), (sun_x + 460, sun_y + 460)], fill=(245, 158, 11, 75))
+    # Intense solar plasma ring (R ~ 280px)
+    d_sun.ellipse([(sun_x - 280, sun_y - 280), (sun_x + 280, sun_y + 280)], fill=(251, 191, 36, 120))
+    # Relativistic photon ring (lensed bright boundary)
+    d_sun.ellipse([(sun_x - 190, sun_y - 190), (sun_x + 190, sun_y + 190)], fill=(255, 237, 160, 160))
+
+    # Blur solar halos smoothly
+    sun_layer = sun_layer.filter(ImageFilter.GaussianBlur(90))
+
+    # Core Sun Disk (Intense thermonuclear fusion core)
+    d_core = ImageDraw.Draw(sun_layer)
+    d_core.ellipse([(sun_x - 145, sun_y - 145), (sun_x + 145, sun_y + 145)], fill=(255, 200, 50, 240))
+    d_core.ellipse([(sun_x - 110, sun_y - 110), (sun_x + 110, sun_y + 110)], fill=(255, 245, 200, 255))
+    d_core.ellipse([(sun_x - 70, sun_y - 70), (sun_x + 70, sun_y + 70)], fill=(255, 255, 255, 255))
+
+    # Horizontal anamorphic lens flare beam through the Sun
+    flare_layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d_flare = ImageDraw.Draw(flare_layer)
+    d_flare.line([(sun_x - 900, sun_y), (sun_x + 900, sun_y)], fill=(255, 230, 150, 160), width=12)
+    d_flare.line([(sun_x - 600, sun_y), (sun_x + 600, sun_y)], fill=(255, 255, 255, 220), width=6)
+    flare_layer = flare_layer.filter(ImageFilter.GaussianBlur(14))
+
+    # Composite Sun & Flares onto Base
+    base = Image.alpha_composite(base, sun_layer)
+    base = Image.alpha_composite(base, flare_layer)
+
+    # 4. Vignette Overlay for maximum contrast
+    vignette = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d_vig = ImageDraw.Draw(vignette)
     for y in range(H):
         ratio = y / H
-        alpha = int(205 + 40 * math.sin(ratio * math.pi * 0.8))
-        draw_ov.line([(0, y), (W, y)], fill=(6, 12, 26, alpha))
+        alpha = int(140 + 65 * (math.cos(ratio * math.pi * 2 - math.pi) * 0.5 + 0.5))
+        d_vig.line([(0, y), (W, y)], fill=(5, 8, 16, alpha))
+    base = Image.alpha_composite(base, vignette)
 
-    base = Image.alpha_composite(bg, overlay)
+    return base
 
-    # Ambient glows
-    glows = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    d_glow = ImageDraw.Draw(glows)
-    d_glow.ellipse([(-160, -160), (900, 900)], fill=(14, 165, 233, 40))
-    d_glow.ellipse([(W - 900, H - 900), (W + 200, H + 200)], fill=(245, 158, 11, 30))
-    d_glow.ellipse([(W // 2 - 500, 600), (W // 2 + 500, 1500)], fill=(99, 102, 241, 28))
-    glows = glows.filter(ImageFilter.GaussianBlur(160))
-    base = Image.alpha_composite(base, glows)
+def generate_card(lang='es', filename='public/instagram_post_preview.jpg'):
+    # 1. Base Sun + Spacetime Curvature Grid Background
+    base = create_sun_spacetime_background(W, H)
 
     draw = ImageDraw.Draw(base)
 
@@ -283,5 +394,5 @@ def generate_card(lang='en', filename='public/instagram_post_preview.jpg'):
 generate_card(lang='en', filename='public/instagram_post_en.jpg')
 # Generate Spanish version
 generate_card(lang='es', filename='public/instagram_post_es.jpg')
-# Also default preview to English
-generate_card(lang='en', filename='public/instagram_post_preview.jpg')
+# Default preview to Spanish
+generate_card(lang='es', filename='public/instagram_post_preview.jpg')

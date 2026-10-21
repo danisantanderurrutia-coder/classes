@@ -259,7 +259,7 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Sol',
     emoji: '☀️',
     spectralClass: 'G2V Main Sequence Star',
-    academicAreaEn: 'General Physics (Bachelor / Plan Común)',
+    academicAreaEn: 'General Physics (Bachelor / Common Core)',
     academicAreaEs: 'Física General (Nivel Bachelor / Plan Común)',
     shortCourseEn: 'General Physics',
     shortCourseEs: 'Física General',
@@ -472,7 +472,7 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Marte',
     emoji: '🔴',
     spectralClass: 'Oxidized Ferric Crust',
-    academicAreaEn: 'Foundational Mathematics (Bachelor / Plan Común)',
+    academicAreaEn: 'Foundational Mathematics (Bachelor / Common Core)',
     academicAreaEs: 'Matemática Fundamental (Nivel Bachelor / Plan Común)',
     shortCourseEn: 'Foundational Math',
     shortCourseEs: 'Matemática Base',
@@ -1941,19 +1941,34 @@ export default function SolarSystem({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      animStateRef.current.hasEnteredViewport = true;
+      setShowIntroOverlay(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
+        if (!entries || entries.length === 0) return;
         const entry = entries[0];
-        if (entry.isIntersecting) {
+        if (entry && entry.isIntersecting) {
           animStateRef.current.hasEnteredViewport = true;
           setShowIntroOverlay(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.22 }
+      { threshold: 0.15 }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    try {
+      observer.observe(el);
+    } catch (e) {
+      animStateRef.current.hasEnteredViewport = true;
+      setShowIntroOverlay(true);
+    }
+    return () => {
+      try {
+        observer.disconnect();
+      } catch {}
+    };
   }, []);
 
   // Safety timer to prevent any intro freeze under any circumstances
@@ -1984,11 +1999,12 @@ export default function SolarSystem({
   const audioRef = useRef(null);
 
   const activeCourse = useMemo(() => {
-    if (!activePlanet) return courses[0] || null;
+    const list = Array.isArray(courses) ? courses : [];
+    if (!activePlanet) return list[0] || null;
     return (
-      courses.find((c) => c.id === activePlanet.courseId) ||
-      courses.find((c) => c.planetId === activePlanet.id) ||
-      courses[0] ||
+      list.find((c) => c.id === activePlanet.courseId) ||
+      list.find((c) => c.planetId === activePlanet.id) ||
+      list[0] ||
       null
     );
   }, [activePlanet, courses]);
@@ -2113,12 +2129,12 @@ export default function SolarSystem({
 
   // Cinematic scientific subtitles (only in orbital mode)
   useEffect(() => {
-    if (!introDone || viewVariant !== 'orbital') {
+    if (!introDone || viewVariant !== 'orbital' || !activePlanet) {
       setCaption(null);
       return;
     }
     const en = lang === 'en';
-    const bodyName = activePlanet.name.split(' (')[0];
+    const bodyName = (activePlanet.name || '').split(' (')[0];
     let title;
     let sub;
     if (archLevel === 'galaxy') {
@@ -2129,11 +2145,11 @@ export default function SolarSystem({
       sub = '1 AU = 149 597 870 km';
     } else {
       title = bodyName;
-      sub = activePlanet.spectralClass;
+      sub = activePlanet.spectralClass || '';
     }
     if (isRealScale) sub += ' · 1:1';
-    setCaption({ key: `${archLevel}-${activePlanet.id}-${isRealScale}-${Date.now()}`, title, sub });
-  }, [archLevel, activePlanet.id, isRealScale, introDone, lang, viewVariant]);
+    setCaption({ key: `${archLevel}-${activePlanet.id || 'body'}-${isRealScale}-${Date.now()}`, title, sub });
+  }, [archLevel, activePlanet?.id, isRealScale, introDone, lang, viewVariant]);
 
   // Ambient audio follows the architectural level
   useEffect(() => {
@@ -2241,8 +2257,8 @@ export default function SolarSystem({
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x010204);
 
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    const width = Math.max(1, container.clientWidth || 800);
+    const height = Math.max(1, container.clientHeight || 600);
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.2, 85000);
     camera.position.set(0, 48, 70);
@@ -2260,8 +2276,8 @@ export default function SolarSystem({
       fallback.className = 'w-full h-full flex flex-col items-center justify-center text-slate-400 bg-slate-950 p-6 text-center select-none';
       fallback.innerHTML = `
         <div class="text-4xl mb-3">🪐</div>
-        <p class="font-mono text-sm text-slate-300 mb-1">WebGL 3D Solar System</p>
-        <p class="text-xs text-slate-500">Hardware acceleration or WebGL is required to render the interactive 3D planetary model.</p>
+        <p class="font-mono text-sm text-slate-300 mb-1">${lang === 'en' ? 'WebGL 3D Solar System' : 'Sistema Solar 3D (WebGL)'}</p>
+        <p class="text-xs text-slate-500">${lang === 'en' ? 'Hardware acceleration or WebGL is required to render the interactive 3D planetary model.' : 'Se requiere aceleración por hardware o WebGL para mostrar el modelo planetario 3D interactivo.'}</p>
       `;
       container.appendChild(fallback);
       return () => {
@@ -3460,37 +3476,54 @@ export default function SolarSystem({
     // ========================================================================
     // CINEMATIC POST-PROCESSING (Bloom -> ACES output -> Lens/Streak/Grade/Grain)
     // ========================================================================
-    const pr = renderer.getPixelRatio();
-    const composerTarget = new THREE.WebGLRenderTarget(width * pr, height * pr, {
-      type: THREE.HalfFloatType,
-      samples: pr > 1.5 ? 2 : 4,
-    });
-    const composer = new EffectComposer(renderer, composerTarget);
-    composer.setPixelRatio(pr);
-    composer.setSize(width, height);
-    composer.addPass(new RenderPass(scene, camera));
-    const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(width, height),
-      DEFAULT_VIEWER_SETTINGS.bloomStrength,
-      0.55,
-      DEFAULT_VIEWER_SETTINGS.bloomThreshold
-    );
-    composer.addPass(bloomPass);
-    const outputPass = new OutputPass();
-    composer.addPass(outputPass);
-    const cinePass = new ShaderPass(CineShader);
-    composer.addPass(cinePass);
-    const cineUniforms = cinePass.uniforms;
-    cineUniforms.uAspect.value = width / height;
+    const pr = Math.min(window.devicePixelRatio || 1, 1.75);
+    let composer = null;
+    let bloomPass = null;
+    let cineUniforms = null;
+
+    try {
+      const isWebGL2 = !!renderer.capabilities.isWebGL2;
+      const canUseHalfFloat = isWebGL2 || (renderer.extensions && renderer.extensions.has('OES_texture_half_float'));
+      const targetW = Math.max(1, Math.round(width * pr));
+      const targetH = Math.max(1, Math.round(height * pr));
+      const composerTarget = new THREE.WebGLRenderTarget(targetW, targetH, {
+        type: canUseHalfFloat ? THREE.HalfFloatType : THREE.UnsignedByteType,
+        samples: isWebGL2 ? (pr > 1.5 ? 2 : 4) : 0,
+      });
+      composer = new EffectComposer(renderer, composerTarget);
+      composer.setPixelRatio(pr);
+      composer.setSize(width, height);
+      composer.addPass(new RenderPass(scene, camera));
+      bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(width, height),
+        DEFAULT_VIEWER_SETTINGS.bloomStrength,
+        0.55,
+        DEFAULT_VIEWER_SETTINGS.bloomThreshold
+      );
+      composer.addPass(bloomPass);
+      const outputPass = new OutputPass();
+      composer.addPass(outputPass);
+      const cinePass = new ShaderPass(CineShader);
+      composer.addPass(cinePass);
+      cineUniforms = cinePass.uniforms;
+      cineUniforms.uAspect.value = width / height;
+    } catch (e) {
+      console.warn('EffectComposer could not be initialized, falling back to standard renderer:', e);
+      composer = null;
+      bloomPass = null;
+      cineUniforms = null;
+    }
 
     const handleResize = () => {
       if (!container) return;
-      const w = Math.max(1, container.clientWidth);
-      const h = Math.max(1, container.clientHeight);
+      const w = Math.max(1, container.clientWidth || 800);
+      const h = Math.max(1, container.clientHeight || 600);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
-      composer.setSize(w, h);
+      if (composer) {
+        composer.setSize(w, h);
+      }
     };
     window.addEventListener('resize', handleResize);
     let resizeObserver = null;
@@ -3531,6 +3564,7 @@ export default function SolarSystem({
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      try {
       const delta = Math.min(clock.getDelta(), 0.05);
       const elapsedTime = clock.getElapsedTime();
 
@@ -3587,7 +3621,7 @@ export default function SolarSystem({
       }
 
       // Update target alignment factor based on introPhase and mode:
-      if (introPhase === 'orbiting') {
+      if (introPhase === 'waiting' || introPhase === 'orbiting') {
         alignBlend = 0.0;
       } else if (introPhase === 'swooping') {
         // alignBlend is driven directly by smootherstep 's' in the swoop curve
@@ -3690,8 +3724,10 @@ export default function SolarSystem({
       sunLight.intensity = THREE.MathUtils.lerp(targetSunInt, targetSunInt * 0.42, b);
       ambientLight.intensity = targetAmbInt;
       hemiLight.intensity = targetAmbInt * 0.75;
-      bloomPass.strength = curSettings.bloomStrength;
-      bloomPass.threshold = curSettings.bloomThreshold;
+      if (bloomPass) {
+        bloomPass.strength = curSettings.bloomStrength;
+        bloomPass.threshold = curSettings.bloomThreshold;
+      }
       if (diskMat?.uniforms?.uExposure) {
         diskMat.uniforms.uExposure.value = curSettings.sgrExposure;
       }
@@ -4148,7 +4184,7 @@ export default function SolarSystem({
       }
 
       // Gravitational lensing of Sgr A* (fades to 0 in lineup mode so neighboring planets aren't distorted)
-      if (cineOn) {
+      if (composer && cineUniforms && cineOn) {
         blackHoleGroup.getWorldPosition(tmpBH);
         camera.updateMatrixWorld();
         camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
@@ -4168,7 +4204,10 @@ export default function SolarSystem({
       } else {
         renderer.render(scene, camera);
       }
-    };
+    } catch (err) {
+      console.error('Three.js animate error:', err);
+    }
+  };
 
     animate();
 
@@ -4690,7 +4729,7 @@ export default function SolarSystem({
                   setViewVariant('orbital');
                 }}
                 className="px-3.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/60 text-purple-200 hover:text-white font-mono text-xs font-bold shadow-md shadow-purple-950/40 transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Explora el sistema solar con sus órbitas elípticas, vectores DCL de fuerzas, magnetosfera y simulaciones"
+                title={lang === 'en' ? 'Explore the solar system with elliptical orbits, FBD force vectors, magnetosphere and simulations' : 'Explora el sistema solar con sus órbitas elípticas, vectores DCL de fuerzas, magnetosfera y simulaciones'}
               >
                 <span>🌌</span>
                 <span>{lang === 'en' ? 'Open Planetarium (Orbits & Physics) →' : 'Ir al Planetario (Órbitas & Física) →'}</span>

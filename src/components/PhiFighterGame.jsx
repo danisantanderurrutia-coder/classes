@@ -247,32 +247,32 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
             <div className="space-y-1">
               <span className="text-amber-400 font-bold block">{lang === 'en' ? 'FLIGHT STICK' : 'MANIOBRAS'}</span>
               <div className="text-slate-300 space-y-0.5">
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">W / S</kbd> : Pitch (Cabeceo)</div>
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">A / D</kbd> : Roll & Yaw (Giro)</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">W / S</kbd> : {lang === 'en' ? 'Pitch' : 'Cabeceo'}</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">A / D</kbd> : {lang === 'en' ? 'Roll & Yaw' : 'Alabeo y Guiñada'}</div>
               </div>
             </div>
 
             <div className="space-y-1">
               <span className="text-amber-400 font-bold block">{lang === 'en' ? 'WEAPONS' : 'ARMAMENTO'}</span>
               <div className="text-slate-300 space-y-0.5">
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">SPACE</kbd> : Twin Lasers</div>
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">X / F</kbd> : Homing Missile</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">SPACE</kbd> : {lang === 'en' ? 'Twin Lasers' : 'Láseres dobles'}</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">X / F</kbd> : {lang === 'en' ? 'Homing Missile' : 'Misil guiado'}</div>
               </div>
             </div>
 
             <div className="space-y-1">
               <span className="text-amber-400 font-bold block">{lang === 'en' ? 'TACTICAL AVIONICS' : 'AVIÓNICA'}</span>
               <div className="text-slate-300 space-y-0.5">
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">V</kbd> : Toggle Force Vectors</div>
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">C</kbd> : Cockpit / Chase View</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">V</kbd> : {lang === 'en' ? 'Toggle Force Vectors' : 'Alternar vectores de fuerza'}</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">C</kbd> : {lang === 'en' ? 'Cockpit / Chase View' : 'Cabina / Vista trasera'}</div>
               </div>
             </div>
 
             <div className="space-y-1">
               <span className="text-amber-400 font-bold block">{lang === 'en' ? 'DIFFICULTY & SOUND' : 'CONFIGURACIÓN'}</span>
               <div className="text-slate-300 space-y-0.5">
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">T</kbd> : Cadet / Pilot / Ace</div>
-                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">M</kbd> : Audio / Synth Mode</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">T</kbd> : {lang === 'en' ? 'Cadet / Pilot / Ace' : 'Cadete / Piloto / As'}</div>
+                <div><kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-amber-300">M</kbd> : {lang === 'en' ? 'Audio / Synth Mode' : 'Modo audio / sintetizador'}</div>
               </div>
             </div>
           </div>
@@ -295,14 +295,14 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-bold text-amber-400">PROJECT PHI-FIGHTER</span>
                 <span className="hidden sm:inline text-slate-500">|</span>
-                <span className="hidden sm:inline text-slate-400">PANTALLA COMPLETA ACTIVA &bull; 60 FPS</span>
+                <span className="hidden sm:inline text-slate-400">{lang === 'en' ? 'FULLSCREEN ACTIVE' : 'PANTALLA COMPLETA ACTIVA'} &bull; 60 FPS</span>
               </div>
               <button
                 onClick={exitFullscreenMode}
                 className="px-3 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white font-mono font-bold text-xs border border-rose-500/40 transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Minimize2 className="w-3.5 h-3.5" />
-                <span>Salir de Pantalla Completa (ESC)</span>
+                <span>{lang === 'en' ? 'Exit Fullscreen (ESC)' : 'Salir de Pantalla Completa (ESC)'}</span>
               </button>
             </div>
           )}
@@ -313,7 +313,7 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
               key={iframeKey}
               src={getAssetUrl('/phi-fighter/index.html')}
               className="w-full h-full border-0 block"
-              title="Project Phi-Fighter 3D Game"
+              title={lang === 'en' ? 'Project Phi-Fighter 3D Game' : 'Proyecto Phi-Fighter: Juego 3D'}
               allow="autoplay; fullscreen"
             />
           </div>

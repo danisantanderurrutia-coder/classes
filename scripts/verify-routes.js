@@ -121,7 +121,7 @@ await send('Page.enable');
 
 const routes = [
   '#/',
-  '#/precios',
+  '#/pricing',
   '#/courses',
   '#/lab',
   '#/piad',

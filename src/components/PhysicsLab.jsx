@@ -36,6 +36,13 @@ import {
   Radio
 } from 'lucide-react';
 
+// Picks the LaTeX source for a formula entry: language-specific latex first, then shared latex,
+// then the legacy Unicode text (eqEn/eqEs/eq) as a last resort.
+const getFormulaMath = (f, lang) =>
+  (lang === 'en' ? f.latexEn : f.latexEs) ||
+  f.latex ||
+  (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq));
+
 // ============================================================================
 // CATALOG OF 14 CLASSICAL PHYSICS, ENGINEERING & GEOPHYSICS LAB PROBLEMS
 // ============================================================================
@@ -94,12 +101,14 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Sistema acoplado 2×2 en movimiento (Forma Matricial):',
           labelEn: '3. Coupled 2×2 system in motion (Matrix Form):',
-          eq: '[ m₁   1 ] [ a ] = [ -m₁·g·sin(θ) ∓ μ·m₁·g·cos(θ) ]\n[ m₂  -1 ] [ T ]   [            m₂·g              ]'
+          eq: '[ m₁   1 ] [ a ] = [ -m₁·g·sin(θ) ∓ μ·m₁·g·cos(θ) ]\n[ m₂  -1 ] [ T ]   [            m₂·g              ]',
+          latex: '\\begin{bmatrix} m_1 & 1 \\\\ m_2 & -1 \\end{bmatrix} \\begin{bmatrix} a \\\\ T \\end{bmatrix} = \\begin{bmatrix} -m_1 g \\sin\\theta \\mp \\mu m_1 g \\cos\\theta \\\\ m_2 g \\end{bmatrix}',
         },
         {
           labelEs: '4. Solución explícita de aceleración (si sube por la rampa):',
           labelEn: '4. Explicit acceleration solution (moving up-ramp):',
-          eq: 'a = g · (m₂ - m₁·sin(θ) - μ·m₁·cos(θ)) / (m₁ + m₂)'
+          eq: 'a = g · (m₂ - m₁·sin(θ) - μ·m₁·cos(θ)) / (m₁ + m₂)',
+          latex: 'a = g \\, \\frac{m_2 - m_1 \\sin\\theta - \\mu m_1 \\cos\\theta}{m_1 + m_2}',
         }
       ]
     },
@@ -205,12 +214,14 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Eliminación algebraica del tiempo t para obtener la parábola y(x):',
           labelEn: '2. Algebraic elimination of time t to get parabola y(x):',
-          eq: 'y(x) = x · tan(θ) - [ g / (2 · v₀² · cos²(θ)) ] · x²'
+          eq: 'y(x) = x · tan(θ) - [ g / (2 · v₀² · cos²(θ)) ] · x²',
+          latex: 'y(x) = x \\tan\\theta - \\frac{g}{2 v_0^2 \\cos^2\\theta} \\, x^2',
         },
         {
           labelEs: '3. Alcance horizontal máximo (R) y Altura máxima (H):',
           labelEn: '3. Maximum horizontal range (R) and Peak Altitude (H):',
-          eq: 'R = (v₀² · sin(2θ)) / g     ;     H = (v₀² · sin²(θ)) / (2g)'
+          eq: 'R = (v₀² · sin(2θ)) / g     ;     H = (v₀² · sin²(θ)) / (2g)',
+          latex: 'R = \\frac{v_0^2 \\sin 2\\theta}{g} \\quad ; \\quad H = \\frac{v_0^2 \\sin^2\\theta}{2g}',
         }
       ]
     },
@@ -675,12 +686,14 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Optimización por Cálculo Diferencial (Tiempo estacionario dT/dx = 0):',
           labelEn: '2. Differential Calculus Optimization (Stationary time dT/dx = 0):',
-          eq: 'dT / dx = [ x / (v₁·√(x² + h₁²)) ] - [ (L - x) / (v₂·√((L-x)² + h₂²)) ] = sin(θ₁)/v₁ - sin(θ₂)/v₂ = 0'
+          eq: 'dT / dx = [ x / (v₁·√(x² + h₁²)) ] - [ (L - x) / (v₂·√((L-x)² + h₂²)) ] = sin(θ₁)/v₁ - sin(θ₂)/v₂ = 0',
+          latex: '\\frac{dT}{dx} = \\frac{x}{v_1 \\sqrt{x^2 + h_1^2}} - \\frac{L - x}{v_2 \\sqrt{(L-x)^2 + h_2^2}} = \\frac{\\sin\\theta_1}{v_1} - \\frac{\\sin\\theta_2}{v_2} = 0',
         },
         {
           labelEs: '3. Ecuación en Derivadas Parciales (EDP) de Onda Elástica / Acústica:',
           labelEn: '3. Partial Differential Equation (PDE) for Elastic / Acoustic Waves:',
-          eq: '∂²u / ∂t² = v² · ( ∂²u / ∂x² + ∂²u / ∂z² )'
+          eq: '∂²u / ∂t² = v² · ( ∂²u / ∂x² + ∂²u / ∂z² )',
+          latex: '\\frac{\\partial^2 u}{\\partial t^2} = v^2 \\left( \\frac{\\partial^2 u}{\\partial x^2} + \\frac{\\partial^2 u}{\\partial z^2} \\right)',
         }
       ]
     },
@@ -760,12 +773,14 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Matriz Jacobiana J_F del campo vectorial 2×2:',
           labelEn: '2. 2×2 Jacobian Matrix J_F of the vector field:',
-          eq: 'J_F = [ ∂P/∂x   ∂P/∂y ] = [  k   -ω ]   =  k·I  +  ω·[  0  -1 ]\n      [ ∂Q/∂x   ∂Q/∂y ]   [  ω    k ]              [  1   0 ]'
+          eq: 'J_F = [ ∂P/∂x   ∂P/∂y ] = [  k   -ω ]   =  k·I  +  ω·[  0  -1 ]\n      [ ∂Q/∂x   ∂Q/∂y ]   [  ω    k ]              [  1   0 ]',
+          latex: 'J_F = \\begin{bmatrix} \\partial P/\\partial x & \\partial P/\\partial y \\\\ \\partial Q/\\partial x & \\partial Q/\\partial y \\end{bmatrix} = \\begin{bmatrix} k & -\\omega \\\\ \\omega & k \\end{bmatrix} = k I + \\omega \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix}',
         },
         {
           labelEs: '3. Rotacional (Vorticidad) y Divergencia locales:',
           labelEn: '3. Local Curl (Vorticity) and Divergence:',
-          eq: 'rot(F⃗) = (∂Q/∂x - ∂P/∂y) k̂ = 2ω k̂    ;    div(F⃗) = ∂P/∂x + ∂Q/∂y = 2k'
+          eq: 'rot(F⃗) = (∂Q/∂x - ∂P/∂y) k̂ = 2ω k̂    ;    div(F⃗) = ∂P/∂x + ∂Q/∂y = 2k',
+          latex: '\\mathrm{rot}(\\vec{F}) = \\left( \\frac{\\partial Q}{\\partial x} - \\frac{\\partial P}{\\partial y} \\right) \\hat{k} = 2\\omega \\, \\hat{k} \\quad ; \\quad \\mathrm{div}(\\vec{F}) = \\frac{\\partial P}{\\partial x} + \\frac{\\partial Q}{\\partial y} = 2k',
         }
       ]
     },
@@ -782,14 +797,17 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Verificación por parametrización explícita r⃗(t) = (R cos t, R sin t):',
           labelEn: '2. Verification by explicit parametrization r⃗(t) = (R cos t, R sin t):',
-          eq: '∮_C F⃗ · d r⃗ = ∫₀²ᵖⁱ [ -ω R sin(t) (-R sin t) + ω R cos(t) (R cos t) ] dt = ∫₀²ᵖⁱ ω R² dt = 2π R² ω'
+          eq: '∮_C F⃗ · d r⃗ = ∫₀²ᵖⁱ [ -ω R sin(t) (-R sin t) + ω R cos(t) (R cos t) ] dt = ∫₀²ᵖⁱ ω R² dt = 2π R² ω',
+          latex: '\\oint_C \\vec{F} \\cdot d\\vec{r} = \\int_0^{2\\pi} \\left[ -\\omega R \\sin t \\, (-R \\sin t) + \\omega R \\cos t \\, (R \\cos t) \\right] dt = \\int_0^{2\\pi} \\omega R^2 \\, dt = 2\\pi R^2 \\omega',
         },
         {
           labelEs: '3. Criterio de independencia de la trayectoria (Campo Conservativo):',
           labelEn: '3. Path independence criterion (Conservative Field):',
           eq: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0',
           eqEs: 'rot(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (para cualquier curva cerrada simple C)',
-          eqEn: 'curl(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (for any simple closed curve C)'
+          eqEn: 'curl(F⃗) = 0⃗   ⇔   F⃗ = ∇φ   ⇒   ∮_C F⃗ · d r⃗ = 0  (for any simple closed curve C)',
+          latexEs: '\\mathrm{rot}(\\vec{F}) = \\vec{0} \\iff \\vec{F} = \\nabla\\varphi \\Rightarrow \\oint_C \\vec{F} \\cdot d\\vec{r} = 0 \\quad \\text{(para cualquier curva cerrada simple } C\\text{)}',
+          latexEn: '\\mathrm{curl}(\\vec{F}) = \\vec{0} \\iff \\vec{F} = \\nabla\\varphi \\Rightarrow \\oint_C \\vec{F} \\cdot d\\vec{r} = 0 \\quad \\text{(for any simple closed curve } C\\text{)}',
         }
       ]
     },
@@ -978,17 +996,22 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Sistema matricial acoplado de 2º orden:',
           labelEn: '1. Coupled 2nd-order matrix system:',
-          eq: '[ M ] d²x⃗/dt² + [ K ] x⃗ = 0⃗   con   K = [  k+k₁₂   -k₁₂  ]\n                                          [  -k₁₂    k+k₁₂ ]'
+          eq: '[ M ] d²x⃗/dt² + [ K ] x⃗ = 0⃗   con   K = [  k+k₁₂   -k₁₂  ]\n                                          [  -k₁₂    k+k₁₂ ]',
+          latex: '[M] \\, \\frac{d^2 \\vec{x}}{dt^2} + [K] \\, \\vec{x} = \\vec{0}, \\quad K = \\begin{bmatrix} k + k_{12} & -k_{12} \\\\ -k_{12} & k + k_{12} \\end{bmatrix}',
         },
         {
           labelEs: '2. Ecuación secular característica: det(K - ω²M) = 0:',
           labelEn: '2. Characteristic secular equation: det(K - ω²M) = 0:',
-          eq: 'ω₁² = k / m     ;     ω₂² = (k + 2k₁₂) / m   (para masas idénticas m₁ = m₂ = m)'
+          eq: 'ω₁² = k / m     ;     ω₂² = (k + 2k₁₂) / m   (para masas idénticas m₁ = m₂ = m)',
+          latexEs: '\\omega_1^2 = \\frac{k}{m} \\quad ; \\quad \\omega_2^2 = \\frac{k + 2k_{12}}{m} \\quad \\text{(para masas idénticas } m_1 = m_2 = m\\text{)}',
+          latexEn: '\\omega_1^2 = \\frac{k}{m} \\quad ; \\quad \\omega_2^2 = \\frac{k + 2k_{12}}{m} \\quad \\text{(for identical masses } m_1 = m_2 = m\\text{)}',
         },
         {
           labelEs: '3. Autovectores modales ortogonales normalizados:',
           labelEn: '3. Normalized orthogonal modal eigenvectors:',
-          eq: 'v⃗₁ = (1/√2) [ 1,  1 ]ᵀ  (Modo en Fase)  ;  v⃗₂ = (1/√2) [ 1, -1 ]ᵀ  (Modo en Antifase)'
+          eq: 'v⃗₁ = (1/√2) [ 1,  1 ]ᵀ  (Modo en Fase)  ;  v⃗₂ = (1/√2) [ 1, -1 ]ᵀ  (Modo en Antifase)',
+          latexEs: '\\vec{v}_1 = \\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} \\; \\text{(Modo en Fase)} \\quad ; \\quad \\vec{v}_2 = \\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix} \\; \\text{(Modo en Antifase)}',
+          latexEn: '\\vec{v}_1 = \\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} \\; \\text{(In-Phase Mode)} \\quad ; \\quad \\vec{v}_2 = \\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix} \\; \\text{(Out-of-Phase Mode)}',
         }
       ]
     },
@@ -1099,12 +1122,14 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Sistema lineal 2×2 del equilibrio horizontal (Fuerza P + Coriolis = 0):',
           labelEn: '2. 2×2 horizontal balance system (Pressure Gradient + Coriolis = 0):',
-          eq: '[  0   -f ] [ u_g ] = - (1/ρ) [ ∂P/∂x ]\n[  f    0 ] [ v_g ]          [ ∂P/∂y ]'
+          eq: '[  0   -f ] [ u_g ] = - (1/ρ) [ ∂P/∂x ]\n[  f    0 ] [ v_g ]          [ ∂P/∂y ]',
+          latex: '\\begin{bmatrix} 0 & -f \\\\ f & 0 \\end{bmatrix} \\begin{bmatrix} u_g \\\\ v_g \\end{bmatrix} = -\\frac{1}{\\rho} \\begin{bmatrix} \\partial P/\\partial x \\\\ \\partial P/\\partial y \\end{bmatrix}',
         },
         {
           labelEs: '3. Solución explícita del vector viento geostrófico (v⃗_g ⟂ ∇P):',
           labelEn: '3. Explicit solution of geostrophic wind vector (v⃗_g ⟂ ∇P):',
-          eq: 'u_g = - (1 / (ρ · f)) · (∂P / ∂y)     ;     v_g = (1 / (ρ · f)) · (∂P / ∂x)'
+          eq: 'u_g = - (1 / (ρ · f)) · (∂P / ∂y)     ;     v_g = (1 / (ρ · f)) · (∂P / ∂x)',
+          latex: 'u_g = -\\frac{1}{\\rho f} \\frac{\\partial P}{\\partial y} \\quad ; \\quad v_g = \\frac{1}{\\rho f} \\frac{\\partial P}{\\partial x}',
         }
       ]
     },
@@ -4375,7 +4400,7 @@ export default function PhysicsLab({
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
                       <div className="p-3 bg-white rounded-xl border border-slate-200 text-slate-900 overflow-x-auto">
-                        <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                        <MathFormula math={getFormulaMath(f, lang)} display={true} />
                       </div>
                     </div>
                   ))}
@@ -4406,7 +4431,7 @@ export default function PhysicsLab({
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
                       <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200/80 text-emerald-950 overflow-x-auto">
-                        <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                        <MathFormula math={getFormulaMath(f, lang)} display={true} />
                       </div>
                     </div>
                   ))}
@@ -4668,7 +4693,7 @@ export default function PhysicsLab({
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
                         <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 overflow-x-auto">
-                          <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                          <MathFormula math={getFormulaMath(f, lang)} display={true} />
                         </div>
                       </div>
                     ))}
@@ -4692,7 +4717,7 @@ export default function PhysicsLab({
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
                         <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 overflow-x-auto">
-                          <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                          <MathFormula math={getFormulaMath(f, lang)} display={true} />
                         </div>
                       </div>
                     ))}

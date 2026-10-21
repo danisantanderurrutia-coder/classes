@@ -224,9 +224,9 @@ const ACADEMIC_COURSES = [
     id: "physics_bachelor",
     planetId: "sun",
     code: "PHY-101",
-    titleEn: "General Physics I & II (Bachelor / Plan Común Core)",
+    titleEn: "General Physics I & II (Bachelor / Common Core)",
     titleEs: "Física General I y II (Plan Común y Grado Universitario)",
-    facultyEn: "Faculty of Physical & Mathematical Sciences (Engineering Plan Común)",
+    facultyEn: "Faculty of Physical & Mathematical Sciences (Engineering Common Core)",
     facultyEs: "Facultad de Ciencias Físicas y Matemáticas (Plan Común de Ingeniería)",
     targetEn: "First- and second-year university students mastering mechanics, energy conservation, fluids, thermodynamics, and laboratory exams.",
     targetEs: "Estudiantes de primer y segundo año que preparan certámenes de mecánica, conservación de energía, fluidos y termodinámica.",
@@ -409,7 +409,7 @@ const ACADEMIC_COURSES = [
     id: "math_bachelor",
     planetId: "mars",
     code: "MAT-101",
-    titleEn: "Foundational Mathematics (Bachelor / Plan Común Core)",
+    titleEn: "Foundational Mathematics (Bachelor / Common Core)",
     titleEs: "Matemática Fundamental (Plan Común y Grado Universitario)",
     facultyEn: "Faculty of Mathematical Sciences & Engineering Foundations",
     facultyEs: "Facultad de Ciencias Físicas y Matemáticas (Bases Universitarias)",
@@ -818,7 +818,7 @@ const WHY_ME_REASONS = [
     titleEs: 'Doble M.Sc. Europeo e Ingeniero Geofísico',
     textEn: 'Trained at Universidad de Chile (FCFM/Beauchef), CAU Kiel (Germany), and AMU Poznań (Poland), combining catchment modeling and computational geophysics with 500+ hours of 1-on-1 university and IB mentoring.',
     textEs: 'Formado en la Universidad de Chile (FCFM/Beauchef), CAU Kiel (Alemania) y AMU Poznań (Polonia), combinando modelación hidrogeofísica y física computacional con más de 500 horas de mentoría universitaria e IB.',
-    actionPage: 'precios',
+    actionPage: 'pricing',
     actionSection: 'mentor-dossier',
     actionLabelEn: 'Inspect Academic Credentials →',
     actionLabelEs: 'Ver Credenciales Académicas →',
@@ -845,7 +845,7 @@ const WHY_ME_REASONS = [
     titleEs: 'En Tu Idioma + Artefactos de Conocimiento Abierto',
     textEn: 'Zero language fatigue in 100% English or Spanish (online worldwide or in-person in Hannover). After every session you keep a 4K vector Miro PDF, custom formula cheat-sheets, executable NumPy/SciPy scripts, and async WhatsApp Q&A.',
     textEs: 'Cero fatiga idiomática en clases 100% en español o inglés (online global o presencial en Hannover). Al terminar cada sesión te llevas un PDF vectorial 4K de la pizarra Miro, formularios resumen, scripts en Python y soporte por WhatsApp.',
-    actionPage: 'precios',
+    actionPage: 'pricing',
     actionLabelEn: 'Calculate Your Study Plan →',
     actionLabelEs: 'Calcular Plan a Medida →',
   },
@@ -954,6 +954,20 @@ export default function App() {
   const [currency, setCurrencyState] = useState(() => detectInitialCurrency());
   const [detectedCountry, setDetectedCountry] = useState('');
 
+  // Keep <html lang>, document title and meta description in sync with the selected language
+  useEffect(() => {
+    document.documentElement.lang = lang === 'en' ? 'en' : 'es';
+    document.title = lang === 'en'
+      ? 'Math & Physics Classes | Daniel S. Santander Urrutia'
+      : 'Clases de Matemáticas y Física | Daniel S. Santander Urrutia';
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) {
+      desc.setAttribute('content', lang === 'en'
+        ? 'University & IB Exam Mentorship in Higher Mathematics, Classical Mechanics, Calculus, Linear Algebra & PDEs. Double European M.Sc. & Geophysicist (Hannover & Online).'
+        : 'Mentoría universitaria y de exámenes IB en Matemáticas Superiores, Mecánica Clásica, Cálculo, Álgebra Lineal y EDP. Doble M.Sc. europeo y Geofísico (Hannover y online).');
+    }
+  }, [lang]);
+
   const setLang = (newLang) => {
     setLangState(newLang);
     try {
@@ -1000,7 +1014,7 @@ export default function App() {
     } catch {}
   }, []);
 
-  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'precios' | 'contact' | 'game'
+  // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'pricing' | 'contact' | 'game'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
   const [selectedSubjectId, setSelectedSubjectId] = useState('klausur');
@@ -1101,8 +1115,10 @@ export default function App() {
         }, 100);
       } else if (['tutor', 'mentor'].includes(hash)) {
         setCurrentPage('tutor');
-      } else if (['precios', 'calculator'].includes(hash)) {
-        setCurrentPage('precios');
+      } else if (['pricing', 'calculator', 'precios'].includes(hash)) {
+        // 'precios' kept as legacy alias for old shared links; normalize URL to English
+        setCurrentPage('pricing');
+        if (hash === 'precios') window.location.replace('#/pricing');
       } else if (['landing', 'lab', 'courses', 'tutor', 'piad', 'library', 'contact', 'game'].includes(hash)) {
         setCurrentPage(hash);
       } else if (!hash) {
@@ -1129,9 +1145,9 @@ export default function App() {
       }, 50);
       return;
     }
-    if (page === 'calculator' || page === 'precios') {
-      setCurrentPage('precios');
-      window.location.hash = '#/precios';
+    if (page === 'calculator' || page === 'pricing') {
+      setCurrentPage('pricing');
+      window.location.hash = '#/pricing';
       if (sectionId === 'mentor-dossier') {
         setTimeout(() => {
           document.getElementById('mentor-dossier')?.scrollIntoView({ behavior: 'smooth' });
@@ -1283,7 +1299,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 Daniel S. Santander Urrutia
               </span>
               <span className="text-[10px] text-sky-400 font-mono tracking-wider whitespace-nowrap leading-none">
-                Double M.Sc. &amp; Geophysicist
+                {lang === 'en' ? 'Double M.Sc. & Geophysicist' : 'Doble M.Sc. y Geofísico'}
               </span>
             </div>
           </button>
@@ -1351,9 +1367,9 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             </button>
 
             <button
-              onClick={() => navigateTo('precios')}
+              onClick={() => navigateTo('pricing')}
               className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                currentPage === 'precios'
+                currentPage === 'pricing'
                   ? 'bg-white text-slate-950 font-bold shadow-md'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
               }`}
@@ -1458,8 +1474,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
           <span>PIAD™</span>
         </button>
         <button
-          onClick={() => navigateTo('precios')}
-          className={`p-1 flex flex-col items-center gap-0.5 ${currentPage === 'precios' ? 'text-white font-bold' : 'hover:text-white'}`}
+          onClick={() => navigateTo('pricing')}
+          className={`p-1 flex flex-col items-center gap-0.5 ${currentPage === 'pricing' ? 'text-white font-bold' : 'hover:text-white'}`}
         >
           <Calculator className="w-3.5 h-3.5" />
           <span>{lang === 'en' ? 'Pricing' : 'Precios'}</span>
@@ -1590,14 +1606,16 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </div>
 
                 <div id="planetarium-viewport" className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
-                  <SolarSystem
-                    onSelectSubject={handleSelectPlanetSubject}
-                    selectedSubjectId={selectedSubjectId}
-                    lang={lang}
-                    onNavigate={navigateTo}
-                    onOpenBooking={handleOpenBooking}
-                    courses={ACADEMIC_COURSES}
-                  />
+                  <ErrorBoundary key="solar-system-boundary">
+                    <SolarSystem
+                      onSelectSubject={handleSelectPlanetSubject}
+                      selectedSubjectId={selectedSubjectId}
+                      lang={lang}
+                      onNavigate={navigateTo}
+                      onOpenBooking={handleOpenBooking}
+                      courses={ACADEMIC_COURSES}
+                    />
+                  </ErrorBoundary>
                 </div>
               </div>
             </section>
@@ -1809,7 +1827,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     </p>
                   </div>
                   <button
-                    onClick={() => navigateTo('precios')}
+                    onClick={() => navigateTo('pricing')}
                     className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold whitespace-nowrap cursor-pointer transition-colors shrink-0 shadow-sm flex items-center gap-2"
                   >
                     <span>{lang === 'en' ? 'View Barter & Solidarity Options →' : 'Ver Opciones de Trueque y Apoyo →'}</span>
@@ -1905,7 +1923,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       <span>{lang === 'en' ? 'Book Free Diagnostic' : 'Reservar Diagnóstico Gratis'}</span>
                     </button>
                     <button
-                      onClick={() => navigateTo('precios')}
+                      onClick={() => navigateTo('pricing')}
                       className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <Calculator className="w-3.5 h-3.5 text-sky-400" />
@@ -1943,7 +1961,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       Daniel S. Santander Urrutia
                     </h3>
                     <p className="text-xs sm:text-sm font-mono text-slate-600">
-                      Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany &amp; AMU Poznań, Poland)
+                      {lang === 'en' ? 'Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany & AMU Poznań, Poland)' : 'Ingeniería en Geofísica (Universidad de Chile) • Doble M.Sc. Europeo (CAU Kiel, Alemania y AMU Poznań, Polonia)'}
                     </p>
                     <p className="text-sm text-slate-600 leading-relaxed font-sans">
                       {lang === 'en'
@@ -2062,9 +2080,9 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               {/* Breadcrumb & Header */}
               <div className="mb-8">
                 <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-2">
-                  <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
+                  <button onClick={() => navigateTo('landing')} className="hover:underline">{lang === 'en' ? 'Home' : 'Inicio'}</button>
                   <span>/</span>
-                  <span className="text-slate-900 font-bold">Course Catalog</span>
+                  <span className="text-slate-900 font-bold">{lang === 'en' ? 'Course Catalog' : 'Catálogo de Clases'}</span>
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
                   {lang === 'en' ? 'Official Course Catalog & University Exam Modules' : 'Catálogo Curricular Oficial de Materias'}
@@ -2435,7 +2453,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
               
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-                <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
+                <button onClick={() => navigateTo('landing')} className="hover:underline">{lang === 'en' ? 'Home' : 'Inicio'}</button>
                 <span>/</span>
                 <span className="text-slate-900 font-bold">{lang === 'en' ? 'Classical Library & Compendium' : 'Biblioteca Clásica & Compendio de Leyes'}</span>
               </div>
@@ -2444,12 +2462,12 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-lg group">
                 <img 
                   src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
-                  alt="Academic Library" 
+                  alt={lang === 'en' ? 'Academic Library' : 'Biblioteca Académica'} 
                   className="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity duration-700 ease-in-out group-hover:opacity-0" 
                 />
                 <img 
                   src={getAssetUrl('/images/stem-library.webp')} 
-                  alt="Theoretical STEM Library Treatises" 
+                  alt={lang === 'en' ? 'Theoretical STEM Library Treatises' : 'Tratados Teóricos de la Biblioteca STEM'} 
                   className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-35" 
                 />
                 <div className="relative z-10 p-8 sm:p-14 max-w-3xl">
@@ -2633,12 +2651,12 @@ Sent from Open Knowledge & Science Mentorship Portal`;
         {/* ========================================================= */}
         {/* PAGE 3: PRECIOS (UNIFIED TUITION CALCULATOR & MENTOR DOSSIER) */}
         {/* ========================================================= */}
-        {currentPage === 'precios' && (
+        {currentPage === 'pricing' && (
           <div className="pt-24 pb-12 sm:pt-28 sm:pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
               
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-                <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
+                <button onClick={() => navigateTo('landing')} className="hover:underline">{lang === 'en' ? 'Home' : 'Inicio'}</button>
                 <span>/</span>
                 <span className="text-slate-900 font-bold">{lang === 'en' ? 'Pricing & Mentor Dossier' : 'Precios & Dossier del Mentor'}</span>
               </div>
@@ -3026,17 +3044,17 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                       <div className="flex flex-wrap gap-1.5 font-mono text-[11px] pt-1">
                         <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 flex items-center gap-1.5">
                           <Music className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Música &amp; Producción</span>
+                          <span>{lang === 'en' ? 'Music &amp; Production' : 'Música &amp; Producción'}</span>
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 flex items-center gap-1.5">
                           <Gamepad2 className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Videojuegos</span>
+                          <span>{lang === 'en' ? 'Video Games' : 'Videojuegos'}</span>
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
-                          🧠 Sesiones de Psicología
+                          🧠 {lang === 'en' ? 'Psychology Sessions' : 'Sesiones de Psicología'}
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
-                          🎨 Diseño &amp; Otros Talentos
+                          🎨 {lang === 'en' ? 'Design &amp; Other Talents' : 'Diseño &amp; Otros Talentos'}
                         </span>
                       </div>
                     </div>
@@ -3165,7 +3183,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           <span>{lang === 'en' ? 'Germany (CAU Kiel)' : 'Alemania (CAU Kiel)'}</span>
                           <span>{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                         </div>
-                        <span className="text-slate-900 font-bold block">M.Sc. Environmental Management</span>
+                        <span className="text-slate-900 font-bold block">{lang === 'en' ? 'M.Sc. Environmental Management' : 'M.Sc. en Gestión Ambiental'}</span>
                         <span className="text-slate-500 text-[11px]">Christian-Albrechts-Universität zu Kiel</span>
                       </div>
 
@@ -3174,17 +3192,17 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           <span>{lang === 'en' ? 'Poland (AMU Poznań)' : 'Polonia (AMU Poznań)'}</span>
                           <span>{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                         </div>
-                        <span className="text-slate-900 font-bold block">M.Sc. Integrated Catchment Management</span>
+                        <span className="text-slate-900 font-bold block">{lang === 'en' ? 'M.Sc. Integrated Catchment Management' : 'M.Sc. en Gestión Integrada de Cuencas'}</span>
                         <span className="text-slate-500 text-[11px]">Adam Mickiewicz University</span>
                       </div>
 
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                         <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase mb-0.5">
-                          <span>{lang === 'en' ? 'Chile (FCFM)' : 'Chile (FCFM)'}</span>
+                          <span>Chile (FCFM)</span>
                           <span>{lang === 'en' ? 'Engineering Degree' : 'Título de Ingeniero'}</span>
                         </div>
-                        <span className="text-slate-900 font-bold block">Engineering Geophysics (Geofísica)</span>
-                        <span className="text-slate-500 text-[11px]">Universidad de Chile (Facultad de Cs. Físicas y Matemáticas)</span>
+                        <span className="text-slate-900 font-bold block">{lang === 'en' ? 'Engineering Geophysics' : 'Ingeniería en Geofísica'}</span>
+                        <span className="text-slate-500 text-[11px]">{lang === 'en' ? 'Universidad de Chile (Faculty of Physical &amp; Mathematical Sciences)' : 'Universidad de Chile (Facultad de Ciencias Físicas y Matemáticas)'}</span>
                       </div>
                     </div>
 
@@ -3324,7 +3342,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
-                <button onClick={() => navigateTo('landing')} className="hover:underline">Home</button>
+                <button onClick={() => navigateTo('landing')} className="hover:underline">{lang === 'en' ? 'Home' : 'Inicio'}</button>
                 <span>/</span>
                 <span className="text-slate-900 font-bold">Contact</span>
               </div>
@@ -3366,7 +3384,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     Daniel S. Santander Urrutia
                   </h2>
                   <p className="text-xs sm:text-sm font-mono text-slate-600">
-                    Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany &amp; AMU Poznań, Poland)
+                    {lang === 'en' ? 'Engineering Geophysics (Universidad de Chile) • Double European M.Sc. (CAU Kiel, Germany & AMU Poznań, Poland)' : 'Ingeniería en Geofísica (Universidad de Chile) • Doble M.Sc. Europeo (CAU Kiel, Alemania y AMU Poznań, Polonia)'}
                   </p>
                   <p className="text-sm text-slate-600 leading-relaxed font-sans">
                     {lang === 'en'
@@ -3636,7 +3654,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
           <div className="flex items-center gap-3">
             <button onClick={() => navigateTo('landing')} className="font-bold text-slate-900 hover:text-sky-700 cursor-pointer">[Φ] DANIEL S. SANTANDER URRUTIA</button>
             <span>•</span>
-            <span>Geophysicist &amp; Double M.Sc.</span>
+            <span>{lang === 'en' ? 'Geophysicist &amp; Double M.Sc.' : 'Geofísico y Doble M.Sc.'}</span>
             <span>•</span>
             <a href="tel:+4917676497440" className="hover:text-emerald-700">+49 176 7649 7440</a>
           </div>
@@ -3647,7 +3665,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             <button
               type="button"
               onClick={handleOpenAdminGate}
-              aria-label="Internal Console"
+              aria-label={lang === 'en' ? 'Internal Console' : 'Consola interna'}
               className="text-[11px] text-slate-300 hover:text-slate-500 transition-colors px-1 cursor-pointer select-none"
             >
               π

@@ -78,7 +78,8 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       tagEs: 'Esencia y Parsimonia',
       titleEn: '3. Highlighting the Essential Core of a Problem',
       titleEs: '3. Relevar lo Esencial de un Problema',
-      mentorEn: 'Guillermo de Ockham',
+      mentorEn: 'William of Ockham',
+      mentorEs: 'Guillermo de Ockham',
       quoteEn: '"Entities must not be multiplied beyond necessity."',
       quoteEs: '"No deben multiplicarse los entes sin necesidad."',
       descEn: 'Every complex engineering problem contains an elegant governing core hidden beneath layers of noise, excess variables, and decorative jargon. Guided by Occam\'s razor, the student extracts what truly matters.',
@@ -171,7 +172,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
         <div className="max-w-4xl mx-auto text-center mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 text-sky-300 font-mono text-xs font-bold mb-4 shadow-sm">
             <Compass className="w-3.5 h-3.5 text-sky-400" />
-            <span>MÉTODO PIAD™ • PEDAGOGÍA DE LA INDAGACIÓN ABIERTA Y DIGITAL</span>
+            <span>{lang === 'en' ? 'PIAD METHOD™ • OPEN & DIGITAL INQUIRY PEDAGOGY' : 'MÉTODO PIAD™ • PEDAGOGÍA DE LA INDAGACIÓN ABIERTA Y DIGITAL'}</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
@@ -293,7 +294,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               
               <div className={`space-y-5 ${steps[activeStep].image ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-sky-400 font-mono text-xs font-bold border border-slate-700">
-                  <span>{steps[activeStep].mentorEn}</span>
+                  <span>{lang === 'en' ? steps[activeStep].mentorEn : (steps[activeStep].mentorEs || steps[activeStep].mentorEn)}</span>
                   <span>•</span>
                   <span>{lang === 'en' ? steps[activeStep].tagEn : steps[activeStep].tagEs}</span>
                 </div>

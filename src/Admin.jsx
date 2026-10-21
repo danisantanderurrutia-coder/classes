@@ -836,7 +836,7 @@ Prueba los simuladores y agenda 15 min gratis aquí: ${BASE_SITE_URL}?src=fb-chi
     badge: 'FÍSICA TEÓRICA PARA AUTODIDACTAS & MENTES CURIOSAS',
     headline: '¿FASCINADO CON LA FÍSICA CUÁNTICA PERO HARTO DE LIBROS SECOS?',
     subheadline: 'De la Dualidad Onda-Partícula y el Gato de Schrödinger a la Computación Cuántica sin filtros universitarios aburridos.',
-    languageNotice: '💬 “God does not play dice with the universe... but we can simulate the odds!” — Aprende los conceptos reales (espacios de Hilbert, espín, superposición y entrelazamiento) con intuición geométrica pura y simulaciones en Python.',
+    languageNotice: '💬 “Dios no juega a los dados con el universo... ¡pero podemos simular las probabilidades!” — Aprende los conceptos reales (espacios de Hilbert, espín, superposición y entrelazamiento) con intuición geométrica pura y simulaciones en Python.',
     bullets: [
       'Concepto Real vs. Misticismo: Entiende el colapso de la función de onda y el experimento de la doble rendija sin humo pseudocientífico.',
       'Intuición Matemática sin Sufrir: Matrices de Pauli, operadores hermíticos y notación bra-ket explicados con geometría visual.',

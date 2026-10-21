@@ -133,7 +133,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                 </div>
 
                 {/* Geofrecuencia Brand Icon Badge */}
-                <div className="absolute -top-3 -left-3 bg-amber-400 p-2 rounded-xl border-2 border-slate-900 shadow-lg" title="Sello de Investigación Geofísica">
+                <div className="absolute -top-3 -left-3 bg-amber-400 p-2 rounded-xl border-2 border-slate-900 shadow-lg" title={lang === 'en' ? 'Geophysical Research Seal' : 'Sello de Investigación Geofísica'}>
                   <img src="./geofrecuencia_symbol.svg" alt="Geofrecuencia" className="w-5 h-5 text-slate-950" />
                 </div>
 
@@ -188,28 +188,28 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                       <span>🇨🇱 CHILE (FCFM)</span>
                       <span className="text-amber-300 font-bold">{lang === 'en' ? 'Geophysics Degree' : 'Título en Geofísica'}</span>
                     </div>
-                    <div className="text-white font-bold text-sm">Geofísica (Hydro-Geophysics & Earth Science)</div>
-                    <div className="text-slate-400 text-[11px]">Universidad de Chile • Facultad de Ciencias Físicas y Matemáticas (Beauchef)</div>
+                    <div className="text-white font-bold text-sm">{lang === 'en' ? 'Geophysics (Hydro-Geophysics & Earth Science)' : 'Geofísica (Hidrogeofísica y Ciencias de la Tierra)'}</div>
+                    <div className="text-slate-400 text-[11px]">{lang === 'en' ? 'Universidad de Chile • Faculty of Physical & Mathematical Sciences (Beauchef)' : 'Universidad de Chile • Facultad de Ciencias Físicas y Matemáticas (Beauchef)'}</div>
                   </div>
 
                   {/* Germany */}
                   <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
                     <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
-                      <span>🇩🇪 ALEMANIA (CAU KIEL)</span>
+                      <span>{lang === 'en' ? '🇩🇪 GERMANY (CAU KIEL)' : '🇩🇪 ALEMANIA (CAU KIEL)'}</span>
                       <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                     </div>
-                    <div className="text-white font-bold text-sm">M.Sc. Environmental Management</div>
-                    <div className="text-slate-400 text-[11px]">Christian-Albrechts-Universität zu Kiel (Alemania) • Tesis en Dinámica de Gases GEI y Humedales</div>
+                    <div className="text-white font-bold text-sm">{lang === 'en' ? 'M.Sc. Environmental Management' : 'M.Sc. en Gestión Ambiental'}</div>
+                    <div className="text-slate-400 text-[11px]">{lang === 'en' ? 'Christian-Albrechts-Universität zu Kiel (Germany) • Thesis on Greenhouse Gas Dynamics & Wetlands' : 'Christian-Albrechts-Universität zu Kiel (Alemania) • Tesis en Dinámica de Gases GEI y Humedales'}</div>
                   </div>
 
                   {/* Poland */}
                   <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700 hover:border-slate-600 transition-colors">
                     <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase mb-0.5">
-                      <span>🇵🇱 POLONIA (AMU POZNAŃ)</span>
+                      <span>{lang === 'en' ? '🇵🇱 POLAND (AMU POZNAŃ)' : '🇵🇱 POLONIA (AMU POZNAŃ)'}</span>
                       <span className="text-emerald-400 font-bold">{lang === 'en' ? 'Double Master Degree' : 'Doble Grado de Máster'}</span>
                     </div>
-                    <div className="text-white font-bold text-sm">M.Sc. Integrated Catchment Management</div>
-                    <div className="text-slate-400 text-[11px]">Adam Mickiewicz University (Polonia) • Tesis en Limnología y Gestión Integral de Cuencas</div>
+                    <div className="text-white font-bold text-sm">{lang === 'en' ? 'M.Sc. Integrated Catchment Management' : 'M.Sc. en Gestión Integrada de Cuencas'}</div>
+                    <div className="text-slate-400 text-[11px]">{lang === 'en' ? 'Adam Mickiewicz University (Poland) • Thesis on Limnology & Integrated Catchment Management' : 'Adam Mickiewicz University (Polonia) • Tesis en Limnología y Gestión Integral de Cuencas'}</div>
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                   type="button"
                   onClick={handleDownloadVCard}
                   className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold flex items-center justify-center gap-2 border border-slate-600 transition-all cursor-pointer shadow-md group"
-                  title="Guardar contacto en tu teléfono (vCard)"
+                  title={lang === 'en' ? 'Save contact to your phone (vCard)' : 'Guardar contacto en tu teléfono (vCard)'}
                 >
                   <Download className="w-4 h-4 text-emerald-400 group-hover:-translate-y-0.5 transition-transform" />
                   <span>{lang === 'en' ? 'Save Contact (vCard)' : 'Guardar Contacto (vCard)'}</span>
@@ -453,7 +453,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
               type="button"
               onClick={handleCopyLink}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 hover:border-sky-400/50 font-mono text-xs font-bold transition-all shrink-0 cursor-pointer shadow-sm"
-              title="Copy website link to clipboard"
+              title={lang === 'en' ? 'Copy website link to clipboard' : 'Copiar enlace del sitio al portapapeles'}
             >
               {copiedLink ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               <span>{copiedLink ? (lang === 'en' ? 'Link Copied!' : '¡Enlace Copiado!') : (lang === 'en' ? 'Copy Web Link' : 'Copiar Enlace Web')}</span>
@@ -476,7 +476,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
             <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-[1200/630] max-w-4xl mx-auto shadow-2xl">
               <img
                 src="./og_banner_preview.jpg"
-                alt="Math & Physics Classes • Social Preview Card"
+                alt={lang === 'en' ? 'Math & Physics Classes • Social Preview Card' : 'Clases de Matemáticas y Física • Tarjeta de vista previa social'}
                 className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
                 loading="lazy"
               />
@@ -508,7 +508,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs font-bold border border-slate-700 transition-all"
-                title="Open full resolution in new tab"
+                title={lang === 'en' ? 'Open full resolution in new tab' : 'Abrir en resolución completa en una pestaña nueva'}
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Open in New Tab' : 'Abrir en Pestaña Nueva'}</span>

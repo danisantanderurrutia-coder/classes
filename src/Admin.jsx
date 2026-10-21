@@ -2457,101 +2457,383 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
         {/* ================================================================= */}
         {activeTab === 'classifieds' && (
           <div className="space-y-8">
+            {/* Master Checklist Card */}
             <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
-              <div>
-                <span className="font-mono text-[11px] uppercase tracking-widest text-sky-400 font-bold block mb-1">
-                  Step A Checklist • Recordatorio Automático cada 5 Días
-                </span>
-                <h2 className="text-xl font-bold text-white">
-                  Matriz de Portales de Clasificados (Alemania, Suiza, Chile, España, UK/NL)
-                </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Publica con los nuevos precios de tracción (<strong>Ab 25 €</strong> en Alemania/España, <strong>$20.000 CLP</strong> en Chile, <strong>42 CHF</strong> en Suiza) y renueva cada 5 días.
-                </p>
+              
+              {/* Header & Overall Progress */}
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 border-b border-slate-800 pb-6">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[11px] uppercase tracking-widest text-emerald-400 font-bold block">
+                      Difusión Multi-Canal • Checklist Operativo
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-bold">
+                      {masterChecklist.filter((i) => i.status === 'publicado').length}/{masterChecklist.length} Cubiertos
+                    </span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    Checklist de Posteo &amp; Lugares (Físicos, Clasificados &amp; Foros)
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+                    Haz clic en el checkbox conforme vayas pegando carteles en campus o publicando anuncios en portales y foros. El sistema guarda la fecha y te avisa cuando un anuncio cumpla más de 5 días para republicarlo.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setShowAddPlaceModal(!showAddPlaceModal)}
+                    className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-lg shadow-sky-600/20"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>{showAddPlaceModal ? 'Cerrar Formulario' : 'Añadir Nuevo Lugar'}</span>
+                  </button>
+                  <button
+                    onClick={resetMasterChecklist}
+                    className="px-3.5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 font-mono text-xs flex items-center gap-1.5 cursor-pointer"
+                    title="Reiniciar todos a pendiente para un nuevo ciclo de exámenes"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Nuevo Ciclo</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="border-b border-slate-800 font-mono text-[11px] text-slate-400 uppercase">
-                      <th className="py-3 px-4">País / Mercado</th>
-                      <th className="py-3 px-4">Plataforma</th>
-                      <th className="py-3 px-4">Moneda</th>
-                      <th className="py-3 px-4">Última Publicación</th>
-                      <th className="py-3 px-4">Estado / Alerta 5 Días</th>
-                      <th className="py-3 px-4 text-right">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/70">
-                    {channels.map((ch) => {
-                      const days = getDaysSince(ch.lastPosted);
-                      const needsRenewal = ch.status === 'activo' && days !== null && days >= 5;
-                      return (
-                        <tr key={ch.id} className="hover:bg-slate-800/40">
-                          <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
-                            {ch.country}
-                          </td>
-                          <td className="py-3.5 px-4">
-                            <div className="font-semibold text-slate-200 flex items-center gap-1.5">
-                              <span>{ch.platform}</span>
-                              <a
-                                href={ch.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-sky-400 hover:text-sky-300"
-                              >
-                                <ExternalLink className="w-3.5 h-3.5" />
-                              </a>
+              {/* Progress Summary Cards */}
+              {(() => {
+                const totalCount = masterChecklist.length;
+                const completedCount = masterChecklist.filter((i) => i.status === 'publicado').length;
+                const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+                const countFisicosDone = masterChecklist.filter((i) => i.category === 'fisico' && i.status === 'publicado').length;
+                const countFisicosTotal = masterChecklist.filter((i) => i.category === 'fisico').length;
+                const countClasificadosDone = masterChecklist.filter((i) => i.category === 'clasificado' && i.status === 'publicado').length;
+                const countClasificadosTotal = masterChecklist.filter((i) => i.category === 'clasificado').length;
+                const countForosDone = masterChecklist.filter((i) => i.category === 'foro' && i.status === 'publicado').length;
+                const countForosTotal = masterChecklist.filter((i) => i.category === 'foro').length;
+
+                return (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-base font-extrabold shrink-0">
+                          {pct}%
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-mono text-slate-400">Progreso Total</div>
+                          <div className="text-sm font-bold text-white">{completedCount} de {totalCount} hechos</div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                          <MapPin className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-mono text-slate-400">Físicos (Hannover)</div>
+                          <div className="text-sm font-bold text-amber-300">{countFisicosDone} de {countFisicosTotal} pegados</div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                          <Globe className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-mono text-slate-400">Clasificados (5 Países)</div>
+                          <div className="text-sm font-bold text-sky-300">{countClasificadosDone} de {countClasificadosTotal} activos</div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+                          <MessageSquare className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-mono text-slate-400">Foros &amp; Reddit</div>
+                          <div className="text-sm font-bold text-purple-300">{countForosDone} de {countForosTotal} publicados</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-xs font-mono text-slate-400">
+                        <span>Cobertura de Canales de Difusión</span>
+                        <span className="text-emerald-400 font-bold">{pct}% ({completedCount}/{totalCount})</span>
+                      </div>
+                      <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                        <div
+                          className="h-full bg-gradient-to-r from-emerald-500 via-sky-500 to-indigo-500 rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+
+              {/* Add Custom Place Accordion Form */}
+              {showAddPlaceModal && (
+                <form
+                  onSubmit={handleAddNewPlace}
+                  className="p-5 rounded-2xl bg-slate-950 border-2 border-sky-500/40 space-y-4 animate-fadeIn"
+                >
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <div className="font-bold text-sm text-white flex items-center gap-2">
+                      <Plus className="w-4 h-4 text-sky-400" />
+                      <span>Añadir Nuevo Lugar de Posteo (Físico o Digital)</span>
+                    </div>
+                    <span className="text-xs font-mono text-slate-400">Se guardará automáticamente en tu navegador</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label className="block font-mono text-slate-400 mb-1">Nombre del Lugar / Portal / Grupo *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Ej. Tablón Fachschaft Maschinenbau / r/learnmath"
+                        value={newPlace.name}
+                        onChange={(e) => setNewPlace({ ...newPlace, name: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-slate-400 mb-1">Tipo de Canal</label>
+                      <select
+                        value={newPlace.category}
+                        onChange={(e) => setNewPlace({ ...newPlace, category: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white font-mono"
+                      >
+                        <option value="fisico">🏫 Físico (Campus / Calle)</option>
+                        <option value="clasificado">🌐 Portal de Clasificados</option>
+                        <option value="foro">💬 Foro Web / Comunidad / Reddit</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-slate-400 mb-1">Zona / Mercado</label>
+                      <input
+                        type="text"
+                        placeholder="Ej. Campus Garbsen / Santiago / Chile"
+                        value={newPlace.zone}
+                        onChange={(e) => setNewPlace({ ...newPlace, zone: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <label className="block font-mono text-slate-400 mb-1">URL Directa (opcional si es digital)</label>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={newPlace.url}
+                        onChange={(e) => setNewPlace({ ...newPlace, url: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white font-mono text-[11px]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-slate-400 mb-1">Notas / Consejos de Publicación</label>
+                      <input
+                        type="text"
+                        placeholder="Ej. Pegar junto a la puerta principal / Hilo semanal los lunes"
+                        value={newPlace.notes}
+                        onChange={(e) => setNewPlace({ ...newPlace, notes: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowAddPlaceModal(false)}
+                      className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-mono text-xs cursor-pointer"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold cursor-pointer shadow-md"
+                    >
+                      Guardar y Añadir a la Lista
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3 text-xs font-mono">
+                {[
+                  { id: 'all', label: `🌟 Todos (${masterChecklist.length})` },
+                  { id: 'fisico', label: `🏫 Físicos (${masterChecklist.filter((i) => i.category === 'fisico').length})` },
+                  { id: 'clasificado', label: `🌐 Clasificados (${masterChecklist.filter((i) => i.category === 'clasificado').length})` },
+                  { id: 'foro', label: `💬 Foros & Reddit (${masterChecklist.filter((i) => i.category === 'foro').length})` },
+                  { id: 'pending', label: `⏳ Pendientes (${masterChecklist.filter((i) => i.status !== 'publicado').length})` },
+                  { id: 'completed', label: `✓ Publicados (${masterChecklist.filter((i) => i.status === 'publicado').length})` }
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => setChecklistFilter(f.id)}
+                    className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                      checklistFilter === f.id
+                        ? 'bg-sky-600/20 border-sky-500 text-white font-bold'
+                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Master Checklist Items List */}
+              <div className="space-y-3">
+                {masterChecklist
+                  .filter((item) => {
+                    if (checklistFilter === 'fisico') return item.category === 'fisico';
+                    if (checklistFilter === 'clasificado') return item.category === 'clasificado';
+                    if (checklistFilter === 'foro') return item.category === 'foro';
+                    if (checklistFilter === 'pending') return item.status !== 'publicado';
+                    if (checklistFilter === 'completed') return item.status === 'publicado';
+                    return true;
+                  })
+                  .map((item) => {
+                    const days = getDaysSince(item.lastChecked);
+                    const isDone = item.status === 'publicado';
+                    const needsRenewal = isDone && days !== null && days >= 5;
+
+                    return (
+                      <div
+                        key={item.id}
+                        className={`p-4 rounded-2xl border transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${
+                          isDone
+                            ? 'bg-slate-950/80 border-slate-800/90'
+                            : 'bg-slate-950 border-slate-800 hover:border-slate-700'
+                        }`}
+                      >
+                        {/* Left: Checkbox + Info */}
+                        <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                          <button
+                            type="button"
+                            onClick={() => toggleMasterChecklistItem(item.id)}
+                            className={`mt-0.5 w-7 h-7 rounded-xl border flex items-center justify-center shrink-0 transition-all cursor-pointer ${
+                              isDone
+                                ? 'bg-emerald-500 border-emerald-400 text-white shadow-md shadow-emerald-500/20'
+                                : 'bg-slate-900 border-slate-700 hover:border-sky-400 text-transparent'
+                            }`}
+                            title={isDone ? 'Marcar como pendiente' : 'Marcar como publicado / pegado'}
+                          >
+                            <Check className="w-4 h-4 stroke-[3]" />
+                          </button>
+
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              {/* Category Badge */}
+                              {item.category === 'fisico' && (
+                                <span className="px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px] font-bold flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  <span>Físico Hannover</span>
+                                </span>
+                              )}
+                              {item.category === 'clasificado' && (
+                                <span className="px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/30 text-sky-400 font-mono text-[10px] font-bold flex items-center gap-1">
+                                  <Globe className="w-3 h-3" />
+                                  <span>Clasificado</span>
+                                </span>
+                              )}
+                              {item.category === 'foro' && (
+                                <span className="px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-[10px] font-bold flex items-center gap-1">
+                                  <MessageSquare className="w-3 h-3" />
+                                  <span>Foro / Red</span>
+                                </span>
+                              )}
+
+                              <span className="font-bold text-sm text-white truncate">
+                                {item.name}
+                              </span>
+
+                              <span className="text-[11px] font-mono text-slate-400">
+                                • {item.zone || item.country}
+                              </span>
                             </div>
-                            <div className="text-[11px] text-slate-400">{ch.notes}</div>
-                          </td>
-                          <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
-                            {ch.currency}
-                          </td>
-                          <td className="py-3.5 px-4 font-mono text-slate-300">
-                            {ch.lastPosted ? (
-                              <span>{ch.lastPosted} ({days === 0 ? 'hoy' : `hace ${days}d`})</span>
-                            ) : (
-                              <span className="text-slate-500">Sin publicar</span>
-                            )}
-                          </td>
-                          <td className="py-3.5 px-4 font-mono">
-                            {ch.status !== 'activo' ? (
-                              <span className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[11px]">
-                                Pendiente
+
+                            <div className="text-xs text-slate-400 leading-snug">
+                              {item.notes}
+                            </div>
+
+                            {/* Quick Tag / Link */}
+                            <div className="flex flex-wrap items-center gap-3 pt-0.5 text-[11px] font-mono">
+                              {item.url && (
+                                <a
+                                  href={item.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-sky-400 hover:text-sky-300 font-bold inline-flex items-center gap-1 hover:underline"
+                                >
+                                  <span>Abrir Portal / Foro</span>
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              )}
+                              {item.qrTag && (
+                                <span className="text-slate-500">
+                                  Tag QR: <code className="text-sky-400">{item.qrTag}</code>
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right: Status Pill & Action Buttons */}
+                        <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
+                          {/* Status Badge */}
+                          <div className="font-mono text-xs">
+                            {!isDone ? (
+                              <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-[11px]">
+                                ⏳ Pendiente
                               </span>
                             ) : needsRenewal ? (
-                              <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-bold flex items-center gap-1 w-fit">
+                              <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-bold flex items-center gap-1">
                                 <AlertTriangle className="w-3 h-3" />
-                                Renovar (&gt;5 días)
+                                <span>Renovar ({days}d)</span>
                               </span>
                             ) : (
-                              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 w-fit">
+                              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" />
-                                Activo al día
+                                <span>{days === 0 ? 'Hecho hoy' : `Hace ${days}d`}</span>
                               </span>
                             )}
-                          </td>
-                          <td className="py-3.5 px-4 text-right whitespace-nowrap space-x-2">
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-1.5">
                             <button
-                              onClick={() => markChannelPostedToday(ch.id)}
-                              className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-[11px] font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                              type="button"
+                              onClick={() => markItemCheckedToday(item.id)}
+                              className="px-2.5 py-1.5 rounded-lg bg-sky-600/20 hover:bg-sky-600 border border-sky-500/40 text-sky-300 hover:text-white font-mono text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                              title="Actualizar fecha a hoy"
                             >
                               <RefreshCw className="w-3 h-3" />
-                              <span>Publicado Hoy</span>
+                              <span className="hidden sm:inline">Hoy</span>
                             </button>
-                            <button
-                              onClick={() => toggleChannelStatus(ch.id)}
-                              className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px] cursor-pointer"
-                            >
-                              {ch.status === 'activo' ? 'Pausar' : 'Activar'}
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+
+                            {item.id.startsWith('custom-') && (
+                              <button
+                                type="button"
+                                onClick={() => deleteMasterChecklistItem(item.id)}
+                                className="p-1.5 rounded-lg bg-slate-900 hover:bg-rose-500/20 text-slate-500 hover:text-rose-400 border border-slate-800 transition-all cursor-pointer"
+                                title="Eliminar este lugar personalizado"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
 

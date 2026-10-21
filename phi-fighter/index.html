@@ -4320,6 +4320,20 @@
         const progress = Math.min(1, breakdownTimer / breakdownDuration);
         document.getElementById('cb-timer-fill').style.width = `${Math.round(progress * 100)}%`;
 
+        const continueBtn = document.getElementById('cb-btn-continue');
+        if (continueBtn) {
+          if (breakdownTimer < 2.0) {
+            const rem = Math.ceil(2.0 - breakdownTimer);
+            continueBtn.innerText = `ANALYZING TELEMETRY... (${rem}s)`;
+            continueBtn.style.opacity = '0.5';
+            continueBtn.style.pointerEvents = 'none';
+          } else {
+            continueBtn.innerText = 'ENGAGE HYPERDRIVE [SPACE / CLICK] 🌌';
+            continueBtn.style.opacity = '1.0';
+            continueBtn.style.pointerEvents = 'auto';
+          }
+        }
+
         const orbitAngle = breakdownTimer * 0.75;
         const orbitDist = 12 + Math.sin(breakdownTimer * 0.6) * 2;
         camera.position.set(
@@ -4469,7 +4483,7 @@
         document.getElementById('ui-fg-val').innerText = `${gravityForce.length().toFixed(1)} kN`;
       }
 
-      // Camera Positioning
+      // Camera Positioning & Dynamic Lens FOV
       if (introActive) {
         if (!transformationInProgress) {
           // Floating cinematic steadicam in front of 3D Phi glyph
@@ -4482,33 +4496,60 @@
         camera.position.copy(shipRoot.position);
         camera.rotation.copy(shipRoot.rotation);
       } else {
+        // 2nd-order spring-damper camera chase with Dutch banking tilt
         const chaseOffset = new THREE.Vector3(0, 1.8, 6.4);
         chaseOffset.applyQuaternion(shipRoot.quaternion);
         chaseOffset.add(shipRoot.position);
         camera.position.lerp(chaseOffset, 0.14);
         camera.lookAt(shipRoot.position.x, shipRoot.position.y + 0.25, shipRoot.position.z - 25);
+
+        // Camera banking tilt during lateral high-G turns
+        const cameraRoll = -shipVelocity.x * 0.012;
+        camera.rotation.z += (cameraRoll - camera.rotation.z) * 4 * delta;
+
+        // Dynamic Speed FOV (60 deg base -> up to 74 deg under high velocity)
+        const speedRatio = Math.min(1.0, shipVelocity.length() / 42);
+        const targetFov = 60 + speedRatio * 12;
+        if (Math.abs(camera.fov - targetFov) > 0.05) {
+          camera.fov += (targetFov - camera.fov) * 5 * delta;
+          camera.updateProjectionMatrix();
+        }
       }
 
-      // UPDATE ENEMY INTERCEPTOR DRONES (SECTOR 2+)
+      // UPDATE ENEMY REBEL STARSHIPS (SECTORS 1-10)
       document.getElementById('ui-hostiles-stat').innerText = `${enemies.length} Active`;
       for (let i = enemies.length - 1; i >= 0; i--) {
         const en = enemies[i];
         en.position.z += en.userData.speedZ * delta;
 
-        // AI Steer towards player's position
-        en.position.x += (shipRoot.position.x - en.position.x) * 1.2 * delta;
-        en.position.y += (shipRoot.position.y - en.position.y) * 1.2 * delta;
-        en.rotation.z += 0.02;
+        // 3D Sinusoidal dogfight weaving, strafing and evasion
+        const ud = en.userData;
+        const targetX = shipRoot.position.x + Math.sin(time * ud.weaveSpeedX + ud.weavePhaseX) * ud.weaveAmpX;
+        const targetY = shipRoot.position.y + Math.cos(time * ud.weaveSpeedY + ud.weavePhaseY) * ud.weaveAmpY;
 
-        // Hostile Blaster Fire (fires every 2.2 seconds if in front of player)
-        if (time - en.userData.lastShotTime > 2.2 && en.position.z < shipRoot.position.z) {
-          en.userData.lastShotTime = time;
+        const vx = (targetX - en.position.x) * ud.agility * 2.2;
+        const vy = (targetY - en.position.y) * ud.agility * 2.2;
+
+        en.position.x += vx * delta;
+        en.position.y += vy * delta;
+
+        // Banking Dutch tilt and pitch based on flight direction
+        const targetRoll = -vx * 0.04;
+        const targetPitch = vy * 0.025;
+        en.rotation.z += (targetRoll - en.rotation.z) * 6 * delta;
+        en.rotation.x += (targetPitch - en.rotation.x) * 6 * delta;
+        en.rotation.y = Math.sin(time * ud.weaveSpeedX) * 0.22;
+
+        // Hostile Blaster Fire (fires aimed burst if in front of player)
+        if (time - ud.lastShotTime > 2.0 && en.position.z < shipRoot.position.z - 15) {
+          ud.lastShotTime = time;
           enemyFireLaser(en.position);
         }
 
         // Collision with Player
-        if (!isGameOver && !introActive && shipRoot.position.distanceTo(en.position) < en.userData.radius + 1.2) {
+        if (!isGameOver && !introActive && shipRoot.position.distanceTo(en.position) < ud.radius + 1.2) {
           triggerExplosion(en.position, true);
+          flashPlayerShields();
           scene.remove(en);
           enemies.splice(i, 1);
           applyPlayerDamage(40, 'COLLISION');
@@ -4526,17 +4567,22 @@
       // UPDATE ENEMY LASERS (HITTING PLAYER)
       for (let i = enemyLasers.length - 1; i >= 0; i--) {
         const el = enemyLasers[i];
-        el.position.z += 90 * delta; // Flies towards player (+Z)
+        if (el.userData && el.userData.velocity) {
+          el.position.addScaledVector(el.userData.velocity, delta);
+        } else {
+          el.position.z += 90 * delta; // Flies towards player (+Z)
+        }
 
         // Hit player check!
         if (!isGameOver && !introActive && el.position.distanceTo(shipRoot.position) < 1.6) {
+          flashPlayerShields();
           scene.remove(el);
           enemyLasers.splice(i, 1);
           applyPlayerDamage(15, 'ENEMY');
           continue;
         }
 
-        if (el.position.z > shipRoot.position.z + 25) {
+        if (el.position.z > shipRoot.position.z + 25 || el.position.distanceTo(shipRoot.position) > 220) {
           scene.remove(el);
           enemyLasers.splice(i, 1);
         }

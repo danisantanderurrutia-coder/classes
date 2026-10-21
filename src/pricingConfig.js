@@ -36,26 +36,26 @@ export const SUBJECT_COMPLEXITY_TIERS = [
     badgeEn: 'Tier 1 • Foundations & Calculus',
     shortEs: 'Cálculo, Física Base & IB',
     shortEn: 'Calculus, Physics I & IB',
-    coursesEs: 'Cálculo I–II, Física General, IB Diploma, Abitur, PAES',
-    coursesEn: 'Calculus I–II, General Physics, IB Diploma, Abitur'
+    coursesEs: 'Cálculo I–III, Matemática Base, Física General, Cuántica para Curiosos, IB Diploma',
+    coursesEn: 'Calculus I–III, Foundational Math, General Physics, Quantum Concepts, IB Diploma'
   },
   {
     id: 'bachelor',
     badgeEs: 'Nivel 2 • Ingeniería Intermedia',
     badgeEn: 'Tier 2 • Intermediate Engineering',
-    shortEs: 'Álgebra, EDOs & Mecánica',
-    shortEn: 'Linear Algebra, ODEs & Mechanics',
-    coursesEs: 'Álgebra Lineal, EDOs, Mecánica Analítica, Electromagnetismo',
-    coursesEn: 'Linear Algebra, ODEs, Analytical Mechanics, Electromagnetism'
+    shortEs: 'Álgebra, Mecánica & Electromagnetismo',
+    shortEn: 'Linear Algebra, Mechanics & Electromagnetism',
+    coursesEs: 'Álgebra Lineal, Mecánica Analítica, Electromagnetismo y Ecuaciones de Maxwell',
+    coursesEn: 'Linear Algebra, Analytical Mechanics, Electromagnetism & Maxwell Equations'
   },
   {
     id: 'master',
-    badgeEs: 'Nivel 3 • Avanzado, Python & Tesis',
-    badgeEn: 'Tier 3 • Advanced, Python & Thesis',
-    shortEs: 'Fluidos, Geofísica, Python & Tesis',
-    shortEn: 'Fluids, Geophysics, Python & Thesis',
-    coursesEs: 'Mecánica de Fluidos, Geofísica, Python Científico + IA, Tesis',
-    coursesEn: 'Fluid Mechanics, Geophysics, Scientific Python + AI, Thesis'
+    badgeEs: 'Nivel 3 • Avanzado, Datos & Tesis',
+    badgeEn: 'Tier 3 • Advanced, Data & Thesis',
+    shortEs: 'Atmósfera, Suelos, Datos & Tesis',
+    shortEn: 'Atmosphere, Soils, Data & Thesis',
+    coursesEs: 'Física Atmosférica, Física de Suelos & Hidrogeofísica, Python Científico & MATLAB, Tesis & Titulación',
+    coursesEn: 'Atmospheric Physics, Soil Physics & Hydrogeophysics, Scientific Python & MATLAB, Thesis & Mentorship'
   }
 ];
 

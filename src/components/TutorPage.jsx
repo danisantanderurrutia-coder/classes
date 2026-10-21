@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   GraduationCap,
   MapPin,
@@ -17,7 +17,11 @@ import {
   FileCheck2,
   Atom,
   Layers,
-  Award
+  Award,
+  Share2,
+  Copy,
+  Check,
+  Eye
 } from 'lucide-react';
 
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -26,7 +30,27 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
+const InstagramIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
 export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  const handleCopyLink = () => {
+    const shareUrl = 'https://danisantanderurrutia-coder.github.io/classes/';
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2500);
+      });
+    }
+  };
+
   // Downloadable digital vCard file
   const handleDownloadVCard = () => {
     const vCardContent = [
@@ -131,7 +155,7 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
               {/* Identity & Legal Trust Badge */}
               <div className="space-y-1.5">
                 <div className="inline-block bg-white text-slate-950 px-3 py-0.5 rounded font-mono font-extrabold text-sm tracking-tight uppercase">
-                  DANIEL SANTANDER URRUTIA
+                  DANIEL S. SANTANDER URRUTIA
                 </div>
                 <div className="text-xs font-mono text-amber-300 font-semibold">
                   Geophysicist (B.Sc.) • Double European M.Sc.
@@ -142,16 +166,16 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
                 </div>
               </div>
 
-              {/* Official German Registration Notice */}
+              {/* Official Invoicing Notice */}
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 text-[11px] font-mono text-slate-300 space-y-1 w-full max-w-sm">
                 <div className="flex items-center gap-1.5 text-emerald-400 font-bold uppercase text-[10px]">
                   <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  <span>{lang === 'en' ? 'Official Invoices in Germany' : 'Factura Oficial en Alemania'}</span>
+                  <span>{lang === 'en' ? 'Official Invoices in Germany' : 'Facturas Oficiales en Alemania'}</span>
                 </div>
                 <p className="text-slate-400 leading-snug">
                   {lang === 'en'
-                    ? 'Registered Freiberufler (§ 19 UStG). Tax-deductible invoices valid for German university claims, student aid, and educational grants.'
-                    : 'Freiberufler registrado en Alemania (§ 19 UStG). Emisión de factura oficial deducible para impuestos, becas y universidades.'}
+                    ? 'Registered independent educator (Freiberufler). Official compliant receipts and invoices provided for all tutoring programs.'
+                    : 'Educador independiente registrado en Alemania (Freiberufler). Comprobantes y facturas oficiales para todos los programas.'}
                 </p>
               </div>
             </div>

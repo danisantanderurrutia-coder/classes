@@ -3961,7 +3961,7 @@ export default function PhysicsLab({
     }
   }, [selectedId, safeParams, simTime, showDCL, telemetry.raw]);
 
-  const linkedCourse = courses.find((c) => c.id === currentProblem.courseId) || courses[0];
+  const linkedCourse = courses.find((c) => c.id === currentProblem.courseId || (currentProblem.courseId === 'geophysics' && c.id === 'soil_physics')) || courses[0];
 
   return (
     <div className="pt-24 pb-12 sm:pt-28 sm:pb-16">

@@ -43,7 +43,7 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
       titleEn: '1. Observation (Sensory Intuition & Sketching)',
       titleEs: '1. Observación (Intuición Sensible y Bocetos)',
       mentorEn: 'Leonardo Da Vinci',
-      image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+      image: './images/stock/photo-1579783900882-c0d3dad7b119-900.webp',
       simulationImage: '/images/method-piad.webp',
       imageCaptionEn: 'Da Vinci method: analytical sketching and observational geometry before abstract formalisms.',
       imageCaptionEs: 'Método Da Vinci: dibujo analítico y geometría observacional antes del formalismo abstracto.',

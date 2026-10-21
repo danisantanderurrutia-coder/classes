@@ -10,8 +10,10 @@ Built following rigorous pedagogical and computational geophysics standards.
 ## ⚡ Quick Start Options
 
 ### Option 1: Instant Standalone Launch (No installation needed)
-You can directly double-click or open the self-contained HTML file in any modern browser:
-- [`index_standalone.html`](./index_standalone.html) or [`dist/standalone.html`](./dist/standalone.html)
+Generate the self-contained HTML file locally (it is git-ignored, so it is not in the repository) and open it in any modern browser:
+```bash
+npm run build:standalone   # creates dist/standalone.html and ./index_standalone.html
+```
 
 ### Option 2: Run Live Development Server with Hot-Reloading
 ```bash
@@ -29,13 +31,22 @@ To regenerate the single-file bundle anytime:
 npm run build:standalone
 ```
 
+### Routes (hash-based)
+`#/` (landing), `#/lab`, `#/courses`, `#/tutor`, `#/piad`, `#/library`, `#/pricing`, `#/contact`, `#/game`, `#/admin`.
+The old `#/precios` link is kept as an alias and redirects to `#/pricing`.
+
+### Content checks
+```bash
+npm run check   # validates EN/ES key pairs and that every LaTeX formula compiles with KaTeX (also runs in CI)
+```
+
 ---
 
 ## 🔬 Core Features & Architecture
 
 ### 1. Sticky Navigation Bar & Header
 - **Monogram & Logo**: `[Φ] GeoPhysics & STEM Mentorship` with real-time green pulse indicator (*"Open for Semester Exam Sprints & Master Coaching"*).
-- **Navigation Links**: Fast anchor scrolling to `#lab`, `#courses`, `#calculator`, `#mentor`, `#faq`.
+- **Navigation Links**: Fast anchor scrolling to `#lab`, `#courses`, `#pricing`, `#tutor`, `#contact`.
 - **Language Switcher (EN | ES)**: Instant pill toggle switching the entire app context between English and Spanish.
 - **CTA**: Highlighted `"Book Intro Call"` button triggering the diagnostic session modal.
 

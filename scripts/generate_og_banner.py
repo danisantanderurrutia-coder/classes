@@ -125,5 +125,6 @@ r_draw.text((44, 24), 'DANIEL S. SANTANDER URRUTIA', font=font_ribbon, fill=(248
 bg_final.paste(ribbon, (photo_x + 30, photo_y + pw_target - 40), ribbon)
 
 # Save with highest quality and no subsampling (subsampling=0)
-bg_final.save('public/og_banner_preview.jpg', 'JPEG', quality=98, subsampling=0)
-print('Generated public/og_banner_preview.jpg (2400x1260, quality=98, subsampling=0) successfully!')
+# Downscale to the declared og:image size (1200x630) to keep the file light for link previews
+bg_final.resize((1200, 630), Image.LANCZOS).save('public/og_banner_preview.jpg', 'JPEG', quality=85, optimize=True)
+print('Generated public/og_banner_preview.jpg (1200x630, quality=85) successfully!')

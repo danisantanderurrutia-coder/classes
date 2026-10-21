@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import confetti from 'canvas-confetti';
 import {
   Atom,
@@ -46,13 +46,15 @@ import {
   Music,
   Handshake
 } from 'lucide-react';
-import SolarSystem, { PLANET_SUBJECTS } from './components/SolarSystem';
-import PhysicsLab, { LAB_PROBLEMS } from './components/PhysicsLab';
+import { PLANET_SUBJECTS } from './data/planetSubjects';
+const SolarSystem = lazy(() => import('./components/SolarSystem'));
+import { LAB_PROBLEMS } from './data/labProblems';
+const PhysicsLab = lazy(() => import('./components/PhysicsLab'));
 import { ProblemThumbnail } from './components/LabThumbnails';
-import PIADMethod from './components/PIADMethod';
-import PhysicsToolkit from './components/PhysicsToolkit';
-import { TutorPage } from './components/TutorPage';
-import PhiFighterGame from './components/PhiFighterGame';
+const PIADMethod = lazy(() => import('./components/PIADMethod'));
+const PhysicsToolkit = lazy(() => import('./components/PhysicsToolkit'));
+const TutorPage = lazy(() => import('./components/TutorPage').then((m) => ({ default: m.TutorPage })));
+const PhiFighterGame = lazy(() => import('./components/PhiFighterGame'));
 import {
   CURRENCY_TIERS,
   SUBJECT_COMPLEXITY_TIERS,
@@ -64,6 +66,7 @@ import {
   getCoursePackRate,
   getGroupPricing
 } from './pricingConfig';
+import { isAdminPin } from './adminGate';
 
 // Custom crisp GitHub SVG icon component
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -253,7 +256,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Newton's Laws", "Energy Conservation", "Bernoulli Principle", "Angular Momentum", "Thermodynamics"],
     badgeEn: "Bachelor Physics Track",
     badgeEs: "Física Plan Común",
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1532094349884-543bc11b234d-700.webp",
     simulationImage: "/images/course-mechanics.webp",
     color: "#FFB703"
   },
@@ -290,7 +293,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Inertia Tensor", "Lagrangian Dynamics", "Coriolis Force", "Euler Angles", "Poisson Brackets"],
     badgeEn: "Analytical Mechanics",
     badgeEs: "Mecánica Analítica",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1509228468518-180dd4864904-700.webp",
     simulationImage: "/images/course-mechanics.webp",
     color: "#A3A8B5"
   },
@@ -327,7 +330,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Hydrostatic Equation", "Geostrophic Wind", "Radiative Transfer", "Adiabatic Lapse Rate", "Eddy Covariance"],
     badgeEn: "Atmospheric Physics",
     badgeEs: "Física Atmosférica",
-    image: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1534088568595-a066f410bcda-700.webp",
     simulationImage: "/images/lab-sandbox.webp",
     color: "#FCD34D"
   },
@@ -364,7 +367,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Gradient & Divergence", "Stokes' Theorem", "Gauss Theorem", "Taylor Series", "Linear ODEs"],
     badgeEn: "University Calculus Track",
     badgeEs: "Cálculo Universitario",
-    image: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1635372722656-389f87a941b7-700.webp",
     simulationImage: "/images/course-calculus.webp",
     color: "#0284C7"
   },
@@ -401,7 +404,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Darcy's Law", "Richards Equation", "VES Soundings", "Porosity & Retention", "Water Balance"],
     badgeEn: "Environmental Geophysics",
     badgeEs: "Física de Suelos & Hidro",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1464822759023-fed622ff2c3b-700.webp",
     simulationImage: "/images/lab-sandbox.webp",
     color: "#64748B"
   },
@@ -438,7 +441,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Mathematical Induction", "Epsilon-Delta Limits", "Function Inversion", "Partial Fractions", "Trigonometric Proofs"],
     badgeEn: "Foundational Math",
     badgeEs: "Matemática Fundamental",
-    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1596495578065-6e0763fa1178-700.webp",
     simulationImage: "/images/course-calculus.webp",
     color: "#E05A36"
   },
@@ -475,7 +478,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Gauss's Law", "Ampère-Maxwell Law", "Faraday Induction", "Lorentz Force", "Poynting Vector"],
     badgeEn: "Maxwell Electrodynamics",
     badgeEs: "Electromagnetismo",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1518770660439-4636190af475-700.webp",
     simulationImage: "/images/course-quantum.webp",
     color: "#D97706"
   },
@@ -512,7 +515,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Vector Spaces", "Rank-Nullity Theorem", "Eigenvalues", "Gram-Schmidt", "Diagonalization"],
     badgeEn: "Matrix Geometry",
     badgeEs: "Álgebra Lineal",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1509228468518-180dd4864904-700.webp",
     simulationImage: "/images/course-linear-algebra.webp",
     color: "#4F46E5"
   },
@@ -549,7 +552,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Photoelectric Effect", "Double Slit", "Wave-Particle Duality", "Heisenberg Uncertainty", "Quantum Entanglement"],
     badgeEn: "Curious & Enthusiasts",
     badgeEs: "Cuántica para Aficionados",
-    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1507413245164-6160d8298b31-700.webp",
     simulationImage: "/images/course-quantum.webp",
     color: "#7DD3FC"
   },
@@ -586,7 +589,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["NumPy Arrays", "SciPy Curve Fitting", "Fourier Analysis (FFT)", "Pandas Data Cleaning", "MATLAB Translation"],
     badgeEn: "Scientific Data Analysis",
     badgeEs: "Análisis de Datos & Python",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1526374965328-7f61d4dc18c5-700.webp",
     simulationImage: "/images/course-computational.webp",
     color: "#38BDF8"
   },
@@ -623,7 +626,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Thesis Scoping", "Code Optimization", "Scientific Writing", "Defense Rehearsal", "Figure Design"],
     badgeEn: "Thesis & Mentorship",
     badgeEs: "Tesis & Titulación",
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1456513080510-7bf3a84b82f8-700.webp",
     simulationImage: "/images/stem-library.webp",
     color: "#C084FC"
   },
@@ -660,7 +663,7 @@ const ACADEMIC_COURSES = [
     skriptKeywords: ["Internal Assessment (IA)", "Paper 1 (Non-Calc)", "Vector Planes", "Mark Scheme Precision", "Calculus AA"],
     badgeEn: "Target Grade 7",
     badgeEs: "Objetivo Nota 7",
-    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=700&q=80",
+    image: "./images/stock/photo-1497633762265-9d179a990aa6-700.webp",
     simulationImage: "/images/course-calculus.webp",
     color: "#059669"
   }
@@ -679,7 +682,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["PHY-201"],
     descriptionEn: "The undisputed international benchmark for graduate classical mechanics: D'Alembert's principle, canonical transformations, Hamilton-Jacobi theory, and rigid body inertia tensors.",
     descriptionEs: "El referente internacional indiscutible en mecánica clásica avanzada: principio de D'Alembert, transformaciones canónicas, teoría de Hamilton-Jacobi y tensor de inercia.",
-    image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1457369804613-52c61a468e7d-600.webp",
     tag: "Theoretical Physics"
   },
   {
@@ -693,7 +696,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["PHY-101", "PHY-202", "IB-HL"],
     descriptionEn: "Masterclass in physical intuition: demystifying vector circulation, Gauss's law, harmonic resonance, and the deep physical necessity behind every differential equation.",
     descriptionEs: "La máxima referencia en intuición física: desmitifica la circulación de campos, la ley de Gauss, la resonancia armónica y la necesidad física tras cada ecuación diferencial.",
-    image: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1506703719100-a0f3a48c0f86-600.webp",
     tag: "Physical Intuition"
   },
   {
@@ -707,7 +710,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["GEO-202", "COMP-205"],
     descriptionEn: "The definitive treatise on elastic wave propagation, representation theorems, stress-strain tensor constitutive laws, and ray theory in planetary media.",
     descriptionEs: "El tratado cumbre sobre propagación de ondas elásticas en medios continuos, teoremas de representación, leyes constitutivas de esfuerzos y teoría de rayos.",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1451187580459-43490279c0fa-600.webp",
     tag: "Applied Geophysics"
   },
   {
@@ -721,7 +724,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["LA-102", "COMP-205"],
     descriptionEn: "Clear, geometric understanding of fundamental subspaces (column space, nullspace), orthogonal projections, eigenvalues, positive definite matrices, and transformations.",
     descriptionEs: "Comprensión geométrica cristalina de los 4 subespacios fundamentales, proyecciones ortogonales, autovalores, matrices simétricas y transformaciones de base.",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1544716278-ca5e3f4abd8c-600.webp",
     tag: "Linear Algebra"
   },
   {
@@ -735,7 +738,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["HM-101", "MAT-101"],
     descriptionEn: "The European rigorous foundation for higher mathematics: precise limits, uniform convergence, multiple integrals, curvilinear coordinate transforms, and Stokes' theorem.",
     descriptionEs: "La base rigurosa europea para el Cálculo Avanzado y Superior: límites estrictos, convergencia uniforme, integrales múltiples, transformaciones de coordenadas y teorema de Stokes.",
-    image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1524995997946-a1c2e315a42f-600.webp",
     tag: "Cálculo Superior"
   },
   {
@@ -749,7 +752,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["ATM-201", "PHY-201"],
     descriptionEn: "The master formulation of continuous media: exact hydrodynamic equations, boundary conditions, viscous dissipation tensors, and acoustic wave dispersion.",
     descriptionEs: "La formulación magistral de los medios continuos: ecuaciones hidrodinámicas exactas, disipación viscosa, capas límite y dispersión de ondas acústicas.",
-    image: "https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1516339901601-2e1b62dc0c45-600.webp",
     tag: "Continuum Physics"
   },
   {
@@ -763,7 +766,7 @@ const FOUNDATIONAL_BOOKS = [
     usedIn: ["ATM-201", "GEO-202"],
     descriptionEn: "The premier international textbook on atmospheric physics: hydrostatic equation, hypsometric equation, skew-T diagrams, atmospheric radiative transfer, and cloud physics.",
     descriptionEs: "El texto cumbre internacional en física atmosférica: ecuación hidrostática, ecuación hipsométrica, diagramas termodinámicos, transferencia radiativa y dinámica de fluidos geofísicos.",
-    image: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=600&q=80",
+    image: "./images/stock/photo-1534088568595-a066f410bcda-600.webp",
     tag: "Atmospheric Physics"
   }
 ];
@@ -1045,12 +1048,7 @@ export default function App() {
 
   const handleAdminPinSubmit = (e) => {
     e.preventDefault();
-    const encoded = adminPinInput
-      .trim()
-      .split('')
-      .map((c) => c.charCodeAt(0))
-      .join('.');
-    if (encoded === '50.50.50.51') {
+    if (isAdminPin(adminPinInput)) {
       try {
         sessionStorage.setItem('ds_admin_unlocked', 'true');
       } catch {}
@@ -1408,6 +1406,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             <div className="flex items-center bg-white/10 border border-white/15 rounded-full p-0.5 text-xs font-mono shrink-0">
               <button
                 onClick={() => setLang('en')}
+                aria-pressed={lang === 'en'}
+                aria-label="English"
                 className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
                   lang === 'en' ? 'bg-white text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
                 }`}
@@ -1416,6 +1416,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               </button>
               <button
                 onClick={() => setLang('es')}
+                aria-pressed={lang === 'es'}
+                aria-label="Español"
                 className={`px-2 py-0.5 rounded-full transition-colors cursor-pointer ${
                   lang === 'es' ? 'bg-white text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
                 }`}
@@ -1498,6 +1500,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
       <main className="relative z-10">
         <ErrorBoundary key={currentPage}>
+        <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center font-mono text-sm text-slate-500">{lang === 'en' ? 'Loading…' : 'Cargando…'}</div>}>
 
         {/* ========================================================= */}
         {/* PAGE 1: ATTRACTIVE LANDING WITH PLANETARY OBSERVATORY     */}
@@ -2461,7 +2464,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               {/* Library Banner with Real Historical Library + Illuminated Treatises Crossfade */}
               <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-lg group">
                 <img 
-                  src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80" 
+                  src="./images/stock/photo-1521587760476-6c12a4b040da-1600.webp" 
                   alt={lang === 'en' ? 'Academic Library' : 'Biblioteca Académica'} 
                   className="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity duration-700 ease-in-out group-hover:opacity-0" 
                 />
@@ -3644,6 +3647,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
             onOpenBooking={handleOpenBooking}
           />
         )}
+        </Suspense>
         </ErrorBoundary>
 
       </main>

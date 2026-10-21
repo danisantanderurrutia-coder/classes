@@ -7,4 +7,15 @@ export default defineConfig({
   optimizeDeps: {
     entries: ['index.html'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Keep heavy third-party libs in their own cacheable chunks
+        manualChunks(id) {
+          if (id.includes('node_modules/three')) return 'three';
+          if (id.includes('node_modules/katex')) return 'katex';
+        },
+      },
+    },
+  },
 });

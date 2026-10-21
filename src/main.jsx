@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-import Admin from './Admin.jsx';
+const Admin = lazy(() => import('./Admin.jsx'));
 import './index.css';
+import { isAdminPin } from './adminGate';
 
 const isAdminHash = () => window.location.hash.replace('#/', '').replace('#', '') === 'admin';
 const isSessionUnlocked = () => {
@@ -34,12 +35,7 @@ function Root() {
 
   const handleUnlock = (e) => {
     e.preventDefault();
-    const encoded = pin
-      .trim()
-      .split('')
-      .map((c) => c.charCodeAt(0))
-      .join('.');
-    if (encoded === '50.50.50.51') {
+    if (isAdminPin(pin)) {
       try {
         sessionStorage.setItem('ds_admin_unlocked', 'true');
       } catch {}
@@ -96,7 +92,11 @@ function Root() {
     );
   }
 
-  return admin ? <Admin onBack={handleBackToPublic} /> : <App />;
+  return admin ? (
+    <Suspense fallback={null}>
+      <Admin onBack={handleBackToPublic} />
+    </Suspense>
+  ) : <App />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

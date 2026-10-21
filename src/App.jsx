@@ -1635,24 +1635,33 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           {lang === 'en' ? course.targetEn : course.targetEs}
                         </p>
 
-                        <div className="mb-5 flex items-baseline justify-between bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        {/* Investment & Customized Plan Indicator (Adapts by country & tier) */}
+                        <div className="mb-5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-2xl font-mono font-bold text-slate-900">{formatMoney(getCourseHourlyRate(course, currency), currency)}</span>
-                              <span className="text-xs font-mono text-slate-500">/ hour</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-mono text-xs font-bold text-slate-800">
+                                {lang === 'en' ? 'Tuition by Country & Tier' : 'Aranceles según País y Nivel'}
+                              </span>
+                              <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
+                                {lang === 'en' ? 'PPP Adjusted' : 'Ponderado PPP'}
+                              </span>
                             </div>
-                            <span className="text-[10px] font-mono text-slate-500 block">
-                              {lang === 'en' ? '1-on-1 Individual Session' : 'Sesión Individual 1-a-1'}
+                            <span className="text-[11px] font-sans text-slate-500 block mt-0.5">
+                              {lang === 'en'
+                                ? 'Adjusted by regional purchasing power & subject complexity'
+                                : 'Ajustado según poder adquisitivo local y complejidad del ramo'}
                             </span>
                           </div>
-                          <div className="text-right">
-                            <span className="text-xs font-mono font-bold text-emerald-700 block">
-                              {formatMoney(getCoursePackRate(course, currency), currency)} / {course.packageHours}h Pack
-                            </span>
-                            <span className="text-[10px] font-mono text-slate-500">
-                              {lang === 'en' ? 'Exam Sprint Pack' : 'Pack Sprint de Examen'}
-                            </span>
-                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedSubject(COURSE_TIER_MAP[course.id] || 'ib');
+                              navigateTo('pricing');
+                            }}
+                            className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-mono text-xs font-bold transition-all shadow-2xs hover:shadow-xs cursor-pointer text-left shrink-0"
+                          >
+                            <span>{lang === 'en' ? 'View Rates & Plans →' : 'Ver Aranceles & Packs →'}</span>
+                          </button>
                         </div>
 
                         <div className="mb-6">

@@ -59,11 +59,11 @@ import {
 const BASE_SITE_URL = 'https://danisantanderurrutia-coder.github.io/classes/';
 
 const KANBAN_COLUMNS = [
-  { id: 'New Inquiry', label: '1. Nueva Consulta', dot: 'bg-sky-400', border: 'border-sky-500/30' },
-  { id: 'Diagnostic Booked', label: '2. Diagnóstico Agendado', dot: 'bg-amber-400', border: 'border-amber-500/30' },
-  { id: 'Active Student', label: '3. Alumno Activo', dot: 'bg-emerald-400', border: 'border-emerald-500/30' },
-  { id: 'Completed / Exam Passed', label: '4. Examen Aprobado', dot: 'bg-indigo-400', border: 'border-indigo-500/30' },
-  { id: 'Archived', label: '5. Archivado', dot: 'bg-slate-500', border: 'border-slate-700' }
+  { id: 'New Inquiry', labelEs: '1. Nueva Consulta', labelEn: '1. New Inquiry', dot: 'bg-sky-400', border: 'border-sky-500/30' },
+  { id: 'Diagnostic Booked', labelEs: '2. Diagnóstico Agendado', labelEn: '2. Diagnostic Booked', dot: 'bg-amber-400', border: 'border-amber-500/30' },
+  { id: 'Active Student', labelEs: '3. Alumno Activo', labelEn: '3. Active Student', dot: 'bg-emerald-400', border: 'border-emerald-500/30' },
+  { id: 'Completed / Exam Passed', labelEs: '4. Examen Aprobado', labelEn: '4. Exam Passed / Completed', dot: 'bg-indigo-400', border: 'border-indigo-500/30' },
+  { id: 'Archived', labelEs: '5. Archivado', labelEn: '5. Archived', dot: 'bg-slate-500', border: 'border-slate-700' }
 ];
 
 const PAYMENT_METHODS = [
@@ -650,38 +650,114 @@ const INITIAL_LEADS = [
 
 const AD_TEMPLATES = [
   {
-    id: 'ad-de',
-    badge: '🇩🇪🇨🇭 Kleinanzeigen / Tutti.ch (Título en Alemán -> Clase EN/ES)',
-    title: 'Nachhilfe Mathematik, Analysis, Physik & Python (Uni / FH / IB) – M.Sc. Ingenieur – Ab 25 €',
-    priceNote: 'Alemania: 25 €/h (Cálculo/Física/IB), 29 €/h (Álgebra/EDOs), 35 €/h (Fluidos/Python) | Suiza: 42–55 CHF/h',
-    body: `Steht deine Klausur in Höherer Mathematik (Analysis / Lineare Algebra), Technischer Mechanik, Physik, Fluiddynamik oder Python bevor?
+    id: 'ad-en-kids',
+    lang: 'en',
+    badge: '🇬🇧 🌱 Curious Minds (Ages 9–15) – International / Expat Families',
+    title: 'Curious Minds: Intuitive Math, Spatial Geometry & Playful Physics for Kids & Teens (Ages 9–15) – Double M.Sc. Mentor',
+    priceNote: 'Tier 1 (€25 / £24 / $28 / 42 CHF / $20,000 CLP) — Interactive 3D Solar System + Fun First Principles',
+    body: `Does your child or teenager love asking "Why?" about space, science, and numbers, but feels constrained by rote school drills?
 
-Ich bin Daniel S. Santander Urrutia, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
+Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I mentor young curious minds (ages 9–15) to build authentic scientific intuition, visual geometry, and analytical thinking in a playful, low-pressure environment.
 
-⚠️ WICHTIGER HINWEIS ZUR SPRACHE:
-Der Unterricht findet auf ENGLISCH oder SPANISCH statt (ich spreche kein Deutsch). 
-ABER: Du kannst mir problemlos deine deutschen Vorlesungsfolien (Skripte), Übungsblätter und Altklausuren schicken! Mathematische Gleichungen, Freikörperbilder (DCL) und physikalische Gesetze sind universell.
+🌱 WHAT MAKES "CURIOUS MINDS" DIFFERENT?
+• Interactive 3D Solar System & Visual Simulators: In my custom web lab, we explore planetary orbits, gravity wells, pendulums, and wave interference in real time. We don't just memorize formulas — we see and touch physical phenomena!
+• Visual Geometry & Logic Puzzles: We develop spatial intuition, proportions, and deductive reasoning through engaging visual challenges before jumping into formal algebra.
+• First-Principles Thinking: Encouraging healthy inquiry, asking big questions (How do satellites orbit? Why is the sky blue? How do sound waves travel?), and discovering answers together.
+• Bilingual Immersion: Taught 1-on-1 in clear, engaging English or Spanish.
+• After-Session Study Artifacts: After every session, parents receive a high-resolution vector PDF summarizing what we explored, complete with visual diagrams and curiosity challenges.
 
-🚀 WAS MEINE METHODE EINZIGARTIG MACHT (PIAD™-Methode & Interaktives Labor):
-• Eigenes Interaktives Physik- & Mathe-Labor: Auf meiner Website kannst du vorab 14 interaktive Echtzeit-Simulatoren mit Freikörperbildern (DCL) und ein 5-Säulen Mathe-Toolkit (Taylor, Eigenwerte, ODEs, FFT) kostenlos testen.
-• Produktive KI für Python: Ich zeige dir, wie du KI als wissenschaftlichen Co-Piloten nutzt, um sauberen Python-Code (NumPy/SciPy/Matplotlib) zu schreiben und zu verstehen.
-• Open-Knowledge Artefakte: Nach jeder Sitzung erhältst du alle Herleitungen als hochauflösendes Vektor-PDF (Miro-Board + druckbares Study Sheet).
+💰 TRANSPARENT RATES (Tier 1):
+• €25 / £24 / $28 / 42 CHF / $20,000 CLP per 60-min session.
+• 15% discount on an 8-session Curiosity Pack.
+• Small-group option available (up to 3 friends or siblings) at -30% per student!
 
-💰 FAIRE PREISE NACH FACH-LEVEL:
-• Level 1 (Analysis I–II, Klassische Physik, IB / Abitur): 25 €/Std. (im 8h-Paket nur ~21 €/Std.!)
-• Level 2 (Lineare Algebra, DGL/ODEs, Technische Mechanik): 29 €/Std.
-• Level 3 (Fluiddynamik, Geophysik, Wissenschaftliches Python & Masterarbeit): 35 €/Std.
-• Präsenz in Hannover (TIB, LUH Campus): Kleiner Aufpreis für die Anfahrt.
-• Kostenloses 15-minütiges Diagnosegespräch vorab!
+🎯 Book a FREE 15-minute diagnostic & explore our interactive 3D planetarium together:
+🌐 ${BASE_SITE_URL}?src=kids-en#courses
+📲 WhatsApp: +49 176 7649 7440`
+  },
+  {
+    id: 'ad-es-kids',
+    lang: 'es',
+    badge: '🇪🇸🇨🇱 🌱 Mentes Curiosas (9 a 15 años) – Niños y Jóvenes Curiosos',
+    title: 'Mentes Curiosas: Geometría Visual, Lógica y Física Lúdica para Niños y Jóvenes (9 a 15 años) – Geofísico U. Chile + Doble Máster Europa',
+    priceNote: 'Nivel 1 ($20.000 CLP / €25 / £24 / 42 CHF) — Planetario 3D Interactivo + Pensamiento Crítico',
+    body: `¿Tu hijo/a hace preguntas constantes sobre el universo, cómo funcionan las cosas o las matemáticas, pero la escuela tradicional se las hace aburridas con repetición mecánica?
 
-🌐 Teste mein interaktives Labor: ${BASE_SITE_URL}?src=kleinanzeigen-de
-📲 Schreib mir direkt auf WhatsApp (Englisch oder Spanisch): +49 176 7649 7440`
+Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Diseñé el programa "Mentes Curiosas" para niños y jóvenes (9 a 15 años) con sed de aprender más allá del currículum escolar.
+
+🌱 ¿QUÉ APRENDERÁ EN "MENTES CURIOSAS"?
+• Planetario 3D y Simuladores Interactivos Propios: En mi web exploramos en tiempo real órbitas planetarias, pozos gravitacionales, ondas y péndulos. La física se entiende viendo y manipulando, no memorizando hojas de fórmulas.
+• Geometría Visual y Razonamiento Lógico: Desarrollamos intuición espacial, proporcionalidad, coordenadas y deducción lógica antes de mecanizar álgebra abstracta.
+• Método de Primeros Principios: Enseño a formular hipótesis, pensar con criterio científico y asombrarse con el porqué de la naturaleza.
+• Apuntes en PDF para Padres: Al terminar cada sesión, envío un reporte visual en PDF de alta resolución con lo trabajado y acertijos para seguir explorando.
+• Clases 1-a-1 o grupos pequeños de hermanos/amigos (online para todo el mundo o presencial en Hannover).
+
+💰 VALORES TRANSPARENTES (NIVEL 1):
+• $20.000 CLP / €25 / £24 / 42 CHF por hora pedagógica.
+• -15% de descuento en Pack de 8 sesiones.
+• -30% por alumno en grupos de hasta 3 niños.
+
+🎯 Agenda 15 minutos de diagnóstico GRATIS y prueba el planetario 3D interactivo en:
+🌐 ${BASE_SITE_URL}?src=mentes-curiosas-es#courses
+📲 WhatsApp directo: +49 176 7649 7440`
+  },
+  {
+    id: 'ad-ib-en',
+    lang: 'en',
+    badge: '🇬🇧🎓 IB Diploma Specialists (Mathematics AA/AI HL/SL & Physics HL/SL)',
+    title: 'IB Physics & Math AA/AI HL Mentor (Double M.Sc. Engineer) | 14 Interactive Simulators & Past Paper Mastery – From €25 / £24',
+    priceNote: 'Tier 1 (€25 / £24 / $28 / 42 CHF) — Exam Sprint Packs (-15%) & Study Sheets Included',
+    body: `Struggling with IB Physics HL or Mathematics Analysis & Approaches (AA) HL? Feeling overwhelmed by tricky mark schemes, paper 2/3 problem setups, or Internal Assessment (IA) modeling?
+
+I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I specialize in mentoring IB Diploma candidates worldwide to turn abstract IB syllabus objectives into deep visual intuition and reliable 7s.
+
+🚀 WHY IB STUDENTS EXCEL WITH THIS METHODOLOGY:
+• Free Body Diagrams (DCL) & Force Vectors First: No more freezing on complex mechanics problems. We derive the physics step-by-step before touching your calculator.
+• 14 Interactive Physics Simulators: Practice on our custom web platform covering mechanics, wave interference, thermodynamics, and fields with real-time vector visualization.
+• 5-Pillar Mathematics Toolkit: Live visualizers for Taylor Series, Differential Equations (ODEs), Matrix Eigenvalues, and Fourier Analysis (FFT) directly mapped to IB Math AA HL.
+• Past Paper & Mark Scheme Auditing: We deconstruct how examiners allocate M, A, and R marks so you write rigorous, concise proofs under exam time pressure.
+• High-Resolution Miro PDF Board: Receive full vector notes after every single class.
+
+💰 TRANSPARENT IB RATES (Tier 1):
+• €25/h (€21/h in 8h Exam Sprint Pack) | £24/h | $28/h | 42 CHF/h | $20,000 CLP/h.
+• Up to 3 classmates can study together at -30% per student!
+
+🎯 Book your FREE 15-minute diagnostic consultation and test our interactive simulators at:
+🌐 ${BASE_SITE_URL}?src=ib-en#lab
+📲 WhatsApp: +49 176 7649 7440`
+  },
+  {
+    id: 'ad-uni-en',
+    lang: 'en',
+    badge: '🇬🇧🇺🇸 University Engineering (Calculus, Linear Algebra, Mechanics, Fluids & Python)',
+    title: 'University Engineering Calculus, Linear Algebra, Mechanics, Fluids & Python Mentor (Double M.Sc.) | Interactive Lab & First Principles',
+    priceNote: 'Tier 1: €25 / £24 | Tier 2: €29 / £28 | Tier 3 (Fluids/Python): €35 / £34 | Free 15-min Diagnostic',
+    body: `Facing high-stakes exams in Higher Engineering Mathematics, Classical Mechanics, Vector Calculus, Differential Equations, Fluid Dynamics, or Scientific Python?
+
+I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer with graduate degrees in Europe. I provide rigorous 1-on-1 and small group mentorship for university engineering and science students worldwide (UK, US, Germany, Switzerland, Canada, and beyond).
+
+🚀 HOW WE ACCELERATE YOUR UNIVERSITY MASTERY (PIAD™ METHOD):
+1. First Principles & Geometry First: Before calculating complex line integrals or stress tensors, we map the physical system so you never face a blank exam paper without a strategy.
+2. 14 Interactive Physics Simulators & 5-Pillar Math Toolkit: Free online platform with live Taylor series, matrix transformations, Navier-Stokes/Poiseuille flow, and geostrophic wind simulations.
+3. Scientific Python & Numerical Modeling: Learn to structure, simulate, and audit numerical modeling using NumPy, SciPy, and Matplotlib grounded in first principles.
+4. Exported Vector PDF Notes: Every derivation from our Miro board is delivered immediately after class as a searchable, printable study artifact.
+
+💰 TRANSPARENT RATES BY TIER:
+• Tier 1 (Calculus I–II, Mechanics, General Physics): €25/h (£24 / $28 / 42 CHF / $20,000 CLP)
+• Tier 2 (Linear Algebra, Multi-variable Calculus, ODEs, Thermodynamics): €29/h (£28 / $32 / 48 CHF / $23,000 CLP)
+• Tier 3 (Fluid Mechanics, Geophysics, Scientific Python, M.Sc. Thesis): €35/h (£34 / $38 / 55 CHF / $26,000 CLP)
+• 15% discount on 8h Exam Sprint Packs. Group discounts available.
+
+🎯 Book a FREE 15-minute diagnostic call & try our interactive lab:
+🌐 ${BASE_SITE_URL}?src=uni-en#toolkit
+📲 WhatsApp: +49 176 7649 7440`
   },
   {
     id: 'ad-cl-es',
-    badge: '🇨🇱🇪🇸 Chile (Yapo / Tusclasesparticulares) & España — Tarifas Escalonadas por Ramo',
+    lang: 'es',
+    badge: '🇨🇱 Chile (Beauchef FCFM / UC / USM / UdeC) – Tarifas Escalonadas por Ramo',
     title: 'Clases Cálculo, Física, Álgebra, Fluidos y Python (Geofísico U. de Chile + Doble M.Sc. Europa)',
-    priceNote: 'Chile: $20.000 CLP/h (Cálculo/Física I), $23.000 (Álgebra/EDOs), $26.000 (Fluidos/Python) | España: €25–€35/h',
+    priceNote: 'Chile: $20.000 CLP/h (Cálculo/Física I), $23.000 (Álgebra/EDOs), $26.000 (Fluidos/Python) | Packs -15% y Grupos -30%',
     body: `¿Se acerca tu control, certamen o examen de Cálculo I–III, Física Mecánica, Álgebra Lineal, Ecuaciones Diferenciales, Mecánica de Fluidos o Python?
 
 Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Hago clases particulares 1-a-1 y a grupos pequeños con una plataforma interactiva propia.
@@ -689,7 +765,7 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
 🚀 ¿POR QUÉ APRENDERÁS MÁS RÁPIDO CONMIGO? (MÉTODO PIAD™):
 • Laboratorio Interactivo Propio (14 Simuladores + DCL en vivo): En mi web puedes practicar gratis con problemas reales de controles de la U. de Chile (Beauchef) y universidades europeas, viendo los vectores de fuerza y el paso a paso entre Álgebra y Cálculo.
 • Toolkit Matemático de 5 Pilares: Visualizador en tiempo real de Series de Taylor, Matrices/Autovalores, EDOs, Gradientes y Transformada de Fourier (FFT).
-• IA Productiva para Python: Aprende a usar la Inteligencia Artificial con rigor matemático para estructurar y auditar tu propio código en NumPy, SciPy y Matplotlib.
+• Python Científico y Modelación Numérica: Aprende a estructurar, modelar y auditar tu propio código en NumPy, SciPy y Matplotlib con rigor matemático y primeros principios.
 • Apuntes en PDF Vectorial: Al terminar cada clase te envío el PDF de alta resolución de nuestra pizarra Miro + Hojas de Estudio resumidas.
 
 💰 TARIFAS SEGÚN COMPLEJIDAD DEL RAMO (CHILE / EUROPA):
@@ -702,29 +778,59 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
 📲 WhatsApp directo: +49 176 7649 7440`
   },
   {
-    id: 'ad-en',
-    badge: '🇬🇧🌍 International / IB Diploma / UK / Expat (English)',
-    title: 'IB & University Calculus, Physics & Python Mentor (Double M.Sc.) | Interactive Lab – From €25 / £24',
-    priceNote: 'Tier 1 (Calculus/Physics/IB): €25 / £24 / $28 | Tier 2: €29 / £28 | Tier 3 (Fluids/Python): €35 / £34',
-    body: `Struggling with IB Physics/Math HL, University Calculus, Linear Algebra, Fluid Mechanics, or Scientific Python?
+    id: 'ad-es-general',
+    lang: 'es',
+    badge: '🇪🇸 España & Latam (Grado en Ingeniería, Física y Matemáticas)',
+    title: 'Profesor Particular Análisis Matemático, Álgebra Lineal, Mecánica, Termodinámica y Python (Doble Máster Europa)',
+    priceNote: 'Nivel 1: 25 €/h | Nivel 2: 29 €/h | Nivel 3: 35 €/h | Diagnóstico 15 min Gratis',
+    body: `¿Preparando tus exámenes de Grado en Ingeniería, Física o Matemáticas (Cálculo / Análisis, Álgebra Lineal, Mecánica Clásica, Ecuaciones Diferenciales, Termodinámica o Fluidos)?
 
-Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I help university students (B.Sc. / M.Sc.) and IB Diploma students master STEM subjects through visual intuition rather than rote memorization.
+Soy Daniel S. Santander Urrutia, Geofísico e Ingeniero con Doble Máster (M.Sc.) en Europa. Ofrezco mentorías individuales estructuradas y apoyo para exámenes universitarios con enfoque en intuición visual y primeros principios.
 
-🚀 WHY LEARN WITH ME? (THE PIAD™ METHOD):
-1. Free Body Diagrams (DCL) & Visual Intuition First: Before touching any integral, we sketch the physical system and force vectors so you never get stuck on a blank exam page.
-2. 14-Simulator Interactive Physics Lab & 5-Pillar Math Toolkit: Explore my custom web platform featuring real university exam problems, live Algebra ↔ Calculus bridges, and printable PDF Study Sheets.
-3. Productive AI for Python: Learn how to prompt AI with mathematical precision to design, debug, and verify your own Python (NumPy, SciPy, Matplotlib) simulations.
-4. Open-Knowledge PDF Artifacts: Every session includes exported vector PDF notes from our collaborative Miro whiteboard.
+🚀 ¿POR QUÉ ESTE MÉTODO MARCA LA DIFERENCIA?:
+• Diagramas de Cuerpo Libre (DCL) y Geometría Antes de Operar: Desarrollamos el planteamiento físico antes de empezar a integrar o derivar, eliminando el bloqueo frente a la hoja en blanco.
+• Laboratorio Web de 14 Simuladores + Toolkit Matemático: Plataforma propia interactiva donde puedes manipular vectores, ciclos termodinámicos, series de Taylor y EDOs en tiempo real.
+• Python Científico: Modelación numérica estructurada con NumPy, SciPy y Matplotlib.
+• Pizarra Miro Vectorial: Tras cada clase recibes el archivo PDF en alta resolución con todo el desarrollo detallado.
 
-💰 TRANSPARENT RATES BY SUBJECT COMPLEXITY:
-• Tier 1 (Calculus I–II, General Physics, IB Diploma): €25/h (£24 / $28 / 42 CHF) — or save 15% with an Exam Sprint Pack!
-• Tier 2 (Linear Algebra, ODEs, Analytical Mechanics, Electromagnetism): €29/h (£28 / $32 / 48 CHF)
-• Tier 3 (Fluid Mechanics, Geophysics, Scientific Python & Thesis): €35/h (£34 / $38 / 55 CHF)
-• Online Worldwide or In-Person in Hannover.
+💰 TARIFAS POR NIVEL DE COMPLEJIDAD:
+• Nivel 1 (Cálculo I–II, Física Mecánica, Bachillerato / Selectividad): 25 €/h (con Pack de Examen ~21 €/h).
+• Nivel 2 (Álgebra Lineal, EDOs, Mecánica Analítica, Termodinámica): 29 €/h.
+• Nivel 3 (Mecánica de Fluidos, Geofísica, Python Científico y TFG/TFM): 35 €/h.
+• Clases online en directo con pizarra digital o presenciales en Hannover.
 
-🎯 Book a FREE 15-minute diagnostic call & test the interactive simulators at:
-🌐 ${BASE_SITE_URL}?src=classifieds-en
+🎯 Reserva tu diagnóstico gratuito de 15 minutos y prueba el laboratorio interactivo:
+🌐 ${BASE_SITE_URL}?src=anuncios-es#lab
 📲 WhatsApp: +49 176 7649 7440`
+  },
+  {
+    id: 'ad-de',
+    lang: 'de',
+    badge: '🇩🇪🇨🇭 Kleinanzeigen / Tutti.ch (Deutsches Skript -> Unterricht auf Englisch/Spanisch)',
+    title: 'Nachhilfe Mathematik, Analysis, Physik & Python (Uni / FH / IB) – M.Sc. Ingenieur – Ab 25 €',
+    priceNote: 'Deutschland: 25 €/h (Level 1), 29 €/h (Level 2), 35 €/h (Level 3) | Schweiz: 42–55 CHF/h',
+    body: `Steht deine Klausur in Höherer Mathematik (Analysis / Lineare Algebra), Technischer Mechanik, Physik, Fluiddynamik oder Python bevor?
+
+Ich bin Daniel S. Santander Urrutia, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
+
+⚠️ WICHTIGER HINWEIS ZUR SPRACHE:
+Der Unterricht findet auf ENGLISCH oder SPANISCH statt (ich spreche kein Deutsch). 
+ABER: Du kannst mir problemlos deine deutschen Vorlesungsfolien (Skripte), Übungsblätter und Altklausuren schicken! Mathematische Gleichungen, Freikörperbilder (DCL) und physikalische Gesetze sind universell.
+
+🚀 WAS MEINE METHODE EINZIGARTIG MACHT (PIAD™-Methode & Interaktives Labor):
+• Eigenes Interaktives Physik- & Mathe-Labor: Auf meiner Website kannst du vorab 14 interaktive Echtzeit-Simulatoren mit Freikörperbildern (DCL) und ein 5-Säulen Mathe-Toolkit (Taylor, Eigenwerte, ODEs, FFT) kostenlos testen.
+• Wissenschaftliches Python & Numerik: Ich zeige dir, wie du sauberen, robusten Python-Code (NumPy/SciPy/Matplotlib) auf Basis mathematischer Prinzipien strukturierst und auditierst.
+• Open-Knowledge Artefakte: Nach jeder Sitzung erhältst du alle Herleitungen als hochauflösendes Vektor-PDF (Miro-Board + druckbares Study Sheet).
+
+💰 FAIRE PREISE NACH FACH-LEVEL:
+• Level 1 (Analysis I–II, Klassische Physik, IB / Abitur): 25 €/Std. (im 8h-Paket nur ~21 €/Std.!)
+• Level 2 (Lineare Algebra, DGL/ODEs, Technische Mechanik): 29 €/Std.
+• Level 3 (Fluiddynamik, Geophysik, Wissenschaftliches Python & Masterarbeit): 35 €/Std.
+• Präsenz in Hannover (TIB, LUH Campus): Kleiner Aufpreis für die Anfahrt.
+• Kostenloses 15-minütiges Diagnosegespräch vorab!
+
+🌐 Teste mein interaktives Labor: ${BASE_SITE_URL}?src=kleinanzeigen-de
+📲 Schreib mir direkt auf WhatsApp (Englisch oder Spanisch): +49 176 7649 7440`
   }
 ];
 
@@ -1095,7 +1201,28 @@ function getDaysSince(dateStr) {
 }
 
 export default function Admin({ onBack }) {
+  const [adminLang, setAdminLang] = useState(() => {
+    try {
+      return localStorage.getItem('ds_admin_lang') || 'es';
+    } catch {
+      return 'es';
+    }
+  });
+
+  const handleToggleAdminLang = (newLang) => {
+    setAdminLang(newLang);
+    try {
+      localStorage.setItem('ds_admin_lang', newLang);
+    } catch (e) {}
+    setWaLang(newLang);
+    setAdminInstaLang(newLang);
+  };
+
+  const t = (esText, enText) => (adminLang === 'en' ? enText : esText);
+
   const [activeTab, setActiveTab] = useState('strategy');
+  const [adLangFilter, setAdLangFilter] = useState('all');
+  const [crmSearch, setCrmSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [pipelineView, setPipelineView] = useState('kanban');
 
@@ -1672,33 +1799,61 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
       </div>
 
       {/* Top Mission Control Header */}
-      <header className="no-print sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-4">
+      <header className="no-print sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500/20 to-emerald-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shadow-lg shadow-sky-500/10">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500/20 to-emerald-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shadow-lg shadow-sky-500/10 shrink-0">
               <Zap className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
-                  Tu Cockpit Principal • Daniel S. Santander Urrutia
+                  {t('Tu Cockpit Principal • Daniel S. Santander Urrutia', 'Mission Cockpit • Daniel S. Santander Urrutia')}
                 </span>
                 <span className="font-mono text-[10px] text-slate-400 hidden sm:inline">
-                  Ponderante Base EUR = 1.00x • Clases Universitarias &amp; Mentes Curiosas
+                  {t('Ponderante Base EUR = 1.00x • Clases Universitarias & Mentes Curiosas', 'Base Factor EUR = 1.00x • University STEM & Curious Minds')}
                 </span>
               </div>
-              <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
-                Centro de Comando: Tarifas, Alumnos &amp; Conversión
+              <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-0.5">
+                {t('Centro de Comando: Tarifas, Alumnos & Conversión', 'Command Center: Rates, Pipeline & Growth')}
               </h1>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5">
+            {/* Bilingual Language Switcher (ES / EN) */}
+            <div className="flex items-center rounded-xl bg-slate-900 border border-slate-700/80 p-0.5 font-mono text-xs shadow-inner">
+              <button
+                type="button"
+                onClick={() => handleToggleAdminLang('es')}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminLang === 'es'
+                    ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🇪🇸</span>
+                <span>ES</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleToggleAdminLang('en')}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminLang === 'en'
+                    ? 'bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🇬🇧</span>
+                <span>EN</span>
+              </button>
+            </div>
+
             <a
               href="https://wa.me/4917676497440"
               target="_blank"
               rel="noreferrer"
-              className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-mono text-xs flex items-center gap-2 border border-slate-700/80 transition-colors"
+              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-mono text-xs flex items-center gap-2 border border-slate-700/80 transition-colors"
             >
               <Send className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden sm:inline">WhatsApp</span>
@@ -1708,7 +1863,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-md shadow-sky-600/20 cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Volver a la Web</span>
+              <span>{t('Volver a la Web', 'Back to Website')}</span>
             </button>
           </div>
         </div>
@@ -1726,11 +1881,11 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-emerald-400" />
                   <span className="font-mono text-xs uppercase tracking-wider text-emerald-400 font-bold">
-                    Meta de Ingresos Mensual (Conversión Automática a EUR)
+                    {t('Meta de Ingresos Mensual (Conversión Automática a EUR)', 'Monthly Revenue Target (Auto-Converted to EUR)')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 font-mono text-xs">
-                  <span className="text-slate-400">Tu Meta: €</span>
+                  <span className="text-slate-400">{t('Tu Meta: €', 'Your Target: €')}</span>
                   <input
                     type="number"
                     step="100"
@@ -1748,11 +1903,11 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     €{paidRevenueEur}
                   </span>
                   <span className="text-xs font-mono text-slate-400 ml-2">
-                    cobrados / €{monthlyGoalEur} meta ({goalProgressPct}%)
+                    {t(`cobrados / €${monthlyGoalEur} meta (${goalProgressPct}%)`, `collected / €${monthlyGoalEur} target (${goalProgressPct}%)`)}
                   </span>
                 </div>
                 <div className="text-right font-mono text-xs text-sky-400">
-                  Pipeline total: <strong>€{pipelineRevenueEur}</strong>
+                  {t('Pipeline total:', 'Total Pipeline:')} <strong>€{pipelineRevenueEur}</strong>
                 </div>
               </div>
 
@@ -1766,10 +1921,10 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
               <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pt-1">
                 <span>
-                  💡 Con Cálculo a <strong>€25/h</strong> ($20.000 CLP/h), necesitas ~<strong>{Math.ceil(Math.max(0, monthlyGoalEur - paidRevenueEur) / 25)} horas</strong> para completar tu meta.
+                  💡 {t('Con Cálculo a', 'With Calculus at')} <strong>€25/h</strong> ($20.000 CLP/h), {t('necesitas ~', 'you need ~')}<strong>{Math.ceil(Math.max(0, monthlyGoalEur - paidRevenueEur) / 25)} {t('horas', 'hours')}</strong> {t('para completar tu meta.', 'to reach your goal.')}
                 </span>
                 <span className="text-emerald-300">
-                  Horas ya dictadas: <strong>{totalHoursCompleted}h</strong>
+                  {t('Horas ya dictadas:', 'Delivered hours:')} <strong>{totalHoursCompleted}h</strong>
                 </span>
               </div>
             </div>
@@ -1778,7 +1933,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             <div className="lg:col-span-5 grid grid-cols-2 gap-3">
               <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>Alumnos Activos</span>
+                  <span>{t('Alumnos Activos', 'Active Students')}</span>
                   <Users className="w-3.5 h-3.5 text-emerald-400" />
                 </div>
                 <div className="text-2xl font-mono font-extrabold text-white">
@@ -1788,7 +1943,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
               <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>Portales Activos</span>
+                  <span>{t('Portales Activos', 'Active Portals')}</span>
                   <Globe className="w-3.5 h-3.5 text-sky-400" />
                 </div>
                 <div className="text-2xl font-mono font-extrabold text-white">
@@ -1798,7 +1953,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
               <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>Renovar (&gt;5 días)</span>
+                  <span>{t('Renovar (>5 días)', 'Needs Renewal (>5d)')}</span>
                   <AlertTriangle className={`w-3.5 h-3.5 ${expiredChannelsCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`} />
                 </div>
                 <div className="text-2xl font-mono font-extrabold text-white">
@@ -1808,7 +1963,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
               <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>Flyers en Calle</span>
+                  <span>{t('Flyers en Calle', 'Street Flyers')}</span>
                   <MapPin className="w-3.5 h-3.5 text-amber-400" />
                 </div>
                 <div className="text-2xl font-mono font-extrabold text-white">
@@ -1822,12 +1977,12 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
         {/* Navigation Tabs (hidden on print) */}
         <div className="no-print flex flex-wrap gap-2 border-b border-slate-800/80 pb-4">
           {[
-            { id: 'strategy', label: '1. Tarifas & Ponderantes Económicos (Base 1.00x)', icon: Sliders },
-            { id: 'whatsapp', label: '2. Cerrador WhatsApp (Cálculo, Mentes Curiosas, IB)', icon: MessageSquare },
-            { id: 'crm', label: '3. Pipeline CRM & Control de Horas/Pagos', icon: Columns },
-            { id: 'classifieds', label: '4. Checklist de Posteo (Físicos & Digitales)', icon: CheckCircle2 },
-            { id: 'flyer', label: '5. Generador Flyer A4 Imprimible & Calle', icon: Printer },
-            { id: 'marketing', label: '6. Social Media & Instagram Kit (Marketing)', icon: Megaphone }
+            { id: 'strategy', label: t('1. Tarifas & Ponderantes Económicos (Base 1.00x)', '1. Rates & Purchasing Multipliers (Base 1.00x)'), icon: Sliders },
+            { id: 'whatsapp', label: t('2. Cerrador WhatsApp (Cálculo, Mentes Curiosas, IB)', '2. WhatsApp Closer (Calculus, Curious Minds, IB)'), icon: MessageSquare },
+            { id: 'crm', label: t('3. Pipeline CRM & Control de Horas/Pagos', '3. CRM Pipeline & Hours/Payments Ledger'), icon: Columns },
+            { id: 'classifieds', label: t('4. Avisos Clasificados & Canales de Posteo', '4. Classified Ads & Posting Channels'), icon: CheckCircle2 },
+            { id: 'flyer', label: t('5. Generador Flyer A4 Imprimible & Calle', '5. Printable A4 Flyer Generator & Street Ops'), icon: Printer },
+            { id: 'marketing', label: t('6. Social Media & Instagram Kit (Marketing)', '6. Social Media & Instagram Marketing Kit'), icon: Megaphone }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -1857,30 +2012,33 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-5">
                 <div>
                   <span className="font-mono text-[11px] uppercase tracking-widest text-emerald-400 font-bold block mb-1">
-                    Tarifación Escalonada por Complejidad de Materia + Poder Adquisitivo (PPP)
+                    {t('Tarifación Escalonada por Complejidad de Materia + Poder Adquisitivo (PPP)', 'Tiered Tuition by Subject Complexity + Purchasing Power (PPP)')}
                   </span>
                   <h2 className="text-2xl font-extrabold text-white">
-                    Editor de Precios en Vivo (Sincronizado con la Calculadora Pública)
+                    {t('Editor de Precios en Vivo (Sincronizado con la Calculadora Pública)', 'Live Rate Editor (Synced with Public Pricing Calculator)')}
                   </h2>
                   <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
-                    Cálculo y Física I parten ahora en <strong>$20.000 CLP/h</strong> en Chile y <strong>€25/h</strong> en Europa para que te lleguen muchos más alumnos desde el primer día. Puedes modificar cualquier número aquí abajo y pulsar <strong>Guardar Cambios en la Web</strong> cuando quieras subir tus tarifas.
+                    {t(
+                      'Cálculo y Física I parten ahora en $20.000 CLP/h en Chile y €25/h en Europa para que te lleguen muchos más alumnos desde el primer día. Puedes modificar cualquier número aquí abajo y pulsar Guardar Cambios en la Web cuando quieras subir tus tarifas.',
+                      'Calculus and Physics I start at $20,000 CLP/h in Chile and €25/h in Europe to maximize inquiry volume from day one. Modify any figure below and click Save Changes to Website whenever you wish to adjust rates.'
+                    )}
                   </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     onClick={handleResetDefaultPrices}
-                    className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs flex items-center gap-1.5 cursor-pointer border border-slate-700 transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Restaurar Sugeridos ($20k / €25)</span>
+                    <span>{t('Restaurar Sugeridos ($20k / €25)', 'Restore Recommended ($20k / €25)')}</span>
                   </button>
                   <button
                     onClick={handleSaveCustomPrices}
-                    className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/20 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/20 cursor-pointer transition-all"
                   >
                     <Save className="w-3.5 h-3.5" />
-                    <span>Guardar Cambios en la Web</span>
+                    <span>{t('Guardar Cambios en la Web', 'Save Changes to Website')}</span>
                   </button>
                 </div>
               </div>
@@ -1888,7 +2046,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               {priceSavedBanner && (
                 <div className="p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>¡Precios actualizados! La calculadora pública y las tarjetas de cursos ya muestran estos valores.</span>
+                  <span>{t('¡Precios actualizados! La calculadora pública y las tarjetas de cursos ya muestran estos valores.', 'Rates successfully saved! The public pricing calculator and course modules are now live with these values.')}</span>
                 </div>
               )}
 
@@ -1901,10 +2059,14 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                   >
                     <div className="font-mono text-xs font-bold text-sky-400">
                       {idx === 0 ? '🟢 ' : idx === 1 ? '🔵 ' : '🟣 '}
-                      {st.badgeEs}
+                      {adminLang === 'en' ? st.badgeEn : st.badgeEs}
                     </div>
-                    <div className="text-xs text-white font-semibold">{st.shortEs}</div>
-                    <p className="text-[11px] text-slate-400 leading-relaxed">{st.coursesEs}</p>
+                    <div className="text-xs text-white font-semibold">
+                      {adminLang === 'en' ? st.shortEn : st.shortEs}
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      {adminLang === 'en' ? st.coursesEn : st.coursesEs}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -1913,32 +2075,35 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               {/* PONDERANTES ECONÓMICOS POR PAÍS (BASE EURO = 1.00x) & SIMULADOR    */}
               {/* ================================================================= */}
               <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900/90 to-slate-950 border border-sky-500/30 space-y-5">
-                <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800/80 pb-4">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-mono text-[11px] uppercase tracking-widest text-sky-400 font-bold">
-                        Ponderantes Económicos por País
+                        {t('Ponderantes Económicos por País', 'Purchasing Power Factors by Country')}
                       </span>
                       <span className="px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-300 font-mono text-[10px] font-bold">
-                        Base EUR = 1.00x
+                        {t('Base EUR = 1.00x', 'Base EUR = 1.00x')}
                       </span>
                     </div>
                     <h3 className="text-lg font-bold text-white">
-                      Relación de Precios según Capacidad de Gasto por País
+                      {t('Relación de Precios según Capacidad de Gasto por País', 'Price Multipliers by Regional Spending Capacity')}
                     </h3>
                     <p className="text-xs text-slate-400 max-w-2xl leading-relaxed mt-1">
-                      Tomando el Euro como valor ponderante base de <strong>1.00x</strong> (lo que se cobra en Alemania y Europa), cada país tiene su ponderante respectivo que indica <em>cuántas veces se multiplica el valor de acuerdo a lo que pueden gastar</em> sus estudiantes y familias.
+                      {t(
+                        'Tomando el Euro como valor ponderante base de 1.00x (lo que se cobra en Alemania y Europa), cada país tiene su ponderante respectivo que indica cuántas veces se multiplica el valor de acuerdo a lo que pueden gastar sus estudiantes y familias.',
+                        'Setting the Euro as the baseline anchor of 1.00x (standard tuition in Germany & EU), each currency operates on an empirical multiplier reflecting local purchasing power parity.'
+                      )}
                     </p>
                   </div>
 
                   {/* Simulator Box */}
-                  <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-700/80 space-y-3 font-mono text-xs">
+                  <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-700/80 space-y-3 font-mono text-xs shrink-0 shadow-lg">
                     <div className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
                       <Sliders className="w-3.5 h-3.5" />
-                      <span>Simulador Rápido por Ponderante</span>
+                      <span>{t('Simulador Rápido por Ponderante', 'Quick Multiplier Simulator')}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-slate-400 text-[11px]">Base EUR: €</span>
+                      <span className="text-slate-400 text-[11px]">{t('Base EUR: €', 'Base EUR: €')}</span>
                       <input
                         type="number"
                         min="15"
@@ -1947,16 +2112,16 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                         onChange={(e) => setSimBaseEur(Number(e.target.value) || 25)}
                         className="w-16 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-sky-500/50 text-white font-bold text-center"
                       />
-                      <span className="text-[11px] text-slate-400">/h Nivel 1</span>
+                      <span className="text-[11px] text-slate-400">/h {t('Nivel 1', 'Tier 1')}</span>
                       <button
                         onClick={handleApplyPonderanteSimulation}
                         className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[11px] transition-all cursor-pointer shadow-sm shadow-sky-600/30"
                       >
-                        ⚡ Aplicar a la Web
+                        ⚡ {t('Aplicar a la Web', 'Apply to Site')}
                       </button>
                     </div>
                     <div className="text-[10px] text-slate-400">
-                      Calcula CHF (1.65x), CLP (0.80x), GBP (1.15x) y USD (1.10x) al instante.
+                      {t('Calcula CHF (1.65x), CLP (0.80x), GBP (1.15x) y USD (1.10x) al instante.', 'Recalculates CHF (1.65x), CLP (0.80x), GBP (1.15x), USD (1.10x) instantly.')}
                     </div>
                   </div>
                 </div>
@@ -1971,7 +2136,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                         key={tier.code}
                         className={`p-3.5 rounded-2xl border transition-all ${
                           isBase
-                            ? 'bg-sky-950/30 border-sky-500/40'
+                            ? 'bg-sky-950/30 border-sky-500/40 shadow-sm'
                             : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'
                         }`}
                       >
@@ -1988,17 +2153,56 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                           </span>
                         </div>
                         <div className="font-bold text-white text-xs mb-1">
-                          {tier.code} — {tier.labelEs.split('•')[1] || tier.code}
+                          {tier.code} — {adminLang === 'en' ? (tier.labelEn?.split('•')[1] || tier.code) : (tier.labelEs.split('•')[1] || tier.code)}
                         </div>
                         <div className="text-[11px] text-emerald-400 font-extrabold mb-1.5">
                           {formatMoney(tier.rates.ib, tier.code)}/h
                         </div>
                         <p className="text-[10px] font-sans text-slate-400 leading-tight">
-                          {tier.ponderanteDescEs}
+                          {adminLang === 'en' ? tier.ponderanteDescEn : tier.ponderanteDescEs}
                         </p>
                       </div>
                     );
                   })}
+                </div>
+
+                {/* Visual Purchasing Power Benchmark Bar */}
+                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                      <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
+                      <span>{t('Escala Comparativa de Poder Adquisitivo vs. Base EUR (1.00x)', 'Purchasing Power Benchmark vs. Base EUR (1.00x)')}</span>
+                    </span>
+                    <span className="text-slate-500 text-[11px]">{t('Alemania/UE = 100% Benchmark', 'Germany/EU = 100% Benchmark')}</span>
+                  </div>
+                  <div className="space-y-2 pt-1 font-mono text-[11px]">
+                    {[
+                      { code: 'CHF', name: t('Suiza (ETH / EPFL / Expat)', 'Switzerland (ETH / EPFL / Expat)'), flag: '🇨🇭', mult: 1.65, pct: 100, color: 'bg-emerald-500' },
+                      { code: 'GBP', name: t('Reino Unido (Imperial / Cambridge)', 'United Kingdom (Imperial / Cambridge)'), flag: '🇬🇧', mult: 1.15, pct: 70, color: 'bg-sky-400' },
+                      { code: 'USD', name: t('EE.UU. / Internacional (Ivy League / Tech)', 'USA / International (Ivy / Tech)'), flag: '🇺🇸', mult: 1.10, pct: 67, color: 'bg-cyan-400' },
+                      { code: 'EUR', name: t('Alemania & Zona Euro (LUH / TUM / Uni)', 'Germany & Eurozone (LUH / TUM / Uni)'), flag: '🇩🇪🇪🇺', mult: 1.00, pct: 61, color: 'bg-indigo-400' },
+                      { code: 'CLP', name: t('Chile (FCFM Beauchef / PUC / USM)', 'Chile (FCFM Beauchef / PUC / USM)'), flag: '🇨🇱', mult: 0.80, pct: 48, color: 'bg-amber-400' },
+                    ].map((item) => (
+                      <div key={item.code} className="flex items-center gap-3">
+                        <span className="w-16 shrink-0 font-bold text-white flex items-center gap-1">
+                          <span>{item.flag}</span>
+                          <span>{item.code}</span>
+                        </span>
+                        <div className="flex-1 h-2.5 rounded-full bg-slate-900 overflow-hidden relative border border-slate-800">
+                          <div
+                            className={`h-full rounded-full ${item.color} transition-all duration-500`}
+                            style={{ width: `${item.pct}%` }}
+                          />
+                        </div>
+                        <span className="w-14 text-right font-extrabold text-white shrink-0">
+                          {item.mult.toFixed(2)}x
+                        </span>
+                        <span className="hidden sm:inline w-56 text-slate-400 text-[10px] truncate shrink-0">
+                          {item.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -2362,37 +2566,65 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-white">Registrar Nuevo Alumno / Lead</h2>
+                  <h2 className="text-lg font-bold text-white">
+                    {t('Registrar Nuevo Alumno / Lead', 'Register New Student / Lead')}
+                  </h2>
                   <p className="text-xs text-slate-400">
-                    Al marcar un alumno como <strong>Pagado ✓</strong>, su monto se suma automáticamente a tu barra de Meta Mensual arriba.
+                    {t(
+                      'Al marcar un alumno como Pagado ✓, su monto se suma automáticamente a tu barra de Meta Mensual arriba.',
+                      'Marking a student as Paid ✓ automatically tallies their tuition towards your Monthly Target above.'
+                    )}
                   </p>
                 </div>
-                <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 font-mono text-xs">
-                  <button
-                    onClick={() => setPipelineView('kanban')}
-                    className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
-                      pipelineView === 'kanban' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <Columns className="w-3.5 h-3.5" />
-                    <span>Kanban</span>
-                  </button>
-                  <button
-                    onClick={() => setPipelineView('table')}
-                    className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
-                      pipelineView === 'table' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <Table className="w-3.5 h-3.5" />
-                    <span>Tabla</span>
-                  </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Live Search Input */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={t('Buscar alumno o ramo...', 'Search student or course...')}
+                      value={crmSearch}
+                      onChange={(e) => setCrmSearch(e.target.value)}
+                      className="px-3 py-1.5 pl-8 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono text-xs placeholder:text-slate-500 w-44 sm:w-56 focus:outline-none focus:border-sky-500 shadow-inner"
+                    />
+                    <svg className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    {crmSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setCrmSearch('')}
+                        className="text-slate-400 hover:text-white absolute right-2.5 top-1/2 -translate-y-1/2 text-xs"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 font-mono text-xs shadow-inner">
+                    <button
+                      onClick={() => setPipelineView('kanban')}
+                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
+                        pipelineView === 'kanban' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Columns className="w-3.5 h-3.5" />
+                      <span>Kanban</span>
+                    </button>
+                    <button
+                      onClick={() => setPipelineView('table')}
+                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${
+                        pipelineView === 'table' ? 'bg-sky-600 text-white font-bold' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Table className="w-3.5 h-3.5" />
+                      <span>{t('Tabla', 'Table')}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <form onSubmit={handleAddLead} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
                 <input
                   type="text"
-                  placeholder="Nombre del alumno *"
+                  placeholder={t('Nombre del alumno *', 'Student name *')}
                   value={newLead.name}
                   onChange={(e) => setNewLead({ ...newLead, name: e.target.value })}
                   className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
@@ -2400,14 +2632,14 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                 />
                 <input
                   type="text"
-                  placeholder="Ramo (ej. Cálculo I, Fluidos)"
+                  placeholder={t('Ramo (ej. Cálculo I, Fluidos)', 'Course (e.g. Calculus, Fluids)')}
                   value={newLead.subject}
                   onChange={(e) => setNewLead({ ...newLead, subject: e.target.value })}
                   className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
                 />
                 <input
                   type="text"
-                  placeholder="Universidad / Colegio"
+                  placeholder={t('Universidad / Colegio', 'University / School')}
                   value={newLead.university}
                   onChange={(e) => setNewLead({ ...newLead, university: e.target.value })}
                   className="px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
@@ -2435,7 +2667,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                   </select>
                   <input
                     type="text"
-                    placeholder="Tarifa/h"
+                    placeholder={t('Tarifa/h', 'Rate/h')}
                     value={newLead.quotedRate}
                     onChange={(e) => setNewLead({ ...newLead, quotedRate: e.target.value })}
                     className="w-full px-2.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono"
@@ -2450,7 +2682,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     value={newLead.hoursTotal}
                     onChange={(e) => setNewLead({ ...newLead, hoursTotal: e.target.value })}
                     className="w-16 px-2.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
-                    title="Horas del plan"
+                    title={t('Horas del plan', 'Plan hours')}
                   />
                   <span className="text-slate-400 text-[11px]">hrs</span>
                   <select
@@ -2459,16 +2691,16 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     className="w-full px-2 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
                   >
                     <option value="Online">Online</option>
-                    <option value="In-Person Hannover">Presencial (+Extra)</option>
+                    <option value="In-Person Hannover">{t('Presencial (+Extra)', 'In-Person (+Extra)')}</option>
                   </select>
                 </div>
 
                 <button
                   type="submit"
-                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-emerald-600/20"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Añadir Alumno</span>
+                  <span>{t('Añadir Alumno', 'Add Student')}</span>
                 </button>
               </form>
             </div>
@@ -2476,7 +2708,12 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             {pipelineView === 'kanban' ? (
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {KANBAN_COLUMNS.map((col) => {
-                  const colLeads = leads.filter((l) => l.status === col.id);
+                  const colLeads = leads.filter((l) => {
+                    if (l.status !== col.id) return false;
+                    if (!crmSearch.trim()) return true;
+                    const q = crmSearch.toLowerCase();
+                    return l.name?.toLowerCase().includes(q) || l.subject?.toLowerCase().includes(q) || l.university?.toLowerCase().includes(q);
+                  });
                   return (
                     <div
                       key={col.id}
@@ -2485,7 +2722,9 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                       <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
                         <div className="flex items-center gap-2">
                           <span className={`w-2 h-2 rounded-full ${col.dot}`} />
-                          <span className="font-mono text-xs font-bold text-white">{col.label}</span>
+                          <span className="font-mono text-xs font-bold text-white">
+                            {adminLang === 'en' ? (col.labelEn || col.label) : (col.labelEs || col.label)}
+                          </span>
                         </div>
                         <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-slate-800 text-sky-300 font-bold">
                           {colLeads.length}
@@ -2495,7 +2734,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                       <div className="space-y-3 flex-1">
                         {colLeads.length === 0 && (
                           <div className="text-center py-10 text-xs text-slate-600 font-mono">
-                            Sin alumnos en esta etapa
+                            {crmSearch ? t('Sin coincidencias', 'No matches found') : t('Sin alumnos en esta etapa', 'No students in this stage')}
                           </div>
                         )}
                         {colLeads.map((lead) => {
@@ -3058,38 +3297,79 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-lg font-bold text-white">
-                Plantillas de Avisos con Precios Escalonados ($20.000 CLP / €25 Base + Método PIAD™)
-              </h3>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    {t('Plantillas de Avisos con Precios Escalonados (Base 1.00x EUR / $20.000 CLP)', 'Classified Ad Templates with Tiered Pricing (Base 1.00x EUR / $20,000 CLP)')}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {t('Avisos listos para copiar y pegar en portales clasificados, foros y redes sociales con enlaces de trazabilidad y números de WhatsApp.', 'Ready-to-post classified templates with attribution links and direct WhatsApp action.')}
+                  </p>
+                </div>
+
+                {/* Ad Language Filter Bar */}
+                <div className="flex flex-wrap gap-1.5 font-mono text-xs p-1 rounded-xl bg-slate-950 border border-slate-800 self-start sm:self-auto shadow-inner">
+                  {[
+                    { id: 'all', label: t('Todos', 'All'), count: AD_TEMPLATES.length },
+                    { id: 'en', label: '🇬🇧 English', count: AD_TEMPLATES.filter((a) => a.lang === 'en').length },
+                    { id: 'es', label: '🇪🇸 Español', count: AD_TEMPLATES.filter((a) => a.lang === 'es').length },
+                    { id: 'de', label: '🇩🇪 Deutsch', count: AD_TEMPLATES.filter((a) => a.lang === 'de').length }
+                  ].map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setAdLangFilter(f.id)}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                        adLangFilter === f.id
+                          ? 'bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold shadow-md shadow-sky-600/30'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                      }`}
+                    >
+                      <span>{f.label}</span>
+                      <span className="text-[10px] px-1 rounded-full bg-slate-800 text-slate-300">
+                        {f.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 gap-6">
-                {AD_TEMPLATES.map((ad) => (
-                  <div key={ad.id} className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 space-y-4">
+                {AD_TEMPLATES.filter((ad) => adLangFilter === 'all' || ad.lang === adLangFilter).map((ad) => (
+                  <div key={ad.id} className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-slate-700 transition-colors">
                     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
-                      <div>
-                        <span className="font-mono text-xs font-bold text-sky-400 block mb-1">
-                          {ad.badge}
-                        </span>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs font-bold text-sky-400 block">
+                            {ad.badge}
+                          </span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 uppercase font-semibold">
+                            {ad.lang === 'en' ? '🇬🇧 English' : ad.lang === 'es' ? '🇪🇸 Español' : '🇩🇪 Deutsch'}
+                          </span>
+                        </div>
                         <h4 className="text-base font-bold text-white">{ad.title}</h4>
                         <span className="text-xs font-mono text-emerald-400">{ad.priceNote}</span>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 shrink-0">
                         <button
+                          type="button"
                           onClick={() => copyToClipboard(ad.title, `${ad.id}-title`)}
-                          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs flex items-center gap-1.5 cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs flex items-center gap-1.5 cursor-pointer border border-slate-700/80 transition-colors"
                         >
                           {copiedId === `${ad.id}-title` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                          <span>Copiar Título</span>
+                          <span>{t('Copiar Título', 'Copy Title')}</span>
                         </button>
                         <button
+                          type="button"
                           onClick={() => copyToClipboard(ad.body, `${ad.id}-body`)}
-                          className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-sky-600/20 transition-all"
                         >
-                          {copiedId === `${ad.id}-body` ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                          <span>{copiedId === `${ad.id}-body` ? '¡Texto Copiado!' : 'Copiar Anuncio Completo'}</span>
+                          {copiedId === `${ad.id}-body` ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span>{copiedId === `${ad.id}-body` ? t('¡Texto Copiado!', 'Copied to Clipboard!') : t('Copiar Anuncio Completo', 'Copy Full Ad')}</span>
                         </button>
                       </div>
                     </div>
-                    <pre className="whitespace-pre-wrap font-sans text-xs text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 leading-relaxed">
+                    <pre className="whitespace-pre-wrap font-sans text-xs text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 leading-relaxed max-h-96 overflow-y-auto selection:bg-sky-500/30">
                       {ad.body}
                     </pre>
                   </div>

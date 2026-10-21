@@ -889,12 +889,129 @@ function createStarSpriteTexture() {
   const ctx = canvas.getContext('2d');
   const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
   grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');
-  grad.addColorStop(0.12, 'rgba(255, 255, 255, 0.85)');
-  grad.addColorStop(0.35, 'rgba(210, 230, 255, 0.25)');
-  grad.addColorStop(0.7, 'rgba(150, 190, 255, 0.05)');
+  grad.addColorStop(0.18, 'rgba(240, 248, 255, 0.90)');
+  grad.addColorStop(0.42, 'rgba(180, 215, 255, 0.40)');
+  grad.addColorStop(0.75, 'rgba(120, 170, 255, 0.10)');
   grad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 64, 64);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.generateMipmaps = false;
+  texture.minFilter = THREE.LinearFilter;
+  return texture;
+}
+
+function createBrightStarSpriteTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128; canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  const cx = 64, cy = 64;
+
+  // Core glow
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60);
+  grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');
+  grad.addColorStop(0.12, 'rgba(255, 255, 255, 0.95)');
+  grad.addColorStop(0.30, 'rgba(200, 230, 255, 0.45)');
+  grad.addColorStop(0.70, 'rgba(120, 180, 255, 0.08)');
+  grad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 128, 128);
+
+  // 4-point diffraction spike (Hubble / James Webb astrophotography aesthetic)
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.70)';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(cx - 50, cy); ctx.lineTo(cx + 50, cy);
+  ctx.moveTo(cx, cy - 50); ctx.lineTo(cx, cy + 50);
+  ctx.stroke();
+
+  // Secondary diagonal subtle rays
+  ctx.strokeStyle = 'rgba(190, 225, 255, 0.28)';
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(cx - 24, cy - 24); ctx.lineTo(cx + 24, cy + 24);
+  ctx.moveTo(cx - 24, cy + 24); ctx.lineTo(cx + 24, cy - 24);
+  ctx.stroke();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.generateMipmaps = false;
+  texture.minFilter = THREE.LinearFilter;
+  return texture;
+}
+
+function createCosmicNebulaTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 2048; canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+
+  // Deep obsidian cosmos background
+  ctx.fillStyle = '#020307';
+  ctx.fillRect(0, 0, 2048, 1024);
+
+  // Soft atmospheric Milky Way galactic plane & nebulae
+  const nebulae = [
+    // Galactic center bulge (Sagittarius / Scorpius region)
+    { x: 1024, y: 512, r1: 0, r2: 500, c1: 'rgba(52, 98, 200, 0.18)', c2: 'rgba(2, 3, 7, 0)' },
+    { x: 1024, y: 512, r1: 0, r2: 280, c1: 'rgba(130, 75, 200, 0.15)', c2: 'rgba(2, 3, 7, 0)' },
+    { x: 990, y: 500, r1: 0, r2: 150, c1: 'rgba(210, 160, 255, 0.20)', c2: 'rgba(2, 3, 7, 0)' },
+    // Cygnus / Cassiopeia arm
+    { x: 440, y: 390, r1: 0, r2: 420, c1: 'rgba(20, 80, 170, 0.14)', c2: 'rgba(2, 3, 7, 0)' },
+    { x: 620, y: 440, r1: 0, r2: 360, c1: 'rgba(95, 45, 150, 0.11)', c2: 'rgba(2, 3, 7, 0)' },
+    // Carina / Crux arm
+    { x: 1560, y: 610, r1: 0, r2: 450, c1: 'rgba(28, 92, 195, 0.15)', c2: 'rgba(2, 3, 7, 0)' },
+    { x: 1700, y: 660, r1: 0, r2: 340, c1: 'rgba(150, 50, 130, 0.10)', c2: 'rgba(2, 3, 7, 0)' },
+    // Orion / Taurus reflection clouds
+    { x: 1260, y: 360, r1: 0, r2: 310, c1: 'rgba(35, 120, 180, 0.12)', c2: 'rgba(2, 3, 7, 0)' },
+    { x: 790, y: 640, r1: 0, r2: 330, c1: 'rgba(25, 75, 155, 0.10)', c2: 'rgba(2, 3, 7, 0)' },
+  ];
+
+  nebulae.forEach(n => {
+    const rad = ctx.createRadialGradient(n.x, n.y, n.r1, n.x, n.y, n.r2);
+    rad.addColorStop(0.0, n.c1);
+    rad.addColorStop(1.0, n.c2);
+    ctx.fillStyle = rad;
+    ctx.fillRect(0, 0, 2048, 1024);
+  });
+
+  // Dark dust lanes (Great Rift of the Milky Way)
+  const dustLanes = [
+    { x: 1010, y: 520, rx: 270, ry: 40, rot: 0.10, alpha: 0.28 },
+    { x: 610, y: 430, rx: 300, ry: 32, rot: 0.08, alpha: 0.22 },
+    { x: 1530, y: 605, rx: 280, ry: 36, rot: 0.14, alpha: 0.24 },
+  ];
+
+  dustLanes.forEach(d => {
+    ctx.save();
+    ctx.translate(d.x, d.y);
+    ctx.rotate(d.rot);
+    const rad = ctx.createRadialGradient(0, 0, 0, 0, 0, d.rx);
+    rad.addColorStop(0.0, `rgba(2, 3, 7, ${d.alpha})`);
+    rad.addColorStop(0.65, `rgba(2, 3, 7, ${d.alpha * 0.45})`);
+    rad.addColorStop(1.0, 'rgba(2, 3, 7, 0)');
+    ctx.scale(1.0, d.ry / d.rx);
+    ctx.fillStyle = rad;
+    ctx.beginPath();
+    ctx.arc(0, 0, d.rx, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Micro-stardust resolution layer across galactic belt
+  const imgData = ctx.getImageData(0, 0, 2048, 1024);
+  const data = imgData.data;
+  for (let i = 0; i < 18000; i++) {
+    const u = Math.random();
+    const galacticY = 512 + Math.sin(u * Math.PI * 2) * 150 + (Math.random() - 0.5) * 160 * (1 - Math.abs(u - 0.5));
+    const px = Math.floor(u * 2048);
+    const py = Math.floor(Math.max(0, Math.min(1023, galacticY)));
+    const idx = (py * 2048 + px) * 4;
+    const b = Math.floor(45 + Math.random() * 150);
+    data[idx] = Math.min(255, data[idx] + b);
+    data[idx + 1] = Math.min(255, data[idx + 1] + Math.floor(b * 0.9));
+    data[idx + 2] = Math.min(255, data[idx + 2] + Math.floor(b * 1.15));
+  }
+  ctx.putImageData(imgData, 0, 0);
+
   const texture = new THREE.CanvasTexture(canvas);
   texture.generateMipmaps = false;
   texture.minFilter = THREE.LinearFilter;
@@ -2146,25 +2263,37 @@ export default function SolarSystem({
     });
 
     // ========================================================================
-    // STARFIELD & MILKY WAY
+    // CELESTIAL BACKGROUND: COSMIC NEBULA SKY DOME & DUAL-TIER STARFIELD
     // ========================================================================
+    const cosmicNebulaTex = createCosmicNebulaTexture();
+    const skyDomeGeo = new THREE.SphereGeometry(12000, 48, 32);
+    const skyDomeMat = new THREE.MeshBasicMaterial({
+      map: cosmicNebulaTex,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+    const skyDome = new THREE.Mesh(skyDomeGeo, skyDomeMat);
+    scene.add(skyDome);
+
+    // 1. High-Density Pinpoint Starfield (7,200 stars with Spectral Colors)
     const starSprite = createStarSpriteTexture();
-    const starCount = 3800;
+    const starCount = 7200;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
 
     const spectralColors = [
-      new THREE.Color(0.68, 0.78, 1.0),
-      new THREE.Color(0.85, 0.90, 1.0),
-      new THREE.Color(0.98, 0.98, 0.94),
-      new THREE.Color(1.0, 0.92, 0.80),
-      new THREE.Color(1.0, 0.78, 0.58),
-      new THREE.Color(1.0, 0.55, 0.38),
+      new THREE.Color(0.72, 0.84, 1.0),  // O/B: Bluish-white (hot stars)
+      new THREE.Color(0.88, 0.94, 1.0),  // A: Brilliant pure white (Vega, Sirius)
+      new THREE.Color(0.98, 0.98, 0.94),  // F: Soft yellowish-white
+      new THREE.Color(1.0, 0.94, 0.82),  // G: Solar warm golden (Sun, Alpha Centauri)
+      new THREE.Color(1.0, 0.80, 0.58),  // K: Orange (Arcturus)
+      new THREE.Color(1.0, 0.58, 0.42),  // M: Red giant (Betelgeuse, Antares)
+      new THREE.Color(0.60, 0.90, 1.0),  // Cyan celestial accent
     ];
 
     for (let i = 0; i < starCount; i++) {
-      const radius = 3500 + Math.random() * 8000;
+      const radius = 2500 + Math.random() * 4500;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
@@ -2173,7 +2302,8 @@ export default function SolarSystem({
       starPositions[i * 3 + 2] = radius * Math.cos(phi);
 
       const colorPick = spectralColors[Math.floor(Math.random() * spectralColors.length)];
-      const brightness = 0.35 + Math.pow(Math.random(), 3.5) * 0.65;
+      // Calibrated brightness for crisp starry contrast
+      const brightness = 0.50 + Math.pow(Math.random(), 2.8) * 0.50;
       starColors[i * 3] = colorPick.r * brightness;
       starColors[i * 3 + 1] = colorPick.g * brightness;
       starColors[i * 3 + 2] = colorPick.b * brightness;
@@ -2184,6 +2314,7 @@ export default function SolarSystem({
 
     const starMat = new THREE.PointsMaterial({
       size: 2.2,
+      sizeAttenuation: false, // Ensures pinpoint razor-sharp stars on all displays & zooms
       map: starSprite,
       vertexColors: true,
       transparent: true,
@@ -2192,6 +2323,44 @@ export default function SolarSystem({
     });
     const starPoints = new THREE.Points(starGeo, starMat);
     scene.add(starPoints);
+
+    // 2. Bright Navigational Stars with 4-Point Diffraction Glint (~450 stars)
+    const brightStarSprite = createBrightStarSpriteTexture();
+    const brightStarCount = 450;
+    const brightStarGeo = new THREE.BufferGeometry();
+    const brightStarPositions = new Float32Array(brightStarCount * 3);
+    const brightStarColors = new Float32Array(brightStarCount * 3);
+
+    for (let i = 0; i < brightStarCount; i++) {
+      const radius = 2400 + Math.random() * 4000;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+
+      brightStarPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      brightStarPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      brightStarPositions[i * 3 + 2] = radius * Math.cos(phi);
+
+      const colorPick = spectralColors[Math.floor(Math.random() * spectralColors.length)];
+      const brightness = 0.70 + Math.random() * 0.30;
+      brightStarColors[i * 3] = colorPick.r * brightness;
+      brightStarColors[i * 3 + 1] = colorPick.g * brightness;
+      brightStarColors[i * 3 + 2] = colorPick.b * brightness;
+    }
+
+    brightStarGeo.setAttribute('position', new THREE.BufferAttribute(brightStarPositions, 3));
+    brightStarGeo.setAttribute('color', new THREE.BufferAttribute(brightStarColors, 3));
+
+    const brightStarMat = new THREE.PointsMaterial({
+      size: 5.5,
+      sizeAttenuation: false,
+      map: brightStarSprite,
+      vertexColors: true,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const brightStarPoints = new THREE.Points(brightStarGeo, brightStarMat);
+    scene.add(brightStarPoints);
 
     // ========================================================================
     // LIGHTING SYSTEM (HDR Calibrated Anti-Glare Baseline)
@@ -3851,6 +4020,14 @@ export default function SolarSystem({
       controls.autoRotateSpeed = 0.45;
       controls.update();
 
+      // Celestial Background follows camera for infinite cosmic parallax
+      skyDome.position.copy(camera.position);
+      starPoints.position.copy(camera.position);
+      brightStarPoints.position.copy(camera.position);
+      starPoints.rotation.y += delta * 0.0012;
+      brightStarPoints.rotation.y += delta * 0.0012;
+      skyDome.rotation.y += delta * 0.0006;
+
       // ======================================================================
       // 2D PROJECTED SCREEN COORDINATES FOR THE 7 LINEUP FLOATING COURSE BADGES
       // ======================================================================
@@ -3945,6 +4122,12 @@ export default function SolarSystem({
       starGeo.dispose();
       starMat.dispose();
       starSprite.dispose();
+      brightStarGeo.dispose();
+      brightStarMat.dispose();
+      brightStarSprite.dispose();
+      skyDomeGeo.dispose();
+      skyDomeMat.dispose();
+      cosmicNebulaTex.dispose();
       sgrGeo.dispose();
       sgrMat.dispose();
       diskGeo.dispose();

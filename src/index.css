@@ -89,3 +89,191 @@
     page-break-inside: avoid;
   }
 }
+
+/* ========================================================================= */
+/* THEMES FOR ADMIN DASHBOARD (.ds-admin-light, .ds-admin-warm, .ds-admin-dark) */
+/* ========================================================================= */
+
+/* --- 1. LUMINOSO / CLEAN LIGHT THEME (DEFAULT) --- */
+.ds-admin-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.ds-admin-light header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 4px 0 rgba(15, 23, 42, 0.05) !important;
+}
+
+.ds-admin-light .bg-gradient-to-br.from-slate-900\/95,
+.ds-admin-light .bg-slate-900\/90,
+.ds-admin-light .bg-slate-900\/95,
+.ds-admin-light .bg-slate-900 {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04) !important;
+}
+
+.ds-admin-light .bg-slate-950,
+.ds-admin-light .bg-slate-950\/90,
+.ds-admin-light .bg-slate-950\/80,
+.ds-admin-light .bg-slate-950\/70,
+.ds-admin-light .bg-slate-950\/60,
+.ds-admin-light .bg-slate-950\/50,
+.ds-admin-light .bg-sky-950\/30 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+.ds-admin-light input,
+.ds-admin-light select,
+.ds-admin-light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.ds-admin-light input:focus,
+.ds-admin-light select:focus,
+.ds-admin-light textarea:focus {
+  border-color: #0284c7 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15) !important;
+}
+
+.ds-admin-light pre {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.ds-admin-light .text-white {
+  color: #0f172a !important;
+}
+
+.ds-admin-light .text-slate-100 {
+  color: #0f172a !important;
+}
+
+.ds-admin-light .text-slate-200 {
+  color: #1e293b !important;
+}
+
+.ds-admin-light .text-slate-300 {
+  color: #334155 !important;
+}
+
+.ds-admin-light .text-slate-400 {
+  color: #64748b !important;
+}
+
+.ds-admin-light .border-slate-800,
+.ds-admin-light .border-slate-800\/90,
+.ds-admin-light .border-slate-800\/80,
+.ds-admin-light .border-slate-800\/70,
+.ds-admin-light .border-slate-700,
+.ds-admin-light .border-slate-700\/80 {
+  border-color: #e2e8f0 !important;
+}
+
+.ds-admin-light .divide-slate-800\/70,
+.ds-admin-light .divide-slate-800 {
+  border-color: #e2e8f0 !important;
+}
+
+.ds-admin-light tr:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.ds-admin-light tr td,
+.ds-admin-light tr th {
+  border-color: #e2e8f0 !important;
+}
+
+.ds-admin-light .bg-slate-800,
+.ds-admin-light .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.ds-admin-light .text-sky-400 {
+  color: #0369a1 !important;
+}
+
+.ds-admin-light .text-emerald-400 {
+  color: #047857 !important;
+}
+
+.ds-admin-light .text-amber-300,
+.ds-admin-light .text-amber-400 {
+  color: #b45309 !important;
+}
+
+.ds-admin-light .bg-slate-900 button.text-slate-400,
+.ds-admin-light button.bg-slate-900\/90 {
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* --- 2. CÁLIDO / WARM CREAM & MARFIL THEME --- */
+.ds-admin-warm {
+  background-color: #fbf9f4 !important;
+  color: #1c1917 !important;
+}
+
+.ds-admin-warm header {
+  background-color: rgba(254, 252, 247, 0.95) !important;
+  border-color: #e7e2d6 !important;
+  box-shadow: 0 1px 4px 0 rgba(28, 25, 23, 0.05) !important;
+}
+
+.ds-admin-warm .bg-gradient-to-br.from-slate-900\/95,
+.ds-admin-warm .bg-slate-900\/90,
+.ds-admin-warm .bg-slate-900\/95,
+.ds-admin-warm .bg-slate-900 {
+  background: #ffffff !important;
+  border-color: #e7e2d6 !important;
+  box-shadow: 0 1px 3px 0 rgba(28, 25, 23, 0.06) !important;
+}
+
+.ds-admin-warm .bg-slate-950,
+.ds-admin-warm .bg-slate-950\/90,
+.ds-admin-warm .bg-slate-950\/80,
+.ds-admin-warm .bg-slate-950\/70,
+.ds-admin-warm .bg-sky-950\/30 {
+  background-color: #f5f0e6 !important;
+  border-color: #e7e2d6 !important;
+}
+
+.ds-admin-warm input,
+.ds-admin-warm select,
+.ds-admin-warm textarea,
+.ds-admin-warm pre {
+  background-color: #fdfbf7 !important;
+  border-color: #d6cebe !important;
+  color: #1c1917 !important;
+}
+
+.ds-admin-warm .text-white,
+.ds-admin-warm .text-slate-100,
+.ds-admin-warm .text-slate-200 {
+  color: #1c1917 !important;
+}
+
+.ds-admin-warm .text-slate-300,
+.ds-admin-warm .text-slate-400 {
+  color: #57534e !important;
+}
+
+.ds-admin-warm .border-slate-800,
+.ds-admin-warm .border-slate-800\/90,
+.ds-admin-warm .border-slate-700 {
+  border-color: #e7e2d6 !important;
+}
+
+.ds-admin-warm tr:hover {
+  background-color: #f3ece0 !important;
+}

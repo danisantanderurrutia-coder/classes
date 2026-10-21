@@ -35,7 +35,9 @@ import {
   Atom,
   Brain,
   Terminal,
-  GraduationCap
+  GraduationCap,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const InstagramIcon = ({ className = "w-4 h-4" }) => (
@@ -1220,6 +1222,21 @@ export default function Admin({ onBack }) {
 
   const t = (esText, enText) => (adminLang === 'en' ? enText : esText);
 
+  const [adminTheme, setAdminTheme] = useState(() => {
+    try {
+      return localStorage.getItem('ds_admin_theme') || 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  const handleSetAdminTheme = (newTheme) => {
+    setAdminTheme(newTheme);
+    try {
+      localStorage.setItem('ds_admin_theme', newTheme);
+    } catch (e) {}
+  };
+
   const [activeTab, setActiveTab] = useState('strategy');
   const [adLangFilter, setAdLangFilter] = useState('all');
   const [crmSearch, setCrmSearch] = useState('');
@@ -1791,7 +1808,13 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
   };
 
   return (
-    <div className="min-h-screen bg-[#070B14] text-slate-100 font-sans selection:bg-sky-500/30">
+    <div className={`min-h-screen font-sans selection:bg-sky-500/30 transition-colors duration-200 ${
+      adminTheme === 'light'
+        ? 'ds-admin-light bg-slate-50 text-slate-900'
+        : adminTheme === 'warm'
+        ? 'ds-admin-warm bg-[#FBF9F4] text-stone-900'
+        : 'ds-admin-dark bg-[#070B14] text-slate-100'
+    }`}>
       {/* Subtle Ambient Background Glows (hidden when printing) */}
       <div className="no-print pointer-events-none fixed inset-0 overflow-hidden z-0">
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
@@ -1821,6 +1844,49 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
           </div>
 
           <div className="flex items-center gap-2.5">
+            {/* Theme Selector: Claro / Cálido / Oscuro */}
+            <div className="flex items-center rounded-xl bg-slate-900 border border-slate-700/80 p-0.5 font-mono text-xs shadow-inner">
+              <button
+                type="button"
+                onClick={() => handleSetAdminTheme('light')}
+                title={t('Tema Claro / SaaS White', 'Light Theme / Clean SaaS White')}
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminTheme === 'light'
+                    ? 'bg-amber-500/25 text-amber-300 font-bold border border-amber-500/40 shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden md:inline">{t('Claro', 'Light')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetAdminTheme('warm')}
+                title={t('Tema Cálido / Cuaderno Marfil', 'Warm Theme / Engineering Cream')}
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminTheme === 'warm'
+                    ? 'bg-amber-600/30 text-amber-200 font-bold border border-amber-500/40 shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>📖</span>
+                <span className="hidden md:inline">{t('Cálido', 'Warm')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetAdminTheme('dark')}
+                title={t('Tema Oscuro / Cockpit Espacial', 'Dark Theme / Space Cockpit')}
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminTheme === 'dark'
+                    ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40 shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5 text-sky-400" />
+                <span className="hidden md:inline">{t('Oscuro', 'Dark')}</span>
+              </button>
+            </div>
+
             {/* Bilingual Language Switcher (ES / EN) */}
             <div className="flex items-center rounded-xl bg-slate-900 border border-slate-700/80 p-0.5 font-mono text-xs shadow-inner">
               <button

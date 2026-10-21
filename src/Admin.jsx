@@ -1129,13 +1129,18 @@ export default function Admin({ onBack }) {
   const [channels, setChannels] = useState(() => {
     try {
       const saved = localStorage.getItem('ds_admin_channels_v4');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
       const old = localStorage.getItem('ds_admin_channels_v3');
       if (old) {
         const oldArr = JSON.parse(old);
-        const existingIds = new Set(oldArr.map((c) => c.id));
-        const merged = [...oldArr, ...INITIAL_CHANNELS.filter((c) => !existingIds.has(c.id))];
-        return merged;
+        if (Array.isArray(oldArr)) {
+          const existingIds = new Set(oldArr.map((c) => c.id));
+          const merged = [...oldArr, ...INITIAL_CHANNELS.filter((c) => !existingIds.has(c.id))];
+          return merged;
+        }
       }
       return INITIAL_CHANNELS;
     } catch {
@@ -1147,7 +1152,11 @@ export default function Admin({ onBack }) {
   const [streetLocations, setStreetLocations] = useState(() => {
     try {
       const saved = localStorage.getItem('ds_admin_street_v3');
-      return saved ? JSON.parse(saved) : INITIAL_STREET_LOCATIONS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+      return INITIAL_STREET_LOCATIONS;
     } catch {
       return INITIAL_STREET_LOCATIONS;
     }
@@ -1157,7 +1166,11 @@ export default function Admin({ onBack }) {
   const [leads, setLeads] = useState(() => {
     try {
       const saved = localStorage.getItem('ds_admin_leads_v3');
-      return saved ? JSON.parse(saved) : INITIAL_LEADS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+      return INITIAL_LEADS;
     } catch {
       return INITIAL_LEADS;
     }
@@ -1183,7 +1196,10 @@ export default function Admin({ onBack }) {
   const [masterChecklist, setMasterChecklist] = useState(() => {
     try {
       const saved = localStorage.getItem('ds_admin_master_checklist_v1');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
       return INITIAL_MASTER_CHECKLIST;
     } catch {
       return INITIAL_MASTER_CHECKLIST;
@@ -1201,7 +1217,9 @@ export default function Admin({ onBack }) {
   });
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_master_checklist_v1', JSON.stringify(masterChecklist));
+    try {
+      localStorage.setItem('ds_admin_master_checklist_v1', JSON.stringify(masterChecklist));
+    } catch {}
   }, [masterChecklist]);
 
   const toggleMasterChecklistItem = (id) => {
@@ -1274,23 +1292,35 @@ export default function Admin({ onBack }) {
   const [flyerSocialChannel, setFlyerSocialChannel] = useState('reddit');
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_channels_v4', JSON.stringify(channels));
+    try {
+      localStorage.setItem('ds_admin_channels_v4', JSON.stringify(channels));
+    } catch {}
   }, [channels]);
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_street_v3', JSON.stringify(streetLocations));
+    try {
+      localStorage.setItem('ds_admin_street_v3', JSON.stringify(streetLocations));
+    } catch {}
   }, [streetLocations]);
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_leads_v3', JSON.stringify(leads));
+    try {
+      localStorage.setItem('ds_admin_leads_v3', JSON.stringify(leads));
+    } catch {}
   }, [leads]);
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_goal_eur', String(monthlyGoalEur));
+    try {
+      localStorage.setItem('ds_admin_goal_eur', String(monthlyGoalEur));
+    } catch {}
   }, [monthlyGoalEur]);
 
   const copyToClipboard = (text, id) => {
-    navigator.clipboard.writeText(text);
+    try {
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+    } catch {}
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2200);
   };

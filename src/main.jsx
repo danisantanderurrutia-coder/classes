@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-const Admin = lazy(() => import('./Admin.jsx'));
+import Admin from './Admin.jsx';
 import './index.css';
 import { isAdminPin } from './adminGate';
 

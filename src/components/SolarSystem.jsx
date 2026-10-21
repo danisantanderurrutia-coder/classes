@@ -2279,6 +2279,9 @@ export default function SolarSystem({
 
     const orbitVantageCam = new THREE.Vector3(-60, 42, 115);
     const orbitVantageTarget = new THREE.Vector3(0, 0, 0);
+    const swoopCamStart = new THREE.Vector3();
+    const sgrStartPos = new THREE.Vector3();
+    let telemetryTimer = 0.0;
     camera.position.copy(orbitVantageCam);
 
     let introPhase = 'waiting'; // 'waiting' -> 'orbiting' -> 'swooping' -> 'done'
@@ -3528,29 +3531,8 @@ export default function SolarSystem({
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const delta = Math.min(clock.getDelta(), 0.1);
+      const delta = Math.min(clock.getDelta(), 0.05);
       const elapsedTime = clock.getElapsedTime();
-
-      // Check if user requested an intro replay from the top bar button
-      if (animStateRef.current.triggerIntroReplay) {
-        animStateRef.current.triggerIntroReplay = false;
-        introPhase = 'orbiting';
-        introTimer = 0.0;
-        alignBlend = 0.0;
-        camera.position.copy(orbitVantageCam);
-        controls.target.copy(orbitVantageTarget);
-        setShowIntroOverlay(true);
-      }
-
-      // Check if observatory has entered the viewport via IntersectionObserver
-      if (introPhase === 'waiting' && animStateRef.current.hasEnteredViewport) {
-        introPhase = 'orbiting';
-        introTimer = 0.0;
-        alignBlend = 0.0;
-        camera.position.copy(orbitVantageCam);
-        controls.target.copy(orbitVantageTarget);
-        setShowIntroOverlay(true);
-      }
 
       const {
         activePlanet: currentActive,
@@ -3566,17 +3548,55 @@ export default function SolarSystem({
 
       const isShowcase = currentVariant !== 'orbital' && !realScaleMode;
 
+      // 1. Galactic Heliocentric Orbit (Compute sun world pos first so vantage is exact)
+      const galRadius = realScaleMode ? 48000 : 320;
+      if (!paused && driftActive && alignBlend < 0.05) {
+        animStateRef.current.galacticAngle += delta * (realScaleMode ? 0.004 : 0.018) * warp;
+      }
+      const gAngle = animStateRef.current.galacticAngle;
+      const sunGalX = galRadius * Math.cos(gAngle);
+      const sunGalZ = galRadius * Math.sin(gAngle);
+      const sunGalY = Math.sin(gAngle * 2.8) * (realScaleMode ? 120.0 : 8.0);
+      solarSystemGroup.position.set(sunGalX, sunGalY, sunGalZ);
+
+      // Keep vantage points centered directly on the solar system
+      orbitVantageTarget.set(sunGalX, sunGalY, sunGalZ);
+      orbitVantageCam.set(sunGalX - 38.0, sunGalY + 24.0, sunGalZ + 52.0);
+
+      // Check if user requested an intro replay from the top bar button
+      if (animStateRef.current.triggerIntroReplay) {
+        animStateRef.current.triggerIntroReplay = false;
+        introPhase = 'orbiting';
+        introTimer = 0.0;
+        alignBlend = 0.0;
+        camera.position.copy(orbitVantageCam);
+        controls.target.copy(orbitVantageTarget);
+        setShowIntroOverlay(true);
+      }
+
+      // Check if observatory has entered the viewport via IntersectionObserver
+      if (introPhase === 'waiting') {
+        camera.position.copy(orbitVantageCam);
+        controls.target.copy(orbitVantageTarget);
+        if (animStateRef.current.hasEnteredViewport) {
+          introPhase = 'orbiting';
+          introTimer = 0.0;
+          alignBlend = 0.0;
+          setShowIntroOverlay(true);
+        }
+      }
+
       // Update target alignment factor based on introPhase and mode:
       if (introPhase === 'orbiting') {
         alignBlend = 0.0;
       } else if (introPhase === 'swooping') {
-        // alignBlend is handled smoothly by the swoop curve
+        // alignBlend is driven directly by smootherstep 's' in the swoop curve
       } else {
         const targetAlign = isShowcase ? 1.0 : 0.0;
         alignBlend += (targetAlign - alignBlend) * Math.min(1.0, delta * 3.2);
         if (Math.abs(targetAlign - alignBlend) < 0.001) alignBlend = targetAlign;
       }
-      const b = alignBlend * alignBlend * (3.0 - 2.0 * alignBlend); // Cubic smoothstep
+      const b = alignBlend;
 
       // Gravitational time dilation (cinematic): slows down near Sgr A*
       const bhR = 7.0 * blackHoleGroup.scale.x;
@@ -3651,17 +3671,6 @@ export default function SolarSystem({
       // ======================================================================
       // UNIFIED POSITIONS & HIERARCHY: BLENDING ORBITAL & 7-PLANET LINEUP
       // ======================================================================
-      // 1. Galactic Heliocentric Orbit
-      const galRadius = realScaleMode ? 48000 : 320;
-      if (!paused && driftActive && b < 0.05) {
-        animStateRef.current.galacticAngle += delta * (realScaleMode ? 0.004 : 0.018) * warp;
-      }
-      const gAngle = animStateRef.current.galacticAngle;
-      const sunGalX = galRadius * Math.cos(gAngle);
-      const sunGalZ = galRadius * Math.sin(gAngle);
-      const sunGalY = Math.sin(gAngle * 2.8) * (realScaleMode ? 120.0 : 8.0);
-      solarSystemGroup.position.set(sunGalX, sunGalY, sunGalZ);
-
       // Environment visibility & lighting blends
       galOrbitLine.visible = b < 0.95;
       galOrbitLine.material.opacity = 0.25 * (1.0 - b);
@@ -3712,25 +3721,8 @@ export default function SolarSystem({
       }
 
       // Asteroid Belt tumbling & orbit
-      if (!paused && b < 0.85) {
-        for (let i = 0; i < beltCount; i++) {
-          const ast = asteroidData[i];
-          ast.angle += ast.speed * delta * 0.35 * warp;
-          ast.rotX += ast.rotSpeedX * delta;
-          ast.rotY += ast.rotSpeedY * delta;
-
-          dummyPos.set(
-            ast.r * Math.cos(ast.angle),
-            ast.verticalDispersion,
-            ast.r * Math.sin(ast.angle)
-          );
-          dummyRot.set(ast.rotX, ast.rotY, ast.rotZ);
-          dummyQuat.setFromEuler(dummyRot);
-          dummyScale.set(ast.scale, ast.scale, ast.scale);
-          dummyMatrix.compose(dummyPos, dummyQuat, dummyScale);
-          asteroidBelt.setMatrixAt(i, dummyMatrix);
-        }
-        asteroidBelt.instanceMatrix.needsUpdate = true;
+      if (!paused && b < 0.95) {
+        asteroidBelt.rotation.y += delta * 0.08 * warp;
       }
 
       const isPanoramaLineup = isShowcase && !isLineupZoomed;
@@ -3765,11 +3757,25 @@ export default function SolarSystem({
       curBhLineupScale += (targetBhLineupScale - curBhLineupScale) * 0.14;
 
       blackHoleGroup.visible = true;
-      blackHoleGroup.position.set(
-        THREE.MathUtils.lerp(0, sunGalX + (bhData?.lineupX || 21), b),
-        THREE.MathUtils.lerp(0, sunGalY + curBhLineupY, b),
-        THREE.MathUtils.lerp(0, sunGalZ + curBhLineupZ, b)
-      );
+      const targetBhX = sunGalX + (bhData?.lineupX || 30.5);
+      const finalBhY = sunGalY + curBhLineupY;
+      const finalBhZ = sunGalZ + curBhLineupZ;
+
+      if (introPhase === 'waiting' || introPhase === 'orbiting') {
+        blackHoleGroup.position.set(targetBhX, finalBhY, finalBhZ + 24.0);
+      } else if (introPhase === 'swooping' && sgrStartPos.lengthSq() > 0) {
+        blackHoleGroup.position.set(
+          targetBhX,
+          finalBhY,
+          THREE.MathUtils.lerp(sgrStartPos.z, finalBhZ, b)
+        );
+      } else {
+        blackHoleGroup.position.set(
+          THREE.MathUtils.lerp(0, targetBhX, b),
+          THREE.MathUtils.lerp(0, finalBhY, b),
+          THREE.MathUtils.lerp(0, finalBhZ, b)
+        );
+      }
       const orbBhScale = realScaleMode ? 9.5 : 1.0;
       const finalBhScale = THREE.MathUtils.lerp(orbBhScale, curBhLineupScale, b);
       blackHoleGroup.scale.setScalar(finalBhScale);
@@ -3787,9 +3793,9 @@ export default function SolarSystem({
         const inc = pObj.data.inclination || 0;
         const orbScale = curSize / pObj.data.size;
 
-        if (!paused && b < 0.85) {
+        if (!paused && (introPhase === 'waiting' || introPhase === 'orbiting' || b < 0.85)) {
           const currentR = (curA * (1 - e * e)) / (1 + e * Math.cos(pObj.angle));
-          const instantaneousSpeed = (pObj.data.speed * 0.32 * warp * (curA / Math.max(1, currentR))) * (1.0 - b * 0.85);
+          const instantaneousSpeed = (pObj.data.speed * 0.32 * warp * (curA / Math.max(1, currentR))) * (1.0 - b * 0.75);
           pObj.angle += instantaneousSpeed * delta;
         }
 
@@ -3816,11 +3822,21 @@ export default function SolarSystem({
           pObj.curLineupZ = (pObj.curLineupZ ?? 0) + (targetPz - (pObj.curLineupZ ?? 0)) * 0.14;
           pObj.curLineupScale = (pObj.curLineupScale ?? targetLScale) + (targetLScale - (pObj.curLineupScale ?? targetLScale)) * 0.14;
 
-          pObj.anchor.position.set(
-            THREE.MathUtils.lerp(orbX, pObj.data.lineupX, b),
-            THREE.MathUtils.lerp(orbY, pObj.curLineupY, b),
-            THREE.MathUtils.lerp(orbZ, pObj.curLineupZ, b)
-          );
+          if (introPhase === 'waiting' || introPhase === 'orbiting') {
+            pObj.anchor.position.set(orbX, orbY, orbZ);
+          } else if (introPhase === 'swooping' && pObj.swoopStartPos) {
+            pObj.anchor.position.set(
+              THREE.MathUtils.lerp(pObj.swoopStartPos.x, pObj.data.lineupX, b),
+              THREE.MathUtils.lerp(pObj.swoopStartPos.y, pObj.curLineupY, b),
+              THREE.MathUtils.lerp(pObj.swoopStartPos.z, pObj.curLineupZ, b)
+            );
+          } else {
+            pObj.anchor.position.set(
+              THREE.MathUtils.lerp(orbX, pObj.data.lineupX, b),
+              THREE.MathUtils.lerp(orbY, pObj.curLineupY, b),
+              THREE.MathUtils.lerp(orbZ, pObj.curLineupZ, b)
+            );
+          }
 
           const finalScale = THREE.MathUtils.lerp(orbScale, pObj.curLineupScale, b);
           pObj.mesh.scale.setScalar(finalScale);
@@ -3874,14 +3890,18 @@ export default function SolarSystem({
         selectionHaloGroup.visible = false;
       }
 
-      // Update telemetry
-      if (Math.random() < 0.1) {
-        const trueAnomalyDeg = ((activeWorldPos.length() > 0 ? Math.atan2(activeWorldPos.z, activeWorldPos.x) : 0) * (180 / Math.PI) + 360) % 360;
-        setLiveTelemetry({
-          rAU: currentActive.semiMajorAxisAU || '1.000 AU',
-          velKms: currentActive.orbitalSpeedKms || `${activeSpeedKms.toFixed(1)} km/s`,
-          nuDeg: `${trueAnomalyDeg.toFixed(1)}°`,
-        });
+      // Update telemetry only when in orbital physics mode (throttled to 1 sec)
+      if (st.visualPhysicMode && currentVariant === 'orbital') {
+        telemetryTimer += delta;
+        if (telemetryTimer > 0.85) {
+          telemetryTimer = 0.0;
+          const trueAnomalyDeg = ((activeWorldPos.length() > 0 ? Math.atan2(activeWorldPos.z, activeWorldPos.x) : 0) * (180 / Math.PI) + 360) % 360;
+          setLiveTelemetry({
+            rAU: currentActive.semiMajorAxisAU || '1.000 AU',
+            velKms: currentActive.orbitalSpeedKms || `${activeSpeedKms.toFixed(1)} km/s`,
+            nuDeg: `${trueAnomalyDeg.toFixed(1)}°`,
+          });
+        }
       }
 
       // ======================================================================
@@ -3967,15 +3987,20 @@ export default function SolarSystem({
         alignBlend = 0.0;
         // Natural gentle camera orbital drift while user observes 3D orbits
         camera.position.set(
-          orbitVantageCam.x + Math.sin(introTimer * 0.45) * 3.2,
-          orbitVantageCam.y + Math.cos(introTimer * 0.35) * 1.8,
-          orbitVantageCam.z + Math.sin(introTimer * 0.25) * 4.0
+          orbitVantageCam.x + Math.sin(introTimer * 0.45) * 2.5,
+          orbitVantageCam.y + Math.cos(introTimer * 0.35) * 1.5,
+          orbitVantageCam.z + Math.sin(introTimer * 0.25) * 3.0
         );
         controls.target.copy(orbitVantageTarget);
 
-        if (introTimer >= 1.25) {
+        if (introTimer >= 1.35) {
           introPhase = 'swooping';
           introTimer = 0.0;
+          swoopCamStart.copy(camera.position);
+          planetObjects.forEach((p) => {
+            p.swoopStartPos = p.anchor.position.clone();
+          });
+          sgrStartPos.copy(blackHoleGroup.position);
         }
       } else if (introPhase === 'swooping') {
         introTimer += delta;
@@ -3983,13 +4008,11 @@ export default function SolarSystem({
         const u = Math.min(1.0, introTimer / swoopDur);
         const s = u * u * u * (u * (u * 6 - 15) + 10);
         travelS = s;
+        alignBlend = s;
 
-        // Smoothly blend planets from orbit into horizontal line
-        alignBlend = THREE.MathUtils.smoothstep(s, 0.10, 0.94);
-
-        // Smooth curved camera swoop from orbit vantage to lineup view
-        const arcY = Math.sin(Math.PI * s) * 8.5;
-        camera.position.lerpVectors(orbitVantageCam, desiredCamPos, s);
+        // Smooth curved camera swoop from exact drift position to lineup view
+        const arcY = Math.sin(Math.PI * s) * 3.2;
+        camera.position.lerpVectors(swoopCamStart, desiredCamPos, s);
         camera.position.y += arcY;
         controls.target.lerpVectors(orbitVantageTarget, targetCenter, s);
 
@@ -3998,6 +4021,7 @@ export default function SolarSystem({
           alignBlend = 1.0;
           camera.position.copy(desiredCamPos);
           controls.target.copy(targetCenter);
+          controls.update();
           setShowIntroOverlay(false);
         }
       } else if (transitioning) {
@@ -4061,9 +4085,12 @@ export default function SolarSystem({
       }
 
       prevFocalWorldPos.copy(targetCenter);
-      controls.autoRotate = !!st.autoOrbit && !st.isTransitioning;
-      controls.autoRotateSpeed = 0.45;
-      controls.update();
+      const isProgrammaticMoving = introPhase === 'orbiting' || introPhase === 'swooping' || st.isTransitioning;
+      if (!isProgrammaticMoving) {
+        controls.autoRotate = !!st.autoOrbit;
+        controls.autoRotateSpeed = 0.45;
+        controls.update();
+      }
 
       // Celestial Background follows camera for infinite cosmic parallax
       skyDome.position.copy(camera.position);

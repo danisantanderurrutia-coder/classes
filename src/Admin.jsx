@@ -30,7 +30,12 @@ import {
   Zap,
   Share2,
   Download,
-  Eye
+  Eye,
+  Rocket,
+  Atom,
+  Brain,
+  Terminal,
+  GraduationCap
 } from 'lucide-react';
 
 const InstagramIcon = ({ className = "w-4 h-4" }) => (
@@ -227,6 +232,86 @@ const INITIAL_CHANNELS = [
     lastPosted: '',
     url: 'https://www.gumtree.com',
     notes: 'Enfocado en A-Levels, IB Diploma y Bachelor en Ingeniería (£24–£34/h).'
+  },
+  {
+    id: 'forum-reddit-chile',
+    country: '🇨🇱 Chile (Reddit)',
+    platform: 'Reddit • r/chile (Hilo Semanal Servicios / Datos)',
+    currency: 'CLP',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.reddit.com/r/chile',
+    notes: 'Publicar en el hilo semanal de datos/servicios. Compartir los simuladores como recurso educativo abierto.'
+  },
+  {
+    id: 'forum-reddit-stem',
+    country: '🌍 Global (Reddit STEM)',
+    platform: 'Reddit • r/EngineeringStudents / r/learnmath / r/PhysicsStudents',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.reddit.com/r/EngineeringStudents',
+    notes: 'Excelente para tesis, cuántica y física. Compartir los simuladores interactivos como aporte pedagógico.'
+  },
+  {
+    id: 'forum-reddit-quantum',
+    country: '🌍 Global (Reddit Cuántica)',
+    platform: 'Reddit • r/physics / r/popularscience / r/QuantumComputing',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.reddit.com/r/physics',
+    notes: 'Comunidades de entusiastas y autodidactas. Publicar el post con el hook de Einstein y simulador en Python.'
+  },
+  {
+    id: 'forum-reddit-grad',
+    country: '🌍 Global (Reddit Tesis)',
+    platform: 'Reddit • r/GradSchool / r/AskAcademia',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.reddit.com/r/GradSchool',
+    notes: 'Estudiantes de B.Sc. y M.Sc. trancados con modelación numérica, Python o gráficos de paper.'
+  },
+  {
+    id: 'forum-studis-online',
+    country: '🇩🇪 Alemania (Foro Universitario)',
+    platform: 'Studis-Online.de • Forum Nachhilfe & Klausuren',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.studis-online.de/Fragen-Brett/',
+    notes: 'El mayor foro estudiantil en Alemania. Hilos de Klausurvorbereitung y ayuda con Technische Mechanik y HM.'
+  },
+  {
+    id: 'forum-fb-plancomun',
+    country: '🇨🇱 Chile (Facebook)',
+    platform: 'Facebook Grupos • Plan Común Beauchef / FCFM / Ing. UC',
+    currency: 'CLP',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.facebook.com/groups/',
+    notes: 'Grupos masivos de estudiantes de 1er y 2do año. Postear en semanas previas a controles 1 y 2.'
+  },
+  {
+    id: 'forum-fb-hannover',
+    country: '🇩🇪 Alemania (Facebook)',
+    platform: 'Facebook Grupos • Latinos / Estudiantes en Hannover & LUH',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://www.facebook.com/groups/hannover/',
+    notes: 'Comunidades internacionales y de habla hispana en Hannover para clases presenciales u online.'
+  },
+  {
+    id: 'forum-discord-stem',
+    country: '🌍 Global (Discord)',
+    platform: 'Discord • Servidores STEM (3Blue1Brown / Math Sorcerer / r/EngineeringStudents)',
+    currency: 'EUR',
+    status: 'pendiente',
+    lastPosted: '',
+    url: 'https://discord.com',
+    notes: 'Canales de #homework-help y #physics-math. Demostrar solvencia en dudas puntuales y enlazar simuladores.'
   }
 ];
 
@@ -237,6 +322,284 @@ const INITIAL_STREET_LOCATIONS = [
   { id: 'st-4', place: 'Hochschule Hannover (HsH - Ricklinger Stadtweg) - Facultad de Ingeniería', zone: 'Linden / Ricklingen', status: 'pendiente', flyersCount: 4, qrTag: 'flyer-hsh' },
   { id: 'st-5', place: 'International School Hannover Region (ISH) - Cafés cercanos y paradas ÜSTRA', zone: 'Mitte / Maschsee', status: 'pendiente', flyersCount: 4, qrTag: 'flyer-ish' },
   { id: 'st-6', place: 'Bibliotecas públicas y cafés de estudio en Nordstadt / E-Damm / Lister Meile', zone: 'Nordstadt / List', status: 'pendiente', flyersCount: 5, qrTag: 'flyer-cafe' }
+];
+
+const INITIAL_MASTER_CHECKLIST = [
+  // FÍSICOS HANNOVER
+  {
+    id: 'st-1',
+    category: 'fisico',
+    name: 'Hauptgebäude LUH (Welfengarten 1)',
+    zone: 'Nordstadt / Mitte (Hannover)',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Tablones de corcho junto a la cafetería central, entrada principal y pasillos.',
+    qrTag: 'flyer-luh-main'
+  },
+  {
+    id: 'st-2',
+    category: 'fisico',
+    name: 'TIB Technik & Naturwissenschaften (Welfengarten 1B)',
+    zone: 'Nordstadt (Hannover)',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Entrada principal, zona de lockers y pasillos hacia salas de estudio silencioso.',
+    qrTag: 'flyer-tib'
+  },
+  {
+    id: 'st-3',
+    category: 'fisico',
+    name: 'Campus Maschinenbau Garbsen (LUH)',
+    zone: 'Garbsen (Hannover)',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Mensa central de Garbsen, edificios de ingeniería mecánica y materiales.',
+    qrTag: 'flyer-garbsen'
+  },
+  {
+    id: 'st-4',
+    category: 'fisico',
+    name: 'Hochschule Hannover (HsH - Ricklinger Stadtweg)',
+    zone: 'Linden / Ricklingen',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Facultad de Ingeniería (Maschinenbau, Elektrotechnik) y tablón del AStA HsH.',
+    qrTag: 'flyer-hsh'
+  },
+  {
+    id: 'st-5',
+    category: 'fisico',
+    name: 'International School Hannover Region (ISH)',
+    zone: 'Mitte / Maschsee',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Cafés cercanos y paradas de tranvía ÜSTRA frecuentadas por familias expat e IB.',
+    qrTag: 'flyer-ish'
+  },
+  {
+    id: 'st-6',
+    category: 'fisico',
+    name: 'Bibliotecas Públicas & Cafés de Estudio (Nordstadt / E-Damm / List)',
+    zone: 'Nordstadt / Lister Meile',
+    country: '🇩🇪 Hannover',
+    status: 'pendiente',
+    lastChecked: '',
+    url: '',
+    notes: 'Cafés con tablón comunitario libre y bibliotecas municipales de Hannover.',
+    qrTag: 'flyer-cafe'
+  },
+
+  // PORTALES DE CLASIFICADOS
+  {
+    id: 'ch-kleinanzeigen-de',
+    category: 'clasificado',
+    name: 'Kleinanzeigen.de (Alemán)',
+    zone: 'Alemania / Hannover',
+    country: '🇩🇪 Alemania',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.kleinanzeigen.de',
+    notes: 'Precio gancho: Ab 25 €/h. Cat: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
+  },
+  {
+    id: 'ch-kleinanzeigen-en',
+    category: 'clasificado',
+    name: 'Kleinanzeigen.de (Inglés - Expat / IB)',
+    zone: 'Alemania / Hannover',
+    country: '🇩🇪 Alemania',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.kleinanzeigen.de',
+    notes: 'Enfocado en familias expat, IB Diploma (ISH) y programas de grado en inglés.'
+  },
+  {
+    id: 'ch-luh-brett',
+    category: 'clasificado',
+    name: 'Leibniz Uni Hannover • Schwarzes Brett / AStA',
+    zone: 'Hannover (Digital)',
+    country: '🇩🇪 Alemania',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.asta-hannover.de',
+    notes: 'Jobbörse / Nachhilfe digital en portal oficial de estudiantes de LUH.'
+  },
+  {
+    id: 'ch-tutti',
+    category: 'clasificado',
+    name: 'Tutti.ch (Zürich / Basel / Bern)',
+    zone: 'Suiza Alemana (ETH / Uni Basel)',
+    country: '🇨🇭 Suiza',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.tutti.ch',
+    notes: 'Tarifa: 42–55 CHF/h. Mercado de altísimo poder adquisitivo y gran demanda de física/cálculo.'
+  },
+  {
+    id: 'ch-anibis',
+    category: 'clasificado',
+    name: 'Anibis.ch (Suiza Romanda / EPFL)',
+    zone: 'Suiza Francesa (Ginebra / Lausanne)',
+    country: '🇨🇭 Suiza',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.anibis.ch',
+    notes: 'Estudiantes de EPFL, UNIL y colegios internacionales en Ginebra/Vaud.'
+  },
+  {
+    id: 'cl-tusclases',
+    category: 'clasificado',
+    name: 'Tusclasesparticulares.cl / Superprof.cl',
+    zone: 'Santiago / Valparaíso / Concepción',
+    country: '🇨🇱 Chile',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.tusclasesparticulares.cl',
+    notes: 'Precio tracción: $20.000 CLP/h. Resaltar Geofísico U. de Chile y método PIAD™.'
+  },
+  {
+    id: 'cl-yapo',
+    category: 'clasificado',
+    name: 'Yapo.cl (Servicios / Clases Particulares)',
+    zone: 'Todo Chile',
+    country: '🇨🇱 Chile',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.yapo.cl',
+    notes: 'Excelente para captar alumnos de Plan Común de Ingeniería y grupos de 2 a 4 amigos.'
+  },
+  {
+    id: 'es-tusclases',
+    category: 'clasificado',
+    name: 'Tusclasesparticulares.com / Milanuncios',
+    zone: 'Madrid / Barcelona / Valencia',
+    country: '🇪🇸 España',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.tusclasesparticulares.com',
+    notes: 'Desde 25 €/h. Muy activo para Álgebra, Cálculo y Física de primer año.'
+  },
+  {
+    id: 'uk-gumtree',
+    category: 'clasificado',
+    name: 'Gumtree UK / Marktplaats.nl',
+    zone: 'Reino Unido & Países Bajos',
+    country: '🇬🇧 UK / 🇳🇱 NL',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.gumtree.com',
+    notes: 'A-Levels, IB Diploma y programas de Bachelor en ingeniería (£24–£34/h).'
+  },
+
+  // FOROS WEB & COMUNIDADES DIGITALES
+  {
+    id: 'forum-reddit-chile',
+    category: 'foro',
+    name: 'Reddit • r/chile (Hilo Semanal Servicios / Datos)',
+    zone: 'Comunidad Chile',
+    country: '🇨🇱 Chile',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.reddit.com/r/chile',
+    notes: 'Postear en el thread semanal de datos/servicios. Compartir los simuladores interactivos abiertos.'
+  },
+  {
+    id: 'forum-reddit-stem',
+    category: 'foro',
+    name: 'Reddit • r/EngineeringStudents & r/learnmath',
+    zone: 'Comunidad Global STEM',
+    country: '🌍 Global',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.reddit.com/r/EngineeringStudents',
+    notes: 'Ideal para compartir simuladores y ofrecer mentoría en cálculo y física universitaria.'
+  },
+  {
+    id: 'forum-reddit-quantum',
+    category: 'foro',
+    name: 'Reddit • r/physics & r/popularscience (Cuántica)',
+    zone: 'Mentes Curiosas / Autodidactas',
+    country: '🌍 Global',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.reddit.com/r/physics',
+    notes: 'Usar el copy con el hook de Einstein y simulador en Python de paquetes de onda.'
+  },
+  {
+    id: 'forum-reddit-grad',
+    category: 'foro',
+    name: 'Reddit • r/GradSchool & r/AskAcademia (Tesis)',
+    zone: 'Tesistas Bachelor / Master',
+    country: '🌍 Global',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.reddit.com/r/GradSchool',
+    notes: 'Ayuda técnica con modelación numérica, depuración en Python y gráficos de paper.'
+  },
+  {
+    id: 'forum-studis-online',
+    category: 'foro',
+    name: 'Studis-Online.de • Forum Nachhilfe & Klausuren',
+    zone: 'Alemania Universitaria',
+    country: '🇩🇪 Alemania',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.studis-online.de/Fragen-Brett/',
+    notes: 'El mayor foro de estudiantes universitarios en Alemania. Hilos de Klausurvorbereitung.'
+  },
+  {
+    id: 'forum-fb-plancomun',
+    category: 'foro',
+    name: 'Facebook • Plan Común Beauchef / FCFM U. de Chile',
+    zone: 'Beauchef (FCFM)',
+    country: '🇨🇱 Chile',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.facebook.com/groups/',
+    notes: 'Grupos masivos de estudiantes de 1er y 2do año antes de controles de cálculo y física.'
+  },
+  {
+    id: 'forum-fb-ing-uc',
+    category: 'foro',
+    name: 'Facebook • Grupos Comunidad Ingeniería UC & USM',
+    zone: 'San Joaquín / Valparaíso',
+    country: '🇨🇱 Chile',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.facebook.com/groups/',
+    notes: 'Grupos de generación y avisos de clases particulares.'
+  },
+  {
+    id: 'forum-fb-hannover',
+    category: 'foro',
+    name: 'Facebook • Latinos / Estudiantes en Hannover & LUH',
+    zone: 'Hannover & Baja Sajonia',
+    country: '🇩🇪 Alemania',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://www.facebook.com/groups/hannover/',
+    notes: 'Comunidad hispanohablante e internacional en Hannover para clases presenciales u online.'
+  },
+  {
+    id: 'forum-discord-stem',
+    category: 'foro',
+    name: 'Discord • Servidores STEM (3Blue1Brown / Math Sorcerer)',
+    zone: 'Discord Global',
+    country: '🌍 Global',
+    status: 'pendiente',
+    lastChecked: '',
+    url: 'https://discord.com',
+    notes: 'Canales de #homework-help y #math-physics. Responder dudas y compartir simuladores.'
+  }
 ];
 
 const INITIAL_LEADS = [
@@ -348,7 +711,7 @@ Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer 
 • Tier 1 (Calculus I–II, General Physics, IB Diploma): €25/h (£24 / $28 / 42 CHF) — or save 15% with an Exam Sprint Pack!
 • Tier 2 (Linear Algebra, ODEs, Analytical Mechanics, Electromagnetism): €29/h (£28 / $32 / 48 CHF)
 • Tier 3 (Fluid Mechanics, Geophysics, Scientific Python & Thesis): €35/h (£34 / $38 / 55 CHF)
-• Online Worldwide or In-Person in Hannover (in-person classes include a small travel extra).
+• Online Worldwide or In-Person in Hannover.
 
 🎯 Book a FREE 15-minute diagnostic call & test the interactive simulators at:
 🌐 ${BASE_SITE_URL}?src=classifieds-en
@@ -356,45 +719,82 @@ Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer 
   }
 ];
 
+function EinsteinCartoon({ className = "w-12 h-12" }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Wild Einstein Hair */}
+      <path d="M15 45 C10 30, 25 15, 45 18 C50 10, 65 10, 75 20 C85 15, 95 30, 85 45 C95 55, 90 70, 80 72 C85 85, 70 90, 60 85 C50 92, 35 90, 30 80 C15 85, 10 70, 18 60 C8 55, 10 45, 15 45 Z" fill="#E2E8F0" stroke="#0F172A" strokeWidth="2.5" />
+      {/* Face */}
+      <ellipse cx="50" cy="52" rx="26" ry="28" fill="#FDE68A" stroke="#0F172A" strokeWidth="2.5" />
+      {/* Eyebrows & Eyes */}
+      <path d="M35 40 Q40 37 45 41" stroke="#0F172A" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M55 41 Q60 37 65 40" stroke="#0F172A" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="40" cy="47" r="3" fill="#0F172A" />
+      <circle cx="60" cy="47" r="3" fill="#0F172A" />
+      <circle cx="41" cy="46" r="1" fill="#FFFFFF" />
+      <circle cx="61" cy="46" r="1" fill="#FFFFFF" />
+      {/* Nose */}
+      <path d="M49 48 Q52 56 46 58 Q51 60 54 58" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Iconic Mustache */}
+      <path d="M30 63 C38 58, 48 64, 50 63 C52 64, 62 58, 70 63 C65 70, 53 69, 50 68 C47 69, 35 70, 30 63 Z" fill="#F1F5F9" stroke="#0F172A" strokeWidth="2" />
+      {/* Playful Tongue */}
+      <path d="M45 69 Q50 75 55 69" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" fill="#EF4444" />
+    </svg>
+  );
+}
+
 const FLYER_PRESETS = {
   de_en: {
-    name: '🇩🇪 Hannover / Uni Alemana (DE + EN)',
+    name: '🇩🇪 Hannover / Uni Alemana (Exámenes DE/EN)',
     badge: 'OPEN KNOWLEDGE STEM MENTORSHIP • HANNOVER & ONLINE',
     headline: 'KLAUSUR IN GEFAHR? STRUGGLING WITH UNI MATH, PHYSICS OR PYTHON?',
     subheadline: '1-on-1 Mentorship by a Geophysicist & Double M.Sc. Engineer • From 25 €/h (Packs from ~21 €/h)',
-    languageNotice: '📌 Honest Language Note: Sessions are taught in ENGLISH or SPANISH. Send me your German Skripte, Übungsblätter & Altklausuren — math, physics diagrams (DCL) and code are universal!',
+    languageNotice: '📌 Bilingual Mentorship: English & Spanish • Online Worldwide & In-Person in Hannover • Miro Vector PDF Notes after every session',
     bullets: [
       'Tier 1 (25 €/h): Calculus / Analysis I–II, Classical Physics & IB Diploma / Abitur',
       'Tier 2 (29 €/h): Linear Algebra, Eigenvalues, ODEs, Analytical Mechanics & Electromagnetism',
       'Tier 3 (35 €/h): Fluid Dynamics, Geophysics, Scientific Python (NumPy/SciPy) & Thesis Support',
       'Includes: Free access to 14-Problem Interactive Physics Lab + Vector PDF Notes after every session'
     ],
-    footerCallout: 'Free 15-min Diagnostic Call • Online or In-Person in Hannover (in-person class has a small travel extra)',
+    footerCallout: 'Free 15-min Diagnostic Call • Online Worldwide or In-Person in Hannover • Scan QR Code to test simulators',
     tearOffTitle: 'Math/Physics/Python • Ab 25€',
-    qrTag: 'flyer-hannover-de'
-  },
-  ib_en: {
-    name: '🌍 International & IB Diploma (EN)',
-    badge: 'IB DIPLOMA & UNIVERSITY STEM MENTORSHIP',
-    headline: 'MASTER IB & UNIVERSITY MATH, PHYSICS & PYTHON WITH VISUAL INTUITION',
-    subheadline: 'Geophysicist & Double M.Sc. Engineer • The PIAD™ Scientific Inquiry Method • From €25/h',
-    languageNotice: '📌 Bilingual Mentorship (English & Spanish) • Online Worldwide & In-Person in Hannover (extra for travel)',
-    bullets: [
-      'IB Physics & Math (AA / AI — SL & HL): Exam paper drills, Internal Assessments (IA) & lab graphs (€25/h)',
-      'Interactive 14-Problem Physics Lab: Live Free Body Diagrams (DCL) & Algebra ↔ Calculus toggle',
-      '5-Pillar Applied Math Toolkit: Taylor Series, 2D Matrices, Damped ODEs, Vector Fields & FFT Signals',
-      'Productive AI for Python: Learn to design & verify scientific code + get full Miro Vector PDF notes'
-    ],
-    footerCallout: 'Scan the QR Code to test the 14 Interactive Simulators for free & book your 15-min diagnostic!',
-    tearOffTitle: 'IB & Uni STEM Mentor • €25/h',
-    qrTag: 'flyer-ib-en'
+    qrTag: 'flyer-hannover-de',
+    illustrationType: 'standard_physics',
+    targetForums: 'r/Hannover, r/germany, Studis-Online.de, AStA LUH Schwarzes Brett, WG-Gesucht',
+    socialMedia: {
+      reddit: `### [Hannover / Online] Klausurvorbereitung: 1-on-1 Mentorship in Higher Math, Physics & Python
+
+Hey everyone! If you are preparing for your upcoming exam in *Höhere Mathematik I/II*, *Technische Mechanik*, *Electrodynamics*, or *Computational Physics* and need someone to walk through your syllabus with visual intuition rather than dry proofs:
+
+I'm Daniel Santander, a Geophysicist (FCFM, Chile) with a Double M.Sc. in Engineering in Germany. I provide 1-on-1 and small-group mentorship in English and Spanish.
+- We solve past exam problems on collaborative vector whiteboards (Miro).
+- You get free access to my 14-Problem Interactive Physics Lab with live vector force diagrams.
+- Rates start at 25 €/h (discounts up to -52% for 2–4 student study groups).
+
+Test the free interactive simulators here:
+👉 ${BASE_SITE_URL}?src=reddit-de
+
+WhatsApp direct: +49 176 7649 7440`,
+      whatsapp: `👋 ¡Hola! Si estás preparando tus exámenes de Cálculo, Álgebra Lineal, Mecánica o Física en Hannover o vía online:
+Ofrezco mentoría 1 a 1 y grupos pequeños (hasta 4 personas con hasta 52% dcto.).
+🔬 Pizarra vectorial Miro + acceso a mi plataforma con 14 simuladores interactivos de física:
+👉 ${BASE_SITE_URL}?src=wa-group
+Escríbeme por interno o al WhatsApp +49 176 7649 7440 para coordinar 15 min de diagnóstico gratis!`,
+      facebook: `🎓 [Apoyo Universitario & Klausurvorbereitung en Hannover / Online]
+¿Problemas con Cálculo (HM I/II), Física Mecánica o Python?
+Soy Daniel Santander, Geofísico de la U. de Chile y Doble Máster en Ingeniería en Europa. Enseño con el método PIAD™: intuición física, diagramas de fuerzas en tiempo real y código.
+• Clases 1 a 1 o grupos con amigos (-30% a -52% c/u).
+• Pizarra Miro en alta resolución con entrega de apuntes PDF vectoriales.
+Prueba gratis los simuladores aquí: ${BASE_SITE_URL}?src=fb-hannover
+Contacto directo: +49 176 7649 7440`
+    }
   },
   es_latam: {
-    name: '🇨🇱🇪🇸 Ingeniería & Ciencias (Español)',
+    name: '🇨🇱🇪🇸 Plan Común & Exámenes (Español)',
     badge: 'MENTORÍA CIENTÍFICA ABIERTA • MÉTODO PIAD™',
     headline: '¿PROBLEMAS CON CÁLCULO, FÍSICA, ÁLGEBRA LINEAL, FLUIDOS O PYTHON?',
     subheadline: 'Geofísico U. de Chile (FCFM) & Doble M.Sc. en Ingeniería en Europa • Desde $20.000 CLP/h (€25/h)',
-    languageNotice: '📌 Clases Online en vivo (Pizarra Miro con entrega de PDF Vectorial) o Grupales (hasta 3 amigos con 30% dcto.)',
+    languageNotice: '📌 Clases Online en vivo (Pizarra Miro con entrega de PDF Vectorial) • Opciones grupales con hasta 52% dcto.',
     bullets: [
       'Nivel 1 ($20.000 CLP / €25): Cálculo I–II, Física Mecánica, Ondas y Bachillerato IB / PAES',
       'Nivel 2 ($23.000 CLP / €29): Álgebra Lineal, EDOs, Mecánica Clásica, Electromagnetismo y Termodinámica',
@@ -403,7 +803,262 @@ const FLYER_PRESETS = {
     ],
     footerCallout: 'Escanea el código QR para probar gratis el Laboratorio Interactivo y agendar 15 min de diagnóstico.',
     tearOffTitle: 'Mate/Física/Python • $20k CLP',
-    qrTag: 'flyer-es'
+    qrTag: 'flyer-es',
+    illustrationType: 'standard_physics',
+    targetForums: 'r/chile (hilo semanal), Grupos Facebook Beauchef FCFM, Ing UC, USM, TusClasesParticulares',
+    socialMedia: {
+      reddit: `### ¿Sufriendo con Cálculo, Física o Álgebra Lineal en la U? [Mentoría 1 a 1 + Simuladores Gratis]
+
+Buena cabros! Sé que las semanas de controles y solemnes son brutales (sobre todo en Plan Común de Ingeniería y Ciencias).
+Soy Daniel Santander, Geofísico de la FCFM (U. de Chile) y Doble Máster en Ciencias e Ingeniería en Alemania.
+Construí una plataforma web abierta con 14 simuladores interactivos de física donde puedes ver los diagramas de cuerpo libre en vivo y la transición entre álgebra y cálculo para controles universitarios:
+👉 ${BASE_SITE_URL}?src=reddit-chile
+
+Además hago mentorías 1 a 1 y grupales (si se juntan 2, 3 o 4 amigos, el precio por persona baja hasta un 52%). También tengo espacio para trueque (música, videojuegos, psicología) y acuerdos solidarios si estás corto de lucas.
+Cualquier duda me pueden escribir al WhatsApp: +49 176 7649 7440.`,
+      whatsapp: `📚 ¿Preparando controles de Cálculo, Álgebra Lineal o Física?
+Ofrezco mentoría online con pizarra Miro y entrega de PDF vectorial al terminar.
+• Si se suman colegas (2 a 4 alumnos), cada uno paga con hasta 52% de descuento!
+• Simuladores interactivos propios para preparar la materia gratis:
+👉 ${BASE_SITE_URL}?src=wa-chile
+WhatsApp: +49 176 7649 7440`,
+      facebook: `📢 [Mentoría Universitaria: Cálculo, Álgebra Lineal, Física y Python]
+Hola a todos! Para quienes estén preparando controles y exámenes en facultades de ingeniería:
+Clases particulares y mentoría con Daniel Santander (Geofísico U. de Chile & Doble M.Sc. en Europa).
+- Metodología visual e intuitiva (PIAD™).
+- Pizarra interactiva Miro y simuladores propios en la web.
+- Descuentos fuertes para grupos de estudio de 2 a 4 compañeros.
+Prueba los simuladores y agenda 15 min gratis aquí: ${BASE_SITE_URL}?src=fb-chile`
+    }
+  },
+  quantum_nerds: {
+    name: '⚛️ Mecánica Cuántica para Mentes Inquietas (No Académico)',
+    badge: 'FÍSICA TEÓRICA PARA AUTODIDACTAS & MENTES CURIOSAS',
+    headline: '¿FASCINADO CON LA FÍSICA CUÁNTICA PERO HARTO DE LIBROS SECOS?',
+    subheadline: 'De la Dualidad Onda-Partícula y el Gato de Schrödinger a la Computación Cuántica sin filtros universitarios aburridos.',
+    languageNotice: '💬 “God does not play dice with the universe... but we can simulate the odds!” — Aprende los conceptos reales (espacios de Hilbert, espín, superposición y entrelazamiento) con intuición geométrica pura y simulaciones en Python.',
+    bullets: [
+      'Concepto Real vs. Misticismo: Entiende el colapso de la función de onda y el experimento de la doble rendija sin humo pseudocientífico.',
+      'Intuición Matemática sin Sufrir: Matrices de Pauli, operadores hermíticos y notación bra-ket explicados con geometría visual.',
+      'Simulaciones en Python: Programa tus propios paquetes de ondas gaussianas y visualiza el efecto túnel cuántico en tiempo real.',
+      'Computación Cuántica Moderna: Qubits, esferas de Bloch y compuertas lógicas cuánticas (Hadamard, CNOT) para principiantes apasionados.'
+    ],
+    footerCallout: 'Mentoría 1 a 1 para nerds, programadores y mentes curiosas • Sesiones en Español o Inglés • Escanea el QR para conversar.',
+    tearOffTitle: 'Mecánica Cuántica • 1 a 1',
+    qrTag: 'flyer-quantum',
+    illustrationType: 'quantum_einstein',
+    einsteinQuote: '“God does not play dice with the universe... but we can simulate the odds!”',
+    targetForums: 'r/physics, r/popularscience, r/learnmath, r/QuantumComputing, Discord STEM, Hacker News',
+    socialMedia: {
+      reddit: `### ¿Fascinado con la Mecánica Cuántica pero harto del misticismo y los libros secos? [Mentoría 1 a 1 para Mentes Curiosas]
+
+*"Dios no juega a los dados con el universo... ¡pero nosotros podemos simular las probabilidades!"*
+
+Siempre me ha apasionado enseñar física moderna a personas que quieren entenderla de verdad, sin tener que tragarse 3 años de teoría abstracta ni caer en la pseudociencia de YouTube.
+
+Soy Daniel Santander, Geofísico y Doble M.Sc. en Europa. He diseñado un programa 1 a 1 para programadores, nerds y mentes inquietas:
+1. **Desmitificamos la doble rendija y el colapso:** Qué dice realmente la interpretación de Copenhague vs Muchos Mundos.
+2. **Espacios de Hilbert y operadores hermíticos:** Explicados con vectores y geometría visual, sin tecnicismos secos.
+3. **Simulaciones numéricas en Python:** Paquetes de ondas gaussianas, pozo de potencial y efecto túnel cuántico en vivo.
+4. **Fundamentos de Computación Cuántica:** Qubits, esferas de Bloch, entrelazamiento (paradoja EPR / Bell) y compuertas cuánticas (Hadamard, CNOT).
+
+Puedes explorar mi plataforma interactiva de física aquí:
+👉 ${BASE_SITE_URL}?src=reddit-quantum
+
+Si te gustaría tener una sesión introductoria de 15 min para conversar sobre qué te gustaría explorar, escríbeme al WhatsApp: +49 176 7649 7440.`,
+      whatsapp: `⚛️ ¿Quieres aprender Mecánica Cuántica de verdad sin fórmulas incomprensibles ni misticismo New Age?
+Abro cupos para mentoría 1 a 1 orientada a mentes curiosas, programadores y autodidactas.
+Cubrimos:
+• Paradoja EPR y teorema de Bell (¿por qué Einstein dudaba?).
+• La ecuación de Schrödinger explicada con simulaciones en Python.
+• Qubits, superposición y compuertas de Computación Cuántica.
+🔬 Revisa los simuladores interactivos aquí:
+👉 ${BASE_SITE_URL}?src=wa-quantum
+Conversémoslo por WhatsApp: +49 176 7649 7440!`,
+      facebook: `⚛️ [Mecánica Cuántica para Mentes Inquietas: De Schrödinger a la Computación Cuántica]
+¿Te fascina la física cuántica pero los libros de texto te aburren?
+Te invito a aprenderla con intuición visual, simulaciones numéricas en vivo y rigor científico sin filtros académicos rígidos.
+Sesiones 1 a 1 personalizadas con Daniel Santander (Geofísico y Doble Máster en Ciencias e Ingeniería en Alemania).
+Prueba la plataforma interactiva y agenda 15 min de diagnóstico gratis:
+${BASE_SITE_URL}?src=fb-quantum
+WhatsApp: +49 176 7649 7440`
+    }
+  },
+  thesis_support: {
+    name: '🎓 Tesis de Bachelor / Master (Modelación & Python)',
+    badge: 'RESEARCH & THESIS SPRINT • MENTORÍA CIENTÍFICA 1 A 1',
+    headline: '¿TRANCADO CON TU TESIS DE BACHELOR O MÁSTER?',
+    subheadline: 'Mentoría en Modelación Numérica, Python Científico (NumPy/SciPy), Análisis de Datos y Gráficos de Publicación',
+    languageNotice: '📌 No dejes que una simulación rota o gráficos deficientes retrasen tu titulación. Mentoría con Geofísico U. de Chile & Doble M.Sc. en Europa.',
+    bullets: [
+      'Depuración de Código Científico: Arreglamos tus scripts de Python / MATLAB / R para que tus modelos corran rápido y sin errores.',
+      'Visualización Nivel Paper: Transforma datos crudos en gráficos vectoriales impecables con Matplotlib, Seaborn y mapas geoespaciales.',
+      'Modelación de Procesos Físicos: Ecuaciones diferenciales, elementos finitos, propagación de ondas, fluidos o series de tiempo.',
+      'Preparación de Defensa: Estructuración rigurosa de metodología, discusión de resultados y simulaciones en vivo para impresionar a tu comisión.'
+    ],
+    footerCallout: 'Sesión de Diagnóstico Metodológico de 15 min gratis • Online Worldwide • Escanea el QR para agendar.',
+    tearOffTitle: 'Mentoría Tesis • Python/Datos',
+    qrTag: 'flyer-thesis',
+    illustrationType: 'thesis_rocket',
+    targetForums: 'r/GradSchool, r/EngineeringStudents, r/AskAcademia, Grupos Tesistas Facebook, Foros LUH / Chile',
+    socialMedia: {
+      reddit: `### [Asesoría Metodológica & Tesis] ¿Trancado con tu modelación numérica, Python o gráficos de publicación?
+
+A muchos nos pasa al hacer la tesis de pregrado o máster: el profesor guía no tiene tiempo, los scripts en Python/MATLAB lanzan errores crípticos y la fecha de entrega se acerca.
+
+Soy Daniel Santander (Geofísico U. de Chile, Doble M.Sc. en Ingeniería en Alemania). Ayudo a tesistas en:
+- Depuración y aceleración de scripts numéricos (NumPy, SciPy, Pandas).
+- Gráficos vectoriales con calidad de *paper* (Matplotlib/Seaborn/Paraview).
+- Modelación de sistemas físicos, transporte de fluidos, series temporales y optimización.
+- Estructuración de la metodología y simulaciones en vivo para la defensa.
+
+Mira mi plataforma y simuladores de modelación aquí:
+👉 ${BASE_SITE_URL}?src=reddit-thesis
+
+Escríbeme a WhatsApp (+49 176 7649 7440) para coordinar 15 min y revisar tu tema.`,
+      whatsapp: `🎓 ¿Trancado con la modelación o los gráficos de tu tesis de Bachelor o Máster?
+No dejes que el código o el análisis de datos te retrasen la titulación.
+Mentoría 1 a 1 en:
+• Limpieza y modelación en Python (NumPy/SciPy).
+• Gráficos vectoriales de nivel publicación.
+• Preparación de simulaciones para tu defensa de grado.
+👉 ${BASE_SITE_URL}?src=wa-thesis
+Conversemos 15 min gratis: +49 176 7649 7440!`,
+      facebook: `🎓 [S.O.S. Tesis de Ingeniería & Ciencias: Modelación Numérica, Python y Gráficos]
+¿Tu modelo no converge? ¿Tus gráficos no se ven profesionales para tu entrega final?
+Ofrezco mentoría metodológica y técnica 1 a 1 para tesistas de pregrado y postgrado.
+Plataforma web con simuladores y metodologías de investigación:
+${BASE_SITE_URL}?src=fb-thesis
+WhatsApp: +49 176 7649 7440`
+    }
+  },
+  python_stem_bootcamp: {
+    name: '🐍 Python Científico & IA Práctica para STEM',
+    badge: 'COMPUTATIONAL STEM BOOTCAMP • APPLIED AI & PYTHON',
+    headline: 'DE CERO A SIMULAR FÍSICA Y ANALIZAR DATOS EN PYTHON CON ASISTENCIA DE IA',
+    subheadline: 'Aprende NumPy, SciPy, Matplotlib y a formular prompts matemáticos precisos para acelerar tu desarrollo',
+    languageNotice: '📌 Deja de copiar ciegamente fragmentos de IA: aprende a formular el modelo físico y auditar el código como un profesional.',
+    bullets: [
+      'Vectorización & Rendimiento: Domina arrays de NumPy y evita los loops lentos para simular sistemas reales a gran velocidad.',
+      'Solución Numérica de EDOs: De osciladores no lineales a difusión de calor y dinámica orbital con scipy.integrate.',
+      'IA Productiva para Código: Técnicas avanzadas de prompting científico para acelerar tu desarrollo sin perder rigor matemático.',
+      'Proyectos Reales de Portafolio: Construye tus propios simuladores interactivos como los 14 de esta plataforma para tu CV.'
+    ],
+    footerCallout: 'Aprende con código universal • Modalidad 1 a 1 o grupos pequeños • Escanea el QR para probar la plataforma.',
+    tearOffTitle: 'Python STEM + IA • 1 a 1',
+    qrTag: 'flyer-python',
+    illustrationType: 'python_ai',
+    targetForums: 'r/Python, r/learnprogramming, r/datascience, Grupos Discord de programación, LinkedIn',
+    socialMedia: {
+      reddit: `### De cero a simular física y analizar datos científicos en Python [Mentoría 1 a 1 asistida por IA]
+
+Muchos ingenieros y científicos aprenden Python copiando código suelto o confiando ciegamente en ChatGPT, sin entender cómo vectorizar con NumPy ni cómo resolver numéricamente ecuaciones diferenciales.
+
+Soy Daniel Santander, Geofísico y Doble Máster en Ciencias e Ingeniería en Alemania.
+Diseñé un bootcamp 1 a 1 enfocado en código computacional real:
+- Vectorización pura en NumPy (adiós a los for loops lentos).
+- Métodos numéricos en SciPy (EDOs, optimización, transformadas de Fourier).
+- Gráficos científicos publicables con Matplotlib.
+- Prompting matemático riguroso: cómo usar IA para acelerar el 80% de tu código sin cometer errores de formulación física.
+
+Prueba mis 14 simuladores construidos con esta misma filosofía:
+👉 ${BASE_SITE_URL}?src=reddit-python
+
+Conversemos al WhatsApp: +49 176 7649 7440!`,
+      whatsapp: `🐍 ¿Quieres aprender Python aplicado a la ingeniería y ciencias sin perder tiempo con tutoriales genéricos?
+Mentoría 1 a 1 en Python Científico (NumPy, SciPy, Matplotlib) + Técnicas de IA productiva para investigación.
+👉 ${BASE_SITE_URL}?src=wa-python
+Escríbeme al WhatsApp: +49 176 7649 7440!`,
+      facebook: `🐍 [Bootcamp 1 a 1: Python Científico & Simulación Numérica para STEM]
+Aprende a programar simulaciones físicas, análisis de datos y solvers de ecuaciones diferenciales con NumPy y SciPy.
+Plataforma interactiva con ejemplos en vivo: ${BASE_SITE_URL}?src=fb-python
+Contacto: +49 176 7649 7440`
+    }
+  },
+  math_for_ai: {
+    name: '🧠 Matemáticas para Machine Learning & Data Science',
+    badge: 'AI MATHEMATICAL FOUNDATIONS • INTUITION FIRST',
+    headline: 'EL CÁLCULO Y ÁLGEBRA LINEAL QUE REALMENTE NECESITAS PARA IA',
+    subheadline: 'Entiende Gradiente Descendente, Backpropagation, Matrices de Covarianza y SVD sin 2 años de teoría seca.',
+    languageNotice: '📌 Conecta la matemática pura con el entrenamiento de modelos de Machine Learning mediante visualizaciones geométricas interactivas.',
+    bullets: [
+      'Cálculo Multivariable & Gradientes: Jacobianos, Hessianos y la regla de la cadena aplicada al entrenamiento de redes neuronales.',
+      'Álgebra Lineal & Espacios Latentes: Transformaciones lineales, autovalores, autovectores y descomposición en valores singulares (SVD).',
+      'Probabilidad & Teoría de la Información: Entropía cruzada, distribuciones continuas y divergencia KL explicadas sin rodeos.',
+      'Implementación Directa en Python: Cada concepto se programa en vivo para ver cómo optimiza una función de pérdida real.'
+    ],
+    footerCallout: 'Domina las bases matemáticas que diferencian a un buen ingeniero de IA • Escanea el QR para iniciar.',
+    tearOffTitle: 'Math for AI • 1 a 1',
+    qrTag: 'flyer-math-ai',
+    illustrationType: 'math_ai',
+    targetForums: 'r/MachineLearning, r/datascience, r/learnmath, Hacker News, Foros de Tech y Data',
+    socialMedia: {
+      reddit: `### ¿Quieres entender Machine Learning a fondo pero te faltan las bases de Cálculo y Álgebra Lineal?
+
+Es fácil importar PyTorch o Scikit-learn, pero cuando el modelo no converge o hay que ajustar la arquitectura, entender qué hace el Jacobiano, la matriz de covarianza o el SVD marca la diferencia entre un script-kiddie y un científico de datos senior.
+
+Ofrezco mentoría 1 a 1 en las bases matemáticas esenciales para IA:
+- Gradiente descendente y backpropagation deducidos con cálculo multivariable visual.
+- Álgebra Lineal geométrica: autovalores, proyección ortogonal y PCA desde cero.
+- Teoría de información: entropía y funciones de pérdida explicadas sin jerga inútil.
+- Cada concepto se traduce de inmediato a código en Python.
+
+Prueba el toolkit interactivo de 5 pilares matemáticos:
+👉 ${BASE_SITE_URL}?src=reddit-math-ai
+
+WhatsApp directo: +49 176 7649 7440`,
+      whatsapp: `🧠 ¿Quieres dominar las matemáticas de Machine Learning (Cálculo Multivariable, Álgebra Lineal y SVD)?
+Mentoría personalizada 1 a 1 orientada a intuición y código Python.
+👉 ${BASE_SITE_URL}?src=wa-math-ai
+WhatsApp: +49 176 7649 7440!`,
+      facebook: `🧠 [Matemáticas para Inteligencia Artificial & Data Science]
+Aprende los fundamentos de cálculo vectorial, álgebra lineal y optimización que hay detrás de las redes neuronales modernas.
+Mentoría con Daniel Santander (Geofísico & Doble M.Sc. en Europa).
+Simuladores interactivos: ${BASE_SITE_URL}?src=fb-math-ai
+WhatsApp: +49 176 7649 7440`
+    }
+  },
+  ib_en: {
+    name: '🌍 International & IB Diploma (EN)',
+    badge: 'IB DIPLOMA & UNIVERSITY STEM MENTORSHIP',
+    headline: 'MASTER IB & UNIVERSITY MATH, PHYSICS & PYTHON WITH VISUAL INTUITION',
+    subheadline: 'Geophysicist & Double M.Sc. Engineer • The PIAD™ Scientific Inquiry Method • From €25/h',
+    languageNotice: '📌 Bilingual Mentorship (English & Spanish) • Online Worldwide & In-Person in Hannover',
+    bullets: [
+      'IB Physics & Math (AA / AI — SL & HL): Exam paper drills, Internal Assessments (IA) & lab graphs (€25/h)',
+      'Interactive 14-Problem Physics Lab: Live Free Body Diagrams (DCL) & Algebra ↔ Calculus toggle',
+      '5-Pillar Applied Math Toolkit: Taylor Series, 2D Matrices, Damped ODEs, Vector Fields & FFT Signals',
+      'Productive AI for Python: Learn to design & verify scientific code + get full Miro Vector PDF notes'
+    ],
+    footerCallout: 'Scan the QR Code to test the 14 Interactive Simulators for free & book your 15-min diagnostic!',
+    tearOffTitle: 'IB & Uni STEM Mentor • €25/h',
+    qrTag: 'flyer-ib-en',
+    illustrationType: 'standard_physics',
+    targetForums: 'r/IBO, r/learnmath, Expat Facebook Groups, International School Hannover Region',
+    socialMedia: {
+      reddit: `### [IB Diploma & Uni STEM] 1-on-1 Mentorship in Physics, Math AA/AI & Scientific Python
+
+Struggling with IB Physics HL, Math Analysis & Approaches (AA), or your Internal Assessment (IA)?
+
+I'm Daniel Santander, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I provide bilingual (English/Spanish) mentorship for IB and university students:
+- Visual intuition first: Free Body Diagrams (DCL) and algebra-calculus connections.
+- Free access to my custom 14-Simulator Interactive Physics Lab and 5-Pillar Math Toolkit.
+- Support with Internal Assessments (IA) and scientific Python data visualization.
+
+Test the simulators here:
+👉 ${BASE_SITE_URL}?src=reddit-ib
+
+WhatsApp direct: +49 176 7649 7440`,
+      whatsapp: `🌍 IB Diploma & University STEM Mentorship (Physics, Math, Python).
+Interactive simulations, past paper drills, and vector PDF notes after every class.
+👉 ${BASE_SITE_URL}?src=wa-ib
+WhatsApp: +49 176 7649 7440`,
+      facebook: `🌍 [IB Physics & Math AA/AI Mentorship • English & Spanish]
+1-on-1 scientific mentorship with Daniel Santander (Geophysicist & Double M.Sc. Engineer).
+Interactive simulators + Internal Assessment guidance.
+Explore: ${BASE_SITE_URL}?src=fb-ib
+WhatsApp: +49 176 7649 7440`
+    }
   }
 };
 
@@ -472,8 +1127,16 @@ export default function Admin({ onBack }) {
   // Persisted Channels
   const [channels, setChannels] = useState(() => {
     try {
-      const saved = localStorage.getItem('ds_admin_channels_v3');
-      return saved ? JSON.parse(saved) : INITIAL_CHANNELS;
+      const saved = localStorage.getItem('ds_admin_channels_v4');
+      if (saved) return JSON.parse(saved);
+      const old = localStorage.getItem('ds_admin_channels_v3');
+      if (old) {
+        const oldArr = JSON.parse(old);
+        const existingIds = new Set(oldArr.map((c) => c.id));
+        const merged = [...oldArr, ...INITIAL_CHANNELS.filter((c) => !existingIds.has(c.id))];
+        return merged;
+      }
+      return INITIAL_CHANNELS;
     } catch {
       return INITIAL_CHANNELS;
     }
@@ -515,14 +1178,102 @@ export default function Admin({ onBack }) {
     notes: ''
   });
 
+  // Master Posting Checklist State (Physical + Digital Channels + Forums)
+  const [masterChecklist, setMasterChecklist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ds_admin_master_checklist_v1');
+      if (saved) return JSON.parse(saved);
+      return INITIAL_MASTER_CHECKLIST;
+    } catch {
+      return INITIAL_MASTER_CHECKLIST;
+    }
+  });
+  const [checklistFilter, setChecklistFilter] = useState('all'); // 'all' | 'fisico' | 'clasificado' | 'foro' | 'pending' | 'completed'
+  const [showAddPlaceModal, setShowAddPlaceModal] = useState(false);
+  const [newPlace, setNewPlace] = useState({
+    name: '',
+    category: 'fisico',
+    zone: '',
+    country: '🇩🇪 Hannover',
+    url: '',
+    notes: ''
+  });
+
+  useEffect(() => {
+    localStorage.setItem('ds_admin_master_checklist_v1', JSON.stringify(masterChecklist));
+  }, [masterChecklist]);
+
+  const toggleMasterChecklistItem = (id) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    setMasterChecklist((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const isCurrentlyDone = item.status === 'publicado';
+          return {
+            ...item,
+            status: isCurrentlyDone ? 'pendiente' : 'publicado',
+            lastChecked: isCurrentlyDone ? '' : todayStr
+          };
+        }
+        return item;
+      })
+    );
+  };
+
+  const markItemCheckedToday = (id) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    setMasterChecklist((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, status: 'publicado', lastChecked: todayStr } : item
+      )
+    );
+  };
+
+  const handleAddNewPlace = (e) => {
+    e.preventDefault();
+    if (!newPlace.name.trim()) return;
+    const item = {
+      id: `custom-${Date.now()}`,
+      category: newPlace.category,
+      name: newPlace.name.trim(),
+      zone: newPlace.zone.trim() || 'General',
+      country: newPlace.country.trim() || 'Internacional',
+      status: 'pendiente',
+      lastChecked: '',
+      url: newPlace.url.trim(),
+      notes: newPlace.notes.trim() || 'Lugar personalizado añadido por Daniel.'
+    };
+    setMasterChecklist((prev) => [item, ...prev]);
+    setNewPlace({
+      name: '',
+      category: 'fisico',
+      zone: '',
+      country: '🇩🇪 Hannover',
+      url: '',
+      notes: ''
+    });
+    setShowAddPlaceModal(false);
+  };
+
+  const deleteMasterChecklistItem = (id) => {
+    setMasterChecklist((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const resetMasterChecklist = () => {
+    if (window.confirm('¿Deseas reiniciar todos los lugares a "Pendiente" para iniciar un nuevo ciclo de difusión?')) {
+      setMasterChecklist((prev) => prev.map((i) => ({ ...i, status: 'pendiente', lastChecked: '' })));
+    }
+  };
+
   // Printable A4 Flyer Generator state
   const [flyerPresetKey, setFlyerPresetKey] = useState('de_en');
   const [flyerInkSaving, setFlyerInkSaving] = useState(true);
   const [flyerTabsCount, setFlyerTabsCount] = useState(10);
   const [customFlyer, setCustomFlyer] = useState(FLYER_PRESETS.de_en);
+  const [flyerSocialChannel, setFlyerSocialChannel] = useState('reddit');
 
   useEffect(() => {
-    localStorage.setItem('ds_admin_channels_v3', JSON.stringify(channels));
+    localStorage.setItem('ds_admin_channels_v4', JSON.stringify(channels));
   }, [channels]);
 
   useEffect(() => {
@@ -775,7 +1526,7 @@ For *${selectedWaSubject.nameEn}*, we work directly with your lecture notes (Skr
 🔬 Before we start, you can test ${selectedWaSubject.simLabelEn} for free right here:
 ${selectedWaSubject.simUrl}
 
-💰 *Tuition Rates (${waMode === 'inperson' ? 'In-Person in Hannover, incl. travel extra' : 'Live Online'}):*
+💰 *Tuition Rates (${waMode === 'inperson' ? 'In-Person in Hannover' : 'Live Online'}):*
 • *Solo (1-on-1):* ${formatMoney(waFinalHourly, waCurrency)}/h (or *${formatMoney(waPackHourly, waCurrency)}/h* with the 8h Exam Sprint Pack -15%)
 • *With +1 classmate (2 students, -${waG2.studentDiscountPct}% each):* ${formatMoney(waG2.perStudentHourly, waCurrency)}/h per student (${formatMoney(waG2.totalGroupHourly, waCurrency)}/h total)
 • *With +2 classmates (3 students, -${waG3.studentDiscountPct}% each):* ${formatMoney(waG3.perStudentHourly, waCurrency)}/h per student (${formatMoney(waG3.totalGroupHourly, waCurrency)}/h total)
@@ -788,6 +1539,10 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
   const flyerTargetUrl = `${BASE_SITE_URL}?src=${encodeURIComponent(customFlyer.qrTag || 'flyer')}`;
   const flyerQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=6&data=${encodeURIComponent(flyerTargetUrl)}`;
+  const currentSocialPostText =
+    customFlyer?.socialMedia?.[flyerSocialChannel] ||
+    customFlyer?.socialMedia?.reddit ||
+    `Hola! Preparando exámenes o aprendiendo STEM con simuladores interactivos... ${BASE_SITE_URL}?src=${customFlyer?.qrTag || 'flyer'}`;
 
   const handleSelectFlyerPreset = (key) => {
     setFlyerPresetKey(key);
@@ -956,7 +1711,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             { id: 'strategy', label: '1. Precios por Materia (Editor en Vivo)', icon: Sliders },
             { id: 'whatsapp', label: '2. Cerrador Rápido WhatsApp (60s)', icon: MessageSquare },
             { id: 'crm', label: '3. Pipeline CRM & Control de Horas/Pagos', icon: Columns },
-            { id: 'classifieds', label: '4. Clasificados (5 Países) & Avisos', icon: Globe },
+            { id: 'classifieds', label: '4. Checklist de Posteo (Físicos & Digitales)', icon: CheckCircle2 },
             { id: 'flyer', label: '5. Generador Flyer A4 Imprimible & Calle', icon: Printer },
             { id: 'marketing', label: '6. Social Media & Instagram Kit (Marketing)', icon: Megaphone }
           ].map((tab) => {
@@ -1985,16 +2740,131 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                         ))}
                       </ul>
 
-                      <div className="pt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
-                        <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
-                          <div className="font-extrabold text-slate-900">14 LIVE SIMULATORS</div>
-                          <div className="text-[10px] text-slate-700">Free Body Diagrams (DCL) &amp; Exam Steps</div>
+                      {/* Dynamic Visual Badges based on Flyer Preset */}
+                      {customFlyer.illustrationType === 'quantum_einstein' && (
+                        <div className="pt-2 space-y-2">
+                          <div className="p-3 rounded-xl border-2 border-slate-900 bg-amber-50 flex items-center gap-3">
+                            <div className="w-14 h-14 shrink-0 bg-white border-2 border-slate-900 rounded-xl p-1 flex items-center justify-center">
+                              <EinsteinCartoon />
+                            </div>
+                            <div className="text-[11px] font-mono leading-tight">
+                              <div className="font-extrabold text-slate-900">
+                                {customFlyer.einsteinQuote || '“God does not play dice with the universe... but we can simulate the odds!”'}
+                              </div>
+                              <div className="text-[10px] text-amber-950 font-bold mt-0.5">
+                                — Albert Einstein (y Daniel Santander)
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">HILBERT &amp; BLOCH</div>
+                              <div className="text-[10px] text-slate-700">Superposición, espín y qubits</div>
+                            </div>
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">SIMULACIONES PYTHON</div>
+                              <div className="text-[10px] text-slate-700">Paquetes de ondas y efecto túnel</div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
-                          <div className="font-extrabold text-slate-900">5-PILLAR MATH TOOLKIT</div>
-                          <div className="text-[10px] text-slate-700">Taylor, Matrices, ODEs, Grad &amp; FFT</div>
+                      )}
+
+                      {customFlyer.illustrationType === 'thesis_rocket' && (
+                        <div className="pt-2 space-y-2">
+                          <div className="p-3 rounded-xl border-2 border-slate-900 bg-emerald-50 flex items-center gap-3">
+                            <div className="w-12 h-12 shrink-0 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center text-emerald-600">
+                              <Rocket className="w-7 h-7" />
+                            </div>
+                            <div className="text-[11px] font-mono leading-tight">
+                              <div className="font-extrabold text-slate-900">
+                                “De scripts rotos y simulaciones divergentes a una defensa con honores”
+                              </div>
+                              <div className="text-[10px] text-emerald-950 font-bold mt-0.5">
+                                Asesoría metodológica &amp; técnica con Geofísico y Doble M.Sc.
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">DEPURACIÓN NUMÉRICA</div>
+                              <div className="text-[10px] text-slate-700">Python, SciPy, MATLAB y Pandas</div>
+                            </div>
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">GRÁFICOS DE PAPER</div>
+                              <div className="text-[10px] text-slate-700">Figuras vectoriales en Matplotlib</div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
+
+                      {customFlyer.illustrationType === 'python_ai' && (
+                        <div className="pt-2 space-y-2">
+                          <div className="p-3 rounded-xl border-2 border-slate-900 bg-sky-50 flex items-center gap-3">
+                            <div className="w-12 h-12 shrink-0 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center text-sky-600">
+                              <Terminal className="w-7 h-7" />
+                            </div>
+                            <div className="text-[11px] font-mono leading-tight">
+                              <div className="font-extrabold text-slate-900">
+                                “Prompting Matemático &amp; Simulación: Programa con IA sin perder el control”
+                              </div>
+                              <div className="text-[10px] text-sky-950 font-bold mt-0.5">
+                                Formula modelos físicos y audita código como un profesional
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">NUMPY &amp; SCIPY SOLVERS</div>
+                              <div className="text-[10px] text-slate-700">Diferencias finitas, osciladores y fluidos</div>
+                            </div>
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">PORTAFOLIO CIENTÍFICO</div>
+                              <div className="text-[10px] text-slate-700">Simuladores web para tu CV</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {customFlyer.illustrationType === 'math_ai' && (
+                        <div className="pt-2 space-y-2">
+                          <div className="p-3 rounded-xl border-2 border-slate-900 bg-purple-50 flex items-center gap-3">
+                            <div className="w-12 h-12 shrink-0 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center text-purple-600">
+                              <Brain className="w-7 h-7" />
+                            </div>
+                            <div className="text-[11px] font-mono leading-tight">
+                              <div className="font-extrabold text-slate-900">
+                                “El puente intuitivo entre el cálculo multivariable y las redes neuronales”
+                              </div>
+                              <div className="text-[10px] text-purple-950 font-bold mt-0.5">
+                                Gradiente descendente, backpropagation y SVD explicados sin rodeos
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">GRADIENTE &amp; SVD</div>
+                              <div className="text-[10px] text-slate-700">Jacobianos y espacios latentes</div>
+                            </div>
+                            <div className="p-2 rounded-lg border border-slate-900 bg-slate-50">
+                              <div className="font-extrabold text-slate-900">CÓDIGO DIRECTO</div>
+                              <div className="text-[10px] text-slate-700">De la teoría a Python en vivo</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {(!customFlyer.illustrationType || customFlyer.illustrationType === 'standard_physics') && (
+                        <div className="pt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
+                          <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
+                            <div className="font-extrabold text-slate-900">14 LIVE SIMULATORS</div>
+                            <div className="text-[10px] text-slate-700">Free Body Diagrams (DCL) &amp; Exam Steps</div>
+                          </div>
+                          <div className="p-2.5 rounded-lg border border-slate-900 bg-slate-50">
+                            <div className="font-extrabold text-slate-900">5-PILLAR MATH TOOLKIT</div>
+                            <div className="text-[10px] text-slate-700">Taylor, Matrices, ODEs, Grad &amp; FFT</div>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-900 bg-white text-center">
@@ -2022,7 +2892,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
                 <div className="border-t-2 border-dashed border-slate-900 bg-white px-4 pt-2 pb-4">
                   <div className="text-center font-mono text-[10px] uppercase tracking-widest text-slate-600 font-bold mb-2">
-                    ✂️ Tear off a tab / Abreißzettel mitnehmen (WhatsApp &amp; Interactive STEM Lab QR) ✂️
+                    ✂️ Tear off a tab (WhatsApp &amp; Interactive STEM Lab QR) ✂️
                   </div>
                   <div
                     className="grid gap-0 border-2 border-slate-900"
@@ -2055,6 +2925,89 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* SOCIAL MEDIA & FORUMS DISTRIBUTION KIT FOR CURRENT FLYER */}
+            <div className="no-print bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-emerald-400 font-bold block mb-1">
+                    Distribución Digital &amp; Copy-Paste
+                  </span>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Share2 className="w-5 h-5 text-sky-400" />
+                    <span>Versión Social Media &amp; Foros Web para este Afiche</span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Post listo para copiar y pegar en Reddit, WhatsApp o foros universitarios para la temática seleccionada arriba.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setFlyerSocialChannel('reddit')}
+                      className={`px-3 py-1.5 rounded-lg cursor-pointer transition-all ${
+                        flyerSocialChannel === 'reddit'
+                          ? 'bg-sky-600 text-white font-bold'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Reddit (Markdown)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFlyerSocialChannel('whatsapp')}
+                      className={`px-3 py-1.5 rounded-lg cursor-pointer transition-all ${
+                        flyerSocialChannel === 'whatsapp'
+                          ? 'bg-emerald-600 text-white font-bold'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      WhatsApp / Discord
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFlyerSocialChannel('facebook')}
+                      className={`px-3 py-1.5 rounded-lg cursor-pointer transition-all ${
+                        flyerSocialChannel === 'facebook'
+                          ? 'bg-blue-600 text-white font-bold'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Facebook / Foros
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(currentSocialPostText, 'flyer-social')}
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                  >
+                    {copiedId === 'flyer-social' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedId === 'flyer-social' ? '¡Texto Copiado!' : 'Copiar Texto'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Target Channel Advice Pill */}
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                <div className="text-slate-300">
+                  <span className="text-emerald-400 font-bold">🎯 Foros sugeridos para este afiche: </span>
+                  <span className="text-white font-semibold">
+                    {customFlyer?.targetForums || 'r/chile, r/EngineeringStudents, Grupos Facebook, Schwarzes Brett'}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  💡 Tip: En Reddit aporta primero el simulador web gratis; en WhatsApp ve directo al grano.
+                </div>
+              </div>
+
+              {/* Text Area */}
+              <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 text-xs font-sans whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+                {currentSocialPostText}
+              </pre>
             </div>
 
             <div className="no-print bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">

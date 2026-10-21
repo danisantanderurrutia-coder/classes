@@ -4994,25 +4994,262 @@
       enemyLasers.push(bolt);
     }
 
-    // Asteroids
+    // =========================================================================
+    // 9. HYPER-REALISTIC PROCEDURAL ASTEROID FIELD (CRATERS, BUMPS & 3D BOULDERS)
+    // =========================================================================
     const asteroids = [];
-    const asteroidGeo = new THREE.DodecahedronGeometry(1.6, 1);
-    const asteroidMat = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.9, metalness: 0.15 });
+
+    // Procedural Rock Regolith Texture (Impact craters, chondrule grains, mineral strata)
+    function generateAsteroidTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512;
+      cvs.height = 512;
+      const ctx = cvs.getContext('2d');
+
+      const grad = ctx.createRadialGradient(256, 256, 40, 256, 256, 300);
+      grad.addColorStop(0, '#5e5b57');
+      grad.addColorStop(0.5, '#423f3d');
+      grad.addColorStop(1, '#252322');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Regolith micro-grains
+      const imgData = ctx.getImageData(0, 0, 512, 512);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const noise = (Math.random() - 0.5) * 48;
+        data[i] = Math.min(255, Math.max(0, data[i] + noise));
+        data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+        data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+      }
+      ctx.putImageData(imgData, 0, 0);
+
+      // Deep Impact Craters with shadows and bright ejecta blankets
+      for (let i = 0; i < 28; i++) {
+        const cx = Math.random() * 512;
+        const cy = Math.random() * 512;
+        const r = 10 + Math.random() * 36;
+
+        // Bright raised crater rim / ejecta
+        ctx.strokeStyle = 'rgba(175, 170, 160, 0.45)';
+        ctx.lineWidth = r * 0.3;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Dark scooped crater bowl
+        const cratGrad = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.08, cx, cy, r);
+        cratGrad.addColorStop(0, 'rgba(12, 12, 14, 0.98)');
+        cratGrad.addColorStop(0.85, 'rgba(28, 26, 25, 0.8)');
+        cratGrad.addColorStop(1, 'rgba(70, 66, 62, 0.1)');
+        ctx.fillStyle = cratGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Central peak for large impacts
+        if (r > 24 && Math.random() > 0.35) {
+          ctx.fillStyle = 'rgba(145, 140, 130, 0.65)';
+          ctx.beginPath();
+          ctx.arc(cx + (Math.random() - 0.5) * 4, cy + (Math.random() - 0.5) * 4, r * 0.12, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Tectonic fractures & fault fissures
+      ctx.strokeStyle = 'rgba(15, 15, 16, 0.65)';
+      ctx.lineWidth = 2.0;
+      for (let j = 0; j < 14; j++) {
+        ctx.beginPath();
+        let sx = Math.random() * 512;
+        let sy = Math.random() * 512;
+        ctx.moveTo(sx, sy);
+        for (let seg = 0; seg < 4; seg++) {
+          sx += (Math.random() - 0.5) * 75;
+          sy += (Math.random() - 0.5) * 75;
+          ctx.lineTo(sx, sy);
+        }
+        ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    // High-Frequency Rock Bump Elevation Map
+    function generateAsteroidBumpMap() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512;
+      cvs.height = 512;
+      const ctx = cvs.getContext('2d');
+
+      ctx.fillStyle = '#808080';
+      ctx.fillRect(0, 0, 512, 512);
+
+      const imgData = ctx.getImageData(0, 0, 512, 512);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const n = (Math.random() - 0.5) * 65;
+        data[i] = Math.min(255, Math.max(0, 128 + n));
+        data[i + 1] = data[i];
+        data[i + 2] = data[i];
+      }
+      ctx.putImageData(imgData, 0, 0);
+
+      for (let i = 0; i < 28; i++) {
+        const cx = Math.random() * 512;
+        const cy = Math.random() * 512;
+        const r = 10 + Math.random() * 36;
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = r * 0.28;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        const cratGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        cratGrad.addColorStop(0, '#0a0a0a');
+        cratGrad.addColorStop(0.75, '#383838');
+        cratGrad.addColorStop(1, '#808080');
+        ctx.fillStyle = cratGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    // Sculpted irregular 3D Asteroid Geometries (Non-spherical, potato / oblong boulders with crater depressions)
+    function createSculptedAsteroidGeometry(variant = 0) {
+      const geo = new THREE.IcosahedronGeometry(1.6, 2);
+      const posAttr = geo.attributes.position;
+      const v = new THREE.Vector3();
+
+      const elX = 1.05 + (variant % 3) * 0.26;
+      const sqY = 0.82 - (variant % 2) * 0.16;
+      const elZ = 1.12 + ((variant + 1) % 3) * 0.22;
+
+      const craterCenters = [
+        { dir: new THREE.Vector3(1, 0.35, 0.3).normalize(), rad: 0.95, depth: 0.44 },
+        { dir: new THREE.Vector3(-0.75, 0.75, -0.3).normalize(), rad: 0.8, depth: 0.4 },
+        { dir: new THREE.Vector3(-0.25, -1, 0.55).normalize(), rad: 0.9, depth: 0.48 },
+        { dir: new THREE.Vector3(0.55, -0.65, -0.75).normalize(), rad: 0.75, depth: 0.36 }
+      ];
+
+      for (let i = 0; i < posAttr.count; i++) {
+        v.fromBufferAttribute(posAttr, i);
+
+        // Oblong / potato deformation
+        v.x *= elX;
+        v.y *= sqY;
+        v.z *= elZ;
+
+        // Harmonic low-frequency boulders
+        const angle = Math.atan2(v.z, v.x);
+        const phi = Math.asin(Math.max(-1, Math.min(1, v.y / (v.length() || 1))));
+        const harmonic = Math.sin(3 * angle + variant * 1.3) * Math.cos(2 * phi) * 0.24
+                       + Math.sin(5 * phi + variant * 2.1) * 0.16;
+
+        let r = v.length() * (1.0 + harmonic);
+
+        // Crater depressions on 3D mesh
+        const vNorm = v.clone().normalize();
+        for (let c of craterCenters) {
+          const dist = vNorm.distanceTo(c.dir);
+          if (dist < c.rad) {
+            const factor = 1 - (dist / c.rad);
+            if (dist < c.rad * 0.75) {
+              r -= c.depth * factor * factor;
+            } else {
+              r += c.depth * 0.22 * (1 - factor);
+            }
+          }
+        }
+
+        // High-frequency craggy facets
+        r += (Math.sin(v.x * 5.5 + variant) * Math.cos(v.y * 5.5) * Math.sin(v.z * 5.5)) * 0.09;
+
+        v.normalize().multiplyScalar(Math.max(0.65, r));
+        posAttr.setXYZ(i, v.x, v.y, v.z);
+      }
+
+      geo.computeVertexNormals();
+      return geo;
+    }
+
+    const astDiffuseMap = generateAsteroidTexture();
+    const astBumpMap = generateAsteroidBumpMap();
+
+    // 3 Authentic Asteroid Mineral Archetypes
+    const asteroidMaterials = [
+      // 1. Carbonaceous Chondrite (Type-C): dark basalt / charcoal
+      new THREE.MeshStandardMaterial({
+        map: astDiffuseMap,
+        bumpMap: astBumpMap,
+        bumpScale: 0.42,
+        color: 0x64615d,
+        roughness: 0.94,
+        metalness: 0.08,
+        flatShading: true
+      }),
+      // 2. Silicate / Stony (Type-S): brownish rock with solar glints
+      new THREE.MeshStandardMaterial({
+        map: astDiffuseMap,
+        bumpMap: astBumpMap,
+        bumpScale: 0.46,
+        color: 0x7c7267,
+        roughness: 0.88,
+        metalness: 0.14,
+        flatShading: true
+      }),
+      // 3. Nickel-Iron Metallic (Type-M): dark gunmetal with metallic sheen
+      new THREE.MeshStandardMaterial({
+        map: astDiffuseMap,
+        bumpMap: astBumpMap,
+        bumpScale: 0.38,
+        color: 0x545a64,
+        roughness: 0.78,
+        metalness: 0.36,
+        flatShading: true
+      })
+    ];
+
+    const asteroidGeometries = [
+      createSculptedAsteroidGeometry(0),
+      createSculptedAsteroidGeometry(1),
+      createSculptedAsteroidGeometry(2),
+      createSculptedAsteroidGeometry(3),
+      createSculptedAsteroidGeometry(4)
+    ];
 
     function spawnAsteroid(zDist = -150) {
-      const ast = new THREE.Mesh(asteroidGeo, asteroidMat);
+      const gIdx = Math.floor(Math.random() * asteroidGeometries.length);
+      const mIdx = Math.floor(Math.random() * asteroidMaterials.length);
+      const ast = new THREE.Mesh(asteroidGeometries[gIdx], asteroidMaterials[mIdx]);
       ast.position.set(
         shipRoot.position.x + (Math.random() - 0.5) * 80,
         shipRoot.position.y + (Math.random() - 0.5) * 50,
         shipRoot.position.z + zDist
       );
-      const s = 0.8 + Math.random() * 1.8;
-      ast.scale.set(s, s, s);
+      // Realistic non-uniform natural scaling
+      const s = 0.9 + Math.random() * 2.0;
+      const sx = s * (0.85 + Math.random() * 0.35);
+      const sy = s * (0.75 + Math.random() * 0.35);
+      const sz = s * (0.85 + Math.random() * 0.4);
+      ast.scale.set(sx, sy, sz);
+
       const currentSector = SECTORS[currentSectorIdx];
       ast.userData = {
-        radius: s * 1.45,
-        rotSpeedX: (Math.random() - 0.5) * 0.04,
-        rotSpeedY: (Math.random() - 0.5) * 0.04,
+        radius: s * 1.5,
+        rotSpeedX: (Math.random() - 0.5) * 0.045,
+        rotSpeedY: (Math.random() - 0.5) * 0.045,
+        rotSpeedZ: (Math.random() - 0.5) * 0.035,
         speedZ: currentSector.asteroidSpeed * (0.8 + Math.random() * 0.4)
       };
       scene.add(ast);
@@ -5944,7 +6181,16 @@
         document.getElementById('cockpit-flux-num').innerText = `${s.flux} W/m²`;
 
         shipRoot.position.set(0, 0, 0);
+        shipRoot.rotation.set(0, 0, 0);
+        shipRoot.quaternion.identity();
         shipVelocity.set(0, 0, 0);
+        mouse.x = 0;
+        mouse.y = 0;
+        hasMovedMouseInSector = false;
+        keys.w = false;
+        keys.s = false;
+        keys.a = false;
+        keys.d = false;
 
         document.body.classList.remove('cinema-active');
         warp.style.opacity = '0';
@@ -7077,6 +7323,15 @@
           transformationInProgress = false;
           shipRoot.position.set(0, 0, 0);
           shipRoot.rotation.set(0, 0, 0);
+          shipRoot.quaternion.identity();
+          shipVelocity.set(0, 0, 0);
+          mouse.x = 0;
+          mouse.y = 0;
+          hasMovedMouseInSector = false;
+          keys.w = false;
+          keys.s = false;
+          keys.a = false;
+          keys.d = false;
           leftPylonGroup.position.set(0, 0, 0);
           rightPylonGroup.position.set(0, 0, 0);
           leftWingGroup.position.set(-1.8, 0, 0);
@@ -7222,6 +7477,7 @@
     // =========================================================================
     const keys = { w: false, s: false, a: false, d: false };
     const mouse = { x: 0, y: 0 };
+    let hasMovedMouseInSector = false;
     let shipVelocity = new THREE.Vector3(0, 0, 0);
 
     window.addEventListener('keydown', (e) => {
@@ -7272,6 +7528,7 @@
     });
 
     window.addEventListener('mousemove', (e) => {
+      hasMovedMouseInSector = true;
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
@@ -7379,6 +7636,14 @@
         moonMesh.position.z = planetMesh.position.z + Math.sin(time * 0.15) * 32;
       }
 
+      // Anchor celestial background with gentle astronomical parallax so the planet never drifts out of view
+      if (!introActive && planetMesh) {
+        celestialGroup.position.x = shipRoot.position.x * 0.90;
+        celestialGroup.position.y = shipRoot.position.y * 0.90;
+      } else {
+        celestialGroup.position.set(0, 0, 0);
+      }
+
       // Update Spacetime Curvature Grid (Einstein Funnel)
       if (showSpacetimeGrid && planetMesh) {
         spacetimeGridMesh.visible = true;
@@ -7431,7 +7696,9 @@
       if (!introActive && !isGameOver) {
         // Compute Gravity Vector toward central body (Sun / Planet / Black Hole)
         if (planetMesh) {
-          const toPlanet = new THREE.Vector3().subVectors(planetMesh.position, shipRoot.position);
+          const worldPlanetPos = new THREE.Vector3();
+          planetMesh.getWorldPosition(worldPlanetPos);
+          const toPlanet = new THREE.Vector3().subVectors(worldPlanetPos, shipRoot.position);
           const dist = toPlanet.length();
           toPlanet.normalize();
 
@@ -7456,12 +7723,26 @@
         const accelRate = 42 * delta;
         const drag = Math.pow(0.92, delta * 60);
 
-        let steerX = mouse.x * 24;
-        let steerY = mouse.y * 16;
-        if (keys.a) steerX -= 28;
-        if (keys.d) steerX += 28;
-        if (keys.w) steerY += 22; // Outward flight boost
-        if (keys.s) steerY -= 22;
+        let steerX = 0;
+        let steerY = 0;
+
+        const isKeyboardSteerX = keys.a || keys.d;
+        const isKeyboardSteerY = keys.w || keys.s;
+
+        // Direct keyboard priority: Arrow keys / A / D will NEVER be counteracted or inverted by mouse cursor
+        if (isKeyboardSteerX) {
+          if (keys.a) steerX -= 32;
+          if (keys.d) steerX += 32;
+        } else if (hasMovedMouseInSector) {
+          steerX = mouse.x * 24;
+        }
+
+        if (isKeyboardSteerY) {
+          if (keys.w) steerY += 24;
+          if (keys.s) steerY -= 24;
+        } else if (hasMovedMouseInSector) {
+          steerY = mouse.y * 16;
+        }
 
         shipVelocity.x += (steerX - shipVelocity.x) * accelRate;
         shipVelocity.y += (steerY - shipVelocity.y) * accelRate;
@@ -7796,6 +8077,7 @@
         const ast = asteroids[i];
         ast.rotation.x += ast.userData.rotSpeedX;
         ast.rotation.y += ast.userData.rotSpeedY;
+        if (ast.userData.rotSpeedZ) ast.rotation.z += ast.userData.rotSpeedZ;
         ast.position.z += ast.userData.speedZ * delta;
 
         // Collision with player

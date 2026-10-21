@@ -3887,8 +3887,6 @@ export default function SolarSystem({
           ? (activeCourse.keywordsEn || activeCourse.skriptKeywords || [])
           : (activeCourse.keywordsEs || activeCourse.skriptKeywords || []))
       : [];
-    const hourlyRate = activeCourse?.rateHourly || activePlanet.rateHourly || 38;
-    const packPrice = activeCourse?.packagePrice || activePlanet.packagePrice || 275;
     const courseCode = activeCourse?.code || activePlanet.courseCode || 'COURSE';
     const levelLabel = activeCourse
       ? (lang === 'en' ? activeCourse.levelEn : activeCourse.levelEs)
@@ -3924,16 +3922,22 @@ export default function SolarSystem({
               </div>
             </div>
 
-            {/* Price & Primary CTA */}
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="text-right">
-                <div className="text-sm sm:text-base font-extrabold text-white font-mono">
-                  €{hourlyRate}<span className="text-[11px] font-normal text-slate-400">/h</span>
-                </div>
-                <div className="text-[10px] font-mono text-emerald-400">
-                  Pack 8h: €{packPrice}
-                </div>
-              </div>
+            {/* Primary Exploration & Booking CTA (No upfront price barrier) */}
+            <div className="flex items-center gap-2.5 shrink-0">
+              <button
+                onClick={() => {
+                  if (onSelectSubject) onSelectSubject(activePlanet);
+                  if (onNavigate) {
+                    onNavigate('courses');
+                  } else {
+                    window.location.hash = '#/courses';
+                  }
+                }}
+                className="px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-sky-300 border border-slate-700 font-mono text-xs font-semibold transition-all cursor-pointer hidden sm:inline-flex items-center gap-1.5"
+              >
+                <span>🔍</span>
+                <span>{lang === 'en' ? 'Explore Course' : 'Explorar Materia'}</span>
+              </button>
 
               <button
                 onClick={() => {
@@ -3953,7 +3957,7 @@ export default function SolarSystem({
             </div>
           </div>
 
-          {/* Sub-tabs: Temario & Klausur (default) vs Astrophysical Labs */}
+          {/* Sub-tabs: Temario (default) vs Astrophysical Labs */}
           <div className="px-4 sm:px-5 py-2 bg-slate-950/80 border-b border-slate-800/70 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-1 font-mono text-[11px]">
               <button
@@ -3964,7 +3968,7 @@ export default function SolarSystem({
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                📚 {lang === 'en' ? 'Course Syllabus & Pricing' : 'Temario de la Clase & Tarifas'}
+                📚 {lang === 'en' ? 'Course Syllabus & Topics' : 'Temario & Contenidos'}
               </button>
               <button
                 onClick={() => setActivePhysicsTab('dcl')}
@@ -4513,7 +4517,7 @@ export default function SolarSystem({
                       {lang === 'en' ? planet.shortCourseEn : planet.shortCourseEs}
                     </div>
                     <div className="text-[9px] font-mono text-emerald-400 font-semibold mt-0.5">
-                      €{planet.rateHourly}/h · {planet.courseCode}
+                      {planet.courseCode} · {lang === 'en' ? 'Explore →' : 'Explorar →'}
                     </div>
                   </button>
                 );

@@ -1049,15 +1049,14 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                         </div>
 
                         <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                          <span className="font-mono text-lg font-bold text-slate-900">
-                            {formatMoney(getCourseHourlyRate(course, currency), currency)}
-                            <span className="text-xs font-normal text-slate-500">/hr</span>
+                          <span className="font-mono text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                            {lang === 'en' ? '1-on-1 & Group • 3D Lab' : '1-a-1 y Grupal • Lab 3D'}
                           </span>
                           <button
-                            onClick={() => handleOpenBooking(course)}
+                            onClick={() => navigateTo('courses')}
                             className="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-semibold cursor-pointer"
                           >
-                            {lang === 'en' ? 'Enroll' : 'Inscribirse'}
+                            {lang === 'en' ? 'Explore →' : 'Explorar →'}
                           </button>
                         </div>
                       </div>

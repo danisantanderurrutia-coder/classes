@@ -3155,10 +3155,16 @@ export default function SolarSystem({
       }
 
       // Update target alignment factor based on introPhase and mode:
+      let swoopU = 0.0;
+      let swoopS = 0.0;
       if (introPhase === 'waiting' || introPhase === 'orbiting') {
         alignBlend = 0.0;
       } else if (introPhase === 'swooping') {
-        // alignBlend is driven directly by smootherstep 's' in the swoop curve
+        introTimer += delta;
+        const swoopDur = 2.4;
+        swoopU = Math.min(1.0, introTimer / swoopDur);
+        swoopS = swoopU * swoopU * swoopU * (swoopU * (swoopU * 6 - 15) + 10);
+        alignBlend = swoopS;
       } else {
         const targetAlign = isShowcase ? 1.0 : 0.0;
         alignBlend += (targetAlign - alignBlend) * Math.min(1.0, delta * 3.2);
@@ -3551,6 +3557,7 @@ export default function SolarSystem({
       if (introPhase === 'waiting') {
         camera.position.copy(orbitVantageCam);
         controls.target.copy(orbitVantageTarget);
+        camera.lookAt(controls.target);
       } else if (introPhase === 'orbiting') {
         introTimer += delta;
         alignBlend = 0.0;
@@ -3561,6 +3568,7 @@ export default function SolarSystem({
           orbitVantageCam.z + Math.sin(introTimer * 0.25) * 3.0
         );
         controls.target.copy(orbitVantageTarget);
+        camera.lookAt(controls.target);
 
         if (introTimer >= 1.35) {
           introPhase = 'swooping';
@@ -3572,25 +3580,24 @@ export default function SolarSystem({
           sgrStartPos.copy(blackHoleGroup.position);
         }
       } else if (introPhase === 'swooping') {
-        introTimer += delta;
-        const swoopDur = 2.4;
-        const u = Math.min(1.0, introTimer / swoopDur);
-        const s = u * u * u * (u * (u * 6 - 15) + 10);
-        travelS = s;
-        alignBlend = s;
+        travelS = swoopS;
 
         // Smooth curved camera swoop from exact drift position to lineup view
-        const arcY = Math.sin(Math.PI * s) * 3.2;
-        camera.position.lerpVectors(swoopCamStart, desiredCamPos, s);
+        const arcY = Math.sin(Math.PI * swoopS) * 3.2;
+        camera.position.lerpVectors(swoopCamStart, desiredCamPos, swoopS);
         camera.position.y += arcY;
-        controls.target.lerpVectors(orbitVantageTarget, targetCenter, s);
+        controls.target.lerpVectors(orbitVantageTarget, targetCenter, swoopS);
+        camera.lookAt(controls.target);
 
-        if (u >= 1.0) {
+        if (swoopU >= 1.0) {
           introPhase = 'done';
           alignBlend = 1.0;
           camera.position.copy(desiredCamPos);
           controls.target.copy(targetCenter);
+          camera.lookAt(targetCenter);
+          controls.enableDamping = false;
           controls.update();
+          controls.enableDamping = true;
           setShowIntroOverlay(false);
         }
       } else if (transitioning) {
@@ -3633,10 +3640,14 @@ export default function SolarSystem({
           );
           controls.target.lerpVectors(travel.t0, targetCenter, s);
         }
+        camera.lookAt(controls.target);
 
         if (u >= 1) {
           st.isTransitioning = false;
           st.shot = null;
+          controls.enableDamping = false;
+          controls.update();
+          controls.enableDamping = true;
         }
       } else {
         tmpDir.subVectors(targetCenter, prevFocalWorldPos);
@@ -3654,7 +3665,7 @@ export default function SolarSystem({
       }
 
       prevFocalWorldPos.copy(targetCenter);
-      const isProgrammaticMoving = introPhase === 'orbiting' || introPhase === 'swooping' || st.isTransitioning;
+      const isProgrammaticMoving = introPhase === 'waiting' || introPhase === 'orbiting' || introPhase === 'swooping' || st.isTransitioning;
       if (!isProgrammaticMoving) {
         controls.autoRotate = !!st.autoOrbit;
         controls.autoRotateSpeed = 0.45;

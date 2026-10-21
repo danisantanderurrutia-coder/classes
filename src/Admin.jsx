@@ -37,7 +37,10 @@ import {
   Terminal,
   GraduationCap,
   Sun,
-  Moon
+  Moon,
+  Layout,
+  PanelLeft,
+  CreditCard
 } from 'lucide-react';
 
 const InstagramIcon = ({ className = "w-4 h-4" }) => (
@@ -1237,6 +1240,21 @@ export default function Admin({ onBack }) {
     } catch (e) {}
   };
 
+  const [adminLayout, setAdminLayout] = useState(() => {
+    try {
+      return localStorage.getItem('ds_admin_layout') || 'tabbed';
+    } catch {
+      return 'tabbed';
+    }
+  });
+
+  const handleSetAdminLayout = (newLayout) => {
+    setAdminLayout(newLayout);
+    try {
+      localStorage.setItem('ds_admin_layout', newLayout);
+    } catch (e) {}
+  };
+
   const [activeTab, setActiveTab] = useState('strategy');
   const [adLangFilter, setAdLangFilter] = useState('all');
   const [crmSearch, setCrmSearch] = useState('');
@@ -1822,68 +1840,101 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
       </div>
 
       {/* Top Mission Control Header */}
-      <header className="no-print sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3.5">
+      <header className="no-print sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-8 py-3">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500/20 to-emerald-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shadow-lg shadow-sky-500/10 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500/20 to-emerald-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 shadow-md shrink-0">
               <Zap className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
-                  {t('Tu Cockpit Principal • Daniel S. Santander Urrutia', 'Mission Cockpit • Daniel S. Santander Urrutia')}
+                <span className="font-extrabold text-white text-base tracking-tight">
+                  Daniel S. Santander Urrutia
                 </span>
-                <span className="font-mono text-[10px] text-slate-400 hidden sm:inline">
-                  {t('Ponderante Base EUR = 1.00x • Clases Universitarias & Mentes Curiosas', 'Base Factor EUR = 1.00x • University STEM & Curious Minds')}
+                <span className="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{t('Cockpit Activo', 'Cockpit Active')}</span>
                 </span>
               </div>
-              <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-0.5">
-                {t('Centro de Comando: Tarifas, Alumnos & Conversión', 'Command Center: Rates, Pipeline & Growth')}
-              </h1>
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+                <span>{t('Panel de Administración & Conversión', 'Admin & Conversion Workspace')}</span>
+                <span>•</span>
+                <span className="text-emerald-400 font-bold">{t('Base EUR 1.00x', 'Base EUR 1.00x')}</span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Layout Switcher (Tabs vs Sidebar) */}
+            <div className="flex items-center rounded-xl bg-slate-900 border border-slate-700/80 p-0.5 font-mono text-xs shadow-inner">
+              <button
+                type="button"
+                onClick={() => handleSetAdminLayout('tabbed')}
+                title={t('Diseño Barra Superior (Tabs)', 'Top Navigation Layout')}
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminLayout === 'tabbed'
+                    ? 'bg-sky-600 text-white font-bold shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Layout className="w-3.5 h-3.5" />
+                <span className="hidden lg:inline">{t('Pestañas', 'Tabs')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetAdminLayout('sidebar')}
+                title={t('Diseño Barra Lateral (Sidebar)', 'Sidebar Navigation Layout')}
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                  adminLayout === 'sidebar'
+                    ? 'bg-sky-600 text-white font-bold shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <PanelLeft className="w-3.5 h-3.5" />
+                <span className="hidden lg:inline">{t('Lateral', 'Sidebar')}</span>
+              </button>
+            </div>
+
             {/* Theme Selector: Claro / Cálido / Oscuro */}
             <div className="flex items-center rounded-xl bg-slate-900 border border-slate-700/80 p-0.5 font-mono text-xs shadow-inner">
               <button
                 type="button"
                 onClick={() => handleSetAdminTheme('light')}
                 title={t('Tema Claro / SaaS White', 'Light Theme / Clean SaaS White')}
-                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
                   adminTheme === 'light'
                     ? 'bg-amber-500/25 text-amber-300 font-bold border border-amber-500/40 shadow-xs'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Sun className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden md:inline">{t('Claro', 'Light')}</span>
+                <span className="hidden sm:inline">{t('Claro', 'Light')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleSetAdminTheme('warm')}
                 title={t('Tema Cálido / Cuaderno Marfil', 'Warm Theme / Engineering Cream')}
-                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
                   adminTheme === 'warm'
                     ? 'bg-amber-600/30 text-amber-200 font-bold border border-amber-500/40 shadow-xs'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <span>📖</span>
-                <span className="hidden md:inline">{t('Cálido', 'Warm')}</span>
+                <span className="hidden sm:inline">{t('Cálido', 'Warm')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleSetAdminTheme('dark')}
                 title={t('Tema Oscuro / Cockpit Espacial', 'Dark Theme / Space Cockpit')}
-                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
                   adminTheme === 'dark'
                     ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40 shadow-xs'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Moon className="w-3.5 h-3.5 text-sky-400" />
-                <span className="hidden md:inline">{t('Oscuro', 'Dark')}</span>
+                <span className="hidden sm:inline">{t('Oscuro', 'Dark')}</span>
               </button>
             </div>
 
@@ -1892,7 +1943,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               <button
                 type="button"
                 onClick={() => handleToggleAdminLang('es')}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
                   adminLang === 'es'
                     ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold shadow-xs'
                     : 'text-slate-400 hover:text-white'
@@ -1904,7 +1955,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               <button
                 type="button"
                 onClick={() => handleToggleAdminLang('en')}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
                   adminLang === 'en'
                     ? 'bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold shadow-xs'
                     : 'text-slate-400 hover:text-white'
@@ -1919,155 +1970,285 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               href="https://wa.me/4917676497440"
               target="_blank"
               rel="noreferrer"
-              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-mono text-xs flex items-center gap-2 border border-slate-700/80 transition-colors"
+              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-mono text-xs flex items-center gap-1.5 border border-slate-700/80 transition-colors"
             >
               <Send className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden sm:inline">WhatsApp</span>
             </a>
             <button
               onClick={onBack}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-md shadow-sky-600/20 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-mono text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-sky-600/20 cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('Volver a la Web', 'Back to Website')}</span>
+              <span>{t('Volver', 'Exit')}</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8">
+      {/* Main Workspace Container */}
+      <div className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${adminLayout === 'sidebar' ? 'flex flex-col lg:flex-row gap-6' : 'space-y-6'}`}>
+
         {/* ================================================================= */}
-        {/* MISSION CONTROL HERO: MONTHLY REVENUE GOAL & KPI CARDS            */}
+        {/* SIDEBAR NAVIGATION (When layout === 'sidebar')                    */}
         {/* ================================================================= */}
-        <div className="no-print bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-slate-950 border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Left 7 cols: Monthly Goal Tracker */}
-            <div className="lg:col-span-7 space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-emerald-400 font-bold">
-                    {t('Meta de Ingresos Mensual (Conversión Automática a EUR)', 'Monthly Revenue Target (Auto-Converted to EUR)')}
-                  </span>
+        {adminLayout === 'sidebar' && (
+          <aside className="no-print lg:w-64 shrink-0 space-y-4">
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 shadow-sm">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block px-2 mb-2">
+                {t('Navegación del Cockpit', 'Cockpit Navigation')}
+              </span>
+              {[
+                { id: 'strategy', label: t('Tarifas & PPP', 'Rates & PPP'), icon: Sliders, badge: '1.00x' },
+                { id: 'whatsapp', label: t('Cerrador WhatsApp', 'WhatsApp Closer'), icon: MessageSquare, badge: '60s' },
+                { id: 'crm', label: t('Alumnos CRM', 'Students CRM'), icon: Users, badge: `${activeStudentsCount}` },
+                { id: 'classifieds', label: t('Avisos & Portales', 'Ads & Portals'), icon: CheckCircle2, badge: `${channels.length}` },
+                { id: 'flyer', label: t('Flyer A4 Imprimible', 'Printable A4 Flyer'), icon: Printer },
+                { id: 'marketing', label: t('Social Media Kit', 'Social Media Kit'), icon: Megaphone }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`w-full px-3 py-2.5 rounded-xl font-mono text-xs font-bold flex items-center justify-between transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-gradient-to-r from-sky-600 to-emerald-600 text-white shadow-md shadow-sky-600/20'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span>{tab.label}</span>
+                    </div>
+                    {tab.badge && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'
+                      }`}>
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Quick Profile Snapshot Card in Sidebar */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 text-xs font-mono">
+              <span className="text-[10px] uppercase text-emerald-400 font-bold block">
+                {t('Resumen Rápido', 'Quick Snapshot')}
+              </span>
+              <div className="flex justify-between text-slate-400">
+                <span>{t('Meta Mensual:', 'Target:')}</span>
+                <strong className="text-white">€{monthlyGoalEur}</strong>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{t('Cobrado hoy:', 'Collected:')}</span>
+                <strong className="text-emerald-400">€{paidRevenueEur}</strong>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{t('Alumnos activos:', 'Active:')}</span>
+                <strong className="text-sky-400">{activeStudentsCount}</strong>
+              </div>
+            </div>
+          </aside>
+        )}
+
+        {/* Content Area (Wide) */}
+        <div className={`flex-1 space-y-6 ${adminLayout === 'sidebar' ? 'min-w-0' : ''}`}>
+
+          {/* ================================================================= */}
+          {/* TOP NAV TABS (When layout === 'tabbed')                           */}
+          {/* ================================================================= */}
+          {adminLayout === 'tabbed' && (
+            <div className="no-print flex flex-wrap gap-2 border-b border-slate-800/80 pb-3">
+              {[
+                { id: 'strategy', label: t('Tarifas & PPP', 'Rates & PPP'), icon: Sliders, badge: '1.00x' },
+                { id: 'whatsapp', label: t('Cerrador WhatsApp', 'WhatsApp Closer'), icon: MessageSquare, badge: '60s' },
+                { id: 'crm', label: t('Alumnos CRM', 'Students CRM'), icon: Users, badge: `${activeStudentsCount}` },
+                { id: 'classifieds', label: t('Avisos & Portales', 'Ads & Portals'), icon: CheckCircle2, badge: `${channels.length}` },
+                { id: 'flyer', label: t('Flyer A4 Imprimible', 'Printable A4 Flyer'), icon: Printer },
+                { id: 'marketing', label: t('Social Media Kit', 'Social Media Kit'), icon: Megaphone }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-gradient-to-r from-sky-600 to-emerald-600 text-white shadow-md shadow-sky-600/20'
+                        : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                    {tab.badge && (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'
+                      }`}>
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ================================================================= */}
+          {/* EXECUTIVE 4-METRIC DASHBOARD GRID                                */}
+          {/* ================================================================= */}
+          <div className="no-print grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Metric 1: Monthly Revenue Goal */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3 shadow-xs hover:border-slate-700 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5" />
+                  <span>{t('Meta Mensual', 'Monthly Target')}</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-[10px]">
+                  {goalProgressPct}%
+                </span>
+              </div>
+              <div>
+                <div className="flex items-baseline justify-between">
+                  <span className="text-2xl sm:text-3xl font-mono font-extrabold text-white">€{paidRevenueEur}</span>
+                  <div className="flex items-center gap-1 font-mono text-xs text-slate-400">
+                    <span>meta: €</span>
+                    <input
+                      type="number"
+                      step="100"
+                      min="200"
+                      value={monthlyGoalEur}
+                      onChange={(e) => setMonthlyGoalEur(Number(e.target.value) || 1000)}
+                      className="w-16 px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 text-white text-right font-bold"
+                    />
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 font-mono text-xs">
-                  <span className="text-slate-400">{t('Tu Meta: €', 'Your Target: €')}</span>
-                  <input
-                    type="number"
-                    step="100"
-                    min="200"
-                    value={monthlyGoalEur}
-                    onChange={(e) => setMonthlyGoalEur(Number(e.target.value) || 1000)}
-                    className="w-20 px-2 py-1 rounded-lg bg-slate-950 border border-slate-700 text-white font-bold text-right"
+                {/* Clean mini progress bar */}
+                <div className="w-full h-2 rounded-full bg-slate-950 border border-slate-800 overflow-hidden mt-2 p-0.5">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 to-amber-300 transition-all duration-500"
+                    style={{ width: `${Math.max(4, goalProgressPct)}%` }}
                   />
                 </div>
               </div>
-
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <span className="text-3xl sm:text-4xl font-mono font-extrabold text-white">
-                    €{paidRevenueEur}
-                  </span>
-                  <span className="text-xs font-mono text-slate-400 ml-2">
-                    {t(`cobrados / €${monthlyGoalEur} meta (${goalProgressPct}%)`, `collected / €${monthlyGoalEur} target (${goalProgressPct}%)`)}
-                  </span>
-                </div>
-                <div className="text-right font-mono text-xs text-sky-400">
-                  {t('Pipeline total:', 'Total Pipeline:')} <strong>€{pipelineRevenueEur}</strong>
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="w-full h-3.5 rounded-full bg-slate-950 border border-slate-800 overflow-hidden p-0.5">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 to-amber-300 transition-all duration-500"
-                  style={{ width: `${Math.max(4, goalProgressPct)}%` }}
-                />
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pt-1">
-                <span>
-                  💡 {t('Con Cálculo a', 'With Calculus at')} <strong>€25/h</strong> ($20.000 CLP/h), {t('necesitas ~', 'you need ~')}<strong>{Math.ceil(Math.max(0, monthlyGoalEur - paidRevenueEur) / 25)} {t('horas', 'hours')}</strong> {t('para completar tu meta.', 'to reach your goal.')}
-                </span>
-                <span className="text-emerald-300">
-                  {t('Horas ya dictadas:', 'Delivered hours:')} <strong>{totalHoursCompleted}h</strong>
-                </span>
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+                <span>{t('Faltan ~', 'Remaining ~')}<strong className="text-white">{Math.ceil(Math.max(0, monthlyGoalEur - paidRevenueEur) / 25)}h</strong></span>
+                <span className="text-sky-400">Pipeline: <strong>€{pipelineRevenueEur}</strong></span>
               </div>
             </div>
 
-            {/* Right 5 cols: 4 Compact KPI Pills */}
-            <div className="lg:col-span-5 grid grid-cols-2 gap-3">
-              <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>{t('Alumnos Activos', 'Active Students')}</span>
-                  <Users className="w-3.5 h-3.5 text-emerald-400" />
-                </div>
-                <div className="text-2xl font-mono font-extrabold text-white">
-                  {activeStudentsCount} <span className="text-xs font-normal text-slate-500">/ {leads.length} leads</span>
-                </div>
+            {/* Metric 2: Active Students & Pipeline */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3 shadow-xs hover:border-slate-700 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-sky-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5" />
+                  <span>{t('Alumnos & Leads', 'Students & Leads')}</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-300 font-bold text-[10px]">
+                  {leads.length} {t('totales', 'total')}
+                </span>
               </div>
-
-              <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>{t('Portales Activos', 'Active Portals')}</span>
-                  <Globe className="w-3.5 h-3.5 text-sky-400" />
+              <div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl sm:text-3xl font-mono font-extrabold text-white">{activeStudentsCount}</span>
+                  <span className="text-xs font-mono text-slate-400">{t('alumnos activos', 'active students')}</span>
                 </div>
-                <div className="text-2xl font-mono font-extrabold text-white">
-                  {activeChannelsCount} <span className="text-xs font-normal text-slate-500">/ {channels.length}</span>
-                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  {leads.filter(l => l.status === 'Diagnostic Booked').length} {t('diagnósticos agendados', 'diagnostics booked')}
+                </p>
               </div>
-
-              <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>{t('Renovar (>5 días)', 'Needs Renewal (>5d)')}</span>
-                  <AlertTriangle className={`w-3.5 h-3.5 ${expiredChannelsCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`} />
-                </div>
-                <div className="text-2xl font-mono font-extrabold text-white">
-                  {expiredChannelsCount}
-                </div>
-              </div>
-
-              <div className="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4">
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase mb-1">
-                  <span>{t('Flyers en Calle', 'Street Flyers')}</span>
-                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                </div>
-                <div className="text-2xl font-mono font-extrabold text-white">
-                  {activeStreetCount} <span className="text-xs font-normal text-slate-500">/ {streetLocations.length}</span>
-                </div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+                <span>{t('Horas dictadas:', 'Delivered hours:')}</span>
+                <strong className="text-emerald-300">{totalHoursCompleted}h</strong>
               </div>
             </div>
+
+            {/* Metric 3: Channels & Renewal */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3 shadow-xs hover:border-slate-700 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>{t('Portales & Avisos', 'Portals & Ads')}</span>
+                </span>
+                <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                  expiredChannelsCount > 0
+                    ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300'
+                    : 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-300'
+                }`}>
+                  {expiredChannelsCount > 0 ? `${expiredChannelsCount} ${t('renovar', 'renew')}` : t('Al día ✓', 'Up to date ✓')}
+                </span>
+              </div>
+              <div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl sm:text-3xl font-mono font-extrabold text-white">{activeChannelsCount}</span>
+                  <span className="text-xs font-mono text-slate-400">/ {channels.length} {t('activos', 'active')}</span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  {masterChecklist.filter(i => i.status === 'publicado').length}/{masterChecklist.length} {t('puntos cubiertos', 'checkpoints covered')}
+                </p>
+              </div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+                <span>{t('Flyers en calle:', 'Street flyers:')}</span>
+                <strong className="text-amber-300">{activeStreetCount} / {streetLocations.length}</strong>
+              </div>
+            </div>
+
+            {/* Metric 4: Quick Actions & Cockpit Helpers */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3 shadow-xs hover:border-slate-700 transition-all">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-indigo-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>{t('Acceso Inmediato', 'Quick Actions')}</span>
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">1-clic</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('crm')}
+                  className="p-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>+ Alumno</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('whatsapp')}
+                  className="p-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>WhatsApp</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('classifieds')}
+                  className="p-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Copy className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Anuncio</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('strategy')}
+                  className="p-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Sliders className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Precios</span>
+                </button>
+              </div>
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+                <span>{t('Base de cobro:', 'Base rate:')}</span>
+                <strong className="text-white">€25 / $20k CLP</strong>
+              </div>
+            </div>
+
           </div>
-        </div>
-
-        {/* Navigation Tabs (hidden on print) */}
-        <div className="no-print flex flex-wrap gap-2 border-b border-slate-800/80 pb-4">
-          {[
-            { id: 'strategy', label: t('1. Tarifas & Ponderantes Económicos (Base 1.00x)', '1. Rates & Purchasing Multipliers (Base 1.00x)'), icon: Sliders },
-            { id: 'whatsapp', label: t('2. Cerrador WhatsApp (Cálculo, Mentes Curiosas, IB)', '2. WhatsApp Closer (Calculus, Curious Minds, IB)'), icon: MessageSquare },
-            { id: 'crm', label: t('3. Pipeline CRM & Control de Horas/Pagos', '3. CRM Pipeline & Hours/Payments Ledger'), icon: Columns },
-            { id: 'classifieds', label: t('4. Avisos Clasificados & Canales de Posteo', '4. Classified Ads & Posting Channels'), icon: CheckCircle2 },
-            { id: 'flyer', label: t('5. Generador Flyer A4 Imprimible & Calle', '5. Printable A4 Flyer Generator & Street Ops'), icon: Printer },
-            { id: 'marketing', label: t('6. Social Media & Instagram Kit (Marketing)', '6. Social Media & Instagram Marketing Kit'), icon: Megaphone }
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-sky-600 to-emerald-600 text-white shadow-lg shadow-sky-600/20'
-                    : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
 
         {/* ================================================================= */}
         {/* TAB 1: LIVE SUBJECT-TIER PRICE EDITOR & GEO-PRICING MATRIX        */}
@@ -4352,6 +4533,7 @@ Incluye sesión diagnóstica inicial gratuita de 20 minutos para revisar temario
 
           </div>
         )}
+        </div>
       </div>
     </div>
   );

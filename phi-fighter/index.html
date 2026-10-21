@@ -1937,7 +1937,7 @@
 
     body:not(.cinema-active) .imperial-bottom-bar {
       display: grid !important;
-      grid-template-columns: 270px 145px 1fr 270px !important;
+      grid-template-columns: 250px 175px 1fr 250px !important;
       height: 102px !important;
       min-height: 102px !important;
       background: linear-gradient(180deg, #060b16 0%, #020409 100%) !important;
@@ -1950,7 +1950,7 @@
 
     @media (max-width: 1100px) {
       body:not(.cinema-active) .imperial-bottom-bar {
-        grid-template-columns: 220px 125px 1fr 220px !important;
+        grid-template-columns: 210px 145px 1fr 210px !important;
         gap: 6px !important;
         padding: 4px 6px !important;
       }
@@ -2027,48 +2027,48 @@
     <!-- Top Slingshot Header -->
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div style="background: rgba(10, 15, 26, 0.9); border: 1px solid rgba(56, 189, 248, 0.4); border-left: 4px solid #38bdf8; padding: 10px 18px; border-radius: 4px; backdrop-filter: blur(8px);">
-        <div style="font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #38bdf8; letter-spacing: 2.5px; font-weight: bold; margin-bottom: 2px;">
-          MANIOBRA DE TIRACHINAS GRAVITACIONAL
+        <div style="font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #38bdf8; letter-spacing: 2.5px; font-weight: bold; margin-bottom: 2px;" id="slingshot-title-label">
+          GRAVITATIONAL SLINGSHOT MANEUVER
         </div>
         <div style="font-family:'Share Tech Mono', monospace; font-size: 0.84rem; color: #f8fafc;" id="slingshot-trajectory-label">
-          TRAYECTORIA HIPERBÓLICA // HORIZONTE ORBITAL
+          HYPERBOLIC TRAJECTORY // ORBITAL ESCAPE HORIZON
         </div>
       </div>
       <div style="background: rgba(10, 15, 26, 0.9); border: 1px solid rgba(245, 158, 11, 0.4); padding: 8px 16px; border-radius: 4px; text-align: right; backdrop-filter: blur(8px);">
-        <div style="font-size: 0.65rem; color: #94a3b8; font-family:'Orbitron', sans-serif; letter-spacing: 1.5px;">ESTADO DEL VECTOR</div>
-        <div style="font-size: 1.05rem; color: #f59e0b; font-weight: bold; font-family:'Share Tech Mono', monospace;" id="slingshot-status-badge">IMPULSO MÁXIMO REQUERIDO</div>
+        <div style="font-size: 0.65rem; color: #94a3b8; font-family:'Orbitron', sans-serif; letter-spacing: 1.5px;" id="slingshot-vector-status-title">VECTOR STATUS</div>
+        <div style="font-size: 1.05rem; color: #f59e0b; font-weight: bold; font-family:'Share Tech Mono', monospace;" id="slingshot-status-badge">MAXIMUM THRUST REQUIRED</div>
       </div>
     </div>
 
     <!-- Center Gravitational Speed Gauge -->
     <div style="margin: 0 auto; width: min(680px, 92vw); background: rgba(6, 11, 22, 0.92); border: 1px solid rgba(0, 240, 255, 0.45); border-radius: 6px; padding: 16px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.85), 0 0 24px rgba(56, 189, 248, 0.25); backdrop-filter: blur(12px); text-align: center;">
       <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 8px;">
-        <span style="font-family:'Orbitron', sans-serif; font-size:0.75rem; color:#94a3b8; letter-spacing:1.5px;">VELOCIDAD ORBITAL ACUMULADA</span>
+        <span style="font-family:'Orbitron', sans-serif; font-size:0.75rem; color:#94a3b8; letter-spacing:1.5px;" id="slingshot-speed-title">ACCUMULATED ORBITAL VELOCITY</span>
         <span style="font-family:'Share Tech Mono', monospace; font-size:1.4rem; color:#00f0ff; font-weight:bold;" id="slingshot-speed-stat">0.0 km/s</span>
-        <span style="font-family:'Share Tech Mono', monospace; font-size:0.8rem; color:#f59e0b;" id="slingshot-target-vesc">OBJETIVO: v_esc</span>
+        <span style="font-family:'Share Tech Mono', monospace; font-size:0.8rem; color:#f59e0b;" id="slingshot-target-vesc">TARGET: v_esc</span>
       </div>
       
       <!-- Progress Bar -->
       <div style="width: 100%; height: 16px; background: #0b1329; border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; position: relative;">
         <div id="slingshot-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0284c7 0%, #38bdf8 50%, #00f0ff 100%); box-shadow: 0 0 14px #00f0ff; transition: width 0.05s linear;"></div>
         <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-family:'Orbitron', sans-serif; font-weight: bold; color: #ffffff; text-shadow: 0 1px 3px #000;">
-          <span id="slingshot-percent-label">0% DE LA VELOCIDAD DE ESCAPE</span>
+          <span id="slingshot-percent-label">0% OF ESCAPE VELOCITY</span>
         </div>
       </div>
 
       <!-- Control Hint -->
-      <div style="margin-top: 10px; font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #fde047; letter-spacing: 1.5px;">
-        ⚡ ¡MANTÉN [W], [↑] O [ESPACIO] PARA ACTIVAR PROPULSORES DE PLASMA // MANIOBRA CON [A]/[D]!
+      <div id="slingshot-control-hint" style="margin-top: 10px; font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #fde047; letter-spacing: 1.5px;">
+        ⚡ HOLD [W], [↑] OR [SPACE] FOR PLASMA BOOST // STEER WITH [A]/[D]!
       </div>
     </div>
 
     <!-- Bottom Telemetry Footer -->
     <div style="display: flex; justify-content: center; gap: 24px; font-family:'Share Tech Mono', monospace; font-size: 0.75rem; color: #64748b;">
-      <span>POZO GRAVITATORIO: <b style="color:#ef4444;" id="slingshot-well-name">SOL</b></span>
+      <span><span id="slingshot-well-label">GRAVITATIONAL WELL:</span> <b style="color:#ef4444;" id="slingshot-well-name">SUN</b></span>
       <span>•</span>
-      <span>DISTORSIÓN RELATIVISTA: <b style="color:#38bdf8;" id="slingshot-lorentz-stat">γ = 1.0004</b></span>
+      <span><span id="slingshot-lorentz-label">RELATIVISTIC DILATION:</span> <b style="color:#38bdf8;" id="slingshot-lorentz-stat">γ = 1.0004</b></span>
       <span>•</span>
-      <span>HORIZONTE: <b style="color:#10b981;" id="slingshot-escape-status">ÓRBITA RASANTE</b></span>
+      <span><span id="slingshot-horizon-label">HORIZON:</span> <b style="color:#10b981;" id="slingshot-escape-status">GRAZING ORBIT</b></span>
     </div>
   </div>
 
@@ -2277,8 +2277,8 @@
           </span>
           <span id="cockpit-comms-badge" style="color:#10b981; font-size:0.55rem; font-weight:bold; letter-spacing:0.5px;">LIVE</span>
         </div>
-        <div style="position:relative; width:100%; height:55px; border-radius:3px; overflow:hidden; border:1px solid #1e293b; background:#02050b;">
-          <canvas id="pilot-cockpit-canvas" width="160" height="90" style="width:100%; height:100%; display:block; object-fit:cover;"></canvas>
+        <div style="position:relative; width:100%; height:58px; border-radius:3px; overflow:hidden; border:1px solid #1e293b; background:#02050b;">
+          <canvas id="pilot-cockpit-canvas" width="170" height="96" style="width:100%; height:100%; display:block; object-fit:cover;"></canvas>
           <div id="cockpit-glitch-overlay" style="position:absolute; inset:0; pointer-events:none; background:transparent;"></div>
           <!-- CRT Scanlines -->
           <div style="position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(0,240,255,0.03) 0px, rgba(0,240,255,0.03) 1px, transparent 2px, transparent 3px);"></div>
@@ -6567,15 +6567,51 @@
       currentSlingshotSpeed = slingshotTargetVesc * 0.42;
       slingshotBaseSpeed = currentSlingshotSpeed;
 
+      const isEs = (typeof playerPilot !== 'undefined' && playerPilot && playerPilot.voiceLang === 'es');
+
       const overlay = document.getElementById('slingshot-escape-overlay');
       if (overlay) {
         overlay.style.display = 'flex';
+        const titleEl = document.getElementById('slingshot-title-label');
+        if (titleEl) titleEl.innerText = isEs ? 'MANIOBRA DE TIRACHINAS GRAVITACIONAL' : 'GRAVITATIONAL SLINGSHOT MANEUVER';
+
         const traj = document.getElementById('slingshot-trajectory-label');
-        if (traj) traj.innerText = `TRAYECTORIA HIPERBÓLICA // ${currentSector.bodyName.toUpperCase()}`;
+        if (traj) traj.innerText = isEs ? `TRAYECTORIA HIPERBÓLICA // ${currentSector.bodyName.toUpperCase()}` : `HYPERBOLIC TRAJECTORY // ${currentSector.bodyName.toUpperCase()}`;
+
+        const vecStatus = document.getElementById('slingshot-vector-status-title');
+        if (vecStatus) vecStatus.innerText = isEs ? 'ESTADO DEL VECTOR' : 'VECTOR STATUS';
+
+        const badge = document.getElementById('slingshot-status-badge');
+        if (badge) {
+          badge.innerText = isEs ? 'IMPULSO MÁXIMO REQUERIDO' : 'MAXIMUM THRUST REQUIRED';
+          badge.style.color = '#f59e0b';
+        }
+
+        const speedTitle = document.getElementById('slingshot-speed-title');
+        if (speedTitle) speedTitle.innerText = isEs ? 'VELOCIDAD ORBITAL ACUMULADA' : 'ACCUMULATED ORBITAL VELOCITY';
+
+        const wellLabel = document.getElementById('slingshot-well-label');
+        if (wellLabel) wellLabel.innerText = isEs ? 'POZO GRAVITATORIO:' : 'GRAVITATIONAL WELL:';
         const well = document.getElementById('slingshot-well-name');
         if (well) well.innerText = currentSector.bodyName.toUpperCase();
+
+        const lorentzLabel = document.getElementById('slingshot-lorentz-label');
+        if (lorentzLabel) lorentzLabel.innerText = isEs ? 'DISTORSIÓN RELATIVISTA:' : 'RELATIVISTIC DILATION:';
+
+        const horizonLabel = document.getElementById('slingshot-horizon-label');
+        if (horizonLabel) horizonLabel.innerText = isEs ? 'HORIZONTE:' : 'HORIZON:';
+        const horizonStat = document.getElementById('slingshot-escape-status');
+        if (horizonStat) horizonStat.innerText = isEs ? 'ÓRBITA RASANTE' : 'GRAZING ORBIT';
+
         const tgt = document.getElementById('slingshot-target-vesc');
-        if (tgt) tgt.innerText = `OBJETIVO: ${slingshotTargetVesc.toFixed(1)} km/s`;
+        if (tgt) tgt.innerText = isEs ? `OBJETIVO: ${slingshotTargetVesc.toFixed(1)} km/s` : `TARGET: ${slingshotTargetVesc.toFixed(1)} km/s`;
+
+        const hint = document.getElementById('slingshot-control-hint');
+        if (hint) {
+          hint.innerHTML = isEs
+            ? '⚡ ¡MANTÉN [W], [↑] O [ESPACIO] PARA ACTIVAR PROPULSORES DE PLASMA // MANIOBRA CON [A]/[D]!'
+            : '⚡ HOLD [W], [↑] OR [SPACE] FOR PLASMA BOOST // STEER WITH [A]/[D]!';
+        }
       }
 
       speakTactical('slingshotStart', true, currentSector.bodyName);
@@ -6672,11 +6708,29 @@
         const s = SECTORS[currentSectorIdx];
         buildSectorPlanet(s);
 
+        // Respawn sector asteroid field in front of player
+        for (let a of asteroids) scene.remove(a);
+        asteroids.length = 0;
+        for (let i = 0; i < 20; i++) {
+          spawnAsteroid(-35 - i * 7);
+        }
+
+        // Clear active enemy starfighters & spawn new sector wave
         for (let e of enemies) scene.remove(e);
         enemies.length = 0;
 
         for (let i = 0; i < s.enemyCount; i++) {
           spawnSectorEnemy(-80 - i * 30);
+        }
+
+        // Clear active lasers and missiles
+        for (let l of lasers) scene.remove(l);
+        lasers.length = 0;
+        for (let el of enemyLasers) scene.remove(el);
+        enemyLasers.length = 0;
+        if (typeof activeMissiles !== 'undefined') {
+          for (let m of activeMissiles) scene.remove(m);
+          activeMissiles.length = 0;
         }
 
         document.getElementById('hud-sector-title').innerText = s.title;
@@ -6695,6 +6749,11 @@
         shipRoot.rotation.set(0, 0, 0);
         shipRoot.quaternion.identity();
         shipVelocity.set(0, 0, 0);
+        steerX = 0;
+        camera.position.set(0, 1.35, 6.5);
+        camera.lookAt(0, -0.2, -25);
+        slingshotActive = false;
+        breakdownActive = false;
         mouse.x = 0;
         mouse.y = 0;
         hasMovedMouseInSector = false;
@@ -6815,42 +6874,44 @@
       const cx = w / 2;
       const cy = h / 2;
 
-      // 1. Background: Deep Sci-Fi Cadet Bay Hologram
-      const bgGrad = ctx.createRadialGradient(cx, cy * 0.9, 10 * scale, cx, cy, 140 * scale);
-      bgGrad.addColorStop(0, '#131b2e');
-      bgGrad.addColorStop(0.7, '#090d18');
-      bgGrad.addColorStop(1, '#03050a');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, w, h);
+      // 1. Background: Deep Sci-Fi Cadet Bay Hologram (Only for Dossier / Preview, omitted in Cockpit Cam)
+      if (!animState.isCockpitCam) {
+        const bgGrad = ctx.createRadialGradient(cx, cy * 0.9, 10 * scale, cx, cy, 140 * scale);
+        bgGrad.addColorStop(0, '#131b2e');
+        bgGrad.addColorStop(0.7, '#090d18');
+        bgGrad.addColorStop(1, '#03050a');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
 
-      // Hologram grid lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < w; x += 20 * scale) {
+        // Hologram grid lines
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < w; x += 20 * scale) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, h);
+          ctx.stroke();
+        }
+        for (let y = 0; y < h; y += 20 * scale) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.stroke();
+        }
+
+        // Concentric tactical circle
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.14)';
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
+        ctx.arc(cx, cy, 105 * scale, 0, Math.PI * 2);
         ctx.stroke();
-      }
-      for (let y = 0; y < h; y += 20 * scale) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
 
-      // Concentric tactical circle
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.14)';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 105 * scale, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Faint Greek letter Phi watermark
-      ctx.font = `bold ${85 * scale}px "Orbitron", serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = 'rgba(245, 158, 11, 0.05)';
-      ctx.fillText('Φ', cx, cy - 10 * scale);
+        // Faint Greek letter Phi watermark
+        ctx.font = `bold ${85 * scale}px "Orbitron", serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.05)';
+        ctx.fillText('Φ', cx, cy - 10 * scale);
+      }
 
       const skin = cfg.skinColor || '#1d4ed8';
 
@@ -7450,13 +7511,18 @@
 
       // Pilot bust with reactive G-force lean, shake, breathing, blinking, and speech
       ctx.save();
-      const cx = w / 2 + cockpitShiftX + shakeX + engineVibeX;
-      const cy = h / 2 + breathY + shakeY + engineVibeY;
-      ctx.translate(cx, cy);
+      const pivotX = w / 2 + cockpitShiftX + shakeX + engineVibeX;
+      const pivotY = h * 0.65 + breathY + shakeY + engineVibeY;
+      ctx.translate(pivotX, pivotY);
       ctx.rotate(cockpitTilt);
-      ctx.translate(-cx, -cy);
+      ctx.translate(-pivotX, -pivotY);
 
-      drawAvatar(ctx, playerPilot, w * 1.65, h * 1.95, -w * 0.325 + cockpitShiftX + shakeX, -h * 0.28 + breathY + shakeY, {
+      // Frame the complete pilot bust (head, species features, visor, neck, pauldrons, chest plaque)
+      const avatarSize = 108;
+      const ox = (w - avatarSize) / 2 + cockpitShiftX + shakeX + engineVibeX;
+      const oy = -14 + breathY + shakeY + engineVibeY;
+
+      drawAvatar(ctx, playerPilot, avatarSize, avatarSize, ox, oy, {
         isBlinking: isBlinking,
         mouthOpen: mouthOpen,
         isSpeaking: isSpeakingTactical,
@@ -8378,25 +8444,31 @@
         const fillElem = document.getElementById('slingshot-progress-fill');
         if (fillElem) fillElem.style.width = `${pct}%`;
 
-        const pctLabel = document.getElementById('slingshot-percent-label');
-        if (pctLabel) pctLabel.innerText = `${pct}% DE LA VELOCIDAD DE ESCAPE (${currentSlingshotSpeed.toFixed(1)} / ${slingshotTargetVesc} km/s)`;
-
-        const badge = document.getElementById('slingshot-status-badge');
-        if (badge) {
-          if (isBoosting) {
-            badge.innerText = '⚡ PROPULSIÓN DE PLASMA AL MÁXIMO';
-            badge.style.color = '#38bdf8';
-          } else {
-            badge.innerText = '¡MANTÉN [W] / [ESPACIO] PARA BOOST!';
-            badge.style.color = '#f59e0b';
-          }
-        }
-
         // Relativistic Lorentz factor
         const beta = Math.min(0.95, currentSlingshotSpeed / 300000);
         const gamma = 1 / Math.sqrt(Math.max(0.01, 1 - beta * beta));
         const gammaElem = document.getElementById('slingshot-lorentz-stat');
         if (gammaElem) gammaElem.innerText = `γ = ${gamma.toFixed(4)}`;
+
+        const isEs = (typeof playerPilot !== 'undefined' && playerPilot && playerPilot.voiceLang === 'es');
+
+        const pctLabel = document.getElementById('slingshot-percent-label');
+        if (pctLabel) {
+          pctLabel.innerText = isEs
+            ? `${pct}% DE LA VELOCIDAD DE ESCAPE (${currentSlingshotSpeed.toFixed(1)} / ${slingshotTargetVesc.toFixed(1)} km/s)`
+            : `${pct}% OF ESCAPE VELOCITY (${currentSlingshotSpeed.toFixed(1)} / ${slingshotTargetVesc.toFixed(1)} km/s)`;
+        }
+
+        const badge = document.getElementById('slingshot-status-badge');
+        if (badge) {
+          if (isBoosting) {
+            badge.innerText = isEs ? '⚡ PROPULSIÓN DE PLASMA AL MÁXIMO' : '⚡ MAXIMUM PLASMA THRUST';
+            badge.style.color = '#38bdf8';
+          } else {
+            badge.innerText = isEs ? '¡MANTÉN [W] / [ESPACIO] PARA BOOST!' : 'HOLD [W] / [SPACE] FOR BOOST!';
+            badge.style.color = '#f59e0b';
+          }
+        }
 
         // Steering during Slingshot with keys A / D
         if (keys.a || keys.arrowleft) steerX = -32;
@@ -8410,25 +8482,41 @@
 
         // Cinematic Hyperbolic Trajectory: ship sweeps close across the planet horizon
         const diveProgress = Math.min(1, slingshotTimer / 5.2);
-        shipRoot.position.y = -6 + Math.sin(diveProgress * Math.PI) * 3.5;
-        shipRoot.position.z -= (80 + currentSlingshotSpeed * 0.22) * delta;
+        shipRoot.position.y = -4 + Math.sin(diveProgress * Math.PI) * 2.8;
+        shipRoot.position.z = -Math.sin(diveProgress * Math.PI) * 14;
 
         // Dynamic Low-Angle Follow Camera
         camera.position.set(
           shipRoot.position.x * 0.45,
-          shipRoot.position.y + 2.6,
-          shipRoot.position.z + 11
+          shipRoot.position.y + 2.4,
+          shipRoot.position.z + 9.5
         );
         camera.lookAt(
           shipRoot.position.x * 0.2,
-          shipRoot.position.y + 0.5,
-          shipRoot.position.z - 35
+          shipRoot.position.y + 0.4,
+          shipRoot.position.z - 30
         );
 
         // Rotate planet and stars dynamically during the high-speed slingshot
         if (planetMesh) planetMesh.rotation.y += 0.006;
         if (accretionDiskMesh) accretionDiskMesh.rotation.z += 0.04;
-        stars.rotation.z += (isBoosting ? 0.06 : 0.02) * delta;
+        if (starfieldMesh) starfieldMesh.rotation.z += (isBoosting ? 0.08 : 0.03) * delta;
+
+        // Hyper-speed particles rush during slingshot
+        if (speedDust && speedDust.geometry && speedDust.geometry.attributes.position) {
+          const dustPos = speedDust.geometry.attributes.position;
+          const dustSpeed = (isBoosting ? 260 : 160) * delta;
+          for (let i = 0; i < dustPos.count; i++) {
+            let z = dustPos.getZ(i) + dustSpeed;
+            if (z > shipRoot.position.z + 10) {
+              z = shipRoot.position.z - 170;
+              dustPos.setX(i, shipRoot.position.x + (Math.random() - 0.5) * 160);
+              dustPos.setY(i, shipRoot.position.y + (Math.random() - 0.5) * 100);
+            }
+            dustPos.setZ(i, z);
+          }
+          dustPos.needsUpdate = true;
+        }
 
         // Render Cockpit Cam live during escape run
         updateAndRenderCockpitCam(delta);

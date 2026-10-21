@@ -1242,9 +1242,14 @@ export default function Admin({ onBack }) {
 
   const [adminLayout, setAdminLayout] = useState(() => {
     try {
-      return localStorage.getItem('ds_admin_layout') || 'tabbed';
+      const saved = localStorage.getItem('ds_admin_layout');
+      if (saved === 'tabbed') {
+        localStorage.setItem('ds_admin_layout', 'sidebar');
+        return 'sidebar';
+      }
+      return saved || 'sidebar';
     } catch {
-      return 'tabbed';
+      return 'sidebar';
     }
   });
 
@@ -1993,7 +1998,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
         {/* SIDEBAR NAVIGATION (When layout === 'sidebar')                    */}
         {/* ================================================================= */}
         {adminLayout === 'sidebar' && (
-          <aside className="no-print lg:w-64 shrink-0 space-y-4">
+          <aside className="no-print lg:w-64 shrink-0 space-y-4 lg:sticky lg:top-20 self-start max-h-[calc(100vh-6rem)] overflow-y-auto pr-0.5">
             <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 shadow-sm">
               <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400 font-bold block px-2 mb-2">
                 {t('Navegación del Cockpit', 'Cockpit Navigation')}

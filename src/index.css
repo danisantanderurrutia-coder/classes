@@ -218,6 +218,11 @@
   border-color: #e2e8f0 !important;
 }
 
+.ds-admin-light aside button:hover:not(.bg-gradient-to-r) {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
 /* --- 2. CÁLIDO / WARM CREAM & MARFIL THEME --- */
 .ds-admin-warm {
   background-color: #fbf9f4 !important;

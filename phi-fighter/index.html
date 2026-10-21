@@ -2436,6 +2436,20 @@
         </div>
       </div>
 
+      <!-- Cockpit Voice Language (English by default, unless Spanish chosen) -->
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:2px; padding-top:8px; border-top:1px solid #1e293b;">
+        <div class="dossier-field-group">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label class="dossier-field-label">COCKPIT VOICE COMMS</label>
+            <span id="voice-lang-status" style="font-size:0.62rem; color:#10b981; font-family:'Share Tech Mono', monospace;">VOICE: ENGLISH (DEFAULT)</span>
+          </div>
+          <div class="dossier-selector-pills" id="voice-lang-group">
+            <button class="dossier-pill-btn active" data-voice="en" id="btn-voice-en">🇬🇧 ENGLISH (DEFAULT)</button>
+            <button class="dossier-pill-btn" data-voice="es" id="btn-voice-es">🇪🇸 ESPAÑOL</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Bounty Reward Teaser -->
       <div class="dossier-bounty-badge">
         🎖️ <strong>STARFIGHTER UNLOCK PROGRESSION:</strong> Clear campaign on CADET (Easy) to unlock Crimson Interceptor, on PILOT (Medium) for Shadow Spec-Ops, and on ACE (Hard) for Vader's TIE Advanced x1!
@@ -3417,17 +3431,72 @@
     }
 
     // =========================================================================
-    // 1B. TACTICAL SPANISH VOICE & COMMS ENGINE
+    // 1B. TACTICAL BILINGUAL VOICE & COMMS ENGINE (DEFAULT: ENGLISH, CONDITIONAL: SPANISH)
     // =========================================================================
     let tacticalVoices = [];
+    let englishVoice = null;
     let spanishVoice = null;
     let isSpeakingTactical = false;
     let lastSpokenTime = 0;
+
+    const TACTICAL_COMM_LINES = {
+      launch: {
+        en: (pilot) => `All systems nominal. Ion drives at one hundred percent. Good hunting, pilot ${pilot || 'Cadet'}!`,
+        es: (pilot) => `Sistemas en línea. Motores de iones al cien por ciento. ¡Buena caza, piloto ${pilot || 'Cadete'}!`
+      },
+      missileLaunch: {
+        en: () => "Concussion missile away. Seeker tracking.",
+        es: () => "Misil guiado en trayectoria."
+      },
+      missileHitEnemy: {
+        en: () => "Missile impact confirmed. Hostile starfighter neutralized.",
+        es: () => "Impacto de misil confirmado. Blanco enemigo neutralizado."
+      },
+      laserHitEnemy: {
+        en: () => "Hostile craft neutralized. Direct hit.",
+        es: () => "Blanco enemigo neutralizado. Buen tiro."
+      },
+      asteroidFragmented: {
+        en: () => "Target pulverized. Asteroid fractured.",
+        es: () => "Objetivo fragmentado."
+      },
+      shieldWarning65: {
+        en: () => "Warning: Deflector shields taking damage.",
+        es: () => "Impacto recibido. Integridad de escudos comprometida."
+      },
+      shieldWarning30: {
+        en: () => "Caution! Shields at critical levels.",
+        es: () => "¡Atención! Escudos en nivel crítico."
+      },
+      shieldCollapsed: {
+        en: () => "Critical alert! Shields collapsed. Hull compromised.",
+        es: () => "¡Alerta crítica! Escudos colapsados. Casco expuesto."
+      },
+      slingshotStart: {
+        en: (body) => `Initiating gravitational slingshot around ${body}. Full throttle to escape velocity.`,
+        es: (body) => `Iniciando aproximación rasante. Acoplando tirachinas gravitacional en ${body}. Acelera a fondo hacia la velocidad de escape.`
+      },
+      slingshotComplete: {
+        en: () => "Escape velocity achieved! Hyperdrive jump completed.",
+        es: () => "¡Velocidad de escape alcanzada! Salto hiperespacial completado."
+      },
+      gameOver: {
+        en: () => "Catastrophic damage. Telemetry signal lost.",
+        es: () => "Alerta catastrófica. Señal de telemetría perdida."
+      }
+    };
 
     function initTacticalVoices() {
       if (!('speechSynthesis' in window)) return;
       const loadVoices = () => {
         tacticalVoices = window.speechSynthesis.getVoices();
+
+        // 1. English Voice (Strict Default)
+        englishVoice = tacticalVoices.find(v => (v.lang.startsWith('en-US') || v.lang.startsWith('en-GB') || v.lang.startsWith('en')) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Daniel') || v.name.includes('Alex') || v.name.includes('Samantha') || v.name.includes('Fred')))
+                    || tacticalVoices.find(v => v.lang.startsWith('en'))
+                    || null;
+
+        // 2. Spanish Voice (Only active if pilot is configured for Spanish)
         spanishVoice = tacticalVoices.find(v => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Jorge') || v.name.includes('Monica') || v.name.includes('Diego') || v.name.includes('Helena') || v.name.includes('Castilian')))
                     || tacticalVoices.find(v => v.lang.startsWith('es'))
                     || null;
@@ -3463,18 +3532,41 @@
       }
     }
 
-    function speakTactical(phrase, priority = false) {
+    function speakTactical(phraseOrKey, priority = false, argOrLang = null) {
       if (!('speechSynthesis' in window)) return;
       const now = Date.now();
-      if (!priority && now - lastSpokenTime < 3200) return;
+      if (!priority && now - lastSpokenTime < 2800) return;
+
+      // STRICT RULE: Cockpit voice is ALWAYS in English unless pilot configuration is explicitly 'es'
+      const isSpanishConfig = (typeof playerPilot !== 'undefined' && playerPilot && playerPilot.voiceLang === 'es');
+      
+      let phrase = phraseOrKey;
+      let targetLang = isSpanishConfig ? 'es-ES' : 'en-US';
+
+      // If called with a phrase key from TACTICAL_COMM_LINES
+      if (TACTICAL_COMM_LINES[phraseOrKey]) {
+        const pack = TACTICAL_COMM_LINES[phraseOrKey];
+        const fn = isSpanishConfig ? pack.es : pack.en;
+        phrase = fn(argOrLang);
+      } else if (typeof argOrLang === 'string' && (argOrLang.startsWith('en') || argOrLang.startsWith('es'))) {
+        targetLang = argOrLang;
+      }
 
       try {
         if (priority) {
           window.speechSynthesis.cancel();
         }
         const utter = new SpeechSynthesisUtterance(phrase);
-        if (spanishVoice) utter.voice = spanishVoice;
-        utter.lang = 'es-ES';
+        const useSpanish = targetLang.startsWith('es');
+        
+        if (useSpanish && spanishVoice) {
+          utter.voice = spanishVoice;
+          utter.lang = 'es-ES';
+        } else {
+          if (englishVoice) utter.voice = englishVoice;
+          utter.lang = 'en-US';
+        }
+
         utter.rate = 1.15;
         utter.pitch = 0.95;
 
@@ -5606,7 +5698,7 @@
           asteroids.push(frag);
         }
 
-        speakTactical("Objetivo fragmentado.", false);
+        speakTactical('asteroidFragmented', false);
         registerTargetKill(60, false, astPos);
       } else {
         // Complete pulverization
@@ -5811,7 +5903,7 @@
 
       const tgtName = target ? (target.userData.name || 'HOSTILE') : 'RADAR PURSUIT';
       showNotification(`🚀 CONCUSSION MISSILE LAUNCHED // LOCK: ${tgtName}`, '#f59e0b');
-      speakTactical("Misil guiado en trayectoria.", false);
+      speakTactical('missileLaunch', false);
     }
 
     function updateMissileUI() {
@@ -5938,11 +6030,11 @@
         document.getElementById('ui-shields-stat').className = 'tele-stat-val danger';
         document.getElementById('cockpit-status-tag').innerText = 'SHIELDS COLLAPSED';
         document.getElementById('cockpit-status-tag').style.color = 'var(--crimson-danger)';
-        speakTactical("¡Alerta crítica! Escudos colapsados. Casco expuesto.", true);
+        speakTactical('shieldCollapsed', true);
       } else if (playerShields <= 30) {
-        speakTactical("¡Atención! Escudos en nivel crítico.", true);
+        speakTactical('shieldWarning30', true);
       } else if (playerShields <= 65) {
-        speakTactical("Impacto recibido. Integridad de escudos comprometida.", false);
+        speakTactical('shieldWarning65', false);
       }
 
       if (playerHull <= 0) {
@@ -5954,7 +6046,7 @@
       isGameOver = true;
       triggerExplosion(shipRoot.position, true);
       shipRoot.visible = false;
-      speakTactical("Alerta catastrófica. Señal de telemetría perdida.", true);
+      speakTactical('gameOver', true);
 
       let msg = 'Your starfighter suffered catastrophic kinetic impact from orbital debris.';
       if (reason === 'BLACKHOLE') {
@@ -6486,7 +6578,7 @@
         if (tgt) tgt.innerText = `OBJETIVO: ${slingshotTargetVesc.toFixed(1)} km/s`;
       }
 
-      speakTactical(`Iniciando aproximación rasante. Acoplando tirachinas gravitacional en ${currentSector.bodyName}. Acelera a fondo hacia la velocidad de escape.`, true);
+      speakTactical('slingshotStart', true, currentSector.bodyName);
 
       playBassDropSound();
       playHydraulicServoSound();
@@ -6497,7 +6589,7 @@
       const overlay = document.getElementById('slingshot-escape-overlay');
       if (overlay) overlay.style.display = 'none';
 
-      speakTactical("¡Velocidad de escape alcanzada! Salto hiperespacial completado.", true);
+      speakTactical('slingshotComplete', true);
 
       if (currentSectorIdx + 1 < SECTORS.length) {
         advanceToNextSector();
@@ -6707,6 +6799,7 @@
       species: 'chiss',
       skinColor: '#1d4ed8',
       suit: 'obsidian',
+      voiceLang: 'en', // Cockpit tactical voice is ALWAYS English unless configured in Spanish!
       accessories: {
         visor: true,
         breather: false,
@@ -7550,6 +7643,27 @@
       });
     }
 
+    // Cockpit Voice Comms Language Selector (English default, unless Spanish chosen)
+    const voiceBtns = document.querySelectorAll('#voice-lang-group .dossier-pill-btn');
+    voiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        voiceBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        playerPilot.voiceLang = btn.dataset.voice;
+        const status = document.getElementById('voice-lang-status');
+        if (status) {
+          status.innerText = `VOICE: ${playerPilot.voiceLang === 'es' ? 'ESPAÑOL' : 'ENGLISH (DEFAULT)'}`;
+          status.style.color = playerPilot.voiceLang === 'es' ? '#f59e0b' : '#10b981';
+        }
+        playCommsRadioChirp(false);
+        if (playerPilot.voiceLang === 'es') {
+          speakTactical("Voz de cabina configurada en español.", true, 'es-ES');
+        } else {
+          speakTactical("Cockpit voice set to English.", true, 'en-US');
+        }
+      });
+    });
+
     // High-Resolution 1024x1024 Official Pilot Credential & Diploma Generator
     function downloadPilotSkinPNG() {
       const c = document.createElement('canvas');
@@ -7828,7 +7942,7 @@
       initTacticalVoices();
       playBassDropSound();
       playHydraulicServoSound();
-      speakTactical(`Sistemas en línea. Motores de iones al cien por ciento. ¡Buena caza, piloto ${playerPilot.name}!`, true);
+      speakTactical('launch', true, playerPilot.name);
 
       transformationInProgress = true;
 
@@ -8602,7 +8716,7 @@
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
               recordEncounteredShip(en.userData.type);
-              speakTactical("Impacto de misil confirmado. Blanco enemigo neutralizado.", false);
+              speakTactical('missileHitEnemy', false);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -8741,7 +8855,7 @@
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
               recordEncounteredShip(en.userData.type);
-              speakTactical("Blanco enemigo neutralizado. Buen tiro.", false);
+              speakTactical('laserHitEnemy', false);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }

@@ -7779,10 +7779,15 @@
         celestialGroup.position.set(0, 0, 0);
       }
 
-      // Update Spacetime Curvature Grid (Einstein Funnel)
+      // Update Spacetime Curvature Grid (Einstein Funnel cradling the planet's mass in world space)
       if (showSpacetimeGrid && planetMesh) {
         spacetimeGridMesh.visible = true;
-        spacetimeGridMesh.position.set(planetMesh.position.x, planetMesh.position.y - (currentSector.isBlackHole ? 16 : 10), planetMesh.position.z);
+        const gridOffsetY = currentSector.isBlackHole ? 6.0 : (currentSector.radius * 0.22);
+        spacetimeGridMesh.position.set(
+          celestialGroup.position.x + planetMesh.position.x,
+          celestialGroup.position.y + planetMesh.position.y - gridOffsetY,
+          celestialGroup.position.z + planetMesh.position.z
+        );
         const posAttr = spacetimeGridGeo.attributes.position;
         const massFactor = currentSector.isBlackHole ? 520 : (currentSector.radius * 7.5);
 

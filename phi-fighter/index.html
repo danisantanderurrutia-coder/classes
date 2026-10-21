@@ -1003,23 +1003,336 @@
       color: #020617;
     }
 
-    /* Intro Screen (Cinematic Transparent Stage) */
+    /* Intro Screen (Split-Screen Recruitment Dossier & Space Viewport) */
     #intro-screen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at center, rgba(3, 7, 18, 0.2) 0%, rgba(2, 6, 16, 0.78) 100%);
-      backdrop-filter: blur(2px);
+      background: linear-gradient(90deg, rgba(2, 6, 16, 0.95) 0%, rgba(2, 6, 16, 0.72) 48%, rgba(2, 6, 16, 0.2) 100%);
       z-index: 90;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-direction: row;
+      align-items: stretch;
       justify-content: space-between;
-      text-align: center;
-      padding: 30px 24px;
       transition: opacity 0.6s ease;
+      overflow: hidden;
+    }
+
+    #pilot-dossier-panel {
+      width: 480px;
+      max-width: 95vw;
+      height: 100%;
+      overflow-y: auto;
+      background: rgba(10, 16, 30, 0.96);
+      border-right: 1px solid #283347;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 95;
+      box-shadow: 12px 0 45px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(14px);
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+      text-align: left;
+    }
+
+    #pilot-dossier-panel.slide-out-left {
+      transform: translateX(-120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #intro-stage-view {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 26px 36px;
+      pointer-events: none;
+      text-align: right;
+    }
+
+    .dossier-title-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: #f59e0b;
+      text-transform: uppercase;
+    }
+
+    .dossier-headline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    .dossier-preview-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #283347;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    #avatar-preview-canvas {
+      width: 135px;
+      height: 135px;
+      border: 1.5px solid #38bdf8;
+      border-radius: 8px;
+      background: #070d19;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .dossier-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: left;
+    }
+
+    .dossier-field-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .dossier-input-text {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #00f0ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      outline: none;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .dossier-input-text:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+    }
+
+    .dossier-selector-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .dossier-pill-btn {
+      background: #0f172a;
+      border: 1px solid #283347;
+      color: #94a3b8;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.64rem;
+      letter-spacing: 1px;
+      padding: 5px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dossier-pill-btn:hover {
+      background: #1e293b;
+      color: #ffffff;
+    }
+
+    .dossier-pill-btn.active {
+      background: #1e293b;
+      border-color: #00f0ff;
+      color: #00f0ff;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .skin-swatch-row {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .skin-swatch-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+
+    .skin-swatch-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .skin-swatch-btn.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 10px #00f0ff;
+      transform: scale(1.18);
+    }
+
+    .accessory-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .accessory-chip {
+      background: #0f172a;
+      border: 1px solid #283347;
+      color: #94a3b8;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      padding: 4px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .accessory-chip.active {
+      border-color: #10b981;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .dossier-bounty-badge {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.68rem;
+      color: #fef08a;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    /* Classes Tutoring Promotion Box in Sector Cleared Modal */
+    .classes-promotion-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.96));
+      border: 1.5px solid #f59e0b;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 14px;
+      text-align: left;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 680px;
+      box-sizing: border-box;
+    }
+
+    .classes-action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .classes-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.74rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s ease;
+    }
+
+    .classes-btn.whatsapp {
+      background: #16a34a;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.35);
+    }
+
+    .classes-btn.whatsapp:hover {
+      background: #22c55e;
+      transform: translateY(-1px);
+    }
+
+    .classes-btn.email {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    }
+
+    .classes-btn.email:hover {
+      background: #38bdf8;
+      color: #020617;
+      transform: translateY(-1px);
+    }
+
+    /* Contact Form Modal */
+    #contact-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 6, 16, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .contact-form-box {
+      background: #0f172a;
+      border: 1.5px solid #38bdf8;
+      border-radius: 8px;
+      padding: 24px 28px;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      text-align: left;
+    }
+
+    .contact-input-field {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #ffffff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      border-radius: 4px;
+      outline: none;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .contact-input-field:focus {
+      border-color: #00f0ff;
     }
 
     /* Intro Controls & Mode Selectors */
@@ -1389,106 +1702,166 @@
     </div>
   </div>
 
-  <!-- 3. INTRO SCREEN (CINEMATIC OPEN STAGE) -->
-  <div id="intro-screen" style="display:flex;">
-    <div style="margin-top: 18px;">
-      <div style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:4px; color:#f59e0b; margin-bottom:4px;">
-        GLYPH IDENTIFIER: GREEK LETTER Φ (PHI) // VALUE: 1.6180339...
+  <!-- 3. INTRO SCREEN (SPLIT-SCREEN: RECRUITMENT DOSSIER & VIEWPORT) -->
+  <div id="intro-screen">
+    <!-- Left Column: Imperial Pilot Enlistment Bay -->
+    <div id="pilot-dossier-panel">
+      <div>
+        <div class="dossier-title-tag">IMPERIAL FLIGHT ACADEMY // ENLISTMENT</div>
+        <h1 class="dossier-headline">PILOT DOSSIER</h1>
       </div>
-      <h1 class="modal-headline" style="color:#ffffff; font-size:2.4rem; margin:0; text-shadow: 0 4px 25px rgba(0,240,255,0.6);">
-        PROJECT PHI-FIGHTER
-      </h1>
-      <p style="font-size:0.72rem; color:#94a3b8; letter-spacing:2px; margin-top:4px;">
-        IMPERIAL HIGH COMMAND AVIONICS &bull; 10 CELESTIAL SECTORS CAMPAIGN
-      </p>
-    </div>
 
-    <!-- Center Vector Holographic Emblem (4K Ultra-Sharp SVG Overlay) -->
-    <div id="intro-vector-hologram">
-      <svg viewBox="0 0 500 500" width="100%" height="100%" style="overflow:visible;">
-        <defs>
-          <filter id="holo-glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="3.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#f59e0b" />
-            <stop offset="50%" stop-color="#fef08a" />
-            <stop offset="100%" stop-color="#d97706" />
-          </linearGradient>
-          <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#00f0ff" />
-            <stop offset="100%" stop-color="#38bdf8" />
-          </linearGradient>
-        </defs>
-        <!-- Outer Golden Ratio Calibration Compass -->
-        <circle cx="250" cy="250" r="225" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 8" fill="none" opacity="0.65" />
-        <circle cx="250" cy="250" r="205" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="14 4" fill="none" opacity="0.55" />
-        <circle cx="250" cy="250" r="165" stroke="#00f0ff" stroke-width="2.5" fill="none" opacity="0.85" filter="url(#holo-glow)" />
-        
-        <!-- Golden Logarithmic Spiral Arc (phi = 1.618) -->
-        <path d="M 250,250 A 25 25 0 0 1 275,250 A 40 40 0 0 1 250,290 A 65 65 0 0 1 185,250 A 105 105 0 0 1 250,145 A 170 170 0 0 1 420,250" 
-              stroke="url(#gold-grad)" stroke-width="2.5" fill="none" opacity="0.8" stroke-dasharray="3 3" filter="url(#holo-glow)" />
-
-        <!-- Degree Markings / Axis Crosshairs -->
-        <line x1="25" y1="250" x2="475" y2="250" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
-        <line x1="250" y1="25" x2="250" y2="475" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
-        
-        <!-- Precision Greek Letter Phi Glyph (4K Ultra-Sharp Vector) -->
-        <g id="svg-phi-glyph" filter="url(#holo-glow)">
-          <!-- Main Ovoid Ring -->
-          <ellipse cx="250" cy="250" rx="112" ry="112" stroke="url(#cyan-grad)" stroke-width="14" fill="none" />
-          <!-- Central Vertical Spine -->
-          <line x1="250" y1="65" x2="250" y2="435" stroke="url(#cyan-grad)" stroke-width="14" stroke-linecap="round" />
-          <!-- Top Serif Cap -->
-          <line x1="205" y1="65" x2="295" y2="65" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
-          <!-- Bottom Serif Cap -->
-          <line x1="205" y1="435" x2="295" y2="435" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
-        </g>
-
-        <!-- Mathematical Telemetry Tags -->
-        <text x="250" y="470" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="11" fill="#f59e0b" letter-spacing="3">Φ = (1 + √5) / 2 = 1.6180339887...</text>
-        <text x="250" y="42" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="#38bdf8" letter-spacing="2">SACRED RATIO HARMONICS // 4K VECTOR HUD</text>
-      </svg>
-    </div>
-
-    <!-- Center is open so the 3D Phi Glyph is visible behind the HUD -->
-    <div style="pointer-events:none; flex:1;"></div>
-
-    <div style="margin-bottom: 18px; display:flex; flex-direction:column; align-items:center; gap:8px;">
-      <p style="font-size:0.82rem; color:#cbd5e1; max-width:680px; line-height:1.45; margin:0; text-shadow:0 2px 10px rgba(0,0,0,0.9);">
-        Observe the golden-ratio mathematical symbol <strong>Φ (Phi)</strong> as it mechanically disengages its vertical axis, extends heavy carbon pylon booms, and unfolds into the deep-space Imperial TIE Interceptor.
-      </p>
-
-      <!-- Selector Rows for Difficulty & Logo Style -->
-      <div class="intro-controls-row">
-        <div class="control-subgroup">
-          <span class="control-label">LOGO RENDER ALTERNATIVE:</span>
-          <div class="diff-btn-group" id="logo-mode-group">
-            <button class="diff-btn active" data-logomode="hybrid">1. CYBER HYBRID (4K+3D)</button>
-            <button class="diff-btn" data-logomode="vector">2. 4K VECTOR SCHEMATIC</button>
-            <button class="diff-btn" data-logomode="pbr3d">3. TITANIUM GOLD 3D</button>
+      <!-- Live Avatar Preview & Name Input Row -->
+      <div class="dossier-preview-row">
+        <canvas id="avatar-preview-canvas" width="280" height="280"></canvas>
+        <div class="dossier-field-group" style="flex:1;">
+          <label class="dossier-field-label">PILOT CALLSIGN</label>
+          <input type="text" id="pilot-name-input" class="dossier-input-text" value="Daniel" maxlength="16" placeholder="Enter Callsign...">
+          <div style="font-size:0.62rem; color:#64748b; font-family:'Share Tech Mono', monospace; margin-top:2px;">
+            RANK: FLIGHT CADET // SQUADRON PHI
           </div>
         </div>
+      </div>
 
-        <div class="control-subgroup">
-          <span class="control-label">COMBAT DIFFICULTY:</span>
+      <!-- Species Selection -->
+      <div class="dossier-field-group">
+        <label class="dossier-field-label">ALIEN SPECIES / LINEAGE</label>
+        <div class="dossier-selector-pills" id="species-selector-group">
+          <button class="dossier-pill-btn active" data-species="chiss">CHISS</button>
+          <button class="dossier-pill-btn" data-species="twilek">TWI'LEK</button>
+          <button class="dossier-pill-btn" data-species="zabrak">ZABRAK</button>
+          <button class="dossier-pill-btn" data-species="cyborg">CYBORG</button>
+          <button class="dossier-pill-btn" data-species="pantoran">PANTORAN</button>
+        </div>
+      </div>
+
+      <!-- Skin Pigment Swatches -->
+      <div class="dossier-field-group">
+        <label class="dossier-field-label">SKIN PIGMENT TONE</label>
+        <div class="skin-swatch-row" id="skin-swatch-group">
+          <button class="skin-swatch-btn active" data-color="#1d4ed8" style="background:#1d4ed8;" title="Chiss Indigo Blue"></button>
+          <button class="skin-swatch-btn" data-color="#06b6d4" style="background:#06b6d4;" title="Twi'lek Cyan"></button>
+          <button class="skin-swatch-btn" data-color="#dc2626" style="background:#dc2626;" title="Zabrak Crimson"></button>
+          <button class="skin-swatch-btn" data-color="#d97706" style="background:#d97706;" title="Ochre Amber"></button>
+          <button class="skin-swatch-btn" data-color="#a855f7" style="background:#a855f7;" title="Pantoran Violet"></button>
+          <button class="skin-swatch-btn" data-color="#f8fafc" style="background:#e2e8f0;" title="Human / Cyber Pale"></button>
+        </div>
+      </div>
+
+      <!-- Flight Uniform Suit -->
+      <div class="dossier-field-group">
+        <label class="dossier-field-label">FLIGHT ARMOR SUIT</label>
+        <div class="dossier-selector-pills" id="suit-selector-group">
+          <button class="dossier-pill-btn active" data-suit="obsidian">OBSIDIAN TIE</button>
+          <button class="dossier-pill-btn" data-suit="crimson">CRIMSON GUARD</button>
+          <button class="dossier-pill-btn" data-suit="admiral">ADMIRAL WHITE</button>
+          <button class="dossier-pill-btn" data-suit="shadow">SHADOW SPEC-OPS</button>
+        </div>
+      </div>
+
+      <!-- Tactical Accessories -->
+      <div class="dossier-field-group">
+        <label class="dossier-field-label">TACTICAL AVIONICS ACCESSORIES</label>
+        <div class="accessory-chip-row">
+          <div class="accessory-chip active" id="toggle-acc-visor">
+            <span>🥽</span> <span>HUD Visor</span>
+          </div>
+          <div class="accessory-chip" id="toggle-acc-breather">
+            <span>🫁</span> <span>Oxygen Breather</span>
+          </div>
+          <div class="accessory-chip" id="toggle-acc-cyber">
+            <span>⚡</span> <span>Neural Data-Jack</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Difficulty & Logo Render Mode in Dossier -->
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:2px; padding-top:8px; border-top:1px solid #1e293b;">
+        <div class="dossier-field-group">
+          <label class="dossier-field-label">COMBAT DIFFICULTY</label>
           <div class="diff-btn-group" id="difficulty-group">
-            <button class="diff-btn" data-diff="easy">CADET (EASY - STATIC)</button>
-            <button class="diff-btn active" data-diff="medium">PILOT (MEDIUM - CHILL)</button>
-            <button class="diff-btn" data-diff="hard">ACE (HARD - AGGRESSIVE)</button>
+            <button class="diff-btn" data-diff="easy">CADET (EASY)</button>
+            <button class="diff-btn active" data-diff="medium">PILOT (CHILL)</button>
+            <button class="diff-btn" data-diff="hard">ACE (HARD)</button>
+          </div>
+        </div>
+        <div class="dossier-field-group">
+          <label class="dossier-field-label">LOGO RENDER STYLE</label>
+          <div class="diff-btn-group" id="logo-mode-group">
+            <button class="diff-btn active" data-logomode="hybrid">1. HYBRID</button>
+            <button class="diff-btn" data-logomode="vector">2. 4K VECTOR</button>
+            <button class="diff-btn" data-logomode="pbr3d">3. 3D GOLD</button>
           </div>
         </div>
       </div>
 
-      <button class="master-btn" id="btn-launch" style="padding: 13px 44px; font-size:0.95rem;">
-        INITIATE METAMORPHOSIS & LAUNCH 🚀
+      <!-- Bounty Reward Teaser -->
+      <div class="dossier-bounty-badge">
+        🎖️ <strong>OFFICIAL GRADUATION REWARD:</strong> Survive all 10 planetary sectors &amp; defeat the Singularity to unlock and download your custom Pilot Dossier &amp; Skin as an official 1024×1024 image!
+      </div>
+
+      <!-- Enlist and Launch Button -->
+      <button class="master-btn" id="btn-launch" style="width:100%; padding:13px; font-size:0.92rem; margin-top:4px;">
+        ENLIST PILOT &amp; LAUNCH MISSION 🚀
       </button>
-      <div style="font-size:0.65rem; color:#64748b; letter-spacing:1.5px;">
-        GUIDED CONCUSSION MISSILES [X / R-CLICK] &bull; 10 SECTORS &bull; SELECT DIFFICULTY ABOVE
+    </div>
+
+    <!-- Right Column: 3D Viewport Backdrop Stage -->
+    <div id="intro-stage-view">
+      <div style="pointer-events:none;">
+        <div style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:4px; color:#f59e0b; margin-bottom:4px;">
+          PROJECT PHI-FIGHTER // GREEK LETTER Φ
+        </div>
+        <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:#94a3b8; letter-spacing:2px;">
+          10 CELESTIAL SECTORS CAMPAIGN &bull; AUTONOMOUS DOGFIGHTING AI
+        </div>
+      </div>
+
+      <!-- Center Vector Holographic Emblem (4K Ultra-Sharp SVG Overlay) -->
+      <div id="intro-vector-hologram" style="left: calc(100% - 300px);">
+        <svg viewBox="0 0 500 500" width="100%" height="100%" style="overflow:visible;">
+          <defs>
+            <filter id="holo-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3.5" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f59e0b" />
+              <stop offset="50%" stop-color="#fef08a" />
+              <stop offset="100%" stop-color="#d97706" />
+            </linearGradient>
+            <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff" />
+              <stop offset="100%" stop-color="#38bdf8" />
+            </linearGradient>
+          </defs>
+          <circle cx="250" cy="250" r="225" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 8" fill="none" opacity="0.65" />
+          <circle cx="250" cy="250" r="205" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="14 4" fill="none" opacity="0.55" />
+          <circle cx="250" cy="250" r="165" stroke="#00f0ff" stroke-width="2.5" fill="none" opacity="0.85" filter="url(#holo-glow)" />
+          
+          <path d="M 250,250 A 25 25 0 0 1 275,250 A 40 40 0 0 1 250,290 A 65 65 0 0 1 185,250 A 105 105 0 0 1 250,145 A 170 170 0 0 1 420,250" 
+                stroke="url(#gold-grad)" stroke-width="2.5" fill="none" opacity="0.8" stroke-dasharray="3 3" filter="url(#holo-glow)" />
+
+          <line x1="25" y1="250" x2="475" y2="250" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
+          <line x1="250" y1="25" x2="250" y2="475" stroke="#38bdf8" stroke-width="1.2" opacity="0.45" stroke-dasharray="3 6" />
+          
+          <g id="svg-phi-glyph" filter="url(#holo-glow)">
+            <ellipse cx="250" cy="250" rx="112" ry="112" stroke="url(#cyan-grad)" stroke-width="14" fill="none" />
+            <line x1="250" y1="65" x2="250" y2="435" stroke="url(#cyan-grad)" stroke-width="14" stroke-linecap="round" />
+            <line x1="205" y1="65" x2="295" y2="65" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
+            <line x1="205" y1="435" x2="295" y2="435" stroke="url(#cyan-grad)" stroke-width="11" stroke-linecap="square" />
+          </g>
+
+          <text x="250" y="470" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="11" fill="#f59e0b" letter-spacing="3">Φ = 1.6180339887...</text>
+          <text x="250" y="42" text-anchor="middle" font-family="'Share Tech Mono', monospace" font-size="10" fill="#38bdf8" letter-spacing="2">SACRED RATIO HARMONICS // 4K VECTOR</text>
+        </svg>
+      </div>
+
+      <div style="font-size:0.68rem; color:#64748b; font-family:'Share Tech Mono', monospace; letter-spacing:1.5px;">
+        ORDNANCE READY // RIGHT-CLICK OR [X] TO FIRE GUIDED MISSILES
       </div>
     </div>
   </div>
@@ -1509,9 +1882,87 @@
         <div id="cleared-next-planet" style="color:var(--amber-glow);">EARTH</div>
       </div>
     </div>
-    <button class="master-btn" id="btn-next-sector">
-      ENGAGE HYPERDRIVE 🌌
-    </button>
+
+    <!-- Classes Tutoring Promotion Box (Shown upon Campaign Completion) -->
+    <div class="classes-promotion-card" id="classes-tutoring-card" style="display:none;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+        <span style="font-size:1.6rem;">🎓</span>
+        <div>
+          <div style="font-family:'Orbitron', sans-serif; font-size:0.95rem; font-weight:bold; color:var(--amber-glow); letter-spacing:1.5px;">
+            ¿QUIERES CLASES PARTICULARES DE FÍSICA, MATEMÁTICAS O PROGRAMACIÓN?
+          </div>
+          <div style="font-size:0.75rem; color:#cbd5e1; margin-top:3px; font-family:'Share Tech Mono', monospace; line-height:1.45;">
+            Aprende a programar simulaciones 3D como este juego o domina tus asignaturas con clases personalizadas de <strong>Daniel Santander (Classes)</strong>.
+          </div>
+        </div>
+      </div>
+
+      <div class="classes-action-buttons">
+        <a id="btn-wa-contact" href="https://wa.me/4917676497440?text=Hola%20Daniel,%20acabo%20de%20completar%20Phi-Fighter%20y%20me%20gustar%C3%ADa%20consultar%20por%20clases%20particulares!" target="_blank" class="classes-btn whatsapp">
+          📱 CONTACTAR POR WHATSAPP (+49 176 76497440)
+        </a>
+        <button class="classes-btn email" id="btn-open-contact-modal">
+          ✉️ ENVIAR MENSAJE DIRECTO
+        </button>
+      </div>
+    </div>
+
+    <!-- Victory Actions -->
+    <div style="display:flex; gap:12px; justify-content:center; width:100%; max-width:680px; flex-wrap:wrap; margin-top:14px;">
+      <button class="master-btn" id="btn-download-skin" style="display:none; background:#0284c7; border-color:#38bdf8;">
+        🏆 DESCARGAR CREDENCIAL DE PILOTO [PNG]
+      </button>
+      <button class="master-btn" id="btn-next-sector">
+        ENGAGE HYPERDRIVE 🌌
+      </button>
+    </div>
+  </div>
+
+  <!-- Contact Form Modal -->
+  <div id="contact-modal">
+    <div class="contact-form-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-family:'Orbitron', sans-serif; font-size:1.0rem; color:#f59e0b; font-weight:bold; letter-spacing:2px;">
+          🎓 SOLICITAR CLASES // DANIEL SANTANDER
+        </div>
+        <button id="btn-close-contact-modal" style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <p style="font-size:0.75rem; color:#cbd5e1; margin:0; line-height:1.4;">
+        Envía tu consulta directamente al Prof. Daniel Santander (Classes) o escríbele a <strong>danisantander.urrutia@gmail.com</strong>.
+      </p>
+      <div>
+        <label class="dossier-field-label">TU NOMBRE</label>
+        <input type="text" id="contact-name" class="contact-input-field" placeholder="Tu nombre...">
+      </div>
+      <div>
+        <label class="dossier-field-label">CORREO ELECTRÓNICO</label>
+        <input type="email" id="contact-email" class="contact-input-field" placeholder="tu-email@ejemplo.com">
+      </div>
+      <div>
+        <label class="dossier-field-label">TELÉFONO / WHATSAPP</label>
+        <input type="text" id="contact-phone" class="contact-input-field" placeholder="+56 9... / +49...">
+      </div>
+      <div>
+        <label class="dossier-field-label">MATERIA O ASIGNATURA DE INTERÉS</label>
+        <select id="contact-subject" class="contact-input-field" style="background:#1e293b; color:#ffffff;">
+          <option value="Física Mecánica (Cinemática, Dinámica, Gravitación)">Física Mecánica (Cinemática, Dinámica, Gravitación)</option>
+          <option value="Electromagnetismo y Astrofísica">Electromagnetismo y Astrofísica</option>
+          <option value="Cálculo Diferencial, Integral y Álgebra">Cálculo Diferencial, Integral y Álgebra</option>
+          <option value="Programación 3D Web (Three.js, WebGL, Python)">Programación 3D Web (Three.js, WebGL, Python)</option>
+          <option value="Preparación Universitaria General">Preparación Universitaria General</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div>
+        <label class="dossier-field-label">MENSAJE O CONSULTA</label>
+        <textarea id="contact-message" class="contact-input-field" rows="3" placeholder="¿En qué te gustaría que te ayude?"></textarea>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+        <button class="classes-btn email" id="btn-send-contact-email" style="flex:1; justify-content:center;">
+          🚀 ENVIAR SOLICITUD DE CLASES
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- 5. GAME OVER MODAL -->
@@ -4314,9 +4765,24 @@
       } else {
         document.body.classList.remove('cinema-active');
         document.querySelector('#sector-cleared-modal h1').innerText = 'CAMPAIGN COMPLETE // ALL 10 SECTORS SECURED';
-        document.getElementById('cleared-subtitle').innerText = 'You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.';
+        document.getElementById('cleared-subtitle').innerText = `Outstanding piloting, Commander ${playerPilot.name.toUpperCase()}! You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.`;
         document.getElementById('cleared-score-stat').innerText = score;
         document.getElementById('cleared-next-planet').innerText = 'SOLAR SYSTEM SECURED';
+
+        // Display Tutoring Promotion and Skin Download Button
+        const tutoringCard = document.getElementById('classes-tutoring-card');
+        if (tutoringCard) tutoringCard.style.display = 'block';
+
+        const dlSkinBtn = document.getElementById('btn-download-skin');
+        if (dlSkinBtn) dlSkinBtn.style.display = 'inline-flex';
+
+        // Update WhatsApp message with player pilot name and score
+        const waBtn = document.getElementById('btn-wa-contact');
+        if (waBtn) {
+          const msg = encodeURIComponent(`Hola Daniel! Acabo de completar Project Phi-Fighter con el piloto "${playerPilot.name}" y un puntaje de ${score} PTS. Me gustaría consultar por clases particulares de Física / Matemáticas / Programación (Classes).`);
+          waBtn.href = `https://wa.me/4917676497440?text=${msg}`;
+        }
+
         document.getElementById('btn-next-sector').innerText = 'RESTART CAMPAIGN 🔄';
         document.getElementById('sector-cleared-modal').style.display = 'flex';
       }
@@ -4331,6 +4797,12 @@
         currentSectorIdx++;
         destroyedInSector = 0;
         playerShields = Math.min(100, playerShields + 50);
+
+        const tutoringCard = document.getElementById('classes-tutoring-card');
+        if (tutoringCard) tutoringCard.style.display = 'none';
+
+        const dlSkinBtn = document.getElementById('btn-download-skin');
+        if (dlSkinBtn) dlSkinBtn.style.display = 'none';
 
         const s = SECTORS[currentSectorIdx];
         buildSectorPlanet(s);
@@ -4473,6 +4945,12 @@
 
       transformationInProgress = true;
       document.getElementById('intro-screen').style.opacity = '0';
+      const holo = document.getElementById('intro-vector-hologram');
+      if (holo) {
+        holo.style.opacity = '0';
+        setTimeout(() => holo.style.display = 'none', 600);
+      }
+      phiGlyphGroup.visible = true;
       setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 600);
 
       morphHud.style.display = 'flex';

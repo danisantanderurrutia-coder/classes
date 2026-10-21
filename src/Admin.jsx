@@ -27,8 +27,19 @@ import {
   RotateCcw,
   Save,
   Award,
-  Zap
+  Zap,
+  Share2,
+  Download,
+  Eye
 } from 'lucide-react';
+
+const InstagramIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 import {
   DEFAULT_CURRENCY_TIERS,
   SUBJECT_COMPLEXITY_TIERS,
@@ -423,6 +434,19 @@ export default function Admin({ onBack }) {
   const [activeTab, setActiveTab] = useState('strategy');
   const [copiedId, setCopiedId] = useState(null);
   const [pipelineView, setPipelineView] = useState('kanban');
+
+  // Marketing & Social Studio State
+  const [adminInstaLang, setAdminInstaLang] = useState('en');
+  const [copiedMarketingKey, setCopiedMarketingKey] = useState(null);
+
+  const handleCopyMarketing = (key, text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopiedMarketingKey(key);
+        setTimeout(() => setCopiedMarketingKey(null), 2500);
+      });
+    }
+  };
 
   // Live Pricing State (synced with localStorage so Admin can tweak rates live)
   const [liveTiers, setLiveTiers] = useState(() => getCurrencyTiers());
@@ -933,7 +957,8 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             { id: 'whatsapp', label: '2. Cerrador Rápido WhatsApp (60s)', icon: MessageSquare },
             { id: 'crm', label: '3. Pipeline CRM & Control de Horas/Pagos', icon: Columns },
             { id: 'classifieds', label: '4. Clasificados (5 Países) & Avisos', icon: Globe },
-            { id: 'flyer', label: '5. Generador Flyer A4 Imprimible & Calle', icon: Printer }
+            { id: 'flyer', label: '5. Generador Flyer A4 Imprimible & Calle', icon: Printer },
+            { id: 'marketing', label: '6. Social Media & Instagram Kit (Marketing)', icon: Megaphone }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -2063,6 +2088,388 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 6: SOCIAL MEDIA & INSTAGRAM KIT (MARKETING STUDIO)            */}
+        {/* ================================================================= */}
+        {activeTab === 'marketing' && (
+          <div className="space-y-8 animate-fadeIn">
+            
+            {/* Header & Overview */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-400/30 text-pink-400 font-mono text-xs font-bold uppercase tracking-wider">
+                    <Megaphone className="w-3.5 h-3.5" />
+                    <span>Marketing Digital & Social Media Hub</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    Kit de Marketing para Redes Sociales & Difusión
+                  </h2>
+                  <p className="text-slate-400 text-xs sm:text-sm font-sans max-w-2xl leading-relaxed">
+                    Piezas publicitarias en Ultra HD (2160×2160 y 2400×1260) con textos persuasivos listos para copiar y publicar en Instagram, LinkedIn, WhatsApp y portales estudiantiles.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleCopyMarketing('web_link', BASE_SITE_URL)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 hover:border-sky-400/50 font-mono text-xs font-bold transition-all cursor-pointer shadow-sm"
+                  >
+                    {copiedMarketingKey === 'web_link' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                    <span>{copiedMarketingKey === 'web_link' ? '¡Link Copiado!' : 'Copiar Link Web'}</span>
+                  </button>
+                  <a
+                    href={BASE_SITE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all cursor-pointer shadow-sm"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Visitar Web en Vivo ↗</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Quick Marketing KPIs / Direct Asset Links */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1">
+                  <div className="text-[10px] font-mono uppercase text-pink-400 font-bold">Post Instagram (2160px)</div>
+                  <div className="text-white font-bold text-xs">Cuadrado 1:1 • Ultra HD Retina</div>
+                  <div className="text-[11px] text-slate-400">Inglés y Español disponibles</div>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1">
+                  <div className="text-[10px] font-mono uppercase text-sky-400 font-bold">Web Social Card (2400px)</div>
+                  <div className="text-white font-bold text-xs">Paisaje 1.91:1 • Open Graph</div>
+                  <div className="text-[11px] text-slate-400">Para WhatsApp, LinkedIn y Twitter</div>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1">
+                  <div className="text-[10px] font-mono uppercase text-emerald-400 font-bold">Copywriting Copilot</div>
+                  <div className="text-white font-bold text-xs">Textos con Emojis & Hashtags</div>
+                  <div className="text-[11px] text-slate-400">Copia directa con un solo clic</div>
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 1: INSTAGRAM POST STUDIO (ULTRA HD 2160x2160) */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-400/20">
+                    <InstagramIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Instagram Studio • Post Cuadrado 1:1</h3>
+                    <p className="text-xs text-slate-400">Gráfico de alta definición para Feed, Carruseles y Stories (sin términos en alemán).</p>
+                  </div>
+                </div>
+
+                {/* Language Switcher */}
+                <div className="inline-flex items-center gap-1 p-1 bg-slate-950 border border-slate-800 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setAdminInstaLang('en')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                      adminInstaLang === 'en'
+                        ? 'bg-sky-500 text-slate-950 shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🇬🇧 English Version
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAdminInstaLang('es')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                      adminInstaLang === 'es'
+                        ? 'bg-sky-500 text-slate-950 shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🇪🇸 Versión en Español
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left: 2160px Image Preview (5 cols) */}
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="relative group rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 aspect-square shadow-2xl">
+                    <img
+                      key={adminInstaLang}
+                      src={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                      alt={`Instagram Post Preview (${adminInstaLang.toUpperCase()})`}
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <a
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-4 py-2 rounded-xl bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-900 transition-all"
+                      >
+                        <Eye className="w-4 h-4 text-pink-400" />
+                        <span>Ver 2160px Ultra HD ↗</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Image specs & download buttons */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                      <span>Resolución: <b className="text-white">2160 × 2160 px</b> (Retina 2x)</span>
+                      <span>Formato: <b className="text-white">JPG 98% (4:4:4)</b></span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        download={adminInstaLang === 'es' ? 'Daniel_S_Santander_Urrutia_Instagram_Post_ES_2160x2160.jpg' : 'Daniel_S_Santander_Urrutia_Instagram_Post_EN_2160x2160.jpg'}
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-mono text-xs font-bold transition-all shadow-md shadow-pink-500/20"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Descargar Imagen ({adminInstaLang.toUpperCase()} 2160px)</span>
+                      </a>
+                      <a
+                        href={adminInstaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all"
+                        title="Abrir imagen completa en pestaña nueva"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Caption & Copywriting Copilot (7 cols) */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-pink-400">
+                      {adminInstaLang === 'en' ? '📝 Ready-to-Post Instagram Caption (English)' : '📝 Texto Listo para Publicar (Español)'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const captionEn = `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
+
+Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
+
+I offer specialized 1-on-1 mentorship designed to bridge the gap between abstract concepts and airtight mathematical proofs:
+🔬 PIAD Method™: From Physical Intuition & Free Body Diagrams to formal derivations
+🔭 14 Interactive 3D Simulators: Hands-on exploration of orbital mechanics, optics, wavefunctions & oscillators
+🎯 Exam Sprint Drills: Step-by-step scoring strategies to capture every partial credit point
+
+👨‍🏫 Mentor: Daniel S. Santander Urrutia
+🎓 Geophysicist (FCFM, Universidad de Chile) • Double M.Sc. (CAU Kiel, Germany)
+📍 Hannover & 1-on-1 Online Worldwide (Fluent English & Spanish)
+
+👉 Book your free 20-minute diagnostic session via link in bio!
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`;
+
+                        const captionEs = `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
+
+¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
+
+Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y redactar demostraciones impecables:
+🔬 Método PIAD™: Desde la intuición visual y diagramas DCL hasta el rigor matemático formal
+🔭 14 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y física cuántica
+🎯 Entrenamiento para Exámenes: Estrategias paso a paso para evitar errores algebraicos y asegurar todo el puntaje parcial
+
+👨‍🏫 Tutor: Daniel S. Santander Urrutia
+🎓 Geofísico (FCFM, Universidad de Chile) • Doble Máster en Ciencias (CAU Kiel, Alemania)
+📍 Hannover, Alemania y Clases Online para todo el mundo (100% en Español o Inglés)
+
+👉 Agenda tu sesión diagnóstica gratuita de 20 minutos en el enlace de la bio!
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`;
+
+                        handleCopyMarketing(adminInstaLang === 'en' ? 'caption_en' : 'caption_es', adminInstaLang === 'en' ? captionEn : captionEs);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 border border-pink-400/30 font-mono text-xs font-bold transition-all cursor-pointer"
+                    >
+                      {copiedMarketingKey === (adminInstaLang === 'en' ? 'caption_en' : 'caption_es') ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedMarketingKey === (adminInstaLang === 'en' ? 'caption_en' : 'caption_es') ? '¡Copiado!' : 'Copiar Texto Completo'}</span>
+                    </button>
+                  </div>
+
+                  {/* Caption Text Box */}
+                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 whitespace-pre-line leading-relaxed max-h-[380px] overflow-y-auto">
+                    {adminInstaLang === 'en' ? (
+                      `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
+
+Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
+
+I offer specialized 1-on-1 mentorship designed to bridge the gap between abstract concepts and airtight mathematical proofs:
+🔬 PIAD Method™: From Physical Intuition & Free Body Diagrams to formal derivations
+🔭 14 Interactive 3D Simulators: Hands-on exploration of orbital mechanics, optics, wavefunctions & oscillators
+🎯 Exam Sprint Drills: Step-by-step scoring strategies to capture every partial credit point
+
+👨‍🏫 Mentor: Daniel S. Santander Urrutia
+🎓 Geophysicist (FCFM, Universidad de Chile) • Double M.Sc. (CAU Kiel, Germany)
+📍 Hannover & 1-on-1 Online Worldwide (Fluent English & Spanish)
+
+👉 Book your free 20-minute diagnostic session via link in bio!
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`
+                    ) : (
+                      `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
+
+¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
+
+Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y redactar demostraciones impecables:
+🔬 Método PIAD™: Desde la intuición visual y diagramas DCL hasta el rigor matemático formal
+🔭 14 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y física cuántica
+🎯 Entrenamiento para Exámenes: Estrategias paso a paso para evitar errores algebraicos y asegurar todo el puntaje parcial
+
+👨‍🏫 Tutor: Daniel S. Santander Urrutia
+🎓 Geofísico (FCFM, Universidad de Chile) • Doble Máster en Ciencias (CAU Kiel, Alemania)
+📍 Hannover, Alemania y Clases Online para todo el mundo (100% en Español o Inglés)
+
+👉 Agenda tu sesión diagnóstica gratuita de 20 minutos en el enlace de la bio!
+🔗 danisantanderurrutia-coder.github.io/classes
+
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`
+                    )}
+                  </div>
+
+                  {/* Quick Hashtag Packs */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <span className="text-[11px] font-mono text-slate-500">Packs de Hashtags:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyMarketing('hash_physics', '#UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMTutoring #Hannover #MathTutor')}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px] border border-slate-700 transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      {copiedMarketingKey === 'hash_physics' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>#Physics & Math (EN)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyMarketing('hash_es', '#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #TutorSTEM')}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px] border border-slate-700 transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      {copiedMarketingKey === 'hash_es' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>#Física & Cálculo (ES)</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* SECTION 2: WEB SOCIAL CARD & OPEN GRAPH STUDIO (2400x1260) */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+              <div className="flex items-center gap-2.5 border-b border-slate-800 pb-4">
+                <div className="p-2 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-400/20">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Web Social Card Studio • Banner 1.91:1</h3>
+                  <p className="text-xs text-slate-400">Banner Open Graph oficial para WhatsApp, LinkedIn, Telegram y Twitter/X.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left: 2400x1260 Image Preview (6 cols) */}
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="relative group rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 aspect-[1200/630] shadow-2xl">
+                    <img
+                      src="./og_banner_preview.jpg"
+                      alt="Web Social Card Preview"
+                      className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <a
+                        href="./og_banner_preview.jpg"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-4 py-2 rounded-xl bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-900 transition-all"
+                      >
+                        <Eye className="w-4 h-4 text-sky-400" />
+                        <span>Ver 2400px Ultra HD ↗</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <a
+                      href="./og_banner_preview.jpg"
+                      download="Daniel_S_Santander_Urrutia_Social_Card_2400x1260.jpg"
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all shadow-md shadow-sky-500/20"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Descargar Web Social Card (2400x1260)</span>
+                    </a>
+                    <a
+                      href="./og_banner_preview.jpg"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all"
+                      title="Abrir imagen completa"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right: Broadcast message for WhatsApp & LinkedIn (6 cols) */}
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-sky-400">
+                      💬 Difusión para WhatsApp & LinkedIn
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const msg = `👋 ¡Hola a todos! Para quienes estén preparando asignaturas de Física y Cálculo este semestre:
+
+Daniel S. Santander Urrutia (Geofísico U. de Chile & Doble Máster en Ciencias CAU Kiel, radicado en Hannover) abrió cupos de mentoría individual 1-a-1:
+
+🔹 Cálculo Diferencial, Integral, Multivariable y EDOs
+🔹 Mecánica Clásica, Electromagnetismo, Termodinámica y Cuántica
+🔹 14 Simuladores físicos interactivos en tiempo real con DCL
+🔹 Método PIAD™: De la intuición física a la demostración matemática formal
+
+Incluye sesión diagnóstica inicial gratuita de 20 minutos para revisar temarios y fijar el plan de estudio:
+👉 ${BASE_SITE_URL}`;
+                        handleCopyMarketing('wa_broadcast', msg);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 border border-sky-400/30 font-mono text-xs font-bold transition-all cursor-pointer"
+                    >
+                      {copiedMarketingKey === 'wa_broadcast' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedMarketingKey === 'wa_broadcast' ? '¡Copiado!' : 'Copiar Mensaje'}</span>
+                    </button>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 whitespace-pre-line leading-relaxed">
+                    {`👋 ¡Hola a todos! Para quienes estén preparando asignaturas de Física y Cálculo este semestre:
+
+Daniel S. Santander Urrutia (Geofísico U. de Chile & Doble Máster en Ciencias CAU Kiel, radicado en Hannover) abrió cupos de mentoría individual 1-a-1:
+
+🔹 Cálculo Diferencial, Integral, Multivariable y EDOs
+🔹 Mecánica Clásica, Electromagnetismo, Termodinámica y Cuántica
+🔹 14 Simuladores físicos interactivos en tiempo real con DCL
+🔹 Método PIAD™: De la intuición física a la demostración matemática formal
+
+Incluye sesión diagnóstica inicial gratuita de 20 minutos para revisar temarios y fijar el plan de estudio:
+👉 ${BASE_SITE_URL}`}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </div>
         )}
       </div>

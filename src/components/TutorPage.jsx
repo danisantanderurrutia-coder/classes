@@ -30,22 +30,8 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-const InstagramIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
-
 export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
   const [copiedLink, setCopiedLink] = useState(false);
-  const [instaLang, setInstaLang] = useState(lang === 'es' ? 'es' : 'en');
-
-  const currentInstaImg = instaLang === 'es' ? './instagram_post_es.jpg' : './instagram_post_en.jpg';
-  const currentInstaDownload = instaLang === 'es' 
-    ? 'Daniel_S_Santander_Urrutia_Instagram_Post_ES_2160x2160.jpg'
-    : 'Daniel_S_Santander_Urrutia_Instagram_Post_EN_2160x2160.jpg';
 
   const handleCopyLink = () => {
     const shareUrl = 'https://danisantanderurrutia-coder.github.io/classes/';
@@ -438,27 +424,27 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
         </div>
 
         {/* ========================================================= */}
-        {/* OFFICIAL SOCIAL CARDS & INSTAGRAM KIT                     */}
+        {/* OFFICIAL WEB SOCIAL CARD (SHARING BANNER)                 */}
         {/* ========================================================= */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 text-white space-y-8 shadow-2xl relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 text-white space-y-6 shadow-2xl relative overflow-hidden">
           {/* Ambient light glow */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/10 blur-[90px] pointer-events-none rounded-full" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 blur-[90px] pointer-events-none rounded-full" />
 
           {/* Section Heading */}
-          <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
-            <div className="space-y-1.5">
+          <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-5">
+            <div className="space-y-1">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/30 text-sky-400 font-mono text-xs font-bold uppercase tracking-wider">
                 <Share2 className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Official Shareable Brand Kit' : 'Kit Oficial de Difusión para Redes'}</span>
+                <span>{lang === 'en' ? 'Official Shareable Social Card' : 'Tarjeta Oficial de Presentación & Difusión'}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                {lang === 'en' ? 'Social Cards & Instagram Media Kit' : 'Social Cards & Kit Gráfico para Instagram'}
+                {lang === 'en' ? 'Digital Social Card & Web Preview' : 'Tarjeta Social Digital & Vista Previa Web'}
               </h2>
               <p className="text-slate-400 text-xs sm:text-sm font-sans max-w-2xl leading-relaxed">
                 {lang === 'en'
-                  ? 'Official high-resolution banners and graphics ready to share across WhatsApp, LinkedIn, Twitter/X, and Instagram feeds or stories.'
-                  : 'Tarjetas gráficas oficiales en alta resolución listas para compartir en WhatsApp, LinkedIn, Twitter/X, posts de Instagram o historias.'}
+                  ? 'Official high-resolution banner generated for instant rich link previews across WhatsApp, LinkedIn, Telegram, and Twitter/X.'
+                  : 'Banner oficial en ultra alta resolución optimizado para vistas previas instantáneas al compartir enlaces por WhatsApp, LinkedIn, Telegram y Twitter/X.'}
               </p>
             </div>
 
@@ -474,173 +460,60 @@ export const TutorPage = ({ lang = 'es', onOpenBooking, navigateTo }) => {
             </button>
           </div>
 
-          {/* 2-Column Grid: Web Card (2400x1260) & Instagram Post (2160x2160) */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            {/* Left Card: Web Banner (Open Graph / WhatsApp / LinkedIn) - 7 cols */}
-            <div className="lg:col-span-7 bg-slate-950/80 rounded-2xl p-5 border border-slate-800 space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-white font-bold text-sm font-mono">
-                    <Globe className="w-4 h-4 text-sky-400" />
-                    <span>{lang === 'en' ? 'Web Social Card (Open Graph)' : 'Tarjeta Social Web (Open Graph)'}</span>
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-400/30 font-bold">
-                    2400 × 1260 px • Ultra HD (1.91:1)
-                  </span>
-                </div>
-
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                  {lang === 'en'
-                    ? 'Optimized high-resolution banner generated for instant rich previews when pasting links on WhatsApp, LinkedIn, Telegram, and Twitter/X.'
-                    : 'Banner oficial en ultra alta resolución para vistas previas instantáneas al pegar el enlace en WhatsApp, LinkedIn, Telegram y Twitter/X.'}
-                </p>
-
-                {/* Image Preview Container */}
-                <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-[1200/630]">
-                  <img
-                    src="./og_banner_preview.jpg"
-                    alt="Math & Physics Classes • Social Preview Card"
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <a
-                      href="./og_banner_preview.jpg"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3.5 py-1.5 rounded-lg bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-1.5 hover:bg-slate-900"
-                    >
-                      <Eye className="w-3.5 h-3.5 text-sky-400" />
-                      <span>{lang === 'en' ? 'View Full Resolution' : 'Ver en Alta Resolución'}</span>
-                    </a>
-                  </div>
-                </div>
+          {/* Web Social Card Showcase */}
+          <div className="relative z-10 bg-slate-950/80 rounded-2xl p-5 sm:p-6 border border-slate-800 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-white font-bold text-sm font-mono">
+                <Globe className="w-4 h-4 text-sky-400" />
+                <span>{lang === 'en' ? 'Open Graph Banner • 2400 × 1260 px' : 'Banner Open Graph • 2400 × 1260 px'}</span>
               </div>
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-sky-500/10 text-sky-400 border border-sky-400/30 font-bold uppercase tracking-wider">
+                Ultra HD Retina • 1.91:1 Landscape
+              </span>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                <a
-                  href="./og_banner_preview.jpg"
-                  download="Daniel_S_Santander_Urrutia_Social_Card_2400x1260.jpg"
-                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all shadow-md shadow-sky-500/20"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Download Web Banner' : 'Descargar Banner Web'}</span>
-                </a>
+            {/* Image Preview Container */}
+            <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-[1200/630] max-w-4xl mx-auto shadow-2xl">
+              <img
+                src="./og_banner_preview.jpg"
+                alt="Math & Physics Classes • Social Preview Card"
+                className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <a
                   href="./og_banner_preview.jpg"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs font-bold border border-slate-700 transition-all"
-                  title="Open full resolution in new tab"
+                  className="px-4 py-2 rounded-xl bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-900 transition-all"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Open' : 'Abrir'}</span>
+                  <Eye className="w-4 h-4 text-sky-400" />
+                  <span>{lang === 'en' ? 'View 2400px Full Resolution ↗' : 'Ver en 2400px Ultra HD ↗'}</span>
                 </a>
               </div>
             </div>
 
-            {/* Right Card: Instagram Post (Square 2160x2160 Ultra HD) - 5 cols */}
-            <div className="lg:col-span-5 bg-slate-950/80 rounded-2xl p-5 border border-slate-800 space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-white font-bold text-sm font-mono">
-                    <InstagramIcon className="w-4 h-4 text-pink-400" />
-                    <span>{lang === 'en' ? 'Instagram Square Post' : 'Post Cuadrado para Instagram'}</span>
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-500/10 text-pink-400 border border-pink-400/30 font-bold">
-                    2160 × 2160 px • Ultra HD (1:1)
-                  </span>
-                </div>
-
-                {/* Language Switcher Tabs for Instagram Card */}
-                <div className="flex items-center justify-between gap-2 pt-1 pb-0.5">
-                  <span className="text-[11px] font-mono text-slate-400 font-semibold">
-                    {lang === 'en' ? 'Select Language Version:' : 'Seleccionar Idioma:'}
-                  </span>
-                  <div className="inline-flex items-center gap-1 p-1 bg-slate-900 border border-slate-800 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() => setInstaLang('en')}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
-                        instaLang === 'en'
-                          ? 'bg-sky-500 text-slate-950 shadow'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      🇬🇧 English
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setInstaLang('es')}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
-                        instaLang === 'es'
-                          ? 'bg-sky-500 text-slate-950 shadow'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      🇪🇸 Español
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                  {instaLang === 'en'
-                    ? 'Ultra-sharp 2160×2160 Retina post in pure English: PIAD Method™, 14 simulators, partial credit mastery, and free diagnostic session.'
-                    : 'Gráfico 2160×2160 Retina en español: Método PIAD™, 14 simuladores, resolución paso a paso y sesión diagnóstica gratuita.'}
-                </p>
-
-                {/* Image Preview Container */}
-                <div className="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-square max-w-[340px] mx-auto shadow-inner">
-                  <img
-                    key={currentInstaImg}
-                    src={currentInstaImg}
-                    alt={`Math & Physics Classes • Instagram Post Preview (${instaLang.toUpperCase()})`}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <a
-                      href={currentInstaImg}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3.5 py-1.5 rounded-lg bg-slate-900/90 text-white font-mono text-xs font-bold border border-white/20 flex items-center gap-1.5 hover:bg-slate-900"
-                    >
-                      <Eye className="w-3.5 h-3.5 text-pink-400" />
-                      <span>{lang === 'en' ? 'View 2160px Full Res' : 'Ver en 2160px Ultra HD'}</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                <a
-                  href={currentInstaImg}
-                  download={currentInstaDownload}
-                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-mono text-xs font-bold transition-all shadow-md shadow-pink-500/20"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>
-                    {lang === 'en'
-                      ? `Download (${instaLang.toUpperCase()} 2160px)`
-                      : `Descargar (${instaLang.toUpperCase()} 2160px)`}
-                  </span>
-                </a>
-                <a
-                  href={currentInstaImg}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs font-bold border border-slate-700 transition-all"
-                  title="Open full resolution in new tab"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Open' : 'Abrir'}</span>
-                </a>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+              <a
+                href="./og_banner_preview.jpg"
+                download="Daniel_S_Santander_Urrutia_Social_Card_2400x1260.jpg"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold transition-all shadow-md shadow-sky-500/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Download Social Card (JPG)' : 'Descargar Tarjeta Social (JPG)'}</span>
+              </a>
+              <a
+                href="./og_banner_preview.jpg"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs font-bold border border-slate-700 transition-all"
+                title="Open full resolution in new tab"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? 'Open in New Tab' : 'Abrir en Pestaña Nueva'}</span>
+              </a>
             </div>
-
           </div>
         </div>
 

@@ -1674,7 +1674,6 @@ export default function PhysicsLab({
   const lastTimeRef = useRef(performance.now());
 
   const handleSelectProblem = (probId) => {
-    setViewMode('benchmarks');
     const prob = LAB_PROBLEMS.find((p) => p.id === probId) || LAB_PROBLEMS[0];
     setSelectedId(prob.id);
     setParams(prob.defaults);

@@ -72,6 +72,15 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
 );
 const Github = GithubIcon;
 
+// Safe asset URL resolver for GitHub Pages, custom domains, and standalone HTML
+export const getAssetUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  const clean = url.replace(/^\//, '');
+  const base = import.meta.env.BASE_URL || './';
+  return `${base}${clean}`;
+};
+
 // Safe React Error Boundary to prevent white screen crashes
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -116,6 +125,98 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// Academic Discipline Filter Tabs (Cleanly separating Mathematics from Physics)
+const COURSE_FILTER_TABS = [
+  {
+    id: 'all',
+    icon: '🌌',
+    labelEn: 'All Subjects',
+    labelEs: 'Todas las Materias',
+    count: 12,
+    badgeEn: 'Full 12-Course Spectrum',
+    badgeEs: '12 Materias',
+    activeClass: 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-slate-900/20',
+    countClass: 'bg-white/20 text-white'
+  },
+  {
+    id: 'math',
+    icon: '📐',
+    labelEn: 'Higher Mathematics',
+    labelEs: 'Matemáticas Universitarias',
+    count: 3,
+    badgeEn: 'Calculus I–III • Linear Algebra • Proofs',
+    badgeEs: 'Cálculo I–III • Álgebra • Demostraciones',
+    activeClass: 'bg-sky-600 text-white border-sky-600 shadow-md shadow-sky-600/20 ring-2 ring-sky-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'physics',
+    icon: '⚡',
+    labelEn: 'Classical Physics & Mechanics',
+    labelEs: 'Física Clásica & Mecánica',
+    count: 3,
+    badgeEn: 'General Physics • Dynamics • Maxwell',
+    badgeEs: 'Física General • Mecánica • Maxwell',
+    activeClass: 'bg-amber-600 text-white border-amber-600 shadow-md shadow-amber-600/20 ring-2 ring-amber-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'earth',
+    icon: '🌍',
+    labelEn: 'Atmosphere & Earth Sciences',
+    labelEs: 'Atmósfera, Suelos & Geofísica',
+    count: 2,
+    badgeEn: 'Meteorology • Porous Media • SEV',
+    badgeEs: 'Física Atmosférica • Suelos • Sondeos SEV',
+    activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20 ring-2 ring-emerald-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'data',
+    icon: '💻',
+    labelEn: 'Scientific Data & Computing',
+    labelEs: 'Datos & Python Científico',
+    count: 1,
+    badgeEn: 'NumPy • SciPy • MATLAB',
+    badgeEs: 'NumPy • SciPy • MATLAB',
+    activeClass: 'bg-cyan-600 text-white border-cyan-600 shadow-md shadow-cyan-600/20 ring-2 ring-cyan-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'thesis',
+    icon: '🕳️',
+    labelEn: 'Thesis & Project Mentorship',
+    labelEs: 'Tesis & Titulación',
+    count: 1,
+    badgeEn: 'Sgr A* • Code Debugging • Defense',
+    badgeEs: 'Sagitario A* • Código • Defensa',
+    activeClass: 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/20 ring-2 ring-purple-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'quantum',
+    icon: '🧊',
+    labelEn: 'Quantum for Enthusiasts',
+    labelEs: 'Cuántica para Curiosos',
+    count: 1,
+    badgeEn: 'Conceptual • Curious • No Exams',
+    badgeEs: 'Aficionados • Sin Exámenes',
+    activeClass: 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/20 ring-2 ring-indigo-500/30',
+    countClass: 'bg-white/25 text-white'
+  },
+  {
+    id: 'ib',
+    icon: '🎓',
+    labelEn: 'IB Diploma (HL)',
+    labelEs: 'Bachillerato Internacional (IB)',
+    count: 1,
+    badgeEn: 'Math AA HL • Physics HL',
+    badgeEs: 'Math AA HL • Física HL',
+    activeClass: 'bg-rose-600 text-white border-rose-600 shadow-md shadow-rose-600/20 ring-2 ring-rose-500/30',
+    countClass: 'bg-white/25 text-white'
+  }
+];
+
 // Academic Curriculum Directory
 const ACADEMIC_COURSES = [
   {
@@ -131,7 +232,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 55,
     packagePrice: 390,
     packageHours: 8,
-    category: "bachelor",
+    category: "physics",
     syllabusEn: [
       "Kinematics and Newton's laws in 2D and 3D coordinate frames",
       "Work, kinetic energy theorem, conservative fields, and potential energy landscapes",
@@ -168,7 +269,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 60,
     packagePrice: 430,
     packageHours: 8,
-    category: "bachelor",
+    category: "physics",
     syllabusEn: [
       "Newtonian dynamics with non-inertial reference frames (Coriolis & centrifugal forces)",
       "Generalized coordinates, D'Alembert's principle, and Euler-Lagrange equations of the 2nd kind",
@@ -205,7 +306,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 60,
     packagePrice: 430,
     packageHours: 8,
-    category: "specialty",
+    category: "earth",
     syllabusEn: [
       "Equation of state for ideal gases, virtual temperature, and atmospheric hydrostatic balance",
       "Thermodynamics of moist air: Clausius-Clapeyron, adiabatic lapse rates, and tephigram analysis",
@@ -242,7 +343,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 55,
     packagePrice: 390,
     packageHours: 8,
-    category: "bachelor",
+    category: "math",
     syllabusEn: [
       "Multivariable differential calculus & gradient vector fields: ∇f, ∇·F, ∇×F",
       "Integral theorems of vector analysis: Green's, Gauss's (Divergence), and Stokes' theorems",
@@ -279,7 +380,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 60,
     packagePrice: 430,
     packageHours: 8,
-    category: "specialty",
+    category: "earth",
     syllabusEn: [
       "Physical properties of porous media: porosity, bulk density, grain size, and water retention curves (van Genuchten)",
       "Darcy's law, hydraulic conductivity, and Richards equation for unsaturated moisture flow",
@@ -316,7 +417,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 55,
     packagePrice: 390,
     packageHours: 8,
-    category: "bachelor",
+    category: "math",
     syllabusEn: [
       "Sets, logic, direct proofs, proof by contradiction, and mathematical induction",
       "Functions: Inversion, composition, domain-range restrictions, and asymptotic behavior",
@@ -353,7 +454,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 60,
     packagePrice: 430,
     packageHours: 8,
-    category: "bachelor",
+    category: "physics",
     syllabusEn: [
       "Electrostatics: Coulomb's law, electric field divergence (Gauss's law), electric potential, and Poisson/Laplace equations",
       "Conductors, dielectrics, capacitance, polarization vectors (P), and bound charge distributions",
@@ -390,7 +491,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 55,
     packagePrice: 390,
     packageHours: 8,
-    category: "bachelor",
+    category: "math",
     syllabusEn: [
       "Vector spaces, subspaces, linear independence, basis transformations, and coordinate vectors",
       "Linear mappings, kernel/image dimension theorem (rank-nullity), and matrix representations",
@@ -427,7 +528,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 45,
     packagePrice: 320,
     packageHours: 8,
-    category: "enthusiast",
+    category: "quantum",
     syllabusEn: [
       "The crisis of classical physics: Blackbody radiation, ultraviolet catastrophe, and Planck's quantum postulate",
       "Light as particles: Photoelectric effect, Einstein's photon hypothesis, and Compton scattering",
@@ -464,7 +565,7 @@ const ACADEMIC_COURSES = [
     rateHourly: 65,
     packagePrice: 470,
     packageHours: 8,
-    category: "specialty",
+    category: "data",
     syllabusEn: [
       "Vectorized scientific computing with NumPy arrays, matrix operations, and memory efficiency",
       "Data manipulation and experimental cleaning with Pandas and structured arrays",
@@ -1570,30 +1671,34 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {ACADEMIC_COURSES.slice(0, 3).map((course) => (
                     <div key={course.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-lg transition-all group">
-                      <div className="h-40 overflow-hidden relative">
-                        {/* Real Academic Photo (Pizarra clásica) */}
+                      <div className="h-44 overflow-hidden relative bg-slate-950">
+                        {/* AI Simulation / Vector Overlay (Back Layer) */}
+                        {course.simulationImage && (
+                          <img 
+                            src={getAssetUrl(course.simulationImage)} 
+                            alt={`${course.titleEn} Simulation`} 
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                            loading="lazy"
+                          />
+                        )}
+                        {/* Real Academic Photo (Front Layer, Crossfade on Hover) */}
                         <img 
                           src={course.image} 
                           alt={course.titleEn} 
-                          className="w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0" 
+                          className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out ${
+                            course.simulationImage ? 'group-hover:opacity-0 group-hover:scale-105' : ''
+                          }`} 
+                          loading="lazy"
                         />
-                        {/* AI Simulation / Vector Overlay (Crossfade on Hover) */}
-                        {course.simulationImage && (
-                          <img 
-                            src={course.simulationImage} 
-                            alt={`${course.titleEn} Simulation`} 
-                            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100" 
-                          />
-                        )}
-                        <div className="absolute top-3 left-3">
-                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs">
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs border border-white/10 shadow-sm">
                             {course.code}
                           </span>
                         </div>
                         {/* Interactive Mode Badge on Hover */}
                         {course.simulationImage && (
-                          <div className="absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                            <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-sky-300 border border-sky-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
+                          <div className="absolute bottom-2.5 right-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                            <span className="font-mono text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-950/90 text-sky-300 border border-sky-400/30 backdrop-blur-sm flex items-center gap-1 shadow-md">
                               <Sparkles className="w-2.5 h-2.5 text-sky-400" />
                               <span>{lang === 'en' ? 'Simulation Model' : 'Modelo Simulado'}</span>
                             </span>

@@ -874,8 +874,8 @@
 
     .cinema-breakdown-card {
       pointer-events: auto;
-      width: 440px;
-      max-width: 90vw;
+      width: 490px;
+      max-width: 92vw;
       background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(9, 14, 23, 0.96) 100%);
       border: 1px solid rgba(56, 189, 248, 0.5);
       border-top: 3px solid #f59e0b;
@@ -1736,7 +1736,105 @@
   color: #fff;
 }
 
+
+    /* ENLARGED PILOT AVATAR PROFILE VIEWPORT */
+    #avatar-preview-canvas {
+      width: 175px !important;
+      height: 175px !important;
+      border: 2px solid #00f0ff !important;
+      border-radius: 12px !important;
+      background: radial-gradient(circle at 50% 50%, #0f1d33 0%, #040812 100%) !important;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.9) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .dossier-preview-row {
+      display: flex !important;
+      gap: 14px !important;
+      align-items: center !important;
+      background: rgba(15, 23, 42, 0.6) !important;
+      border: 1px solid rgba(56, 189, 248, 0.25) !important;
+      border-radius: 10px !important;
+      padding: 10px 14px !important;
+    }
+
+    /* COMPACT SELECTOR BUTTONS AS REQUESTED */
+    .dossier-pill-btn {
+      padding: 3px 8px !important;
+      font-size: 0.62rem !important;
+      border-radius: 4px !important;
+      letter-spacing: 0.8px !important;
+    }
+
+    .skin-swatch-btn {
+      width: 22px !important;
+      height: 22px !important;
+      border-radius: 50% !important;
+    }
+
+    .skin-swatch-row {
+      gap: 6px !important;
+    }
+
+    .accessory-chip {
+      padding: 3px 8px !important;
+      font-size: 0.62rem !important;
+      border-radius: 4px !important;
+    }
+
+    .diff-btn {
+      padding: 4px 10px !important;
+      font-size: 0.65rem !important;
+      border-radius: 4px !important;
+    }
+
+    .dossier-field-label {
+      font-size: 0.6rem !important;
+      letter-spacing: 1.5px !important;
+      margin-bottom: 2px !important;
+      color: #94a3b8 !important;
+    }
+
+    .dossier-field-group {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2px !important;
+      margin-bottom: 2px !important;
+    }
+
+    /* CINEMATIC FORMULA KATEX STYLING */
+    #cb-formula-main {
+      font-size: 1.15rem !important;
+      color: #fbbf24 !important;
+      margin: 10px 0 !important;
+      padding: 10px 14px !important;
+      background: rgba(2, 6, 18, 0.85) !important;
+      border: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
+      text-align: center !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      min-height: 48px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #cb-formula-main .katex {
+      font-size: 1.15rem !important;
+      color: #fef08a !important;
+      text-shadow: 0 0 14px rgba(245, 158, 11, 0.7) !important;
+      white-space: nowrap !important;
+    }
+
+    #cb-formula-main .katex-display {
+      margin: 0.15em 0 !important;
+    }
+
 </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 </head>
 <body>
 
@@ -2030,7 +2128,7 @@
 
       <!-- Live Avatar Preview & Name Input Row -->
       <div class="dossier-preview-row">
-        <canvas id="avatar-preview-canvas" width="200" height="200" style="width:72px; height:72px; border-radius:6px;"></canvas>
+        <canvas id="avatar-preview-canvas" width="350" height="350" style="width:72px; height:72px; border-radius:6px;"></canvas>
         <div class="dossier-field-group" style="flex:1;">
           <label class="dossier-field-label">PILOT CALLSIGN</label>
           <input type="text" id="pilot-name-input" class="dossier-input-text" value="Daniel" maxlength="16" placeholder="Enter Callsign...">
@@ -5270,6 +5368,7 @@
         sector: 1,
         title: "SOLAR RADIATIVE FLUX & PHOTON MOMENTUM",
         formula: "Φ = L_☉ / (4π r²)   |   F_rad = (Φ A / c) · (1 + R)",
+        latex: "\\Phi = \\frac{L_\\odot}{4\\pi r^2} \\quad \\Big|\\quad F_{\\text{rad}} = \\frac{\\Phi A}{c}(1 + R)",
         metrics: [
           { label: "Irradiance (Φ)", val: "63,200 W/m²" },
           { label: "Photon Press.", val: "0.21 mPa" },
@@ -5283,6 +5382,7 @@
         sector: 2,
         title: "GENERAL RELATIVISTIC PERIHELION PRECESSION",
         formula: "Δφ = (6π G M_☉) / (c² a (1 - e²))   |   g_rel = -(GM/r²)(1 + 3L²/(r² c²))",
+        latex: "\\Delta\\phi = \\frac{6\\pi G M_\\odot}{c^2 a (1 - e^2)} \\quad \\Big|\\quad g_{\\text{rel}} = -\\frac{GM}{r^2}\\left(1 + \\frac{3L^2}{r^2 c^2}\\right)",
         metrics: [
           { label: "Perihelion Shift", val: "43.0″ / century" },
           { label: "Solar Curvature", val: "1.75 arcsec" },
@@ -5296,6 +5396,7 @@
         sector: 3,
         title: "HYDRODYNAMIC SUPER-ROTATION & RUNAWAY GREENHOUSE",
         formula: "v_zonal = 100 m/s   |   dP/dr = -ρ g   |   τ_visc = μ ∇²v",
+        latex: "\\frac{dP}{dr} = -\\rho g \\quad \\Big|\\quad \\omega_{\\text{atm}} \\approx 60 \\cdot \\omega_{\\text{planet}} \\quad \\Big|\\quad \\tau_{\\text{visc}} = \\mu \\nabla^2 v",
         metrics: [
           { label: "Surface Pressure", val: "93.0 bar (9.3 MPa)" },
           { label: "Zonal Wind Speed", val: "360 km/h" },
@@ -5309,6 +5410,7 @@
         sector: 4,
         title: "TIDAL LOCKING, GRAVITATIONAL TORQUE & ROTATIONAL SYNCHRONY",
         formula: "τ_tidal = -3 G M_⊕² R_m⁵ k₂ / (2 a⁶ Q)   |   T_orb = T_rot = 27.3 d",
+        latex: "\\tau_{\\text{tidal}} = -\\frac{3 G M_\\oplus^2 R_m^5 k_2}{2 a^6 Q} \\quad \\Big|\\quad T_{\\text{orb}} = T_{\\text{rot}} = 27.3\\text{ d}",
         metrics: [
           { label: "Tidal Dissipation (Q)", val: "26.5" },
           { label: "Orbital Radius (a)", val: "384,400 km" },
@@ -5322,6 +5424,7 @@
         sector: 5,
         title: "KEPLERIAN ORBITAL DECAY & ATMOSPHERIC ABLATION",
         formula: "v_orb = √(G M_⊕ / r)   |   F_d = -½ ρ v² C_d A   |   g = -G M_⊕ / r²",
+        latex: "v_{\\text{orb}} = \\sqrt{\\frac{G M_\\oplus}{r}} \\quad \\Big|\\quad F_d = -\\frac{1}{2} \\rho v^2 C_d A \\quad \\Big|\\quad g = -\\frac{G M_\\oplus}{r^2}",
         metrics: [
           { label: "Orbital Speed", val: "7.91 km/s" },
           { label: "Local Gravity (g)", val: "9.81 m/s²" },
@@ -5335,6 +5438,7 @@
         sector: 6,
         title: "ROCHE LIMIT DESTRUCTION & TIDAL DISRUPTION SHEAR",
         formula: "d_Roche ≈ 2.44 R_M (ρ_M / ρ_m)^(1/3)   |   F_tidal = 2 G M m r / R³",
+        latex: "d_{\\text{Roche}} \\approx 2.44\\, R_M \\left(\\frac{\\rho_M}{\\rho_m}\\right)^{1/3} \\quad \\Big|\\quad F_{\\text{tidal}} = \\frac{2 G M m r}{R^3}",
         metrics: [
           { label: "Phobos Altitude", val: "6,000 km" },
           { label: "Roche Distance", val: "5,470 km" },
@@ -5348,6 +5452,7 @@
         sector: 7,
         title: "N-BODY GRAVITATIONAL PERTURBATION & KIRKWOOD GAPS",
         formula: "d²r_i/dt² = -∑ (G m_j (r_i - r_j)) / |r_i - r_j|³   |   T_ast / T_Jup = p/q",
+        latex: "\\frac{d^2 \\mathbf{r}_i}{dt^2} = -\\sum_{j \\neq i} \\frac{G m_j (\\mathbf{r}_i - \\mathbf{r}_j)}{|\\mathbf{r}_i - \\mathbf{r}_j|^3} \\quad \\Big|\\quad \\frac{T_{\\text{ast}}}{T_{\\text{Jup}}} = \\frac{3}{1}",
         metrics: [
           { label: "Jovian Resonance", val: "3:1 Mean-Motion" },
           { label: "Orbital Period", val: "4.60 years" },
@@ -5361,6 +5466,7 @@
         sector: 8,
         title: "JOVIAN LORENTZ ACCELERATION & SYNCHROTRON BELT",
         formula: "F = q(E + v × B)   |   r_L = m v_⊥ / (|q| B)   |   ω_c = q B / m",
+        latex: "\\mathbf{F} = q(\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B}) \\quad \\Big|\\quad r_L = \\frac{m v_\\perp}{|q| B} \\quad \\Big|\\quad \\omega_c = \\frac{q B}{m}",
         metrics: [
           { label: "Magnetic Field (B)", val: "4.28 Gauss" },
           { label: "Larmor Radius (r_L)", val: "12.4 m" },
@@ -5374,6 +5480,7 @@
         sector: 9,
         title: "KEPLERIAN DIFFERENTIAL SHEAR & SPIRAL DENSITY WAVES",
         formula: "Ω(r) = √(G M_♄ / r³)   |   v_shear = -3/2 Ω r   |   λ_wave = 4π² G σ / κ²",
+        latex: "\\Omega(r) = \\sqrt{\\frac{G M_\\text{Sat}}{r^3}} \\quad \\Big|\\quad \\frac{d\\Omega}{dr} = -\\frac{3}{2}\\frac{\\Omega}{r} \\quad \\Big|\\quad \\lambda = \\frac{4\\pi^2 G \\sigma}{\\kappa^2}",
         metrics: [
           { label: "Cassini Division", val: "4,800 km wide" },
           { label: "Shear Gradient", val: "-1.8 m/s per km" },
@@ -5387,6 +5494,7 @@
         sector: 10,
         title: "GENERAL RELATIVITY: TIDAL SPAGHETTIFICATION & REDSHIFT",
         formula: "r_s = 2GM / c²   |   t' = t √(1 - r_s / r)   |   dF_g/dr = -2GMm / r³ → ∞",
+        latex: "r_s = \\frac{2GM}{c^2} \\quad \\Big|\\quad \\Delta t' = \\Delta t \\sqrt{1 - \\frac{r_s}{r}} \\quad \\Big|\\quad \\lim_{r \\to r_s} \\frac{dF_{\\text{tide}}}{dr} = \\infty",
         metrics: [
           { label: "Schwarzschild r_s", val: "29.5 km" },
           { label: "Grav. Redshift (z)", val: "+∞" },
@@ -5416,12 +5524,22 @@
 
       document.body.classList.add('cinema-active');
 
-      const data = SECTOR_PHYSICS_BREAKDOWNS[currentSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
-      const sector = SECTORS[currentSectorIdx];
+      const effectiveSectorIdx = (typeof window !== 'undefined' && window.forceSectorIdx !== undefined && window.forceSectorIdx !== null) ? window.forceSectorIdx : currentSectorIdx;
+      const data = SECTOR_PHYSICS_BREAKDOWNS[effectiveSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
+      const sector = SECTORS[effectiveSectorIdx] || SECTORS[0];
 
       document.getElementById('cb-sector-title').innerText = sector.title.toUpperCase();
       document.getElementById('cb-phenomenon-title').innerText = data.title;
-      document.getElementById('cb-formula-main').innerText = data.formula;
+            const formulaEl = document.getElementById('cb-formula-main');
+      if (window.katex && data.latex) {
+        try {
+          katex.render(data.latex, formulaEl, { displayMode: true, throwOnError: false });
+        } catch(err) {
+          formulaEl.innerText = data.formula;
+        }
+      } else {
+        formulaEl.innerText = data.formula;
+      }
       document.getElementById('cb-explanation').innerText = data.desc;
 
       const chipsCont = document.getElementById('cb-metrics-chips');
@@ -6479,6 +6597,8 @@
         e.currentTarget.classList.add('active');
         const sp = e.currentTarget.dataset.species;
         playerPilot.species = sp;
+        const spBadge = document.getElementById('avatar-species-badge');
+        if (spBadge) spBadge.innerText = sp.toUpperCase();
 
         // Auto-assign matching species canonical skin pigment
         const defaultSkins = {

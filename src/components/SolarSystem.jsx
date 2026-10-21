@@ -1931,18 +1931,38 @@ export default function SolarSystem({
   const [cinemaMode, setCinemaMode] = useState(true);
   const [letterbox, setLetterbox] = useState(false);
   const [audioOn, setAudioOn] = useState(false);
-  const [introDone, setIntroDone] = useState(true);
+  const [showIntroOverlay, setShowIntroOverlay] = useState(false);
+  const introDone = !showIntroOverlay;
   const [caption, setCaption] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [showPlanetDetails, setShowPlanetDetails] = useState(false);
 
+  // Trigger intro animation only when planetarium viewport is actually scrolled into view
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          animStateRef.current.hasEnteredViewport = true;
+          setShowIntroOverlay(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.22 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Safety timer to prevent any intro freeze under any circumstances
   useEffect(() => {
-    if (!introDone) {
-      const t = setTimeout(() => setIntroDone(true), 4500);
+    if (showIntroOverlay) {
+      const t = setTimeout(() => setShowIntroOverlay(false), 4400);
       return () => clearTimeout(t);
     }
-  }, [introDone]);
+  }, [showIntroOverlay]);
 
   // Optical Telemetry & Glare Control State (Controls the Sun, Bloom, Ambient and Features)
   const [viewerSettings, setViewerSettings] = useState(DEFAULT_VIEWER_SETTINGS);
@@ -1978,6 +1998,7 @@ export default function SolarSystem({
     viewVariant: 'option3',
     lineupZoomed: false,
     triggerIntroReplay: false,
+    hasEnteredViewport: false,
     isPaused: false,
     speedMultiplier: 1,
     archLevel: 'solar',
@@ -2010,12 +2031,12 @@ export default function SolarSystem({
     setIsRealScale(false);
     setViewVariant('option3');
     setLineupZoomed(false);
-    setIntroDone(false);
+    setShowIntroOverlay(true);
     animStateRef.current.isRealScale = false;
     animStateRef.current.viewVariant = 'option3';
     animStateRef.current.lineupZoomed = false;
     animStateRef.current.triggerIntroReplay = true;
-    animStateRef.current.isTransitioning = true;
+    animStateRef.current.isTransitioning = false;
   };
 
   useEffect(() => {
@@ -2256,19 +2277,27 @@ export default function SolarSystem({
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
+    const orbitVantageCam = new THREE.Vector3(-60, 42, 115);
+    const orbitVantageTarget = new THREE.Vector3(0, 0, 0);
+    camera.position.copy(orbitVantageCam);
+
+    let introPhase = 'waiting'; // 'waiting' -> 'orbiting' -> 'swooping' -> 'done'
+    let introTimer = 0.0;
+    let alignBlend = 0.0; // Starts 0.0: all planets orbit naturally in 3D!
+
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 1.5;
     controls.maxDistance = 65000;
     controls.maxPolarAngle = Math.PI / 2 + 0.15;
-    controls.target.set(0, 0, 0);
+    controls.target.copy(orbitVantageTarget);
 
     controls.addEventListener('start', () => {
-      if (isInitialIntro) {
-        isInitialIntro = false;
-        alignBlend = isShowcase ? 1.0 : 0.0;
-        setIntroDone(true);
+      if (introPhase === 'orbiting' || introPhase === 'swooping') {
+        introPhase = 'done';
+        alignBlend = 1.0;
+        setShowIntroOverlay(false);
       }
       animStateRef.current.isTransitioning = false;
       animStateRef.current.shot = null;
@@ -3490,15 +3519,6 @@ export default function SolarSystem({
     const tmpProj = new THREE.Vector3();
     const tmpWorld = new THREE.Vector3();
 
-    // Start directly in front of the horizontal planet lineup with courses visible!
-    const initTanHalfFov = Math.tan(THREE.MathUtils.degToRad(20));
-    const initEffAspect = Math.max(1.15, (container.clientWidth || 1200) / (container.clientHeight || 700));
-    const initCamDist = Math.max(38.0, 32.5 / (initTanHalfFov * initEffAspect));
-    camera.position.set(0, 1.35, initCamDist);
-    controls.target.set(0, -0.55, 0);
-
-    let alignBlend = 1.0; // 1.0 = Immediately in 100% Horizontal Planet Lineup with courses!
-    let isInitialIntro = false;
     let curSunLineupY = 0;
     let curSunLineupZ = 0;
     let curSunLineupScale = PLANET_SUBJECTS[0].lineupScale;
@@ -3511,15 +3531,25 @@ export default function SolarSystem({
       const delta = Math.min(clock.getDelta(), 0.1);
       const elapsedTime = clock.getElapsedTime();
 
-      // Check if user requested an intro replay
+      // Check if user requested an intro replay from the top bar button
       if (animStateRef.current.triggerIntroReplay) {
         animStateRef.current.triggerIntroReplay = false;
-        camera.position.set(-290, 90, 1140);
-        controls.target.set(210, 0, 241);
+        introPhase = 'orbiting';
+        introTimer = 0.0;
         alignBlend = 0.0;
-        isInitialIntro = true;
-        wasTransitioning = false;
-        animStateRef.current.isTransitioning = true;
+        camera.position.copy(orbitVantageCam);
+        controls.target.copy(orbitVantageTarget);
+        setShowIntroOverlay(true);
+      }
+
+      // Check if observatory has entered the viewport via IntersectionObserver
+      if (introPhase === 'waiting' && animStateRef.current.hasEnteredViewport) {
+        introPhase = 'orbiting';
+        introTimer = 0.0;
+        alignBlend = 0.0;
+        camera.position.copy(orbitVantageCam);
+        controls.target.copy(orbitVantageTarget);
+        setShowIntroOverlay(true);
       }
 
       const {
@@ -3536,33 +3566,13 @@ export default function SolarSystem({
 
       const isShowcase = currentVariant !== 'orbital' && !realScaleMode;
 
-      // Update target alignment factor:
-      // In initial intro: keep at 0 while camera approaches from deep space, then ease to 1 as camera nears the Solar System
-      let targetAlign = 0.0;
-      if (isShowcase) {
-        if (isInitialIntro) {
-          const introU = THREE.MathUtils.clamp(travel.t / Math.max(0.1, travel.dur), 0, 1);
-          if (introU < 0.52) {
-            targetAlign = 0.0;
-          } else {
-            targetAlign = THREE.MathUtils.smoothstep(introU, 0.52, 0.94);
-          }
-          if (introU >= 0.96) {
-            isInitialIntro = false;
-            targetAlign = 1.0;
-          }
-        } else {
-          targetAlign = 1.0;
-        }
+      // Update target alignment factor based on introPhase and mode:
+      if (introPhase === 'orbiting') {
+        alignBlend = 0.0;
+      } else if (introPhase === 'swooping') {
+        // alignBlend is handled smoothly by the swoop curve
       } else {
-        targetAlign = 0.0;
-        isInitialIntro = false;
-      }
-
-      // Smooth interpolation of alignment blend
-      if (isInitialIntro) {
-        alignBlend = targetAlign;
-      } else {
+        const targetAlign = isShowcase ? 1.0 : 0.0;
         alignBlend += (targetAlign - alignBlend) * Math.min(1.0, delta * 3.2);
         if (Math.abs(targetAlign - alignBlend) < 0.001) alignBlend = targetAlign;
       }
@@ -3881,7 +3891,7 @@ export default function SolarSystem({
       const shot = st.shot;
       const cineOn = st.cinemaMode;
       const bhRadiusNow = 7.0 * blackHoleGroup.scale.x;
-      const navKey = `${isInitialIntro}|${currentVariant}|${isLineupZoomed}|${currentLevel}|${currentActive.id}|${realScaleMode}|${shot}`;
+      const navKey = `${introPhase}|${currentVariant}|${isLineupZoomed}|${currentLevel}|${currentActive.id}|${realScaleMode}|${shot}`;
       const targetCenter = tmpTarget.set(0, 0, 0);
       const desiredCamPos = tmpDesired.set(0, 0, 0);
 
@@ -3949,15 +3959,54 @@ export default function SolarSystem({
       }
 
       let travelS = 0;
-      if (transitioning) {
+      if (introPhase === 'waiting') {
+        camera.position.copy(orbitVantageCam);
+        controls.target.copy(orbitVantageTarget);
+      } else if (introPhase === 'orbiting') {
+        introTimer += delta;
+        alignBlend = 0.0;
+        // Natural gentle camera orbital drift while user observes 3D orbits
+        camera.position.set(
+          orbitVantageCam.x + Math.sin(introTimer * 0.45) * 3.2,
+          orbitVantageCam.y + Math.cos(introTimer * 0.35) * 1.8,
+          orbitVantageCam.z + Math.sin(introTimer * 0.25) * 4.0
+        );
+        controls.target.copy(orbitVantageTarget);
+
+        if (introTimer >= 1.25) {
+          introPhase = 'swooping';
+          introTimer = 0.0;
+        }
+      } else if (introPhase === 'swooping') {
+        introTimer += delta;
+        const swoopDur = 2.4;
+        const u = Math.min(1.0, introTimer / swoopDur);
+        const s = u * u * u * (u * (u * 6 - 15) + 10);
+        travelS = s;
+
+        // Smoothly blend planets from orbit into horizontal line
+        alignBlend = THREE.MathUtils.smoothstep(s, 0.10, 0.94);
+
+        // Smooth curved camera swoop from orbit vantage to lineup view
+        const arcY = Math.sin(Math.PI * s) * 8.5;
+        camera.position.lerpVectors(orbitVantageCam, desiredCamPos, s);
+        camera.position.y += arcY;
+        controls.target.lerpVectors(orbitVantageTarget, targetCenter, s);
+
+        if (u >= 1.0) {
+          introPhase = 'done';
+          alignBlend = 1.0;
+          camera.position.copy(desiredCamPos);
+          controls.target.copy(targetCenter);
+          setShowIntroOverlay(false);
+        }
+      } else if (transitioning) {
         if (!wasTransitioning || navKey !== lastNavKey) {
           travel.t = 0;
           travel.p0.copy(camera.position);
           travel.t0.copy(controls.target);
           const dist = travel.p0.distanceTo(desiredCamPos);
-          if (isInitialIntro) {
-            travel.dur = 5.2; // 5.2s epic fly-in from deep space approaching the orbiting planets
-          } else if (isShowcase) {
+          if (isShowcase) {
             travel.dur = THREE.MathUtils.clamp(0.75 + dist * 0.015, 0.75, 1.35);
           } else {
             travel.dur = THREE.MathUtils.clamp(1.8 + 0.7 * Math.log10(1 + dist), 2.0, 4.8);
@@ -3969,26 +4018,7 @@ export default function SolarSystem({
         const s = u * u * u * (u * (u * 6 - 15) + 10);
         travelS = s;
 
-        if (isInitialIntro) {
-          // Curved Bezier swoop from deep space down to the front of the aligned Solar System
-          const len = travel.p0.distanceTo(desiredCamPos);
-          tmpDir.subVectors(desiredCamPos, travel.p0);
-          tmpSide.crossVectors(tmpDir, tmpUp.set(0, 1, 0));
-          if (tmpSide.lengthSq() < 1e-9) tmpSide.set(1, 0, 0);
-          tmpSide.normalize();
-          tmpCtrl.addVectors(travel.p0, desiredCamPos).multiplyScalar(0.5)
-            .addScaledVector(tmpUp.set(0, 1, 0), len * 0.14)
-            .addScaledVector(tmpSide, len * 0.10);
-          const ca = (1 - s) * (1 - s);
-          const cb = 2 * (1 - s) * s;
-          const cc = s * s;
-          camera.position.set(
-            ca * travel.p0.x + cb * tmpCtrl.x + cc * desiredCamPos.x,
-            ca * travel.p0.y + cb * tmpCtrl.y + cc * desiredCamPos.y,
-            ca * travel.p0.z + cb * tmpCtrl.z + cc * desiredCamPos.z
-          );
-          controls.target.lerpVectors(travel.t0, targetCenter, s);
-        } else if (isShowcase) {
+        if (isShowcase) {
           camera.position.lerpVectors(travel.p0, desiredCamPos, s);
           controls.target.lerpVectors(travel.t0, targetCenter, s);
         } else {
@@ -4014,7 +4044,6 @@ export default function SolarSystem({
         if (u >= 1) {
           st.isTransitioning = false;
           st.shot = null;
-          isInitialIntro = false;
         }
       } else {
         tmpDir.subVectors(targetCenter, prevFocalWorldPos);
@@ -5060,12 +5089,12 @@ export default function SolarSystem({
             </>
           )}
 
-          {/* Intro: fade from absolute black */}
-          {!introDone && (
+          {/* Intro: cinematic title overlay with soft vignette - see stars and 3D orbiting planets */}
+          {showIntroOverlay && (
             <div
-              className="absolute inset-0 z-40 bg-black/95 flex flex-col items-center justify-center pointer-events-none px-4 select-none"
-              style={{ animation: 'cineIntro 5.2s ease-in-out forwards', fontFamily: CINE_FONT }}
-              onAnimationEnd={() => setIntroDone(true)}
+              className="absolute inset-0 z-40 bg-gradient-to-t from-black/80 via-transparent to-black/60 flex flex-col items-center justify-center pointer-events-none px-4 select-none backdrop-blur-[1px]"
+              style={{ animation: 'cineIntro 4.2s ease-in-out forwards', fontFamily: CINE_FONT }}
+              onAnimationEnd={() => setShowIntroOverlay(false)}
             >
               {/* Epígrafe / Subtítulo: Observatory of the Cosmos */}
               <div className="flex items-center gap-2 mb-2 text-sky-400 text-[10px] sm:text-xs tracking-[0.45em] uppercase font-mono">

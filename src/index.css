@@ -55,9 +55,10 @@
 
 /* ===== Cinematic observatory overlays ===== */
 @keyframes cineIntro {
-  0%   { opacity: 1; }
-  55%  { opacity: 1; }
-  100% { opacity: 0; }
+  0%   { opacity: 0; transform: scale(0.96); }
+  20%  { opacity: 1; transform: scale(1.0); }
+  75%  { opacity: 1; transform: scale(1.0); }
+  100% { opacity: 0; transform: scale(1.02); }
 }
 @keyframes cineCaption {
   0%   { opacity: 0; transform: translateY(8px); letter-spacing: 0.1em; }

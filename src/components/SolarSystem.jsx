@@ -1931,10 +1931,18 @@ export default function SolarSystem({
   const [cinemaMode, setCinemaMode] = useState(true);
   const [letterbox, setLetterbox] = useState(false);
   const [audioOn, setAudioOn] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
+  const [introDone, setIntroDone] = useState(true);
   const [caption, setCaption] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [showPlanetDetails, setShowPlanetDetails] = useState(false);
+
+  // Safety timer to prevent any intro freeze under any circumstances
+  useEffect(() => {
+    if (!introDone) {
+      const t = setTimeout(() => setIntroDone(true), 4500);
+      return () => clearTimeout(t);
+    }
+  }, [introDone]);
 
   // Optical Telemetry & Glare Control State (Controls the Sun, Bloom, Ambient and Features)
   const [viewerSettings, setViewerSettings] = useState(DEFAULT_VIEWER_SETTINGS);
@@ -1976,7 +1984,7 @@ export default function SolarSystem({
     isRealScale: false,
     isGalacticDriftActive: true,
     galacticAngle: 0.85,
-    isTransitioning: true,
+    isTransitioning: false,
     cinemaMode: true,
     shot: null,
     autoOrbit: false,
@@ -2257,6 +2265,11 @@ export default function SolarSystem({
     controls.target.set(0, 0, 0);
 
     controls.addEventListener('start', () => {
+      if (isInitialIntro) {
+        isInitialIntro = false;
+        alignBlend = isShowcase ? 1.0 : 0.0;
+        setIntroDone(true);
+      }
       animStateRef.current.isTransitioning = false;
       animStateRef.current.shot = null;
       animStateRef.current.autoOrbit = false;
@@ -3477,12 +3490,15 @@ export default function SolarSystem({
     const tmpProj = new THREE.Vector3();
     const tmpWorld = new THREE.Vector3();
 
-    // Intro: Start deep in space behind/above the Solar System, flying in towards the orbiting planets
-    camera.position.set(-290, 90, 1140);
-    controls.target.set(210, 0, 241);
+    // Start directly in front of the horizontal planet lineup with courses visible!
+    const initTanHalfFov = Math.tan(THREE.MathUtils.degToRad(20));
+    const initEffAspect = Math.max(1.15, (container.clientWidth || 1200) / (container.clientHeight || 700));
+    const initCamDist = Math.max(38.0, 32.5 / (initTanHalfFov * initEffAspect));
+    camera.position.set(0, 1.35, initCamDist);
+    controls.target.set(0, -0.55, 0);
 
-    let alignBlend = 0.0; // 0.0 = 100% Keplerian Orbit, 1.0 = 100% 7-Planet Lineup
-    let isInitialIntro = true;
+    let alignBlend = 1.0; // 1.0 = Immediately in 100% Horizontal Planet Lineup with courses!
+    let isInitialIntro = false;
     let curSunLineupY = 0;
     let curSunLineupZ = 0;
     let curSunLineupScale = PLANET_SUBJECTS[0].lineupScale;
@@ -3871,7 +3887,7 @@ export default function SolarSystem({
 
       const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(20));
       const effAspect = Math.max(1.15, camera.aspect);
-      const lineupCamDist = Math.max(30.0, 26.2 / (tanHalfFov * effAspect));
+      const lineupCamDist = Math.max(38.0, 32.5 / (tanHalfFov * effAspect));
 
       solarSystemGroup.getWorldPosition(tmpSun);
 

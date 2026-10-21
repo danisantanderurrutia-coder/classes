@@ -253,15 +253,16 @@
     /* Unified Top Imperial Avionics Console */
     .imperial-top-bar {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       background: linear-gradient(180deg, #111827 0%, #090e17 100%);
       border: 1px solid #283347;
       border-bottom: 2px solid #3b4861;
       border-radius: 6px;
-      padding: 6px 14px;
+      padding: 4px 10px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 20px rgba(0, 0, 0, 0.85);
-      gap: 12px;
+      gap: 8px;
     }
 
     .brand-section {
@@ -1021,16 +1022,19 @@
     }
 
     #pilot-dossier-panel {
-      width: 480px;
+      width: 440px;
       max-width: 95vw;
       height: 100%;
+      max-height: 100vh;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #0284c7 #0b1329;
       background: rgba(10, 16, 30, 0.96);
       border-right: 1px solid #283347;
-      padding: 24px 28px;
+      padding: 14px 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 7px;
       z-index: 95;
       box-shadow: 12px 0 45px rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(14px);
@@ -1976,14 +1980,16 @@
         <div class="panel-bay-header" style="justify-content: center;">
           <span>TACTICAL FLIGHT COMPUTER</span>
         </div>
-        <div class="mission-formula" id="ui-formula">Φ = L_☉ / (4π r²)</div>
-        <p class="mission-desc" id="ui-tip">
-          The symbol <strong>Φ (Phi)</strong> designates radiant energy flux. The hexagonal solar wings harvest stellar irradiance to power the twin ion propulsion manifolds.
+        <div id="ui-tactical-status-badge" style="font-size:0.75rem; color:#38bdf8; font-family:'Orbitron', sans-serif; letter-spacing:2px; font-weight:bold; margin-bottom:3px;">
+          PATRULLA ORBITAL EN CURSO // ESCANEO TÁCTICO
+        </div>
+        <p class="mission-desc" id="ui-tip" style="font-size:0.72rem; line-height:1.35; color:#cbd5e1; margin:0 0 4px 0;">
+          ☀️ Alerta: Interceptores rebeldes detectados en la corona solar. Elimina los cazas para acceder a la telemetría astrofísica.
         </p>
-        <div style="font-size:0.68rem; color:#64748b; margin-top:3px;">
-          <span style="color:#ef4444;">■ Fg (Gravity)</span> &nbsp;|&nbsp; 
-          <span style="color:#38bdf8;">■ Ft (Thrust)</span> &nbsp;|&nbsp; 
-          <span style="color:#10b981;">■ v (Velocity)</span>
+        <div style="font-size:0.65rem; color:#64748b; margin-top:2px;">
+          <span style="color:#ef4444;">■ Fg (Gravedad)</span> &nbsp;|&nbsp; 
+          <span style="color:#38bdf8;">■ Ft (Empuje Iónico)</span> &nbsp;|&nbsp; 
+          <span style="color:#10b981;">■ v (Velocidad Neta)</span>
         </div>
       </div>
 
@@ -2024,7 +2030,7 @@
 
       <!-- Live Avatar Preview & Name Input Row -->
       <div class="dossier-preview-row">
-        <canvas id="avatar-preview-canvas" width="280" height="280"></canvas>
+        <canvas id="avatar-preview-canvas" width="200" height="200" style="width:72px; height:72px; border-radius:6px;"></canvas>
         <div class="dossier-field-group" style="flex:1;">
           <label class="dossier-field-label">PILOT CALLSIGN</label>
           <input type="text" id="pilot-name-input" class="dossier-input-text" value="Daniel" maxlength="16" placeholder="Enter Callsign...">
@@ -2121,13 +2127,15 @@
         🎖️ <strong>STARFIGHTER UNLOCK PROGRESSION:</strong> Clear campaign on CADET (Easy) to unlock Crimson Interceptor, on PILOT (Medium) for Shadow Spec-Ops, and on ACE (Hard) for Vader's TIE Advanced x1!
       </div>
 
-      <!-- Enlist and Launch Button -->
-      <button class="master-btn" id="btn-launch" style="width:100%; padding:13px; font-size:0.92rem; margin-top:4px;">
-        PLAY 🚀
-      </button>
-      <button class="dossier-pill-btn" id="btn-open-fleet-museum-dossier" style="position:relative; z-index:50; pointer-events:auto;" style="width:100%; margin-top:8px; padding:10px; background:linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(30, 41, 59, 0.8) 100%); border:1px solid #0284c7; color:#38bdf8; font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:1.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
-        <span>🛸</span> <span>ABRIR HANGAR ESPACIAL &amp; MUSEO (15 NAVES)</span>
-      </button>
+      <!-- Action Buttons Row -->
+      <div style="display:flex; gap:8px; margin-top:6px; align-items:stretch;">
+        <button class="master-btn" id="btn-launch" style="flex:1.4; padding:11px 16px; font-size:1.05rem; letter-spacing:2px; font-weight:bold; margin-top:0;">
+          PLAY 🚀
+        </button>
+        <button class="dossier-pill-btn" id="btn-open-fleet-museum-dossier" style="flex:1; padding:9px 12px; background:linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%); border:1px solid #0284c7; color:#38bdf8; font-family:'Orbitron', sans-serif; font-size:0.7rem; letter-spacing:1.2px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🛸</span> <span>HANGAR 3D</span>
+        </button>
+      </div>
     </div>
 
     <!-- Right Column: 3D Hangar Bay Inspection Viewport -->
@@ -5811,7 +5819,9 @@
         document.getElementById('ui-body-name').innerText = s.bodyName;
         document.getElementById('ui-gravity').innerText = `${s.g} m/s²`;
         document.getElementById('ui-vesc').innerText = `${s.vEsc.toFixed(1)} km/s`;
-        document.getElementById('ui-formula').innerText = s.formula;
+        // Formula hidden during flight; reserved exclusively for cinematic breakdown
+        const statBadge = document.getElementById('ui-tactical-status-badge');
+        if (statBadge) statBadge.innerText = `SECTOR ${s.level} // ${s.title.split(':')[1] || s.title}`;
         document.getElementById('ui-tip').innerHTML = s.tip;
         document.getElementById('cockpit-flux-num').innerText = `${s.flux} W/m²`;
 
@@ -8363,6 +8373,14 @@
     animate();
 
     // Resize Handler
+    
+    // Prevent default browser page scrolling on Arrow keys and Space
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code) || ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();

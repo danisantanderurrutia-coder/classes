@@ -33,18 +33,60 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
   const [iframeKey, setIframeKey] = useState(1);
   const gameContainerRef = useRef(null);
 
-  const toggleFullscreen = () => {
-    if (!gameContainerRef.current) return;
-    if (!document.fullscreenElement) {
-      gameContainerRef.current.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch(err => {
-        console.error('Error attempting to enable fullscreen:', err.message);
-      });
+  // Prevent browser window from scrolling when pressing arrow keys or Space while playing
+  React.useEffect(() => {
+    const handlePreventScroll = (e) => {
+      if (
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code) ||
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)
+      ) {
+        // Prevent background page from moving
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handlePreventScroll, { passive: false });
+    return () => window.removeEventListener('keydown', handlePreventScroll);
+  }, []);
+
+  // Lock background scrolling and listen to Escape key when in fullscreen
+  React.useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = 'hidden';
+      const handleEsc = (e) => {
+        if (e.key === 'Escape') {
+          exitFullscreenMode();
+        }
+      };
+      window.addEventListener('keydown', handleEsc);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleEsc);
+      };
     } else {
-      document.exitFullscreen().then(() => {
-        setIsFullscreen(false);
-      });
+      document.body.style.overflow = '';
+    }
+  }, [isFullscreen]);
+
+  const enterFullscreenMode = () => {
+    setIsFullscreen(true);
+    if (gameContainerRef.current && gameContainerRef.current.requestFullscreen) {
+      gameContainerRef.current.requestFullscreen().catch(() => {});
+    }
+  };
+
+  const exitFullscreenMode = () => {
+    setIsFullscreen(false);
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (isFullscreen) {
+      exitFullscreenMode();
+    } else {
+      enterFullscreenMode();
     }
   };
 
@@ -211,19 +253,45 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
           </div>
         )}
 
-        {/* Embedded Game Iframe Container */}
+        {/* Embedded Game Iframe Container (with robust Fullscreen Mode) */}
         <div 
           ref={gameContainerRef}
-          className="w-full bg-black rounded-2xl border-2 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden relative group transition-all"
-          style={{ height: '720px', minHeight: '520px', maxHeight: '85vh' }}
+          className={
+            isFullscreen
+              ? "fixed inset-0 z-[99999] w-screen h-screen bg-black flex flex-col overflow-hidden"
+              : "w-full bg-black rounded-2xl border-2 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden relative group transition-all"
+          }
+          style={isFullscreen ? { height: '100vh', width: '100vw' } : { height: '740px', minHeight: '560px', maxHeight: '88vh' }}
         >
-          <iframe
-            key={iframeKey}
-            src={getAssetUrl('/phi-fighter/index.html')}
-            className="w-full h-full border-0 block"
-            title="Project Phi-Fighter 3D Game"
-            allow="autoplay; fullscreen"
-          />
+          {/* Fullscreen Floating Header Bar */}
+          {isFullscreen && (
+            <div className="bg-slate-950/90 border-b border-white/10 px-4 py-2 flex items-center justify-between text-xs font-mono text-slate-300 shrink-0 z-50 backdrop-blur-md">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-bold text-amber-400">PROJECT PHI-FIGHTER</span>
+                <span className="hidden sm:inline text-slate-500">|</span>
+                <span className="hidden sm:inline text-slate-400">PANTALLA COMPLETA ACTIVA &bull; 60 FPS</span>
+              </div>
+              <button
+                onClick={exitFullscreenMode}
+                className="px-3 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white font-mono font-bold text-xs border border-rose-500/40 transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <Minimize2 className="w-3.5 h-3.5" />
+                <span>Salir de Pantalla Completa (ESC)</span>
+              </button>
+            </div>
+          )}
+
+          {/* Embedded Game Viewport */}
+          <div className="flex-1 w-full h-full relative">
+            <iframe
+              key={iframeKey}
+              src={getAssetUrl('/phi-fighter/index.html')}
+              className="w-full h-full border-0 block"
+              title="Project Phi-Fighter 3D Game"
+              allow="autoplay; fullscreen"
+            />
+          </div>
         </div>
 
         {/* Educational Physics Showcase */}

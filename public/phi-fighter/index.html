@@ -1936,6 +1936,8 @@
     }
 
     body:not(.cinema-active) .imperial-bottom-bar {
+      display: grid !important;
+      grid-template-columns: 270px 145px 1fr 270px !important;
       height: 102px !important;
       min-height: 102px !important;
       background: linear-gradient(180deg, #060b16 0%, #020409 100%) !important;
@@ -1944,6 +1946,14 @@
       gap: 10px !important;
       align-items: stretch !important;
       box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.95) !important;
+    }
+
+    @media (max-width: 1100px) {
+      body:not(.cinema-active) .imperial-bottom-bar {
+        grid-template-columns: 220px 125px 1fr 220px !important;
+        gap: 6px !important;
+        padding: 4px 6px !important;
+      }
     }
 
     body:not(.cinema-active) .imperial-panel-bay {
@@ -2011,6 +2021,56 @@
 
   <!-- 2D Physics Force Vector Canvas Overlay -->
   <canvas id="vector-canvas"></canvas>
+
+  <!-- Orbital Slingshot Escape Climax Overlay -->
+  <div id="slingshot-escape-overlay" style="display: none; position: absolute; top: 46px; bottom: 104px; left: 0; right: 0; pointer-events: none; z-index: 100; flex-direction: column; justify-content: space-between; padding: 24px 36px; background: radial-gradient(circle at center, rgba(15,23,42,0.15) 0%, rgba(2,6,23,0.72) 100%);">
+    <!-- Top Slingshot Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div style="background: rgba(10, 15, 26, 0.9); border: 1px solid rgba(56, 189, 248, 0.4); border-left: 4px solid #38bdf8; padding: 10px 18px; border-radius: 4px; backdrop-filter: blur(8px);">
+        <div style="font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #38bdf8; letter-spacing: 2.5px; font-weight: bold; margin-bottom: 2px;">
+          MANIOBRA DE TIRACHINAS GRAVITACIONAL
+        </div>
+        <div style="font-family:'Share Tech Mono', monospace; font-size: 0.84rem; color: #f8fafc;" id="slingshot-trajectory-label">
+          TRAYECTORIA HIPERBÓLICA // HORIZONTE ORBITAL
+        </div>
+      </div>
+      <div style="background: rgba(10, 15, 26, 0.9); border: 1px solid rgba(245, 158, 11, 0.4); padding: 8px 16px; border-radius: 4px; text-align: right; backdrop-filter: blur(8px);">
+        <div style="font-size: 0.65rem; color: #94a3b8; font-family:'Orbitron', sans-serif; letter-spacing: 1.5px;">ESTADO DEL VECTOR</div>
+        <div style="font-size: 1.05rem; color: #f59e0b; font-weight: bold; font-family:'Share Tech Mono', monospace;" id="slingshot-status-badge">IMPULSO MÁXIMO REQUERIDO</div>
+      </div>
+    </div>
+
+    <!-- Center Gravitational Speed Gauge -->
+    <div style="margin: 0 auto; width: min(680px, 92vw); background: rgba(6, 11, 22, 0.92); border: 1px solid rgba(0, 240, 255, 0.45); border-radius: 6px; padding: 16px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.85), 0 0 24px rgba(56, 189, 248, 0.25); backdrop-filter: blur(12px); text-align: center;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 8px;">
+        <span style="font-family:'Orbitron', sans-serif; font-size:0.75rem; color:#94a3b8; letter-spacing:1.5px;">VELOCIDAD ORBITAL ACUMULADA</span>
+        <span style="font-family:'Share Tech Mono', monospace; font-size:1.4rem; color:#00f0ff; font-weight:bold;" id="slingshot-speed-stat">0.0 km/s</span>
+        <span style="font-family:'Share Tech Mono', monospace; font-size:0.8rem; color:#f59e0b;" id="slingshot-target-vesc">OBJETIVO: v_esc</span>
+      </div>
+      
+      <!-- Progress Bar -->
+      <div style="width: 100%; height: 16px; background: #0b1329; border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; position: relative;">
+        <div id="slingshot-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0284c7 0%, #38bdf8 50%, #00f0ff 100%); box-shadow: 0 0 14px #00f0ff; transition: width 0.05s linear;"></div>
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-family:'Orbitron', sans-serif; font-weight: bold; color: #ffffff; text-shadow: 0 1px 3px #000;">
+          <span id="slingshot-percent-label">0% DE LA VELOCIDAD DE ESCAPE</span>
+        </div>
+      </div>
+
+      <!-- Control Hint -->
+      <div style="margin-top: 10px; font-family:'Orbitron', sans-serif; font-size: 0.74rem; color: #fde047; letter-spacing: 1.5px;">
+        ⚡ ¡MANTÉN [W], [↑] O [ESPACIO] PARA ACTIVAR PROPULSORES DE PLASMA // MANIOBRA CON [A]/[D]!
+      </div>
+    </div>
+
+    <!-- Bottom Telemetry Footer -->
+    <div style="display: flex; justify-content: center; gap: 24px; font-family:'Share Tech Mono', monospace; font-size: 0.75rem; color: #64748b;">
+      <span>POZO GRAVITATORIO: <b style="color:#ef4444;" id="slingshot-well-name">SOL</b></span>
+      <span>•</span>
+      <span>DISTORSIÓN RELATIVISTA: <b style="color:#38bdf8;" id="slingshot-lorentz-stat">γ = 1.0004</b></span>
+      <span>•</span>
+      <span>HORIZONTE: <b style="color:#10b981;" id="slingshot-escape-status">ÓRBITA RASANTE</b></span>
+    </div>
+  </div>
 
   <!-- Red Damage Flash -->
   <div id="damage-flash"></div>
@@ -2208,7 +2268,28 @@
         </div>
       </div>
 
-      <!-- Bay 2: Central Mission Terminal -->
+      <!-- Bay 2: Pilot Cockpit Cam (Live Reactive Avatar) -->
+      <div class="imperial-panel-bay cockpit-monitor-bay hud-interactive" style="padding: 4px 6px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; overflow: hidden !important;">
+        <div class="panel-bay-header" style="margin-bottom: 2px !important; padding-bottom: 1px !important;">
+          <span style="display:flex; align-items:center; gap:4px;">
+            <span class="led-dot" id="cockpit-cam-led" style="background:#10b981; box-shadow:0 0 6px #10b981; width:5px; height:5px;"></span>
+            COCKPIT CAM
+          </span>
+          <span id="cockpit-comms-badge" style="color:#10b981; font-size:0.55rem; font-weight:bold; letter-spacing:0.5px;">LIVE</span>
+        </div>
+        <div style="position:relative; width:100%; height:55px; border-radius:3px; overflow:hidden; border:1px solid #1e293b; background:#02050b;">
+          <canvas id="pilot-cockpit-canvas" width="160" height="90" style="width:100%; height:100%; display:block; object-fit:cover;"></canvas>
+          <div id="cockpit-glitch-overlay" style="position:absolute; inset:0; pointer-events:none; background:transparent;"></div>
+          <!-- CRT Scanlines -->
+          <div style="position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(0,240,255,0.03) 0px, rgba(0,240,255,0.03) 1px, transparent 2px, transparent 3px);"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.56rem; color:#94a3b8; font-family:'Share Tech Mono', monospace; margin-top:2px; line-height:1;">
+          <span id="cockpit-g-meter" style="color:#38bdf8;">G: +1.0G</span>
+          <span id="cockpit-pilot-state" style="color:#10b981; font-weight:bold;">NOMINAL</span>
+        </div>
+      </div>
+
+      <!-- Bay 3: Central Mission Terminal -->
       <div class="imperial-panel-bay mission-terminal-bay hud-interactive">
         <div class="panel-bay-header" style="justify-content: center;">
           <span>TACTICAL FLIGHT COMPUTER</span>
@@ -3334,6 +3415,98 @@
       osc.start(t);
       osc.stop(t + 0.09);
     }
+
+    // =========================================================================
+    // 1B. TACTICAL SPANISH VOICE & COMMS ENGINE
+    // =========================================================================
+    let tacticalVoices = [];
+    let spanishVoice = null;
+    let isSpeakingTactical = false;
+    let lastSpokenTime = 0;
+
+    function initTacticalVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const loadVoices = () => {
+        tacticalVoices = window.speechSynthesis.getVoices();
+        spanishVoice = tacticalVoices.find(v => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Jorge') || v.name.includes('Monica') || v.name.includes('Diego') || v.name.includes('Helena') || v.name.includes('Castilian')))
+                    || tacticalVoices.find(v => v.lang.startsWith('es'))
+                    || null;
+      };
+      loadVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    }
+
+    function playCommsRadioChirp(isOutro = false) {
+      if (!audioReady || !audioCtx || audioCtx.state !== 'running') return;
+      try {
+        const t = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        if (!isOutro) {
+          osc.frequency.setValueAtTime(1400, t);
+          osc.frequency.setValueAtTime(2200, t + 0.035);
+        } else {
+          osc.frequency.setValueAtTime(2200, t);
+          osc.frequency.setValueAtTime(1400, t + 0.035);
+        }
+        gain.gain.setValueAtTime(0.18, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.075);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.08);
+      } catch (e) {
+        // Audio chirp safe fallback
+      }
+    }
+
+    function speakTactical(phrase, priority = false) {
+      if (!('speechSynthesis' in window)) return;
+      const now = Date.now();
+      if (!priority && now - lastSpokenTime < 3200) return;
+
+      try {
+        if (priority) {
+          window.speechSynthesis.cancel();
+        }
+        const utter = new SpeechSynthesisUtterance(phrase);
+        if (spanishVoice) utter.voice = spanishVoice;
+        utter.lang = 'es-ES';
+        utter.rate = 1.15;
+        utter.pitch = 0.95;
+
+        utter.onstart = () => {
+          isSpeakingTactical = true;
+          lastSpokenTime = Date.now();
+          playCommsRadioChirp(false);
+          const badge = document.getElementById('cockpit-comms-badge');
+          if (badge) {
+            badge.innerText = 'COMMS TX';
+            badge.style.color = '#38bdf8';
+          }
+        };
+
+        utter.onend = utter.onerror = () => {
+          isSpeakingTactical = false;
+          playCommsRadioChirp(true);
+          const badge = document.getElementById('cockpit-comms-badge');
+          if (badge) {
+            badge.innerText = 'LIVE';
+            badge.style.color = '#10b981';
+          }
+        };
+
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        console.warn('Speech synthesis notice:', e);
+      }
+    }
+
+    // Call initTacticalVoices immediately on load
+    initTacticalVoices();
 
     // =========================================================================
     // 2. LEVEL PROGRESSION & PLANETARY SECTORS (INCLUDING BLACK HOLE CLIMAX)
@@ -5387,6 +5560,69 @@
       asteroids.push(ast);
     }
 
+    function shatterAsteroid(ast, hitPos = null) {
+      const astPos = hitPos ? hitPos.clone() : ast.position.clone();
+      const currentScale = ast.scale.x;
+      const isLarge = currentScale > 1.35;
+      const isFragment = !!ast.userData.isFragment;
+
+      triggerExplosion(astPos, false);
+
+      if (isLarge && !isFragment) {
+        // Physical fracture into 2-3 child boulders with momentum conservation
+        const fragCount = Math.random() < 0.45 ? 3 : 2;
+        for (let f = 0; f < fragCount; f++) {
+          const gIdx = Math.floor(Math.random() * asteroidGeometries.length);
+          const mIdx = Math.floor(Math.random() * asteroidMaterials.length);
+          const frag = new THREE.Mesh(asteroidGeometries[gIdx], asteroidMaterials[mIdx]);
+
+          const fScale = currentScale * (0.42 + Math.random() * 0.18);
+          frag.scale.set(
+            fScale * (0.85 + Math.random() * 0.3),
+            fScale * (0.8 + Math.random() * 0.3),
+            fScale * (0.85 + Math.random() * 0.3)
+          );
+
+          // Ejection velocity outward in radial plane
+          const angle = (f / fragCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.9;
+          const speed = 0.5 + Math.random() * 0.6;
+          const vx = Math.cos(angle) * speed;
+          const vy = Math.sin(angle) * speed;
+
+          frag.position.copy(ast.position).add(new THREE.Vector3(vx * 1.2, vy * 1.2, (Math.random() - 0.5) * 2));
+
+          frag.userData = {
+            radius: fScale * 1.35,
+            rotSpeedX: (Math.random() - 0.5) * 0.08,
+            rotSpeedY: (Math.random() - 0.5) * 0.08,
+            rotSpeedZ: (Math.random() - 0.5) * 0.07,
+            speedZ: ast.userData.speedZ * (0.95 + Math.random() * 0.25),
+            velX: vx,
+            velY: vy,
+            isFragment: true
+          };
+
+          scene.add(frag);
+          asteroids.push(frag);
+        }
+
+        speakTactical("Objetivo fragmentado.", false);
+        registerTargetKill(60, false, astPos);
+      } else {
+        // Complete pulverization
+        registerTargetKill(isFragment ? 80 : 100, false, astPos);
+      }
+
+      scene.remove(ast);
+      const idx = asteroids.indexOf(ast);
+      if (idx !== -1) asteroids.splice(idx, 1);
+
+      // Keep asteroid field populous
+      if (asteroids.length < 18) {
+        spawnAsteroid(-160);
+      }
+    }
+
     for (let i = 0; i < 20; i++) {
       spawnAsteroid(-35 - i * 7);
     }
@@ -5575,6 +5811,7 @@
 
       const tgtName = target ? (target.userData.name || 'HOSTILE') : 'RADAR PURSUIT';
       showNotification(`🚀 CONCUSSION MISSILE LAUNCHED // LOCK: ${tgtName}`, '#f59e0b');
+      speakTactical("Misil guiado en trayectoria.", false);
     }
 
     function updateMissileUI() {
@@ -5687,6 +5924,9 @@
         playerHull = Math.max(0, playerHull - effectiveDmg);
       }
 
+      cockpitDamageShake = 1.0;
+      cockpitDamageFlash = 1.0;
+
       document.getElementById('ui-shields-stat').innerText = `${playerShields}%`;
       document.getElementById('ui-hull-stat').innerText = `${playerHull}%`;
       document.getElementById('cockpit-shield-num').innerText = `${playerShields}%`;
@@ -5698,6 +5938,11 @@
         document.getElementById('ui-shields-stat').className = 'tele-stat-val danger';
         document.getElementById('cockpit-status-tag').innerText = 'SHIELDS COLLAPSED';
         document.getElementById('cockpit-status-tag').style.color = 'var(--crimson-danger)';
+        speakTactical("¡Alerta crítica! Escudos colapsados. Casco expuesto.", true);
+      } else if (playerShields <= 30) {
+        speakTactical("¡Atención! Escudos en nivel crítico.", true);
+      } else if (playerShields <= 65) {
+        speakTactical("Impacto recibido. Integridad de escudos comprometida.", false);
       }
 
       if (playerHull <= 0) {
@@ -5709,6 +5954,7 @@
       isGameOver = true;
       triggerExplosion(shipRoot.position, true);
       shipRoot.visible = false;
+      speakTactical("Alerta catastrófica. Señal de telemetría perdida.", true);
 
       let msg = 'Your starfighter suffered catastrophic kinetic impact from orbital debris.';
       if (reason === 'BLACKHOLE') {
@@ -6211,6 +6457,48 @@
         breakdownDebrisGroup.remove(breakdownDebrisGroup.children[0]);
       }
 
+      startOrbitalSlingshotRun();
+    }
+
+    let slingshotActive = false;
+    let slingshotTimer = 0;
+    let currentSlingshotSpeed = 0;
+    let slingshotBaseSpeed = 0;
+    let slingshotTargetVesc = 0;
+
+    function startOrbitalSlingshotRun() {
+      slingshotActive = true;
+      slingshotTimer = 0;
+
+      const currentSector = SECTORS[currentSectorIdx] || SECTORS[0];
+      slingshotTargetVesc = currentSector.vEsc || 617.5;
+      currentSlingshotSpeed = slingshotTargetVesc * 0.42;
+      slingshotBaseSpeed = currentSlingshotSpeed;
+
+      const overlay = document.getElementById('slingshot-escape-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        const traj = document.getElementById('slingshot-trajectory-label');
+        if (traj) traj.innerText = `TRAYECTORIA HIPERBÓLICA // ${currentSector.bodyName.toUpperCase()}`;
+        const well = document.getElementById('slingshot-well-name');
+        if (well) well.innerText = currentSector.bodyName.toUpperCase();
+        const tgt = document.getElementById('slingshot-target-vesc');
+        if (tgt) tgt.innerText = `OBJETIVO: ${slingshotTargetVesc.toFixed(1)} km/s`;
+      }
+
+      speakTactical(`Iniciando aproximación rasante. Acoplando tirachinas gravitacional en ${currentSector.bodyName}. Acelera a fondo hacia la velocidad de escape.`, true);
+
+      playBassDropSound();
+      playHydraulicServoSound();
+    }
+
+    function completeSlingshotEscape() {
+      slingshotActive = false;
+      const overlay = document.getElementById('slingshot-escape-overlay');
+      if (overlay) overlay.style.display = 'none';
+
+      speakTactical("¡Velocidad de escape alcanzada! Salto hiperespacial completado.", true);
+
       if (currentSectorIdx + 1 < SECTORS.length) {
         advanceToNextSector();
       } else {
@@ -6426,7 +6714,7 @@
       }
     };
 
-    function drawAvatar(ctx, cfg, w, h, ox = 0, oy = 0) {
+    function drawAvatar(ctx, cfg, w, h, ox = 0, oy = 0, animState = {}) {
       ctx.save();
       ctx.translate(ox, oy);
 
@@ -6745,7 +7033,18 @@
       ctx.stroke();
 
       // Eyes
-      if (cfg.species === 'chiss') {
+      if (animState && animState.isBlinking) {
+        const drawBlinkEye = (ex) => {
+          ctx.strokeStyle = '#0f172a';
+          ctx.lineWidth = 2.4 * scale;
+          ctx.beginPath();
+          ctx.moveTo(ex - 8 * scale, cy - 9 * scale);
+          ctx.quadraticCurveTo(ex, cy - 7 * scale, ex + 8 * scale, cy - 9 * scale);
+          ctx.stroke();
+        };
+        drawBlinkEye(cx - 18 * scale);
+        drawBlinkEye(cx + 18 * scale);
+      } else if (cfg.species === 'chiss') {
         // Chiss: Glowing Solid Ruby Red Eyes (No pupils)
         const drawChissEye = (ex) => {
           const glow = ctx.createRadialGradient(ex, cy - 10 * scale, 1 * scale, ex, cy - 10 * scale, 12 * scale);
@@ -6828,12 +7127,23 @@
       ctx.stroke();
 
       // Mouth
-      ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-      ctx.lineWidth = 2 * scale;
-      ctx.beginPath();
-      ctx.moveTo(cx - 12 * scale, cy + 24 * scale);
-      ctx.lineTo(cx + 12 * scale, cy + 24 * scale);
-      ctx.stroke();
+      if (animState && animState.mouthOpen > 0.08) {
+        const mH = Math.max(2, animState.mouthOpen * 5.2 * scale);
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + 24 * scale, 8 * scale, mH, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.stroke();
+      } else {
+        ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 12 * scale, cy + 24 * scale);
+        ctx.lineTo(cx + 12 * scale, cy + 24 * scale);
+        ctx.stroke();
+      }
 
       // 9. TACTICAL ACCESSORIES
       // Rebreather
@@ -6921,6 +7231,11 @@
         ctx.fill();
       }
 
+      if (animState && animState.isCockpitCam) {
+        ctx.restore();
+        return;
+      }
+
       // 10. CORNER BRACKETS & CALLSIGN STAMP
       ctx.strokeStyle = 'rgba(245, 158, 11, 0.7)';
       ctx.lineWidth = 2 * scale;
@@ -6957,6 +7272,173 @@
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawAvatar(ctx, playerPilot, canvas.width, canvas.height, 0, 0);
+    }
+
+    // =========================================================================
+    // 10B. PILOT COCKPIT CAM (LIVE REACTIVE AVATAR & INSTRUMENT BAY)
+    // =========================================================================
+    let cockpitDamageShake = 0;
+    let cockpitDamageFlash = 0;
+    let cockpitTilt = 0;
+    let cockpitShiftX = 0;
+    let lastBlinkTime = Date.now();
+    let isBlinking = false;
+
+    function updateAndRenderCockpitCam(delta) {
+      const canvas = document.getElementById('pilot-cockpit-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // 1. Calculate reactive physics values from ship lateral velocity & G-force
+      const targetTilt = -shipVelocity.x * 0.016;
+      const targetShiftX = -shipVelocity.x * 0.42;
+      cockpitTilt += (targetTilt - cockpitTilt) * Math.min(1, delta * 12);
+      cockpitShiftX += (targetShiftX - cockpitShiftX) * Math.min(1, delta * 12);
+
+      // Breathing / subtle engine vibration
+      const now = Date.now();
+      const breathY = Math.sin(now * 0.0035) * 1.5;
+      const engineVibeX = (Math.random() - 0.5) * 0.5;
+      const engineVibeY = (Math.random() - 0.5) * 0.5;
+
+      // Damage shake decay
+      cockpitDamageShake *= Math.pow(0.08, delta);
+      cockpitDamageFlash = Math.max(0, cockpitDamageFlash - delta * 2.5);
+
+      const shakeX = (Math.random() - 0.5) * cockpitDamageShake * 10;
+      const shakeY = (Math.random() - 0.5) * cockpitDamageShake * 10;
+
+      // Blinking logic: blink every 3.8s for ~140ms
+      if (now - lastBlinkTime > 3800) {
+        isBlinking = true;
+        if (now - lastBlinkTime > 3950) {
+          isBlinking = false;
+          lastBlinkTime = now;
+        }
+      }
+
+      // Mouth talking animation during Spanish comms speech
+      let mouthOpen = 0;
+      if (isSpeakingTactical) {
+        mouthOpen = Math.abs(Math.sin(now * 0.024));
+      }
+
+      // Clear canvas
+      ctx.clearRect(0, 0, w, h);
+
+      // Cockpit Background (Canopy interior looking out into space)
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, '#060a14');
+      bgGrad.addColorStop(1, '#020409');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Distant stars / cockpit canopy window behind pilot
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      const starOffset = (now * 0.05) % w;
+      ctx.fillRect((starOffset + 15) % w, 12, 1.5, 1.5);
+      ctx.fillRect((starOffset + 68) % w, 28, 1.2, 1.2);
+      ctx.fillRect((starOffset + 115) % w, 18, 1.5, 1.5);
+
+      // Cockpit rear roll-cage struts behind avatar
+      ctx.fillStyle = '#0f172a';
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.15, h);
+      ctx.lineTo(w * 0.28, h * 0.12);
+      ctx.lineTo(w * 0.72, h * 0.12);
+      ctx.lineTo(w * 0.85, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Pilot bust with reactive G-force lean, shake, breathing, blinking, and speech
+      ctx.save();
+      const cx = w / 2 + cockpitShiftX + shakeX + engineVibeX;
+      const cy = h / 2 + breathY + shakeY + engineVibeY;
+      ctx.translate(cx, cy);
+      ctx.rotate(cockpitTilt);
+      ctx.translate(-cx, -cy);
+
+      drawAvatar(ctx, playerPilot, w * 1.65, h * 1.95, -w * 0.325 + cockpitShiftX + shakeX, -h * 0.28 + breathY + shakeY, {
+        isBlinking: isBlinking,
+        mouthOpen: mouthOpen,
+        isSpeaking: isSpeakingTactical,
+        isCockpitCam: true
+      });
+      ctx.restore();
+
+      // Cockpit red emergency alert lighting (under heavy damage or low shield)
+      const isEmergency = playerShields < 30 || cockpitDamageFlash > 0.05;
+      if (isEmergency) {
+        const redAlpha = Math.max(cockpitDamageFlash * 0.65, (playerShields < 30 ? (0.22 + Math.sin(now * 0.008) * 0.18) : 0));
+        ctx.fillStyle = `rgba(239, 68, 68, ${redAlpha})`;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      // Cockpit HUD Visor green / cyan tactical crosshair & telemetry overlay
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 12, h / 2 - 6); ctx.lineTo(w / 2 - 4, h / 2 - 6);
+      ctx.moveTo(w / 2 + 4, h / 2 - 6); ctx.lineTo(w / 2 + 12, h / 2 - 6);
+      ctx.moveTo(w / 2, h / 2 - 14); ctx.lineTo(w / 2, h / 2 - 9);
+      ctx.moveTo(w / 2, h / 2 - 3); ctx.lineTo(w / 2, h / 2 + 2);
+      ctx.stroke();
+
+      // Top and bottom HUD glass reflection
+      const glassGrad = ctx.createLinearGradient(0, 0, w, h);
+      glassGrad.addColorStop(0, 'rgba(255, 255, 255, 0.07)');
+      glassGrad.addColorStop(0.35, 'transparent');
+      glassGrad.addColorStop(1, 'rgba(0, 240, 255, 0.04)');
+      ctx.fillStyle = glassGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Update telemetry stats below canvas: G-meter and Pilot state
+      const lateralG = 1.0 + Math.abs(shipVelocity.x) * 0.06;
+      const gElem = document.getElementById('cockpit-g-meter');
+      if (gElem) {
+        gElem.innerText = `G: ${lateralG >= 0 ? '+' : ''}${lateralG.toFixed(1)}G`;
+        gElem.style.color = lateralG > 2.0 ? '#f59e0b' : '#38bdf8';
+      }
+
+      const stateElem = document.getElementById('cockpit-pilot-state');
+      if (stateElem) {
+        if (cockpitDamageShake > 0.2) {
+          stateElem.innerText = 'IMPACT';
+          stateElem.style.color = '#ef4444';
+        } else if (playerShields < 30) {
+          stateElem.innerText = 'CRITICAL';
+          stateElem.style.color = '#ef4444';
+        } else if (isSpeakingTactical) {
+          stateElem.innerText = 'RADIO TX';
+          stateElem.style.color = '#38bdf8';
+        } else if (lateralG > 2.2) {
+          stateElem.innerText = 'HIGH-G TURN';
+          stateElem.style.color = '#f59e0b';
+        } else {
+          stateElem.innerText = 'NOMINAL';
+          stateElem.style.color = '#10b981';
+        }
+      }
+
+      // Update LED blink
+      const led = document.getElementById('cockpit-cam-led');
+      if (led) {
+        if (playerShields < 30 || cockpitDamageShake > 0.2) {
+          led.style.background = '#ef4444';
+          led.style.boxShadow = '0 0 6px #ef4444';
+        } else if (isSpeakingTactical) {
+          led.style.background = '#38bdf8';
+          led.style.boxShadow = '0 0 6px #38bdf8';
+        } else {
+          led.style.background = '#10b981';
+          led.style.boxShadow = '0 0 6px #10b981';
+        }
+      }
     }
 
     // Pilot Dossier Listeners
@@ -7343,8 +7825,10 @@
 
     document.getElementById('btn-launch').addEventListener('click', () => {
       initAudio();
+      initTacticalVoices();
       playBassDropSound();
       playHydraulicServoSound();
+      speakTactical(`Sistemas en línea. Motores de iones al cien por ciento. ¡Buena caza, piloto ${playerPilot.name}!`, true);
 
       transformationInProgress = true;
 
@@ -7760,6 +8244,89 @@
         return;
       }
 
+      // Handle Orbital Slingshot Escape Minigame (Interactive Hyperbolic Acceleration Run)
+      if (slingshotActive) {
+        slingshotTimer += delta;
+        const currentSector = SECTORS[currentSectorIdx];
+
+        // Boost input: W, ArrowUp, or Space
+        const isBoosting = keys.w || keys.arrowup || keys[' '];
+
+        // Accumulate velocity towards v_esc
+        const accelRate = isBoosting ? 0.24 : 0.12;
+        currentSlingshotSpeed = Math.min(slingshotTargetVesc, currentSlingshotSpeed + slingshotTargetVesc * accelRate * delta);
+        const pct = Math.min(100, Math.round(((currentSlingshotSpeed - slingshotBaseSpeed) / Math.max(1, slingshotTargetVesc - slingshotBaseSpeed)) * 100));
+
+        // Update Slingshot HUD Gauge
+        const spdElem = document.getElementById('slingshot-speed-stat');
+        if (spdElem) spdElem.innerText = `${currentSlingshotSpeed.toFixed(1)} km/s`;
+
+        const fillElem = document.getElementById('slingshot-progress-fill');
+        if (fillElem) fillElem.style.width = `${pct}%`;
+
+        const pctLabel = document.getElementById('slingshot-percent-label');
+        if (pctLabel) pctLabel.innerText = `${pct}% DE LA VELOCIDAD DE ESCAPE (${currentSlingshotSpeed.toFixed(1)} / ${slingshotTargetVesc} km/s)`;
+
+        const badge = document.getElementById('slingshot-status-badge');
+        if (badge) {
+          if (isBoosting) {
+            badge.innerText = '⚡ PROPULSIÓN DE PLASMA AL MÁXIMO';
+            badge.style.color = '#38bdf8';
+          } else {
+            badge.innerText = '¡MANTÉN [W] / [ESPACIO] PARA BOOST!';
+            badge.style.color = '#f59e0b';
+          }
+        }
+
+        // Relativistic Lorentz factor
+        const beta = Math.min(0.95, currentSlingshotSpeed / 300000);
+        const gamma = 1 / Math.sqrt(Math.max(0.01, 1 - beta * beta));
+        const gammaElem = document.getElementById('slingshot-lorentz-stat');
+        if (gammaElem) gammaElem.innerText = `γ = ${gamma.toFixed(4)}`;
+
+        // Steering during Slingshot with keys A / D
+        if (keys.a || keys.arrowleft) steerX = -32;
+        else if (keys.d || keys.arrowright) steerX = 32;
+        else steerX = 0;
+
+        shipVelocity.x += (steerX - shipVelocity.x) * delta * 5;
+        shipRoot.position.x += shipVelocity.x * delta;
+        shipRoot.position.x = Math.max(-28, Math.min(28, shipRoot.position.x));
+        shipRoot.rotation.z = -shipVelocity.x * 0.035;
+
+        // Cinematic Hyperbolic Trajectory: ship sweeps close across the planet horizon
+        const diveProgress = Math.min(1, slingshotTimer / 5.2);
+        shipRoot.position.y = -6 + Math.sin(diveProgress * Math.PI) * 3.5;
+        shipRoot.position.z -= (80 + currentSlingshotSpeed * 0.22) * delta;
+
+        // Dynamic Low-Angle Follow Camera
+        camera.position.set(
+          shipRoot.position.x * 0.45,
+          shipRoot.position.y + 2.6,
+          shipRoot.position.z + 11
+        );
+        camera.lookAt(
+          shipRoot.position.x * 0.2,
+          shipRoot.position.y + 0.5,
+          shipRoot.position.z - 35
+        );
+
+        // Rotate planet and stars dynamically during the high-speed slingshot
+        if (planetMesh) planetMesh.rotation.y += 0.006;
+        if (accretionDiskMesh) accretionDiskMesh.rotation.z += 0.04;
+        stars.rotation.z += (isBoosting ? 0.06 : 0.02) * delta;
+
+        // Render Cockpit Cam live during escape run
+        updateAndRenderCockpitCam(delta);
+
+        renderer.render(scene, camera);
+
+        if (currentSlingshotSpeed >= slingshotTargetVesc || slingshotTimer >= 5.2) {
+          completeSlingshotEscape();
+        }
+        return;
+      }
+
       const currentSector = SECTORS[currentSectorIdx];
 
       // Rotate planet / accretion disk
@@ -8035,6 +8602,7 @@
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
               recordEncounteredShip(en.userData.type);
+              speakTactical("Impacto de misil confirmado. Blanco enemigo neutralizado.", false);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -8050,13 +8618,8 @@
           for (let k = asteroids.length - 1; k >= 0; k--) {
             const ast = asteroids[k];
             if (m.position.distanceTo(ast.position) < ast.userData.radius + 1.4) {
-              const astPos = ast.position.clone();
-              triggerExplosion(m.position, false);
               detonated = true;
-              scene.remove(ast);
-              asteroids.splice(k, 1);
-              registerTargetKill(100, false, astPos);
-              spawnAsteroid(-140);
+              shatterAsteroid(ast, m.position);
               break;
             }
           }
@@ -8178,6 +8741,7 @@
               enemies.splice(j, 1);
               registerTargetKill(en.userData.points || 250, true, enPos);
               recordEncounteredShip(en.userData.type);
+              speakTactical("Blanco enemigo neutralizado. Buen tiro.", false);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -8194,13 +8758,8 @@
           for (let j = asteroids.length - 1; j >= 0; j--) {
             const ast = asteroids[j];
             if (laser.position.distanceTo(ast.position) < ast.userData.radius + 0.9) {
-              const astPos = ast.position.clone();
-              triggerExplosion(ast.position, false);
-              scene.remove(ast);
-              asteroids.splice(j, 1);
               hit = true;
-              registerTargetKill(100, false, astPos);
-              spawnAsteroid(-160);
+              shatterAsteroid(ast, laser.position);
               break;
             }
           }
@@ -8220,6 +8779,14 @@
         if (ast.userData.rotSpeedZ) ast.rotation.z += ast.userData.rotSpeedZ;
         ast.position.z += ast.userData.speedZ * delta;
 
+        // Fragment drift momentum
+        if (ast.userData.isFragment) {
+          ast.position.x += ast.userData.velX;
+          ast.position.y += ast.userData.velY;
+          ast.userData.velX *= 0.985;
+          ast.userData.velY *= 0.985;
+        }
+
         // Collision with player
         if (!isGameOver && !introActive && shipRoot.position.distanceTo(ast.position) < ast.userData.radius + 1.2) {
           triggerExplosion(ast.position, false);
@@ -8231,6 +8798,11 @@
         }
 
         if (ast.position.z > shipRoot.position.z + 20) {
+          if (ast.userData.isFragment) {
+            scene.remove(ast);
+            asteroids.splice(i, 1);
+            continue;
+          }
           ast.position.z = shipRoot.position.z - 150 - Math.random() * 20;
           ast.position.x = shipRoot.position.x + (Math.random() - 0.5) * 80;
           ast.position.y = shipRoot.position.y + (Math.random() - 0.5) * 50;
@@ -8251,6 +8823,7 @@
 
       drawTacticalRadar();
       updateTargetLockOn();
+      updateAndRenderCockpitCam(delta);
 
       renderer.render(scene, camera);
     }

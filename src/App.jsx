@@ -669,6 +669,7 @@ const ACADEMIC_COURSES = [
 const FOUNDATIONAL_BOOKS = [
   {
     id: "goldstein",
+    category: "physics",
     title: "Classical Mechanics",
     authors: "Herbert Goldstein, Charles P. Poole, John L. Safko",
     edition: "3rd Edition • Addison-Wesley",
@@ -682,6 +683,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "feynman",
+    category: "physics",
     title: "The Feynman Lectures on Physics (Vols. I, II & III)",
     authors: "Richard P. Feynman, Robert B. Leighton, Matthew Sands",
     edition: "Definitive Edition • Caltech",
@@ -695,6 +697,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "aki_richards",
+    category: "earth",
     title: "Quantitative Seismology",
     authors: "Keiiti Aki, Paul G. Richards",
     edition: "2nd Edition • University Science Books",
@@ -708,6 +711,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "strang",
+    category: "math",
     title: "Linear Algebra and Its Applications",
     authors: "Gilbert Strang",
     edition: "5th Edition • Wellesley-Cambridge Press",
@@ -721,6 +725,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "courant",
+    category: "math",
     title: "Introduction to Calculus and Analysis (Vols. I & II)",
     authors: "Richard Courant, Fritz John",
     edition: "Classics in Mathematics • Springer",
@@ -734,6 +739,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "landau_lifshitz",
+    category: "physics",
     title: "Fluid Mechanics (Course of Theoretical Physics Vol. 6)",
     authors: "L.D. Landau, E.M. Lifshitz",
     edition: "2nd Edition • Butterworth-Heinemann",
@@ -747,6 +753,7 @@ const FOUNDATIONAL_BOOKS = [
   },
   {
     id: "wallace_hobbs",
+    category: "earth",
     title: "Atmospheric Science: An Introductory Survey",
     authors: "John M. Wallace, Peter V. Hobbs",
     edition: "2nd Edition • Academic Press / Elsevier",
@@ -1064,8 +1071,10 @@ export default function App() {
   // FAQ State
   const [openFaq, setOpenFaq] = useState(0);
 
-  // Library View State: 'laws' (Compendium of Laws & PDEs) | 'books' (Classical Treatises)
-  const [libraryTab, setLibraryTab] = useState('laws');
+  // Library View State: 'books' (Classical Treatises) | 'laws' (Compendium of Laws & PDEs)
+  const [libraryTab, setLibraryTab] = useState('books');
+  const [bookCategory, setBookCategory] = useState('all');
+  const [bookSearchQuery, setBookSearchQuery] = useState('');
 
   const liveTiers = getCurrencyTiers();
   const activeTier = liveTiers[currency] || liveTiers.EUR;
@@ -1229,6 +1238,21 @@ Sent from Open Knowledge & Science Mentorship Portal`;
   const filteredCourses = courseFilter === 'all' 
     ? ACADEMIC_COURSES 
     : ACADEMIC_COURSES.filter(c => c.category === courseFilter);
+
+  const filteredBooks = FOUNDATIONAL_BOOKS.filter((b) => {
+    const matchesCat = bookCategory === 'all' || b.category === bookCategory;
+    const query = bookSearchQuery.toLowerCase().trim();
+    if (!query) return matchesCat;
+    const matchesQuery = 
+      b.title.toLowerCase().includes(query) ||
+      b.authors.toLowerCase().includes(query) ||
+      (b.subjectEn && b.subjectEn.toLowerCase().includes(query)) ||
+      (b.subjectEs && b.subjectEs.toLowerCase().includes(query)) ||
+      (b.descriptionEn && b.descriptionEn.toLowerCase().includes(query)) ||
+      (b.descriptionEs && b.descriptionEs.toLowerCase().includes(query)) ||
+      b.usedIn.some((m) => m.toLowerCase().includes(query));
+    return matchesCat && matchesQuery;
+  });
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-900">
@@ -1449,7 +1473,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
               {/* Deep Space Universe Photographic Backdrop */}
               <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-screen pointer-events-none"
-                style={{ backgroundImage: `url('/images/hero-universe.webp')` }}
+                style={{ backgroundImage: `url('${getAssetUrl('/images/hero-universe.webp')}')` }}
               />
               {/* Top & Bottom Vignette / Seamless Dark Fade to protect UI contrast */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black pointer-events-none" />
@@ -2197,28 +2221,54 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </div>
               </div>
 
-              {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-2 pb-6 mb-8 border-b border-slate-200">
-                {[
-                  { id: 'all', labelEn: 'All Subjects (12)', labelEs: 'Todas las Materias (12)' },
-                  { id: 'bachelor', labelEn: 'Bachelor & Engineering Core (6)', labelEs: 'Plan Común & Grado Universitario (6)' },
-                  { id: 'specialty', labelEn: 'Atmosphere, Soils & Data (3)', labelEs: 'Atmósfera, Suelos & Datos (3)' },
-                  { id: 'thesis', labelEn: 'Thesis & Mentorship (1)', labelEs: 'Tesis & Titulación (1)' },
-                  { id: 'enthusiast', labelEn: 'Quantum for Enthusiasts (1)', labelEs: 'Cuántica para Curiosos (1)' },
-                  { id: 'ib', labelEn: 'IB Diploma HL (1)', labelEs: 'Bachillerato IB (1)' }
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setCourseFilter(tab.id)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all ${
-                      courseFilter === tab.id
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-400'
-                    }`}
-                  >
-                    {lang === 'en' ? tab.labelEn : tab.labelEs}
-                  </button>
-                ))}
+              {/* Eye-catching & Organized Category Filter Tabs */}
+              <div className="mb-10">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                    {lang === 'en' ? 'Select Subject Discipline' : 'Selecciona Disciplina o Área Académica'}
+                  </span>
+                  <span className="text-xs font-mono text-slate-400">
+                    {lang === 'en' ? `Showing ${filteredCourses.length} of ${ACADEMIC_COURSES.length} courses` : `Mostrando ${filteredCourses.length} de ${ACADEMIC_COURSES.length} materias`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2.5 sm:gap-3">
+                  {COURSE_FILTER_TABS.map((tab) => {
+                    const isActive = courseFilter === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setCourseFilter(tab.id)}
+                        className={`p-3 sm:p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between group ${
+                          isActive
+                            ? `${tab.activeClass} -translate-y-0.5`
+                            : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400 hover:bg-slate-50/80 hover:shadow-xs'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full mb-1.5">
+                          <span className="text-base sm:text-lg">{tab.icon}</span>
+                          <span
+                            className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              isActive
+                                ? 'bg-white/20 text-white'
+                                : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
+                            }`}
+                          >
+                            {tab.count}
+                          </span>
+                        </div>
+                        <div>
+                          <div className={`font-bold text-xs sm:text-sm leading-tight mb-0.5 ${isActive ? 'text-white' : 'text-slate-900'}`}>
+                            {lang === 'en' ? tab.labelEn : tab.labelEs}
+                          </div>
+                          <div className={`font-mono text-[10px] line-clamp-1 ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
+                            {lang === 'en' ? tab.badgeEn : tab.badgeEs}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Grid of Courses */}
@@ -2228,37 +2278,41 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     key={course.id}
                     className="rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-lg transition-all group"
                   >
-                    <div className="h-44 overflow-hidden relative">
-                      {/* Real Academic Photo (Pizarra clásica) */}
+                    <div className="h-48 overflow-hidden relative bg-slate-950">
+                      {/* Back Layer: AI Simulation / Vector Overlay (Always loaded underneath, zooms slightly on hover) */}
+                      {course.simulationImage && (
+                        <img 
+                          src={getAssetUrl(course.simulationImage)} 
+                          alt={`${course.titleEn} Simulation`} 
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+                          loading="lazy"
+                        />
+                      )}
+                      {/* Front Layer: Real Academic Photo (Fades out smoothly on hover to reveal simulation) */}
                       <img 
                         src={course.image} 
                         alt={course.titleEn} 
-                        className="w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0" 
+                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out ${
+                          course.simulationImage ? 'group-hover:opacity-0 group-hover:scale-105' : ''
+                        }`} 
+                        loading="lazy"
                       />
-                      {/* AI Simulation / Vector Overlay (Crossfade on Hover) */}
-                      {course.simulationImage && (
-                        <img 
-                          src={course.simulationImage} 
-                          alt={`${course.titleEn} Simulation`} 
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100" 
-                        />
-                      )}
-                      <div className="absolute top-3 left-3">
-                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs">
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-900/90 text-white backdrop-blur-xs border border-white/10 shadow-sm">
                           {course.code}
                         </span>
                       </div>
-                      <div className="absolute top-3 right-3">
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-sky-100 text-sky-900 font-semibold shadow-xs">
+                      <div className="absolute top-3 right-3 z-10">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-white/95 text-slate-900 font-bold shadow-sm backdrop-blur-xs">
                           {lang === 'en' ? course.badgeEn : course.badgeEs}
                         </span>
                       </div>
                       {/* Interactive Mode Badge on Hover */}
                       {course.simulationImage && (
-                        <div className="absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                          <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-sky-300 border border-sky-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
-                            <Sparkles className="w-2.5 h-2.5 text-sky-400" />
-                            <span>{lang === 'en' ? 'Simulation Model' : 'Modelo Simulado'}</span>
+                        <div className="absolute bottom-2.5 right-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                          <span className="font-mono text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-950/90 text-sky-300 border border-sky-400/30 backdrop-blur-sm flex items-center gap-1.5 shadow-lg">
+                            <Sparkles className="w-3 h-3 text-sky-400" />
+                            <span>{lang === 'en' ? 'Interactive Simulation' : 'Simulación Vectorial'}</span>
                           </span>
                         </div>
                       )}
@@ -2374,7 +2428,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   className="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity duration-700 ease-in-out group-hover:opacity-0" 
                 />
                 <img 
-                  src="/images/stem-library.webp" 
+                  src={getAssetUrl('/images/stem-library.webp')} 
                   alt="Theoretical STEM Library Treatises" 
                   className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-35" 
                 />
@@ -2393,23 +2447,8 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 </div>
               </div>
 
-              {/* Dual Sub-View Switcher: Compendium of Laws vs Classical Treatises */}
+              {/* Dual Sub-View Switcher: Classical Treatises vs Compendium of Laws */}
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <button
-                  onClick={() => setLibraryTab('laws')}
-                  className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
-                    libraryTab === 'laws'
-                      ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-sky-500/30'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
-                  }`}
-                >
-                  <Sparkles className="w-4 h-4 text-sky-400" />
-                  <span>{lang === 'en' ? 'Compendium of Laws & Formulations (LaTeX)' : 'Compendio de Leyes & Formulaciones (LaTeX)'}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold ml-1">
-                    20+
-                  </span>
-                </button>
-
                 <button
                   onClick={() => setLibraryTab('books')}
                   className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
@@ -2424,67 +2463,144 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     {FOUNDATIONAL_BOOKS.length}
                   </span>
                 </button>
+
+                <button
+                  onClick={() => setLibraryTab('laws')}
+                  className={`px-5 py-2.5 rounded-2xl font-mono text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all cursor-pointer border ${
+                    libraryTab === 'laws'
+                      ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-sky-500/30'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 text-sky-400" />
+                  <span>{lang === 'en' ? 'Compendium of Laws & Formulations (LaTeX)' : 'Compendio de Leyes & Formulaciones (LaTeX)'}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold ml-1">
+                    20+
+                  </span>
+                </button>
               </div>
 
-              {/* Tab 1: Compendium of Laws, Formulations, SVD & PDEs */}
-              {libraryTab === 'laws' && (
-                <div>
-                  <PhysicsToolkit lang={lang} onOpenBooking={handleOpenBooking} />
+              {/* Tab 1: Foundational Academic Treatises Grid with Search & Filters */}
+              {libraryTab === 'books' && (
+                <div className="space-y-6">
+                  {/* Clean Search & Discipline Filter Bar */}
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    {/* Live Search Input */}
+                    <div className="relative w-full sm:w-80">
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input 
+                        type="text"
+                        value={bookSearchQuery}
+                        onChange={(e) => setBookSearchQuery(e.target.value)}
+                        placeholder={lang === 'en' ? 'Search title, author, or topic...' : 'Buscar libro, autor o materia...'}
+                        className="w-full pl-9 pr-7 py-2 bg-white rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                      />
+                      {bookSearchQuery && (
+                        <button 
+                          onClick={() => setBookSearchQuery('')}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400 hover:text-slate-600 px-1"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Category Filter Pills */}
+                    <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs w-full sm:w-auto">
+                      {[
+                        { id: 'all', labelEn: 'All Books (7)', labelEs: 'Todos (7)' },
+                        { id: 'physics', labelEn: 'Physics & Mechanics (3)', labelEs: 'Física & Mecánica (3)' },
+                        { id: 'math', labelEn: 'Calculus & Algebra (2)', labelEs: 'Cálculo & Álgebra (2)' },
+                        { id: 'earth', labelEn: 'Earth & Atmosphere (2)', labelEs: 'Geociencias & Atmósfera (2)' }
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setBookCategory(tab.id)}
+                          className={`px-3 py-1.5 rounded-lg border text-xs transition-all cursor-pointer ${
+                            bookCategory === tab.id
+                              ? 'bg-slate-900 border-slate-900 text-white font-bold shadow-xs'
+                              : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400'
+                          }`}
+                        >
+                          {lang === 'en' ? tab.labelEn : tab.labelEs}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {filteredBooks.length === 0 ? (
+                    <div className="p-12 text-center rounded-2xl border border-dashed border-slate-300 bg-white">
+                      <BookOpen className="w-8 h-8 text-slate-400 mx-auto mb-3" />
+                      <p className="font-mono text-sm text-slate-600 mb-2">
+                        {lang === 'en' ? 'No matching books found' : 'No se encontraron libros con esa búsqueda'}
+                      </p>
+                      <button 
+                        onClick={() => { setBookSearchQuery(''); setBookCategory('all'); }}
+                        className="text-xs font-mono text-sky-600 underline font-bold"
+                      >
+                        {lang === 'en' ? 'Clear search filters' : 'Restablecer filtros'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredBooks.map((book) => (
+                        <div 
+                          key={book.id} 
+                          className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-md transition-all"
+                        >
+                          <div className="h-44 overflow-hidden relative">
+                            <img 
+                              src={book.image} 
+                              alt={book.title} 
+                              className="w-full h-full object-cover" 
+                            />
+                            <div className="absolute top-3 right-3">
+                              <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900/90 text-amber-300 backdrop-blur-xs font-bold">
+                                {book.tag}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                              <h3 className="text-lg font-bold text-slate-900 leading-snug mb-1">
+                                {book.title}
+                              </h3>
+                              <p className="text-xs font-mono text-slate-500 mb-2">
+                                {book.authors}
+                              </p>
+                              <p className="text-[11px] font-mono text-sky-700 font-semibold mb-3">
+                                {lang === 'en' ? book.subjectEn : book.subjectEs}
+                              </p>
+                              <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                                {lang === 'en' ? book.descriptionEn : book.descriptionEs}
+                              </p>
+                            </div>
+
+                            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                              <span className="text-[10px] font-mono text-slate-400">
+                                {book.edition}
+                              </span>
+                              <div className="flex gap-1">
+                                {book.usedIn.map((m, i) => (
+                                  <span key={i} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                                    {m}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Tab 2: Foundational Academic Treatises Grid */}
-              {libraryTab === 'books' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {FOUNDATIONAL_BOOKS.map((book) => (
-                    <div 
-                      key={book.id} 
-                      className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-xs hover:border-slate-400 hover:shadow-md transition-all"
-                    >
-                      <div className="h-44 overflow-hidden relative">
-                        <img 
-                          src={book.image} 
-                          alt={book.title} 
-                          className="w-full h-full object-cover" 
-                        />
-                        <div className="absolute top-3 right-3">
-                          <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900/90 text-amber-300 backdrop-blur-xs font-bold">
-                            {book.tag}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                        <div>
-                          <h3 className="text-lg font-bold text-slate-900 leading-snug mb-1">
-                            {book.title}
-                          </h3>
-                          <p className="text-xs font-mono text-slate-500 mb-2">
-                            {book.authors}
-                          </p>
-                          <p className="text-[11px] font-mono text-sky-700 font-semibold mb-3">
-                            {lang === 'en' ? book.subjectEn : book.subjectEs}
-                          </p>
-                          <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                            {lang === 'en' ? book.descriptionEn : book.descriptionEs}
-                          </p>
-                        </div>
-
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-slate-400">
-                            {book.edition}
-                          </span>
-                          <div className="flex gap-1">
-                            {book.usedIn.map((m, i) => (
-                              <span key={i} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                                {m}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+              {/* Tab 2: Compendium of Laws & Formulations (LaTeX) */}
+              {libraryTab === 'laws' && (
+                <div>
+                  <PhysicsToolkit lang={lang} onOpenBooking={handleOpenBooking} />
                 </div>
               )}
 

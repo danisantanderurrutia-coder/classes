@@ -1818,7 +1818,7 @@
       </div>
 
       <!-- Center Vector Holographic Emblem (4K Ultra-Sharp SVG Overlay) -->
-      <div id="intro-vector-hologram" style="left: calc(100% - 300px);">
+      <div id="intro-vector-hologram" style="left:50%; top:50%; transform:translate(-50%, -50%);">
         <svg viewBox="0 0 500 500" width="100%" height="100%" style="overflow:visible;">
           <defs>
             <filter id="holo-glow" x="-30%" y="-30%" width="160%" height="160%">
@@ -4916,6 +4916,873 @@
     });
 
     // =========================================================================
+    // 10. PILOT DOSSIER, AVATAR GENERATOR & CUSTOMIZATION
+    // =========================================================================
+    const playerPilot = {
+      name: 'Daniel',
+      species: 'chiss',
+      skinColor: '#1d4ed8',
+      suit: 'obsidian',
+      accessories: {
+        visor: true,
+        breather: false,
+        cyber: false
+      }
+    };
+
+    function drawAvatar(ctx, cfg, w, h, ox = 0, oy = 0) {
+      ctx.save();
+      ctx.translate(ox, oy);
+
+      const scale = Math.min(w, h) / 280;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // 1. Background: Deep Sci-Fi Cadet Bay Hologram
+      const bgGrad = ctx.createRadialGradient(cx, cy * 0.9, 10 * scale, cx, cy, 140 * scale);
+      bgGrad.addColorStop(0, '#131b2e');
+      bgGrad.addColorStop(0.7, '#090d18');
+      bgGrad.addColorStop(1, '#03050a');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Hologram grid lines
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 20 * scale) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 20 * scale) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Concentric tactical circle
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.14)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 105 * scale, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Faint Greek letter Phi watermark
+      ctx.font = `bold ${85 * scale}px "Orbitron", serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.05)';
+      ctx.fillText('Φ', cx, cy - 10 * scale);
+
+      const skin = cfg.skinColor || '#1d4ed8';
+
+      // 2. SPECIES: TWI'LEK LEKKU (Drawn behind torso and head)
+      if (cfg.species === 'twilek') {
+        ctx.fillStyle = skin;
+        // Left Lekku
+        ctx.beginPath();
+        ctx.moveTo(cx - 30 * scale, cy - 35 * scale);
+        ctx.bezierCurveTo(cx - 95 * scale, cy - 20 * scale, cx - 100 * scale, cy + 90 * scale, cx - 55 * scale, cy + 130 * scale);
+        ctx.bezierCurveTo(cx - 45 * scale, cy + 115 * scale, cx - 65 * scale, cy + 60 * scale, cx - 25 * scale, cy - 10 * scale);
+        ctx.closePath();
+        ctx.fill();
+        // Right Lekku
+        ctx.beginPath();
+        ctx.moveTo(cx + 30 * scale, cy - 35 * scale);
+        ctx.bezierCurveTo(cx + 95 * scale, cy - 20 * scale, cx + 100 * scale, cy + 90 * scale, cx + 55 * scale, cy + 130 * scale);
+        ctx.bezierCurveTo(cx + 45 * scale, cy + 115 * scale, cx + 65 * scale, cy + 60 * scale, cx + 25 * scale, cy - 10 * scale);
+        ctx.closePath();
+        ctx.fill();
+
+        // Decorative leather/gold rings
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 82 * scale, cy + 50 * scale);
+        ctx.lineTo(cx - 62 * scale, cy + 58 * scale);
+        ctx.moveTo(cx + 82 * scale, cy + 50 * scale);
+        ctx.lineTo(cx + 62 * scale, cy + 58 * scale);
+        ctx.stroke();
+      }
+
+      // 3. FLIGHT ARMOR SUIT (Torso & Pauldrons)
+      let suitDark = '#090d16', suitMid = '#1e293b', suitLight = '#475569', trimColor = '#38bdf8';
+      if (cfg.suit === 'crimson') {
+        suitDark = '#450a0a'; suitMid = '#991b1b'; suitLight = '#dc2626'; trimColor = '#f59e0b';
+      } else if (cfg.suit === 'admiral') {
+        suitDark = '#94a3b8'; suitMid = '#e2e8f0'; suitLight = '#f8fafc'; trimColor = '#f59e0b';
+      } else if (cfg.suit === 'shadow') {
+        suitDark = '#050505'; suitMid = '#18181b'; suitLight = '#27272a'; trimColor = '#10b981';
+      }
+
+      // Torso polygon
+      const suitGrad = ctx.createLinearGradient(cx, cy + 40 * scale, cx, h);
+      suitGrad.addColorStop(0, suitMid);
+      suitGrad.addColorStop(1, suitDark);
+      ctx.fillStyle = suitGrad;
+      ctx.beginPath();
+      ctx.moveTo(cx - 110 * scale, h);
+      ctx.lineTo(cx - 95 * scale, cy + 70 * scale);
+      ctx.lineTo(cx - 40 * scale, cy + 55 * scale);
+      ctx.lineTo(cx, cy + 65 * scale);
+      ctx.lineTo(cx + 40 * scale, cy + 55 * scale);
+      ctx.lineTo(cx + 95 * scale, cy + 70 * scale);
+      ctx.lineTo(cx + 110 * scale, h);
+      ctx.closePath();
+      ctx.fill();
+
+      // Shoulder Pauldrons
+      ctx.fillStyle = suitLight;
+      ctx.beginPath();
+      ctx.moveTo(cx - 95 * scale, cy + 70 * scale);
+      ctx.lineTo(cx - 50 * scale, cy + 58 * scale);
+      ctx.lineTo(cx - 60 * scale, cy + 95 * scale);
+      ctx.lineTo(cx - 105 * scale, cy + 110 * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(cx + 95 * scale, cy + 70 * scale);
+      ctx.lineTo(cx + 50 * scale, cy + 58 * scale);
+      ctx.lineTo(cx + 60 * scale, cy + 95 * scale);
+      ctx.lineTo(cx + 105 * scale, cy + 110 * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // Collar trim line
+      ctx.strokeStyle = trimColor;
+      ctx.lineWidth = 2.5 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - 40 * scale, cy + 55 * scale);
+      ctx.lineTo(cx, cy + 65 * scale);
+      ctx.lineTo(cx + 40 * scale, cy + 55 * scale);
+      ctx.stroke();
+
+      // Chest Unit / Rank Plaque
+      if (cfg.suit === 'admiral') {
+        // Grand Admiral Rank Plaque: 3 Red tiles, 3 Blue tiles
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(cx - 24 * scale, cy + 85 * scale, 48 * scale, 18 * scale);
+        for (let i = 0; i < 3; i++) {
+          ctx.fillStyle = '#ef4444';
+          ctx.fillRect(cx - 21 * scale + i * 15 * scale, cy + 87 * scale, 12 * scale, 6 * scale);
+          ctx.fillStyle = '#3b82f6';
+          ctx.fillRect(cx - 21 * scale + i * 15 * scale, cy + 95 * scale, 12 * scale, 6 * scale);
+        }
+      } else {
+        // Imperial Avionics Life-Support Unit
+        ctx.fillStyle = '#0f172a';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.fillRect(cx - 26 * scale, cy + 80 * scale, 52 * scale, 34 * scale);
+        ctx.strokeRect(cx - 26 * scale, cy + 80 * scale, 52 * scale, 34 * scale);
+
+        // Indicator lights
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(cx - 15 * scale, cy + 92 * scale, 3.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#3b82f6';
+        ctx.beginPath();
+        ctx.arc(cx, cy + 92 * scale, 3.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#10b981';
+        ctx.beginPath();
+        ctx.arc(cx + 15 * scale, cy + 92 * scale, 3.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Oxygen rocker switch
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(cx - 16 * scale, cy + 102 * scale, 32 * scale, 5 * scale);
+      }
+
+      // 4. NECK
+      ctx.fillStyle = skin;
+      ctx.fillRect(cx - 18 * scale, cy + 18 * scale, 36 * scale, 42 * scale);
+
+      // Neck shadow under chin
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.beginPath();
+      ctx.moveTo(cx - 18 * scale, cy + 24 * scale);
+      ctx.quadraticCurveTo(cx, cy + 42 * scale, cx + 18 * scale, cy + 24 * scale);
+      ctx.lineTo(cx + 18 * scale, cy + 34 * scale);
+      ctx.quadraticCurveTo(cx, cy + 50 * scale, cx - 18 * scale, cy + 34 * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // 5. HEAD & JAW
+      ctx.fillStyle = skin;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 72 * scale);
+      ctx.bezierCurveTo(cx + 52 * scale, cy - 72 * scale, cx + 50 * scale, cy - 10 * scale, cx + 38 * scale, cy + 15 * scale);
+      ctx.bezierCurveTo(cx + 25 * scale, cy + 38 * scale, cx + 12 * scale, cy + 42 * scale, cx, cy + 44 * scale);
+      ctx.bezierCurveTo(cx - 12 * scale, cy + 42 * scale, cx - 25 * scale, cy + 38 * scale, cx - 38 * scale, cy + 15 * scale);
+      ctx.bezierCurveTo(cx - 50 * scale, cy - 10 * scale, cx - 52 * scale, cy - 72 * scale, cx, cy - 72 * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // Cheek & temple shading
+      const faceGrad = ctx.createRadialGradient(cx, cy - 20 * scale, 5 * scale, cx, cy - 10 * scale, 48 * scale);
+      faceGrad.addColorStop(0, 'rgba(255,255,255,0.18)');
+      faceGrad.addColorStop(0.7, 'rgba(0,0,0,0)');
+      faceGrad.addColorStop(1, 'rgba(0,0,0,0.32)');
+      ctx.fillStyle = faceGrad;
+      ctx.fill();
+
+      // Ears (if not Twi'lek)
+      if (cfg.species !== 'twilek') {
+        ctx.fillStyle = skin;
+        ctx.beginPath();
+        ctx.ellipse(cx - 44 * scale, cy - 6 * scale, 6 * scale, 14 * scale, -0.15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(cx + 44 * scale, cy - 6 * scale, 6 * scale, 14 * scale, 0.15, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 6. SPECIES DETAILS
+      if (cfg.species === 'zabrak') {
+        // Horns
+        const hornAngles = [-0.65, -0.32, 0, 0.32, 0.65];
+        const hornDist = 58 * scale;
+        for (let ang of hornAngles) {
+          const hx = cx + Math.sin(ang) * hornDist;
+          const hy = cy - 22 * scale - Math.cos(ang) * (hornDist - 2 * scale);
+          ctx.fillStyle = '#fef08a';
+          ctx.beginPath();
+          ctx.moveTo(hx - 5 * scale, hy + 4 * scale);
+          ctx.lineTo(hx + Math.sin(ang) * 16 * scale, hy - Math.cos(ang) * 16 * scale);
+          ctx.lineTo(hx + 5 * scale, hy + 4 * scale);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#78350f';
+          ctx.lineWidth = 1 * scale;
+          ctx.stroke();
+        }
+
+        // Tattoos
+        ctx.strokeStyle = '#450a0a';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 60 * scale);
+        ctx.lineTo(cx, cy + 2 * scale);
+        ctx.moveTo(cx - 26 * scale, cy - 20 * scale);
+        ctx.lineTo(cx - 10 * scale, cy - 4 * scale);
+        ctx.moveTo(cx + 26 * scale, cy - 20 * scale);
+        ctx.lineTo(cx + 10 * scale, cy - 4 * scale);
+        ctx.moveTo(cx - 24 * scale, cy + 20 * scale);
+        ctx.lineTo(cx - 8 * scale, cy + 32 * scale);
+        ctx.moveTo(cx + 24 * scale, cy + 20 * scale);
+        ctx.lineTo(cx + 8 * scale, cy + 32 * scale);
+        ctx.stroke();
+      } else if (cfg.species === 'pantoran') {
+        // Golden ritual markings
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillRect(cx - 32 * scale, cy - 6 * scale, 64 * scale, 4 * scale);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 42 * scale);
+        ctx.lineTo(cx - 10 * scale, cy - 54 * scale);
+        ctx.lineTo(cx + 10 * scale, cy - 54 * scale);
+        ctx.closePath();
+        ctx.fill();
+      } else if (cfg.species === 'cyborg') {
+        // Titanium cranial plate on left half
+        ctx.fillStyle = '#475569';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 70 * scale);
+        ctx.bezierCurveTo(cx + 52 * scale, cy - 70 * scale, cx + 50 * scale, cy - 10 * scale, cx + 38 * scale, cy + 15 * scale);
+        ctx.lineTo(cx, cy + 15 * scale);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 70 * scale);
+        ctx.lineTo(cx, cy + 15 * scale);
+        ctx.stroke();
+
+        for (let ry = cy - 60 * scale; ry <= cy + 10 * scale; ry += 14 * scale) {
+          ctx.fillStyle = '#cbd5e1';
+          ctx.beginPath();
+          ctx.arc(cx + 3 * scale, ry, 1.8 * scale, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 7. HAIR
+      if (cfg.species === 'chiss') {
+        ctx.fillStyle = '#090d16';
+        ctx.beginPath();
+        ctx.moveTo(cx - 45 * scale, cy - 40 * scale);
+        ctx.bezierCurveTo(cx - 42 * scale, cy - 84 * scale, cx + 42 * scale, cy - 84 * scale, cx + 45 * scale, cy - 40 * scale);
+        ctx.bezierCurveTo(cx + 30 * scale, cy - 58 * scale, cx - 30 * scale, cy - 58 * scale, cx - 45 * scale, cy - 40 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#2563eb';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.arc(cx, cy - 56 * scale, 30 * scale, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+      } else if (cfg.species === 'pantoran') {
+        ctx.fillStyle = '#312e81';
+        ctx.beginPath();
+        ctx.moveTo(cx - 44 * scale, cy - 35 * scale);
+        ctx.bezierCurveTo(cx - 40 * scale, cy - 82 * scale, cx + 40 * scale, cy - 82 * scale, cx + 44 * scale, cy - 35 * scale);
+        ctx.bezierCurveTo(cx + 25 * scale, cy - 55 * scale, cx - 25 * scale, cy - 55 * scale, cx - 44 * scale, cy - 35 * scale);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 8. EYES & NOSE & MOUTH
+      // Eyebrows
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 2.5 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - 30 * scale, cy - 22 * scale);
+      ctx.lineTo(cx - 10 * scale, cy - 18 * scale);
+      ctx.moveTo(cx + 30 * scale, cy - 22 * scale);
+      ctx.lineTo(cx + 10 * scale, cy - 18 * scale);
+      ctx.stroke();
+
+      // Eyes
+      if (cfg.species === 'chiss') {
+        // Chiss: Glowing Solid Ruby Red Eyes (No pupils)
+        const drawChissEye = (ex) => {
+          const glow = ctx.createRadialGradient(ex, cy - 10 * scale, 1 * scale, ex, cy - 10 * scale, 12 * scale);
+          glow.addColorStop(0, '#f87171');
+          glow.addColorStop(0.4, '#dc2626');
+          glow.addColorStop(1, 'rgba(220, 38, 38, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(ex, cy - 10 * scale, 12 * scale, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ef4444';
+          ctx.beginPath();
+          ctx.ellipse(ex, cy - 10 * scale, 8 * scale, 4.5 * scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#fca5a5';
+          ctx.beginPath();
+          ctx.ellipse(ex, cy - 10 * scale, 4 * scale, 2.5 * scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+        };
+        drawChissEye(cx - 18 * scale);
+        drawChissEye(cx + 18 * scale);
+      } else if (cfg.species === 'cyborg') {
+        // Right eye organic
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(cx - 18 * scale, cy - 10 * scale, 7 * scale, 4 * scale, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#0284c7';
+        ctx.beginPath();
+        ctx.arc(cx - 18 * scale, cy - 10 * scale, 3 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Left eye cybernetic optical scanner
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(cx + 18 * scale, cy - 10 * scale, 7.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx + 18 * scale, cy - 10 * scale, 6.5 * scale, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(cx + 18 * scale, cy - 10 * scale, 2.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        const irisColor = (cfg.species === 'zabrak' ? '#f59e0b' : (cfg.species === 'twilek' ? '#06b6d4' : '#fbbf24'));
+        const drawEye = (ex) => {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.ellipse(ex, cy - 10 * scale, 7.5 * scale, 4.2 * scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = irisColor;
+          ctx.beginPath();
+          ctx.arc(ex, cy - 10 * scale, 3.5 * scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#020617';
+          ctx.beginPath();
+          ctx.arc(ex, cy - 10 * scale, 1.8 * scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(ex - 1.2 * scale, cy - 11.2 * scale, 1 * scale, 0, Math.PI * 2);
+          ctx.fill();
+        };
+        drawEye(cx - 18 * scale);
+        drawEye(cx + 18 * scale);
+      }
+
+      // Nose
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+      ctx.lineWidth = 1.8 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 6 * scale);
+      ctx.lineTo(cx, cy + 9 * scale);
+      ctx.lineTo(cx + 4 * scale, cy + 9 * scale);
+      ctx.stroke();
+
+      // Mouth
+      ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - 12 * scale, cy + 24 * scale);
+      ctx.lineTo(cx + 12 * scale, cy + 24 * scale);
+      ctx.stroke();
+
+      // 9. TACTICAL ACCESSORIES
+      // Rebreather
+      if (cfg.accessories && cfg.accessories.breather) {
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 20 * scale, cy + 14 * scale);
+        ctx.lineTo(cx + 20 * scale, cy + 14 * scale);
+        ctx.lineTo(cx + 16 * scale, cy + 42 * scale);
+        ctx.lineTo(cx - 16 * scale, cy + 42 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(cx - 16 * scale, cy + 32 * scale, 7 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + 16 * scale, cy + 32 * scale, 7 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 3.5 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 18 * scale, cy + 36 * scale);
+        ctx.quadraticCurveTo(cx - 36 * scale, cy + 50 * scale, cx - 28 * scale, cy + 70 * scale);
+        ctx.moveTo(cx + 18 * scale, cy + 36 * scale);
+        ctx.quadraticCurveTo(cx + 36 * scale, cy + 50 * scale, cx + 28 * scale, cy + 70 * scale);
+        ctx.stroke();
+      }
+
+      // HUD Visor
+      if (cfg.accessories && cfg.accessories.visor) {
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.45)';
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 36 * scale, cy - 18 * scale);
+        ctx.lineTo(cx + 36 * scale, cy - 18 * scale);
+        ctx.lineTo(cx + 32 * scale, cy - 2 * scale);
+        ctx.lineTo(cx, cy + 3 * scale);
+        ctx.lineTo(cx - 32 * scale, cy - 2 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 1 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx - 22 * scale, cy - 10 * scale);
+        ctx.lineTo(cx - 14 * scale, cy - 10 * scale);
+        ctx.moveTo(cx + 14 * scale, cy - 10 * scale);
+        ctx.lineTo(cx + 22 * scale, cy - 10 * scale);
+        ctx.stroke();
+
+        ctx.font = `${6 * scale}px "Share Tech Mono", monospace`;
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'left';
+        ctx.fillText('HUD-TGT 98.4%', cx - 30 * scale, cy - 12 * scale);
+      }
+
+      // Neural Data-Jack
+      if (cfg.accessories && cfg.accessories.cyber) {
+        ctx.fillStyle = '#0f172a';
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(cx + 36 * scale, cy - 28 * scale, 5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.8 * scale;
+        ctx.beginPath();
+        ctx.moveTo(cx + 36 * scale, cy - 23 * scale);
+        ctx.lineTo(cx + 42 * scale, cy - 5 * scale);
+        ctx.lineTo(cx + 36 * scale, cy + 18 * scale);
+        ctx.stroke();
+
+        ctx.fillStyle = '#00ff66';
+        ctx.beginPath();
+        ctx.arc(cx + 36 * scale, cy - 28 * scale, 1.8 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 10. CORNER BRACKETS & CALLSIGN STAMP
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.7)';
+      ctx.lineWidth = 2 * scale;
+      const bLen = 14 * scale;
+      // Corners
+      ctx.beginPath(); ctx.moveTo(6 * scale, 6 * scale + bLen); ctx.lineTo(6 * scale, 6 * scale); ctx.lineTo(6 * scale + bLen, 6 * scale); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(w - 6 * scale - bLen, 6 * scale); ctx.lineTo(w - 6 * scale, 6 * scale); ctx.lineTo(w - 6 * scale, 6 * scale + bLen); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(6 * scale, h - 6 * scale - bLen); ctx.lineTo(6 * scale, h - 6 * scale); ctx.lineTo(6 * scale + bLen, h - 6 * scale); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(w - 6 * scale - bLen, h - 6 * scale); ctx.lineTo(w - 6 * scale, h - 6 * scale); ctx.lineTo(w - 6 * scale, h - 6 * scale - bLen); ctx.stroke();
+
+      // Callsign tag at bottom
+      ctx.fillStyle = 'rgba(10, 15, 26, 0.85)';
+      ctx.fillRect(8 * scale, h - 24 * scale, w - 16 * scale, 18 * scale);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1 * scale;
+      ctx.strokeRect(8 * scale, h - 24 * scale, w - 16 * scale, 18 * scale);
+
+      ctx.font = `bold ${8.5 * scale}px "Orbitron", sans-serif`;
+      ctx.fillStyle = '#f59e0b';
+      ctx.textAlign = 'left';
+      ctx.fillText(`ID: ${cfg.name.toUpperCase() || 'CADET'}`, 14 * scale, h - 12 * scale);
+
+      ctx.font = `${7.5 * scale}px "Share Tech Mono", monospace`;
+      ctx.fillStyle = '#38bdf8';
+      ctx.textAlign = 'right';
+      ctx.fillText(cfg.species.toUpperCase(), w - 14 * scale, h - 12 * scale);
+
+      ctx.restore();
+    }
+
+    function refreshAvatarPreview() {
+      const canvas = document.getElementById('avatar-preview-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawAvatar(ctx, playerPilot, canvas.width, canvas.height, 0, 0);
+    }
+
+    // Pilot Dossier Listeners
+    const nameInput = document.getElementById('pilot-name-input');
+    if (nameInput) {
+      nameInput.addEventListener('input', (e) => {
+        playerPilot.name = e.target.value.trim() || 'Cadet';
+        refreshAvatarPreview();
+      });
+    }
+
+    document.querySelectorAll('#species-selector-group .dossier-pill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#species-selector-group .dossier-pill-btn').forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        const sp = e.currentTarget.dataset.species;
+        playerPilot.species = sp;
+
+        // Auto-assign matching species canonical skin pigment
+        const defaultSkins = {
+          chiss: '#1d4ed8',
+          twilek: '#06b6d4',
+          zabrak: '#dc2626',
+          cyborg: '#f8fafc',
+          pantoran: '#a855f7'
+        };
+        if (defaultSkins[sp]) {
+          playerPilot.skinColor = defaultSkins[sp];
+          document.querySelectorAll('#skin-swatch-group .skin-swatch-btn').forEach(s => {
+            s.classList.toggle('active', s.dataset.color.toLowerCase() === defaultSkins[sp].toLowerCase());
+          });
+        }
+        refreshAvatarPreview();
+        playMechanicalStepSound(420);
+      });
+    });
+
+    document.querySelectorAll('#skin-swatch-group .skin-swatch-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#skin-swatch-group .skin-swatch-btn').forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        playerPilot.skinColor = e.currentTarget.dataset.color;
+        refreshAvatarPreview();
+        playMechanicalStepSound(360);
+      });
+    });
+
+    document.querySelectorAll('#suit-selector-group .dossier-pill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#suit-selector-group .dossier-pill-btn').forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        playerPilot.suit = e.currentTarget.dataset.suit;
+        refreshAvatarPreview();
+        playMechanicalStepSound(480);
+      });
+    });
+
+    const visorChip = document.getElementById('toggle-acc-visor');
+    if (visorChip) {
+      visorChip.addEventListener('click', () => {
+        playerPilot.accessories.visor = !playerPilot.accessories.visor;
+        visorChip.classList.toggle('active', playerPilot.accessories.visor);
+        refreshAvatarPreview();
+        playMechanicalStepSound(520);
+      });
+    }
+
+    const breatherChip = document.getElementById('toggle-acc-breather');
+    if (breatherChip) {
+      breatherChip.addEventListener('click', () => {
+        playerPilot.accessories.breather = !playerPilot.accessories.breather;
+        breatherChip.classList.toggle('active', playerPilot.accessories.breather);
+        refreshAvatarPreview();
+        playMechanicalStepSound(310);
+      });
+    }
+
+    const cyberChip = document.getElementById('toggle-acc-cyber');
+    if (cyberChip) {
+      cyberChip.addEventListener('click', () => {
+        playerPilot.accessories.cyber = !playerPilot.accessories.cyber;
+        cyberChip.classList.toggle('active', playerPilot.accessories.cyber);
+        refreshAvatarPreview();
+        playMechanicalStepSound(640);
+      });
+    }
+
+    // High-Resolution 1024x1024 Official Pilot Credential & Diploma Generator
+    function downloadPilotSkinPNG() {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 1024;
+      const ctx = c.getContext('2d');
+
+      // Space background
+      const bg = ctx.createRadialGradient(512, 512, 100, 512, 512, 600);
+      bg.addColorStop(0, '#0f172a');
+      bg.addColorStop(0.6, '#080d1a');
+      bg.addColorStop(1, '#020408');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      // Starfield
+      ctx.fillStyle = '#ffffff';
+      for (let i = 0; i < 180; i++) {
+        const sx = Math.sin(i * 193.7) * 512 + 512;
+        const sy = Math.cos(i * 382.1) * 512 + 512;
+        const sr = (i % 3 === 0) ? 1.5 : 0.8;
+        ctx.globalAlpha = 0.3 + (i % 5) * 0.14;
+        ctx.beginPath();
+        ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1.0;
+
+      // Ornate Gold & Titanium Imperial Border
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(32, 32, 960, 960);
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(44, 44, 936, 936);
+
+      // Corner Accents
+      const cornerSize = 40;
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(32, 32, cornerSize, 6);
+      ctx.fillRect(32, 32, 6, cornerSize);
+      ctx.fillRect(992 - cornerSize, 32, cornerSize, 6);
+      ctx.fillRect(986, 32, 6, cornerSize);
+      ctx.fillRect(32, 986, cornerSize, 6);
+      ctx.fillRect(32, 992 - cornerSize, 6, cornerSize);
+      ctx.fillRect(992 - cornerSize, 986, cornerSize, 6);
+      ctx.fillRect(986, 992 - cornerSize, 6, cornerSize);
+
+      // Top Header
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 15px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('IMPERIAL FLIGHT ACADEMY // HIGH ORBITAL COMMAND', 512, 78);
+
+      ctx.font = '900 34px "Orbitron", sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('OFFICIAL PILOT GRADUATION CREDENTIAL', 512, 122);
+
+      ctx.font = '13px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('PROJECT PHI-FIGHTER // CELESTIAL DEFENSE CAMPAIGN', 512, 148);
+
+      // Horizontal Header Divider
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(60, 168);
+      ctx.lineTo(964, 168);
+      ctx.stroke();
+
+      // Left Column: Avatar Portrait (420x420)
+      ctx.save();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(66, 194, 428, 428);
+      drawAvatar(ctx, playerPilot, 420, 420, 70, 198);
+      ctx.restore();
+
+      // Designation card below portrait
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(66, 636, 428, 86);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(66, 636, 428, 86);
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 20px "Orbitron", sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(`PILOT: ${playerPilot.name.toUpperCase()}`, 86, 670);
+
+      ctx.font = '13px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(`SPECIES: ${playerPilot.species.toUpperCase()} // ARMOR: ${playerPilot.suit.toUpperCase()}`, 86, 700);
+
+      // Right Column: Telemetry & Combat Statistics
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      ctx.fillRect(520, 194, 444, 528);
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(520, 194, 444, 528);
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 18px "Orbitron", sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('MISSION FLIGHT TELEMETRY', 546, 232);
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(546, 244);
+      ctx.lineTo(930, 244);
+      ctx.stroke();
+
+      const metrics = [
+        ['CAMPAIGN STATUS:', 'VICTORIOUS // 10 SECTORS SECURED'],
+        ['SECTORS CLEARED:', '10 / 10 (MERCURY -> SINGULARITY)'],
+        ['FINAL CAMPAIGN SCORE:', `${score} PTS`],
+        ['COMBAT DIFFICULTY:', gameDifficulty.toUpperCase()],
+        ['SINGULARITY SURVIVAL:', 'CONFIRMED (GENERAL RELATIVITY)'],
+        ['OFFICIAL RANK:', 'IMPERIAL FLIGHT ACE // SQUADRON PHI'],
+        ['PHYSICS ENGINES:', 'NEWTONIAN 6-DOF & RELATIVISTIC']
+      ];
+
+      let my = 278;
+      for (let [lbl, val] of metrics) {
+        ctx.font = '12px "Share Tech Mono", monospace';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(lbl, 546, my);
+
+        ctx.font = 'bold 12px "Orbitron", sans-serif';
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(val, 715, my);
+        my += 33;
+      }
+
+      // Classes Tutoring Endorsement Card
+      ctx.fillStyle = '#0a101f';
+      ctx.fillRect(540, 518, 404, 186);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(540, 518, 404, 186);
+
+      ctx.font = 'bold 14px "Orbitron", sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('🎓 ENDORSO Y CLASES PARTICULARES', 558, 548);
+
+      ctx.font = '12px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText('Acreditado por: Daniel Santander (Classes)', 558, 574);
+      ctx.fillText('Especialista en Física, Matemáticas y 3D Web', 558, 596);
+      ctx.fillText('Email: danisantander.urrutia@gmail.com', 558, 624);
+      ctx.fillText('WhatsApp: +49 176 76497440', 558, 648);
+      ctx.fillText('Autenticación: SHA256-PHI-' + Math.floor(100000 + Math.random() * 900000), 558, 672);
+
+      // Bottom Footer Seal
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(66, 746, 898, 172);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(66, 746, 898, 172);
+
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 22px "Orbitron", sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('PROJECT PHI // CLASSES FLIGHT ACADEMY DIPLOMA', 512, 792);
+
+      ctx.font = 'italic 15px "Georgia", serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText('"Per aspera ad Phi - Ex scientia virtus"', 512, 826);
+
+      ctx.font = '12px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText(`EMITIDO: ${new Date().toLocaleDateString()} // EXPEDIDO POR DANIEL SANTANDER // HTTPS://CLASSES.ES`, 512, 862);
+
+      // Trigger PNG Download
+      const a = document.createElement('a');
+      a.download = `Phi_Pilot_Credential_${playerPilot.name || 'Ace'}.png`;
+      a.href = c.toDataURL('image/png');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      showNotification('CREDENCIAL DE PILOTO DESCARGADA [PNG 1024×1024] 🎖️', '#00ff66');
+    }
+
+    const dlSkinBtn = document.getElementById('btn-download-skin');
+    if (dlSkinBtn) dlSkinBtn.addEventListener('click', downloadPilotSkinPNG);
+
+    // Contact Modal Handlers
+    const btnOpenContact = document.getElementById('btn-open-contact-modal');
+    if (btnOpenContact) {
+      btnOpenContact.addEventListener('click', () => {
+        const modal = document.getElementById('contact-modal');
+        if (modal) modal.style.display = 'flex';
+      });
+    }
+
+    const btnCloseContact = document.getElementById('btn-close-contact-modal');
+    if (btnCloseContact) {
+      btnCloseContact.addEventListener('click', () => {
+        const modal = document.getElementById('contact-modal');
+        if (modal) modal.style.display = 'none';
+      });
+    }
+
+    const btnSendContact = document.getElementById('btn-send-contact-email');
+    if (btnSendContact) {
+      btnSendContact.addEventListener('click', () => {
+        const name = document.getElementById('contact-name').value.trim() || playerPilot.name || 'Estudiante';
+        const email = document.getElementById('contact-email').value.trim() || 'No especificado';
+        const phone = document.getElementById('contact-phone').value.trim() || 'No especificado';
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value.trim() || 'Hola Daniel, me gustaría solicitar clases particulares.';
+
+        const mailtoUrl = `mailto:danisantander.urrutia@gmail.com?subject=${encodeURIComponent(`Solicitud de Clases // ${subject} - ${name}`)}&body=${encodeURIComponent(
+          `Nombre: ${name}\n` +
+          `Email: ${email}\n` +
+          `Teléfono / WhatsApp: ${phone}\n` +
+          `Asignatura de interés: ${subject}\n` +
+          `Puntaje en Phi-Fighter: ${score} PTS\n\n` +
+          `Mensaje:\n${message}\n\n` +
+          `--\nEnviado desde Project Phi-Fighter (Classes)`
+        )}`;
+
+        window.location.href = mailtoUrl;
+        showNotification('SOLICITUD PREPARADA // Abriendo tu cliente de correo ✉️', '#00f0ff');
+        document.getElementById('contact-modal').style.display = 'none';
+      });
+    }
+
+    // Initialize default avatar
+    refreshAvatarPreview();
+
+    // =========================================================================
     // 10. STEP-BY-STEP CINEMATIC TRANSFORMATION SEQUENCE
     // =========================================================================
     let introActive = true;
@@ -4933,6 +5800,9 @@
     rightWingGroup.scale.set(0.02, 1, 0.02);
     phiGlyphGroup.visible = true;
 
+    // Split-Screen initial position: Ship positioned in right half stage
+    shipRoot.position.set(2.4, 0, 0);
+
     // Start with cinema scope bars active on intro!
     document.body.classList.add('cinema-active');
     camera.position.set(0, 0.1, -7.8);
@@ -4944,15 +5814,35 @@
       playHydraulicServoSound();
 
       transformationInProgress = true;
-      document.getElementById('intro-screen').style.opacity = '0';
+
+      // Slide out Dossier panel to the left
+      const dossier = document.getElementById('pilot-dossier-panel');
+      if (dossier) dossier.classList.add('slide-out-left');
+
       const holo = document.getElementById('intro-vector-hologram');
       if (holo) {
         holo.style.opacity = '0';
         setTimeout(() => holo.style.display = 'none', 600);
       }
-      phiGlyphGroup.visible = true;
-      setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 600);
+      setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 650);
 
+      // Smoothly animate ship from right (X=2.4) to screen center (X=0.0)
+      const centerDuration = 700;
+      const centerStart = performance.now();
+      const startX = shipRoot.position.x;
+      function animCenter(now) {
+        const p = Math.min(1, (now - centerStart) / centerDuration);
+        const ease = p * p * (3 - 2 * p);
+        shipRoot.position.x = startX * (1 - ease);
+        if (p < 1) {
+          requestAnimationFrame(animCenter);
+        } else {
+          shipRoot.position.x = 0;
+        }
+      }
+      requestAnimationFrame(animCenter);
+
+      phiGlyphGroup.visible = true;
       morphHud.style.display = 'flex';
 
       // 4-Stage Progressive Cinematic Assembly Timeline (4.6 seconds total)

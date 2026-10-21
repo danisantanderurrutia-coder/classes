@@ -51,13 +51,13 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   const rhrCanvasRef = useRef(null);
 
   // ==========================================================================
-  // 2. 2x2 MATRIX DIAGONALIZATION & SVD / TIKHONOV INVERSE THEORY STATE
+  // 2. 2x2 MATRIX DIAGONALIZATION & SPECTRAL THEOREM STATE
   // Matrix A = [ [matA, matB], [matB, matD] ] (symmetric)
   // ==========================================================================
   const [matA, setMatA] = useState(4);
   const [matB, setMatB] = useState(2);
   const [matD, setMatD] = useState(1);
-  const [tikhonovEps, setTikhonovEps] = useState(0.20); // damping parameter epsilon^2
+  const [leastSquaresEps, setLeastSquaresEps] = useState(0.20); // damping parameter epsilon^2
 
   // Compute eigenvalues for [ [matA, matB], [matB, matD] ]
   const tr = matA + matD;
@@ -71,11 +71,11 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   const sigma2 = Math.min(Math.abs(lambda1), Math.abs(lambda2));
   const condNumber = sigma2 > 1e-4 ? sigma1 / sigma2 : 999;
 
-  // Tikhonov Regularization on test data d = [6, 2]^T
+  // Least Squares with Tikhonov damping on test data d = [6, 2]^T
   // (A^T A + eps^2 I) m = A^T d
-  const m11 = matA * matA + matB * matB + tikhonovEps;
+  const m11 = matA * matA + matB * matB + leastSquaresEps;
   const m12 = matA * matB + matB * matD;
-  const m22 = matB * matB + matD * matD + tikhonovEps;
+  const m22 = matB * matB + matD * matD + leastSquaresEps;
   const detM = m11 * m22 - m12 * m12;
   const at_d1 = matA * 6 + matB * 2;
   const at_d2 = matB * 6 + matD * 2;
@@ -487,16 +487,16 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       relevanceEs: 'El estándar de oro para compresión de datos sísmicos, reducción dimensional PCA y filtrado de ruido.'
     },
     {
-      id: 'tikhonov_regularization',
+      id: 'least_squares_projection',
       category: 'spectral',
-      courseCode: 'GEO-301 / COMP-205',
-      titleEn: 'Tikhonov Regularized Inversion (Damped Least Squares)',
-      titleEs: 'Inversión Regularizada de Tikhonov (Mínimos Cuadrados Amortiguados)',
-      latex: '\\hat{\\mathbf{m}} = (A^T A + \\varepsilon^2 I)^{-1} A^T \\mathbf{d} \\quad \\Longleftrightarrow \\quad \\min_{\\mathbf{m}} \\left(\\|A\\mathbf{m} - \\mathbf{d}\\|^2 + \\varepsilon^2 \\|\\mathbf{m}\\|^2\\right)',
-      descEn: 'Stabilizes ill-posed rank-deficient inverse systems by adding an isotropic energy penalty ε²‖m‖², preventing noise amplification from near-zero singular values in tomography.',
-      descEs: 'Estabiliza problemas inversos mal condicionados agregando una penalización de energía ε²‖m‖², evitando que el ruido se amplifique por valores singulares cercanos a cero en tomografía.',
-      relevanceEn: 'Essential in geophysical seismic tomography, satellite gravity recovery, and medical electrical impedance.',
-      relevanceEs: 'Pilar indispensable en tomografía sísmica computarizada y gravimetría satelital.'
+      courseCode: 'LA-102 / COMP-205',
+      titleEn: 'Orthogonal Projection & Least Squares (Normal Equations)',
+      titleEs: 'Proyección Ortogonal y Mínimos Cuadrados (Ecuaciones Normales)',
+      latex: 'A^T A \\hat{\\mathbf{x}} = A^T \\mathbf{b} \\quad \\Longleftrightarrow \\quad \\hat{\\mathbf{x}} = (A^T A)^{-1} A^T \\mathbf{b}',
+      descEn: 'The fundamental theorem of linear least squares: projecting a vector b onto the column space of A to minimize the Euclidean residual norm ||Ax - b||.',
+      descEs: 'El teorema fundamental de mínimos cuadrados lineales: proyecta un vector b sobre el espacio columna de A minimizando la norma residual ||Ax - b||.',
+      relevanceEn: 'Core exam proof in Linear Algebra and experimental curve fitting in Scientific Computing.',
+      relevanceEs: 'Demostración clásica obligada de Álgebra Lineal y ajuste de modelos experimentales en computación científica.'
     }
   ];
 
@@ -1136,8 +1136,8 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
             {isEn
-              ? 'The conceptual pillars that university and IB examinations demand: from interactive 3D right-hand rules and matrix SVD inversion to canonical PDEs, Fourier signal convolution, and complex residue theorems.'
-              : 'Los pilares obligados en la formación de geofísica y ciencias exactas: desde la regla de la mano derecha 3D y la inversión SVD hasta las 3 EDPs canónicas, convolución de señales y residuos complejos.'}
+              ? 'The conceptual pillars that university and IB examinations demand: from interactive 3D right-hand rules and matrix diagonalization to canonical PDEs, Fourier signal decomposition, and complex residue theorems.'
+              : 'Los pilares obligados en la formación de geofísica y ciencias exactas: desde la regla de la mano derecha 3D y la diagonalización matricial hasta las 3 EDPs canónicas, descomposición de señales y residuos complejos.'}
           </p>
         </div>
 
@@ -1348,12 +1348,12 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               {isEn ? 'Linear Algebra, Axiomatic Vector Spaces & Spectral Inversion' : 'Álgebra Lineal, Espacios Axiomáticos e Inversión Espectral'}
             </span>
             <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-              {isEn ? 'Vector Space Axioms, Transformations, Matrices & SVD' : 'Axiomas de Espacios Vectoriales, Transformaciones, Matrices y SVD'}
+              {isEn ? 'Vector Space Axioms, Transformations, Matrices & Diagonalization' : 'Axiomas de Espacios Vectoriales, Transformaciones, Matrices y Diagonalización'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
               {isEn
-                ? 'The complete structural pipeline of university linear algebra: from the 8 formal axioms over a field 𝕂 and subspace criteria to linear transformations, Gram-Schmidt orthonormalization, and 2x2 matrix SVD / Tikhonov regularization.'
-                : 'La columna vertebral del álgebra lineal universitaria: desde los 8 axiomas formales sobre un cuerpo 𝕂 y criterios de subespacio hasta transformaciones lineales, ortogonalización de Gram-Schmidt y regularización SVD / Tikhonov.'}
+                ? 'The complete structural pipeline of university linear algebra: from the 8 formal axioms over a field 𝕂 and subspace criteria to linear transformations, Gram-Schmidt orthonormalization, and 2x2 matrix spectral diagonalization.'
+                : 'La columna vertebral del álgebra lineal universitaria: desde los 8 axiomas formales sobre un cuerpo 𝕂 y criterios de subespacio hasta transformaciones lineales, ortogonalización de Gram-Schmidt y diagonalización espectral de matrices 2x2.'}
             </p>
           </div>
 
@@ -1460,26 +1460,26 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
 
                   <div className="pt-2 border-t border-slate-800">
                     <div className="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                      <span>{isEn ? 'Tikhonov Damping Parameter (ε²):' : 'Amortiguamiento Tikhonov (ε²):'}</span>
-                      <strong className="text-amber-400">{tikhonovEps.toFixed(2)}</strong>
+                      <span>{isEn ? 'Least Squares Damping Parameter (ε²):' : 'Amortiguamiento de Mínimos Cuadrados (ε²):'}</span>
+                      <strong className="text-amber-400">{leastSquaresEps.toFixed(2)}</strong>
                     </div>
                     <input
                       type="range"
                       min="0.00"
                       max="2.00"
                       step="0.05"
-                      value={tikhonovEps}
-                      onChange={(e) => setTikhonovEps(Number(e.target.value))}
+                      value={leastSquaresEps}
+                      onChange={(e) => setLeastSquaresEps(Number(e.target.value))}
                       className="w-full accent-amber-400 cursor-pointer"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Results: Characteristic Polynomial, Eigenvalues & SVD Inverse */}
+              {/* Results: Characteristic Polynomial, Eigenvalues & Spectral Decomposition */}
               <div className="lg:col-span-7 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 font-mono text-xs">
                 <span className="text-xs font-mono uppercase text-indigo-400 font-bold block">
-                  {isEn ? 'Real-Time Spectral & Inverse Decomposition:' : 'Descomposición Espectral e Inversión en Vivo:'}
+                  {isEn ? 'Real-Time Spectral & Matrix Decomposition:' : 'Descomposición Espectral y Matricial en Vivo:'}
                 </span>
 
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
@@ -1519,7 +1519,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                 <div className="p-3.5 bg-slate-950 rounded-xl border border-indigo-950/60 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-indigo-400 text-[10px] uppercase font-bold">
-                      {isEn ? 'SVD Decomposition (A = U Σ Vᵀ)' : 'Descomposición SVD (A = U Σ Vᵀ)'}
+                      {isEn ? 'SVD & Condition Number (A = U Σ Vᵀ)' : 'SVD y Número de Condición (A = U Σ Vᵀ)'}
                     </span>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${condNumber > 15 ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
                       κ(A) = {condNumber > 100 ? (isEn ? '>100 (Ill-Conditioned)' : '>100 (Mal Condicionado)') : condNumber.toFixed(2)}
@@ -1531,7 +1531,7 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
                       : `Valores singulares: σ₁ = ${sigma1.toFixed(2)}, σ₂ = ${sigma2.toFixed(2)}`}
                   </p>
                   <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 flex justify-between items-center">
-                    <span>{isEn ? 'Tikhonov Inverse Solution m̂ for d=[6, 2]ᵀ:' : 'Solución Inversa Tikhonov m̂ para d=[6, 2]ᵀ:'}</span>
+                    <span>{isEn ? 'Estimated Solution m̂ for d=[6, 2]ᵀ:' : 'Solución Estimada m̂ para d=[6, 2]ᵀ:'}</span>
                     <strong className="text-amber-400">[{mEst1.toFixed(2)}, {mEst2.toFixed(2)}]ᵀ</strong>
                   </div>
                 </div>

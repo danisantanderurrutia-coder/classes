@@ -22,6 +22,14 @@ import {
 } from 'lucide-react';
 import EpistemicTimeline from './EpistemicTimeline';
 
+const getAssetUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  const clean = url.replace(/^\//, '');
+  const base = import.meta.env.BASE_URL || './';
+  return `${base}${clean}`;
+};
+
 export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
   const [activeStep, setActiveStep] = useState(0);
 
@@ -336,23 +344,27 @@ export default function PIADMethod({ lang = 'es', onNavigate, onOpenBooking }) {
               {steps[activeStep].image && (
                 <div className="lg:col-span-5 flex flex-col items-center">
                   <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950 max-w-sm group">
-                    <div className="relative h-56 overflow-hidden">
-                      {/* Classical Authentic Da Vinci Sketch */}
+                    <div className="relative h-56 overflow-hidden bg-slate-950">
+                      {/* Modern Analytical / Geometric Overlay (Back Layer) */}
+                      {steps[activeStep].simulationImage && (
+                        <img
+                          src={getAssetUrl(steps[activeStep].simulationImage)}
+                          alt="Analytical Model"
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      )}
+                      {/* Classical Authentic Da Vinci Sketch (Front Layer) */}
                       <img
                         src={steps[activeStep].image}
                         alt="Da Vinci Notebook Sketch"
-                        className="w-full h-full object-cover opacity-90 transition-opacity duration-700 ease-in-out group-hover:opacity-0"
+                        className={`absolute inset-0 w-full h-full object-cover opacity-90 transition-all duration-700 ease-in-out ${
+                          steps[activeStep].simulationImage ? 'group-hover:opacity-0 group-hover:scale-105' : ''
+                        }`}
+                        loading="lazy"
                       />
-                      {/* Modern Analytical / Geometric Overlay */}
                       {steps[activeStep].simulationImage && (
-                        <img
-                          src={steps[activeStep].simulationImage}
-                          alt="Analytical Model"
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:opacity-100 scale-105 group-hover:scale-100"
-                        />
-                      )}
-                      {steps[activeStep].simulationImage && (
-                        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <div className="absolute bottom-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                           <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-950/85 text-amber-300 border border-amber-400/30 backdrop-blur-xs flex items-center gap-1 shadow-md">
                             <span>{lang === 'en' ? 'Digital Analysis' : 'Análisis Digital'}</span>
                           </span>

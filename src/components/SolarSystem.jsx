@@ -246,7 +246,7 @@ function createAmbientEngine() {
 }
 
 // ============================================================================
-// 1. ASTROPHYSICAL & ACADEMIC METADATA
+// 1. ASTROPHYSICAL & ACADEMIC METADATA (11 CELESTIAL BODIES: 8 PLANETS + SUN + MOON + SGR A*)
 // ============================================================================
 export const PLANET_SUBJECTS = [
   {
@@ -259,20 +259,20 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Sol',
     emoji: '☀️',
     spectralClass: 'G2V Main Sequence Star',
-    academicAreaEn: 'Computational Physics & Scientific Python',
-    academicAreaEs: 'Física Computacional y Python Científico',
-    shortCourseEn: 'Scientific Python & Sim',
-    shortCourseEs: 'Python Científico & Sim',
-    courseId: 'computational',
-    courseCode: 'COMP-205',
-    rateHourly: 65,
-    packagePrice: 470,
+    academicAreaEn: 'General Physics (Bachelor / Plan Común)',
+    academicAreaEs: 'Física General (Nivel Bachelor / Plan Común)',
+    shortCourseEn: 'General Physics',
+    shortCourseEs: 'Física General',
+    courseId: 'physics_bachelor',
+    courseCode: 'PHY-101',
+    rateHourly: 55,
+    packagePrice: 390,
     inLineup: true,
     lineupIndex: 0,
-    lineupX: -21.0,
-    lineupScale: 0.56,
-    descriptionEn: 'The central thermonuclear engine: Differential calculus, vector fields, magnetohydrodynamics, and high-performance Python simulation.',
-    descriptionEs: 'El motor termonuclear central: Cálculo diferencial, campos vectoriales, magnetohidrodinámica y simulación científica en Python.',
+    lineupX: -30.0,
+    lineupScale: 0.50,
+    descriptionEn: 'Foundational university physics: Newtonian mechanics, work and energy conservation, thermodynamics, wave optics, and laboratory problem solving.',
+    descriptionEs: 'Física fundamental universitaria: mecánica newtoniana, leyes de conservación de energía y momento, termodinámica, ondas y resolución sistemática de problemas.',
     color: '#FFB703',
     size: 3.4,
     distance: 0,
@@ -300,20 +300,20 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Mercurio',
     emoji: '🪨',
     spectralClass: 'Hermian Silicate Regolith',
-    academicAreaEn: 'Classical Mechanics & Analytical Dynamics',
-    academicAreaEs: 'Mecánica Clásica y Dinámica Analítica',
-    shortCourseEn: 'Classical Mechanics',
-    shortCourseEs: 'Mecánica Clásica',
+    academicAreaEn: 'Classical Mechanics & Dynamics',
+    academicAreaEs: 'Mecánica Clásica y Dinámica',
+    shortCourseEn: 'Mechanics',
+    shortCourseEs: 'Mecánica',
     courseId: 'mechanics',
     courseCode: 'PHY-201',
     rateHourly: 60,
     packagePrice: 430,
     inLineup: true,
     lineupIndex: 1,
-    lineupX: -14.0,
-    lineupScale: 2.55,
-    descriptionEn: 'Relativistic perihelion precession (Einstein 43"/century), Lagrangian & Hamiltonian formalisms, and perturbation theory.',
-    descriptionEs: 'Precesión relativista del perihelio (43"/siglo), formalismo Lagrangiano y Hamiltoniano, y teoría analítica de perturbaciones.',
+    lineupX: -24.0,
+    lineupScale: 2.50,
+    descriptionEn: 'Newtonian dynamics, non-inertial frames, rigid body rotations, inertia tensors, harmonic oscillators, and central gravitational potentials.',
+    descriptionEs: 'Dinámica newtoniana, sistemas no inerciales, cinemática del sólido rígido, tensores de inercia, osciladores armónicos y potenciales gravitatorios.',
     color: '#A3A8B5',
     size: 0.65,
     distance: 7.5,
@@ -342,17 +342,20 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Venus',
     emoji: '🌕',
     spectralClass: 'Supercritical Greenhouse Atmosphere',
-    academicAreaEn: 'Non-Linear Thermodynamics & Chaotic Planetary Systems',
-    academicAreaEs: 'Termodinámica No Lineal y Sistemas Planetarios Caóticos',
-    shortCourseEn: 'Thermodynamics',
-    shortCourseEs: 'Termodinámica',
-    courseId: 'mechanics',
-    courseCode: 'PHY-201',
+    academicAreaEn: 'Atmospheric Physics & Gas Dynamics',
+    academicAreaEs: 'Física Atmosférica y Dinámica de Gases',
+    shortCourseEn: 'Atmospheric Physics',
+    shortCourseEs: 'Física Atmosférica',
+    courseId: 'atmospheric',
+    courseCode: 'ATM-201',
     rateHourly: 60,
     packagePrice: 430,
-    inLineup: false,
-    descriptionEn: 'Runaway greenhouse thermal dynamics, Navier-Stokes fluid transitions, high-pressure phase equilibria, and retrograde atmospheric super-rotation.',
-    descriptionEs: 'Termodinámica de efecto invernadero desbocado, transiciones fluidas de Navier-Stokes, equilibrio de fases a 92 bar y superrotación atmosférica.',
+    inLineup: true,
+    lineupIndex: 2,
+    lineupX: -18.0,
+    lineupScale: 1.65,
+    descriptionEn: 'Atmospheric thermodynamics, hydrostatic balance, greenhouse radiative transfer, baroclinic fluid instability, and planetary boundary layers.',
+    descriptionEs: 'Termodinámica atmosférica, equilibrio hidrostático, transferencia radiativa, efecto invernadero, fluidos baroclínicos y capas límite planetarias.',
     color: '#FCD34D',
     size: 1.08,
     distance: 11.2,
@@ -381,20 +384,20 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Tierra',
     emoji: '🌍',
     spectralClass: 'Active Biosphere / Human Civilization',
-    academicAreaEn: 'Higher Mathematics & Calculus I, II & III',
-    academicAreaEs: 'Cálculo Avanzado y Análisis Matemático (HM I–III)',
+    academicAreaEn: 'Calculus & Mathematical Analysis (I, II & III)',
+    academicAreaEs: 'Cálculo y Análisis Matemático (I, II y III)',
     shortCourseEn: 'Calculus I–III',
     shortCourseEs: 'Cálculo I–III',
     courseId: 'klausur',
-    courseCode: 'HM-101/201',
+    courseCode: 'HM-101',
     rateHourly: 55,
     packagePrice: 390,
     inLineup: true,
-    lineupIndex: 2,
-    lineupX: -7.0,
+    lineupIndex: 3,
+    lineupX: -12.0,
     lineupScale: 1.65,
-    descriptionEn: 'Rigorous multivariable calculus, Gauss/Stokes integral theorems, ODEs, and university exam preparation.',
-    descriptionEs: 'Cálculo multivariable riguroso, teoremas integrales de Gauss/Stokes, EDOs y preparación exhaustiva de exámenes universitarios.',
+    descriptionEn: 'Multivariable differential calculus, gradient vector fields (∇f, ∇·F, ∇×F), Gauss and Stokes theorems, Taylor series, and exam drills.',
+    descriptionEs: 'Cálculo diferencial multivariable, campos vectoriales (∇f, ∇·F, ∇×F), teoremas integrales de Gauss y Stokes, series de Taylor y preparación de exámenes.',
     color: '#38BDF8',
     size: 1.15,
     distance: 15.0,
@@ -404,7 +407,7 @@ export const PLANET_SUBJECTS = [
     axialTilt: 23.44,
     hasClouds: true,
     hasAtmosphere: true,
-    hasMoon: true,
+    hasMoon: false,
     hasSatellites: true,
     orbitalPeriod: '365.25 days',
     temperatureK: '288 K (Mean)',
@@ -418,6 +421,48 @@ export const PLANET_SUBJECTS = [
     magneticFieldTesla: '30.5 µT (Equator) / 60 µT (Poles)',
   },
   {
+    id: 'moon',
+    name: 'The Moon',
+    nameEn: 'The Moon',
+    nameEs: 'La Luna',
+    shortName: 'Moon',
+    shortNameEn: 'Moon',
+    shortNameEs: 'Luna',
+    emoji: '🌑',
+    spectralClass: 'Silicate Lunar Regolith',
+    academicAreaEn: 'Soil Physics, Porous Media & Hydrogeophysics',
+    academicAreaEs: 'Física de Suelos, Medios Porosos e Hidrogeofísica',
+    shortCourseEn: 'Soil Physics',
+    shortCourseEs: 'Física de Suelos',
+    courseId: 'soil_physics',
+    courseCode: 'GEO-202',
+    rateHourly: 60,
+    packagePrice: 430,
+    inLineup: true,
+    lineupIndex: 4,
+    lineupX: -7.0,
+    lineupScale: 2.80,
+    descriptionEn: 'Porous media transport, Darcy\'s law, unsaturated flow, apparent electrical resistivity (VES / SEV), and groundwater catchment balances.',
+    descriptionEs: 'Transporte en medios porosos, ley de Darcy, flujo no saturado, resistividad eléctrica aparente (SEV / VES) y balances hídricos de cuencas.',
+    color: '#E2E8F0',
+    size: 0.52,
+    distance: 17.6,
+    speed: 1.15,
+    eccentricity: 0.0549,
+    inclination: 0.089,
+    axialTilt: 1.54,
+    orbitalPeriod: '27.32 days',
+    temperatureK: '120 K – 390 K',
+    semiMajorAxisAU: '1.002 AU',
+    orbitalSpeedKms: '1.02 km/s',
+    realSize: 0.035,
+    realDistance: 198,
+    massKg: 7.342e22,
+    surfaceGravityMs2: 1.62,
+    escapeVelocityKms: 2.38,
+    magneticFieldTesla: '~0 nT (Crustal Remanence)',
+  },
+  {
     id: 'mars',
     name: 'Mars',
     nameEn: 'Mars',
@@ -427,23 +472,23 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Marte',
     emoji: '🔴',
     spectralClass: 'Oxidized Ferric Crust',
-    academicAreaEn: 'Applied Geophysics, Seismology & Inverse Theory',
-    academicAreaEs: 'Geofísica Aplicada, Sismología y Teoría Inversa',
-    shortCourseEn: 'Applied Geophysics',
-    shortCourseEs: 'Geofísica Aplicada',
-    courseId: 'geophysics',
-    courseCode: 'GEO-301',
-    rateHourly: 65,
-    packagePrice: 470,
+    academicAreaEn: 'Foundational Mathematics (Bachelor / Plan Común)',
+    academicAreaEs: 'Matemática Fundamental (Nivel Bachelor / Plan Común)',
+    shortCourseEn: 'Foundational Math',
+    shortCourseEs: 'Matemática Base',
+    courseId: 'math_bachelor',
+    courseCode: 'MAT-101',
+    rateHourly: 55,
+    packagePrice: 390,
     inLineup: true,
-    lineupIndex: 3,
-    lineupX: 0.0,
-    lineupScale: 2.20,
-    descriptionEn: 'Planetary interior modeling, seismic wave propagation, elastic tensors, crustal dichotomy, and geophysical inversion algorithms.',
-    descriptionEs: 'Modelado del interior planetario, propagación de ondas sísmicas, tensores elásticos e inversión de datos geofísicos.',
+    lineupIndex: 5,
+    lineupX: -1.5,
+    lineupScale: 2.15,
+    descriptionEn: 'Formal university mathematical foundations: functions, trigonometry, limits, sequences, analytical geometry, and deductive proofs.',
+    descriptionEs: 'Bases matemáticas universitarias: álgebra de funciones, trigonometría, límites, sucesiones, geometría analítica y demostraciones deductivas.',
     color: '#E05A36',
     size: 0.82,
-    distance: 19.8,
+    distance: 22.0,
     speed: 0.98,
     eccentricity: 0.0934,
     inclination: 0.032,
@@ -469,24 +514,24 @@ export const PLANET_SUBJECTS = [
     shortNameEn: 'Jupiter',
     shortNameEs: 'Júpiter',
     emoji: '🟠',
-    spectralClass: 'Jovian Gas Giant (H/He Fluid Mantle)',
-    academicAreaEn: 'IB Diploma: Mathematics AA HL & Physics HL',
-    academicAreaEs: 'Bachillerato Internacional: Math AA HL y Física HL',
-    shortCourseEn: 'IB Math & Physics HL',
-    shortCourseEs: 'IB Math & Física HL',
-    courseId: 'ib',
-    courseCode: 'IB-HL',
-    rateHourly: 50,
-    packagePrice: 360,
+    spectralClass: 'Jovian Gas Giant (Giant Magnetosphere)',
+    academicAreaEn: 'Electromagnetism & Maxwell Equations',
+    academicAreaEs: 'Electromagnetismo y Ecuaciones de Maxwell',
+    shortCourseEn: 'Electromagnetism',
+    shortCourseEs: 'Electromagnetismo',
+    courseId: 'electromagnetism',
+    courseCode: 'PHY-202',
+    rateHourly: 60,
+    packagePrice: 430,
     inLineup: true,
-    lineupIndex: 4,
-    lineupX: 7.0,
+    lineupIndex: 6,
+    lineupX: 5.5,
     lineupScale: 0.72,
-    descriptionEn: 'Advanced IB HL Calculus, 3D vectors, gravitational & electromagnetic fields, Internal Assessment (IA) supervision, and Past Paper drills.',
-    descriptionEs: 'Cálculo avanzado IB HL, vectores 3D, campos gravitatorios y electromagnéticos, supervisión de Evaluación Interna (IA) y Past Papers.',
+    descriptionEn: 'Electric and magnetic vector fields, Coulomb & Gauss laws, Lorentz force, Ampère-Maxwell circulation, Faraday induction, and electromagnetic waves.',
+    descriptionEs: 'Campos vectoriales eléctricos y magnéticos, leyes de Coulomb y Gauss, fuerza de Lorentz, circulación de Ampère-Maxwell, inducción de Faraday y ondas EM.',
     color: '#D97706',
     size: 2.65,
-    distance: 31.5,
+    distance: 32.5,
     speed: 0.52,
     eccentricity: 0.0484,
     inclination: 0.023,
@@ -512,8 +557,8 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Saturno',
     emoji: '🪐',
     spectralClass: 'Ringed Chronian Gas Giant',
-    academicAreaEn: 'Linear Algebra & Analytical Geometry',
-    academicAreaEs: 'Álgebra Lineal y Geometría Analítica',
+    academicAreaEn: 'Linear Algebra & Matrix Geometry',
+    academicAreaEs: 'Álgebra Lineal y Geometría Matricial',
     shortCourseEn: 'Linear Algebra',
     shortCourseEs: 'Álgebra Lineal',
     courseId: 'linear_algebra',
@@ -521,14 +566,14 @@ export const PLANET_SUBJECTS = [
     rateHourly: 55,
     packagePrice: 390,
     inLineup: true,
-    lineupIndex: 5,
-    lineupX: 14.0,
+    lineupIndex: 7,
+    lineupX: 12.0,
     lineupScale: 0.70,
-    descriptionEn: 'Vector spaces, spectral decomposition, eigenvalues, Jordan canonical form, SVD, and rigorous university proofs.',
-    descriptionEs: 'Espacios vectoriales, descomposición espectral, autovalores, forma canónica de Jordan, SVD y demostraciones universitarias.',
+    descriptionEn: 'Vector spaces, subspaces, linear independence, basis transformations, linear maps, kernel/image dimension theorems, eigenvalues, and diagonalization.',
+    descriptionEs: 'Espacios vectoriales, subespacios, independencia lineal, cambios de base, aplicaciones lineales, teorema del rango-nulidad, autovalores y diagonalización.',
     color: '#FDE68A',
     size: 2.15,
-    distance: 43.5,
+    distance: 44.0,
     speed: 0.38,
     eccentricity: 0.0541,
     inclination: 0.043,
@@ -546,6 +591,48 @@ export const PLANET_SUBJECTS = [
     magneticFieldTesla: '21 µT (Aligned Axisymmetric)',
   },
   {
+    id: 'uranus',
+    name: 'Uranus',
+    nameEn: 'Uranus',
+    nameEs: 'Urano',
+    shortName: 'Uranus',
+    shortNameEn: 'Uranus',
+    shortNameEs: 'Urano',
+    emoji: '🧊',
+    spectralClass: 'Aquamarine Methane Cryogenic Ice Giant',
+    academicAreaEn: 'Quantum Physics for Enthusiasts (Conceptual / Non-University)',
+    academicAreaEs: 'Física Cuántica para Curiosos (Nivel Aficionados / No Universitario)',
+    shortCourseEn: 'Quantum Concepts',
+    shortCourseEs: 'Cuántica Curiosos',
+    courseId: 'quantum_curious',
+    courseCode: 'QNT-100',
+    rateHourly: 45,
+    packagePrice: 320,
+    inLineup: true,
+    lineupIndex: 8,
+    lineupX: 18.0,
+    lineupScale: 0.85,
+    descriptionEn: 'Fascinating conceptual exploration for science enthusiasts: wave-particle duality, photon quanta, photoelectric effect, and Heisenberg uncertainty without university operator stress.',
+    descriptionEs: 'Exploración conceptual para aficionados de la ciencia: dualidad onda-partícula, fotones, efecto fotoeléctrico e incertidumbre de Heisenberg sin el estrés de operadores universitarios.',
+    color: '#7DD3FC',
+    size: 1.75,
+    distance: 53.0,
+    speed: 0.31,
+    eccentricity: 0.0472,
+    inclination: 0.013,
+    axialTilt: 97.77,
+    orbitalPeriod: '84.0 Earth years',
+    temperatureK: '76 K (Cloud top)',
+    semiMajorAxisAU: '19.22 AU',
+    orbitalSpeedKms: '6.8 km/s',
+    realSize: 0.54,
+    realDistance: 3800,
+    massKg: 8.681e25,
+    surfaceGravityMs2: 8.87,
+    escapeVelocityKms: 21.3,
+    magneticFieldTesla: '23 µT (Tilted 59° Dipole)',
+  },
+  {
     id: 'neptune',
     name: 'Neptune',
     nameEn: 'Neptune',
@@ -555,20 +642,23 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Neptuno',
     emoji: '🔵',
     spectralClass: 'Deep Methane/Ammonia Cryogenic Giant',
-    academicAreaEn: 'Spectral Methods & Cryogenic Fluid Dynamics',
-    academicAreaEs: 'Métodos Espectrales e Hidrodinámica Criogénica',
-    shortCourseEn: 'Fluid Dynamics',
-    shortCourseEs: 'Dinámica de Fluidos',
+    academicAreaEn: 'Scientific Data Analysis (Python & MATLAB)',
+    academicAreaEs: 'Análisis de Datos Científicos (Python y MATLAB)',
+    shortCourseEn: 'Data Analysis',
+    shortCourseEs: 'Data Analysis',
     courseId: 'computational',
     courseCode: 'COMP-205',
     rateHourly: 65,
     packagePrice: 470,
-    inLineup: false,
-    descriptionEn: 'Supersonic zonal winds (2,100 km/h), baroclinic instability, spherical harmonics decomposition, and deep ice giant mantle convection.',
-    descriptionEs: 'Vientos zonales supersónicos (2.100 km/h), inestabilidad baroclínica, armónicos esféricos y convección profunda en mantos de hielo.',
+    inLineup: true,
+    lineupIndex: 9,
+    lineupX: 24.0,
+    lineupScale: 0.80,
+    descriptionEn: 'Vectorized numerical arrays with NumPy, SciPy scientific libraries, curve fitting, signal processing, MATLAB computational pipelines, and publication-quality plots.',
+    descriptionEs: 'Arreglos vectorizados en NumPy, librerías científicas SciPy, ajuste de curvas empíricas, procesamiento de señales, pipelines en MATLAB y gráficos de publicación.',
     color: '#38BDF8',
     size: 1.85,
-    distance: 54.0,
+    distance: 62.0,
     speed: 0.26,
     eccentricity: 0.0086,
     inclination: 0.031,
@@ -594,20 +684,20 @@ export const PLANET_SUBJECTS = [
     shortNameEs: 'Sgr A*',
     emoji: '🕳️',
     spectralClass: 'Supermassive Kerr Black Hole (4.15×10⁶ M☉)',
-    academicAreaEn: 'General Relativity, Gravitation & Black Holes',
-    academicAreaEs: 'Relatividad General, Gravitación y Agujeros Negros',
-    shortCourseEn: 'General Relativity',
-    shortCourseEs: 'Relatividad General',
-    courseId: 'relativity',
-    courseCode: 'AST-401',
-    rateHourly: 65,
-    packagePrice: 470,
+    academicAreaEn: 'Thesis Mentorship, Research Projects & Graduation Coaching',
+    academicAreaEs: 'Mentoría de Tesis de Grado, Proyectos de Investigación y Titulación',
+    shortCourseEn: 'Thesis & Projects',
+    shortCourseEs: 'Tesis & Proyectos',
+    courseId: 'thesis_projects',
+    courseCode: 'RES-501',
+    rateHourly: 75,
+    packagePrice: 540,
     inLineup: true,
-    lineupIndex: 6,
-    lineupX: 21.0,
+    lineupIndex: 10,
+    lineupX: 30.5,
     lineupScale: 0.105,
-    descriptionEn: 'The supermassive gravitational anchor of the Milky Way (26,000 light-years away). Schwarzschild & Kerr spacetime metrics, event horizon shadow, gravitational lensing photon sphere, and relativistic Doppler accretion.',
-    descriptionEs: 'El ancla gravitatoria supermasiva de la Vía Láctea (a 26.000 años luz). Métricas de Schwarzschild y Kerr, sombra del horizonte de sucesos, curvatura gravitacional de la luz (lente de Einstein) y acreción relativista Doppler.',
+    descriptionEn: 'The gravitational anchor for completing your degree: numerical model debugging, simulation code optimization, scientific writing, literature methodology, and thesis defense rehearsal.',
+    descriptionEs: 'El ancla gravitatoria para terminar tu carrera: depuración de modelos numéricos, optimización de simulaciones, redacción científica, metodología y preparación de la defensa de grado.',
     color: '#C084FC',
     size: 7.2,
     distance: 320,
@@ -1348,6 +1438,34 @@ function createNeptuneTexture() {
   ctx.beginPath();
   ctx.ellipse(605, 345, 42, 6, -0.06, 0, Math.PI * 2);
   ctx.fill();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.anisotropy = 4;
+  return texture;
+}
+
+function createUranusTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024; canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.createImageData(1024, 512);
+  const d = imgData.data;
+
+  for (let y = 0; y < 512; y++) {
+    const lat = ((y / 512) - 0.5) * Math.PI;
+    for (let x = 0; x < 1024; x++) {
+      const idx = (y * 1024 + x) * 4;
+      const turb = noise.fbm2D((x / 1024) * 8.0, lat * 6.0, 4, 0.5, 2.0) * 0.08;
+      const band = Math.sin(lat * 8.0 + turb) * 0.5 + 0.5;
+
+      // Pale cyan / aquamarine ice giant palette with subtle methane haze
+      const r = Math.floor(135 + band * 25);
+      const g = Math.floor(212 + band * 22);
+      const b = Math.floor(236 + band * 16);
+      d[idx] = r; d[idx + 1] = g; d[idx + 2] = b; d[idx + 3] = 255;
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.anisotropy = 4;
@@ -2607,9 +2725,11 @@ export default function SolarSystem({
         let pTex;
         if (pData.id === 'mercury') pTex = createMercuryTexture();
         else if (pData.id === 'venus') pTex = createVenusTexture();
+        else if (pData.id === 'moon') pTex = createMoonTexture();
         else if (pData.id === 'mars') pTex = createMarsTexture();
         else if (pData.id === 'jupiter') pTex = createJupiterTexture();
         else if (pData.id === 'saturn') pTex = createSaturnTexture();
+        else if (pData.id === 'uranus') pTex = createUranusTexture();
         else if (pData.id === 'neptune') pTex = createNeptuneTexture();
 
         const pMat = new THREE.MeshStandardMaterial({
@@ -4049,7 +4169,7 @@ export default function SolarSystem({
                 className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-mono text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span>←</span>
-                <span>{lang === 'en' ? 'Back to 7 Planets Lineup' : 'Volver a los 7 Planetas en Fila'}</span>
+                <span>{lang === 'en' ? 'Back to Panoramic Lineup' : 'Volver a la Fila de Astros'}</span>
               </button>
             )}
           </div>
@@ -4307,7 +4427,7 @@ export default function SolarSystem({
                 className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-mono text-xs font-bold shadow-md shadow-sky-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span>🎓</span>
-                <span>{lang === 'en' ? 'Back to Courses (7 Planets) →' : 'Volver a las Clases (7 Planetas) →'}</span>
+                <span>{lang === 'en' ? 'Back to All Subjects & Planets →' : 'Ver Todos los Astros & Materias →'}</span>
               </button>
             ) : (
               <button
@@ -4576,7 +4696,7 @@ export default function SolarSystem({
                   className="px-3 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>←</span>
-                  <span>{lang === 'en' ? 'View 7 Planets in Line' : 'Ver los 7 Planetas en Fila'}</span>
+                  <span>{lang === 'en' ? 'View Celestial Bodies in Line' : 'Ver Astros en Fila'}</span>
                 </button>
 
                 <div className="flex items-center gap-1 overflow-x-auto py-0.5">

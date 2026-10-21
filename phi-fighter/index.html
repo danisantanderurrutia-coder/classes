@@ -827,12 +827,239 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
+
+    /* Cinema Letterbox Bars */
+    .cinema-bar {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0;
+      background: #000000;
+      z-index: 85;
+      pointer-events: none;
+      transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cinema-bar-top {
+      top: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .cinema-bar-bottom {
+      bottom: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    body.cinema-active .cinema-bar {
+      height: 64px;
+    }
+    body.cinema-active #hud {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Tactical Non-Obstructing Imperial Physics Overlay */
+    #cinematic-physics-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 88;
+      display: none;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 72px 28px 0 0;
+      background: radial-gradient(circle at 35% 50%, transparent 45%, rgba(2, 6, 16, 0.6) 100%);
+    }
+
+    .cinema-breakdown-card {
+      pointer-events: auto;
+      width: 440px;
+      max-width: 90vw;
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(9, 14, 23, 0.96) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-top: 3px solid #f59e0b;
+      border-radius: 6px;
+      padding: 16px 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: cinemaSlideRight 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cinemaSlideRight {
+      from { transform: translateX(60px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .cinema-tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+    }
+
+    .cinema-alert-badge {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    .cinema-sector-badge {
+      color: #94a3b8;
+    }
+
+    .cinema-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.12rem;
+      letter-spacing: 2px;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .cinema-formula-box {
+      background: #060910;
+      border: 1px solid #1e2636;
+      border-radius: 5px;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .cinema-formula {
+      font-family: 'Share Tech Mono', monospace;
+      color: #38bdf8;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+    }
+
+    .cinema-metric-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .metric-chip {
+      background: #111827;
+      border: 1px solid #334155;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: 0.68rem;
+      color: #f59e0b;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .cinema-explanation {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .cinema-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .cinema-timer-bar {
+      flex: 1;
+      height: 4px;
+      background: #1e2636;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .cinema-timer-fill {
+      height: 100%;
+      background: #10b981;
+      width: 0%;
+      transition: width 0.05s linear;
+    }
+
+    .cinema-skip-btn {
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      transition: all 0.15s ease;
+    }
+
+    .cinema-skip-btn:hover {
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    /* Intro Screen (Cinematic Transparent Stage) */
+    #intro-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(3, 7, 18, 0.2) 0%, rgba(2, 6, 16, 0.78) 100%);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      padding: 30px 24px;
+      transition: opacity 0.6s ease;
+    }
   </style>
 </head>
 <body>
 
   <!-- WebGL Canvas -->
   <div id="webgl-canvas"></div>
+
+  <!-- Anamorphic Cinema Scope Letterbox Bars -->
+  <div class="cinema-bar cinema-bar-top"></div>
+  <div class="cinema-bar cinema-bar-bottom"></div>
+
+  <!-- Cinematic Physics Climax Breakdown Overlay -->
+  <div id="cinematic-physics-overlay">
+    <div class="cinema-breakdown-card">
+      <div class="cinema-tag-row">
+        <span class="cinema-alert-badge">PHYSICS CLIMAX ANALYSIS</span>
+        <span class="cinema-sector-badge" id="cb-sector-title">SECTOR 1: SUN & HELIOSPHERE</span>
+      </div>
+      <h2 class="cinema-title" id="cb-phenomenon-title">SOLAR RADIATIVE FLUX & PHOTON MOMENTUM</h2>
+      
+      <div class="cinema-formula-box">
+        <div class="cinema-formula" id="cb-formula-main">Φ = L_☉ / (4π r²) &nbsp;|&nbsp; F_rad = (Φ A / c) · (1 + R)</div>
+        <div class="cinema-metric-chips" id="cb-metrics-chips">
+          <span class="metric-chip">Φ: 1,361 W/m²</span>
+          <span class="metric-chip">P_rad: 4.54 µPa</span>
+          <span class="metric-chip">v_esc: 617.5 km/s</span>
+        </div>
+      </div>
+
+      <p class="cinema-explanation" id="cb-explanation">
+        Stellar radiant energy flux (Φ) exerts direct photon momentum pressure against the exploding debris. Microscopic plasma fragments are repelled radially outward into the heliosphere as radiation pressure overcomes local solar gravity.
+      </p>
+
+      <div class="cinema-action-row">
+        <div class="cinema-timer-bar"><div class="cinema-timer-fill" id="cb-timer-fill"></div></div>
+        <button class="cinema-skip-btn" id="cb-btn-continue">ENGAGE HYPERDRIVE [SPACE] 🌌</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 2D Physics Force Vector Canvas Overlay -->
   <canvas id="vector-canvas"></canvas>
@@ -1069,16 +1296,34 @@
     </div>
   </div>
 
-  <!-- 3. INTRO SCREEN -->
-  <div class="fullscreen-modal" id="intro-screen" style="display:flex;">
-    <div style="font-size:9.5rem; font-family:serif; color:var(--cyan-glow); text-shadow:0 0 40px var(--cyan-glow); margin-bottom:12px;">Φ</div>
-    <h1 class="modal-headline" style="color:#ffffff;">PROJECT PHI-FIGHTER</h1>
-    <p class="modal-sub">
-      Witness the mathematical symbol <strong>Φ</strong> assemble into a deep space orbital interceptor. Defend planetary sectors from rogue asteroid showers, hostile drone scouts, and survive the gravitational pull of a supermassive singularity.
-    </p>
-    <button class="master-btn" id="btn-launch">
-      INITIATE TRANSFORMATION 🚀
-    </button>
+  <!-- 3. INTRO SCREEN (CINEMATIC OPEN STAGE) -->
+  <div id="intro-screen" style="display:flex;">
+    <div style="margin-top: 25px;">
+      <div style="font-family:'Orbitron', sans-serif; font-size:0.75rem; letter-spacing:4px; color:#f59e0b; margin-bottom:4px;">
+        GLYPH IDENTIFIER: GREEK LETTER Φ (PHI) // VALUE: 1.6180339...
+      </div>
+      <h1 class="modal-headline" style="color:#ffffff; font-size:2.5rem; margin:0; text-shadow: 0 4px 25px rgba(0,240,255,0.6);">
+        PROJECT PHI-FIGHTER
+      </h1>
+      <p style="font-size:0.72rem; color:#94a3b8; letter-spacing:2px; margin-top:4px;">
+        IMPERIAL HIGH COMMAND AVIONICS &bull; 10 CELESTIAL SECTORS CAMPAIGN
+      </p>
+    </div>
+
+    <!-- Center is open so the glowing 3D Phi Glyph is 100% visible! -->
+    <div style="pointer-events:none; flex:1;"></div>
+
+    <div style="margin-bottom: 25px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+      <p style="font-size:0.85rem; color:#cbd5e1; max-width:680px; line-height:1.5; margin:0; text-shadow:0 2px 10px rgba(0,0,0,0.9);">
+        Observe the golden-ratio mathematical symbol <strong>Φ (Phi)</strong> as it mechanically disengages its vertical axis, extends heavy carbon pylon booms, and unfolds into the deep-space Imperial TIE Interceptor.
+      </p>
+      <button class="master-btn" id="btn-launch" style="padding: 14px 44px; font-size:0.96rem;">
+        INITIATE METAMORPHOSIS & LAUNCH 🚀
+      </button>
+      <div style="font-size:0.65rem; color:#64748b; letter-spacing:1.5px;">
+        10 PLANETARY SECTORS &bull; RELATIVISTIC MECHANICS &bull; DOGFIGHTING AI ONLINE
+      </div>
+    </div>
   </div>
 
   <!-- 4. SECTOR CLEARED MODAL -->
@@ -1724,6 +1969,43 @@
       osc.stop(audioCtx.currentTime + 0.82);
     }
 
+    function playBassDropSound() {
+      if (!audioReady || !audioCtx || audioCtx.state !== 'running') return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(28, audioCtx.currentTime + 1.8);
+      gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 2.1);
+    }
+
+    function playHydraulicServoSound() {
+      if (!audioReady || !audioCtx || audioCtx.state !== 'running') return;
+      const t = audioCtx.currentTime;
+      const bufSize = Math.floor(audioCtx.sampleRate * 0.35);
+      const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(800, t);
+      filter.frequency.exponentialRampToValueAtTime(2400, t + 0.3);
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      noise.start(t);
+    }
+
     // =========================================================================
     // 2. LEVEL PROGRESSION & PLANETARY SECTORS (INCLUDING BLACK HOLE CLIMAX)
     // =========================================================================
@@ -1741,11 +2023,11 @@
         vOrb: 437.0,
         vEsc: 617.5,
         flux: 63200,
-        quota: 10,
+        quota: 8,
         asteroidSpeed: 14,
         enemyCount: 2,
         enemyShipType: 'eta2',
-        enemyShipName: 'ETA-2 REBEL INTERCEPTOR',
+        enemyShipName: 'ETA-2 REBEL ACTIS INTERCEPTOR',
         formula: 'Φ = L_☉ / (4π r²)',
         tip: '☀️ Solar flux charges ion manifolds. Rebel Eta-2 Actis Interceptors detected scouting solar coronal flares!',
         glowColor: 0xff6600,
@@ -1754,7 +2036,79 @@
       },
       {
         level: 2,
-        title: 'SECTOR 2: EARTH & ORBITAL SATELLITES',
+        title: 'SECTOR 2: MERCURY SCORCHED ORBIT',
+        bodyName: 'Mercury',
+        color: 0x8b8579,
+        radius: 6.8,
+        position: [0, -1, -115],
+        hasRings: false,
+        hasMoon: false,
+        g: 3.7,
+        vOrb: 47.4,
+        vEsc: 4.25,
+        flux: 9126,
+        quota: 10,
+        asteroidSpeed: 16,
+        enemyCount: 3,
+        enemyShipType: 'awing',
+        enemyShipName: 'RZ-1 REBEL A-WING INTERCEPTOR',
+        formula: 'Δφ = (6π G M_☉) / (c² a (1-e²))',
+        tip: '🔥 General Relativistic perihelion precession observed near Mercury! Agile Rebel A-Wings executing high-speed strafes.',
+        glowColor: 0xd97706,
+        isStar: false,
+        isBlackHole: false
+      },
+      {
+        level: 3,
+        title: 'SECTOR 3: VENUS CLOUD VEIL',
+        bodyName: 'Venus',
+        color: 0xe0a96d,
+        radius: 11.2,
+        position: [0, 2, -120],
+        hasRings: false,
+        hasMoon: false,
+        g: 8.87,
+        vOrb: 35.0,
+        vEsc: 10.36,
+        flux: 2613,
+        quota: 12,
+        asteroidSpeed: 18,
+        enemyCount: 3,
+        enemyShipType: 'bwing',
+        enemyShipName: 'A/SF-01 B-WING HEAVY FIGHTER',
+        formula: 'dP/dr = -ρ·g  |  ω_atm = 60·ω_planet',
+        tip: '☁️ High-pressure atmospheric super-rotation and runaway greenhouse effect. Heavy B-Wings patrolling the sulfuric cloud deck.',
+        glowColor: 0xf59e0b,
+        isStar: false,
+        isBlackHole: false
+      },
+      {
+        level: 4,
+        title: 'SECTOR 4: LUNA TIDAL GATEWAY',
+        bodyName: 'The Moon',
+        color: 0x94a3b8,
+        radius: 7.2,
+        position: [0, 0, -105],
+        hasRings: false,
+        hasMoon: false,
+        g: 1.62,
+        vOrb: 1.68,
+        vEsc: 2.38,
+        flux: 1361,
+        quota: 14,
+        asteroidSpeed: 20,
+        enemyCount: 3,
+        enemyShipType: 'ywing',
+        enemyShipName: 'BTL-A4 REBEL Y-WING BOMBER',
+        formula: 'T_orb = T_rot  |  τ_tidal = dL/dt',
+        tip: '🌑 Synchronous tidal locking with Earth. Heavily shielded Y-Wing Bombers deploying proton torpedo salvos over the lunar maria!',
+        glowColor: 0x64748b,
+        isStar: false,
+        isBlackHole: false
+      },
+      {
+        level: 5,
+        title: 'SECTOR 5: EARTH SATELLITE DEFENSE',
         bodyName: 'Earth',
         color: 0x1d4ed8,
         radius: 12,
@@ -1765,9 +2119,9 @@
         vOrb: 7.8,
         vEsc: 11.2,
         flux: 1361,
-        quota: 14,
-        asteroidSpeed: 18,
-        enemyCount: 3,
+        quota: 16,
+        asteroidSpeed: 22,
+        enemyCount: 4,
         enemyShipType: 'xwing',
         enemyShipName: 'T-65B X-WING STARFIGHTER',
         formula: 'v_orb = √(G·M_⊕ / r)',
@@ -1777,8 +2131,8 @@
         isBlackHole: false
       },
       {
-        level: 3,
-        title: 'SECTOR 3: MARS DEBRIS BELT',
+        level: 6,
+        title: 'SECTOR 6: MARS PHOBOS CORRIDOR',
         bodyName: 'Mars',
         color: 0xc2410c,
         radius: 8.5,
@@ -1790,19 +2144,43 @@
         vEsc: 5.0,
         flux: 586,
         quota: 18,
-        asteroidSpeed: 23,
+        asteroidSpeed: 24,
         enemyCount: 4,
         enemyShipType: 'v19',
         enemyShipName: 'V-19 TORRENT TRI-FIGHTER',
-        formula: 'g_mars = 0.38 g_earth',
-        tip: '🔴 Heavy V-19 Torrent Tri-Fighters patrolling Martian debris belt. Watch their folding dihedral wing attacks.',
+        formula: 'd_Roche ≈ 2.44·R·(ρ_M/ρ_m)^(1/3)',
+        tip: '🔴 Phobos tidal deceleration past the Roche limit. V-19 Torrent Tri-Fighters deploying folding dihedral wing attacks.',
         glowColor: 0xea580c,
         isStar: false,
         isBlackHole: false
       },
       {
-        level: 4,
-        title: 'SECTOR 4: JUPITER GRAVITY SLINGSHOT',
+        level: 7,
+        title: 'SECTOR 7: ASTEROID BELT (CERES)',
+        bodyName: 'Ceres',
+        color: 0x52525b,
+        radius: 6.5,
+        position: [0, 0, -115],
+        hasRings: false,
+        hasMoon: false,
+        g: 0.28,
+        vOrb: 0.36,
+        vEsc: 0.51,
+        flux: 215,
+        quota: 20,
+        asteroidSpeed: 28,
+        enemyCount: 4,
+        enemyShipType: 'arc170',
+        enemyShipName: 'ARC-170 HEAVY RECON STRIKE',
+        formula: 'F_i = ∑ G m_i m_j / r_ij²  |  Kirkwood 3:1',
+        tip: '☄️ Dense Kirkwood orbital gap resonance! Heavy ARC-170 six-wing starfighters firing heavy proton cannons.',
+        glowColor: 0xa1a1aa,
+        isStar: false,
+        isBlackHole: false
+      },
+      {
+        level: 8,
+        title: 'SECTOR 8: JUPITER GRAVITY SLINGSHOT',
         bodyName: 'Jupiter',
         color: 0xd97706,
         radius: 28,
@@ -1814,36 +2192,60 @@
         vEsc: 59.5,
         flux: 50,
         quota: 22,
-        asteroidSpeed: 28,
-        enemyCount: 3,
+        asteroidSpeed: 30,
+        enemyCount: 4,
         enemyShipType: 'falcon',
         enemyShipName: 'YT-1300 REBEL HEAVY FREIGHTER',
-        formula: 'Δv_slingshot = 2·v_planet',
-        tip: '🪐 Heavily armored YT-1300 freighters diving through Jupiter\'s gravity slingshot. Reinforced deflector shields!',
+        formula: 'F = q(E + v × B)  |  r_L = m v_⊥ / (|q| B)',
+        tip: '🪐 Massive radiation belt synchrotron field. YT-1300 freighters diving through the Jovian magnetosphere with reinforced shields!',
         glowColor: 0xf59e0b,
         isStar: false,
         isBlackHole: false
       },
       {
-        level: 5,
-        title: 'SECTOR 5: GRAVITATIONAL SINGULARITY (BLACK HOLE)',
+        level: 9,
+        title: 'SECTOR 9: SATURN CASSINI DIVISION',
+        bodyName: 'Saturn',
+        color: 0xecd6a5,
+        radius: 24,
+        position: [0, 4, -145],
+        hasRings: true,
+        hasMoon: true,
+        g: 10.44,
+        vOrb: 25.1,
+        vEsc: 35.5,
+        flux: 15,
+        quota: 24,
+        asteroidSpeed: 33,
+        enemyCount: 2,
+        enemyShipType: 'nebulon',
+        enemyShipName: 'NEBULON-B ESCORT FRIGATE',
+        formula: 'Ω(r) = √(G·M / r³)  |  Cassini Res. 2:1',
+        tip: '💍 Maxwellian differential ring shear and Mimas resonance. Rebel Nebulon-B Escort Frigate deploying turbolaser broadsides!',
+        glowColor: 0xfef08a,
+        isStar: false,
+        isBlackHole: false
+      },
+      {
+        level: 10,
+        title: 'SECTOR 10: GRAVITATIONAL SINGULARITY (BLACK HOLE)',
         bodyName: 'Singularity Cygnus-X',
         color: 0x000000,
         radius: 14,
         position: [0, 0, -110],
-        hasRings: true, // Relativistic Accretion Disk!
+        hasRings: true,
         hasMoon: false,
         g: 980.0,
         vOrb: 210.0,
         vEsc: 840.0,
         flux: 0,
-        quota: 16,
-        asteroidSpeed: 36,
-        enemyCount: 1, // Capital Ship Boss!
+        quota: 20,
+        asteroidSpeed: 38,
+        enemyCount: 1,
         enemyShipType: 'corvette',
-        enemyShipName: 'CR90 CORELLIAN BLOCKADE RUNNER',
+        enemyShipName: 'CR90 CORELLIAN BLOCKADE RUNNER BOSS',
         formula: 'F_g = -G M m / r²  |  r_s = 2GM/c²',
-        tip: '⚠️ CR90 CAPITAL FLAGSHIP BOSS! Heavy dual turbolaser batteries. Destroy the flagship before the Event Horizon drags you in!',
+        tip: '⚠️ CR90 CAPITAL FLAGSHIP BOSS! Heavy dual turbolaser batteries. Destroy the flagship before the Event Horizon drags you into the singularity!',
         glowColor: 0xa855f7,
         isStar: false,
         isBlackHole: true
@@ -1888,7 +2290,40 @@
       cvs.height = 512;
       const ctx = cvs.getContext('2d');
 
-      if (type === 'earth') {
+      if (type === 'mercury') {
+        ctx.fillStyle = '#6b7280';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+        ctx.fillStyle = '#4b5563';
+        for (let i = 0; i < 60; i++) {
+          ctx.beginPath();
+          ctx.arc(Math.random() * cvs.width, Math.random() * cvs.height, 10 + Math.random() * 40, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        // Caloris basin crater rings
+        ctx.strokeStyle = '#9ca3af';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(cvs.width * 0.45, cvs.height * 0.5, 75, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (type === 'venus') {
+        ctx.fillStyle = '#d97706';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+        ctx.fillStyle = '#fef3c7';
+        for (let i = 0; i < 20; i++) {
+          ctx.beginPath();
+          ctx.ellipse(Math.random() * cvs.width, Math.random() * cvs.height, 180 + Math.random() * 200, 20 + Math.random() * 40, Math.random() * 0.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (type === 'moon') {
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+        ctx.fillStyle = '#475569'; // Basalt Maria
+        for (let i = 0; i < 15; i++) {
+          ctx.beginPath();
+          ctx.arc(Math.random() * cvs.width, Math.random() * cvs.height, 40 + Math.random() * 90, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (type === 'earth') {
         ctx.fillStyle = '#0f2952';
         ctx.fillRect(0, 0, cvs.width, cvs.height);
         ctx.fillStyle = '#1e5f3c';
@@ -1915,6 +2350,20 @@
         ctx.fillStyle = '#f8fafc';
         ctx.fillRect(0, 0, cvs.width, 35);
         ctx.fillRect(0, cvs.height - 35, cvs.width, 35);
+      } else if (type === 'ceres') {
+        ctx.fillStyle = '#3f3f46';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+        ctx.fillStyle = '#27272a';
+        for (let i = 0; i < 40; i++) {
+          ctx.beginPath();
+          ctx.arc(Math.random() * cvs.width, Math.random() * cvs.height, 15 + Math.random() * 50, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        // Occator bright carbonate salt spot
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(cvs.width * 0.55, cvs.height * 0.48, 12, 0, Math.PI * 2);
+        ctx.fill();
       } else if (type === 'jupiter') {
         const bands = ['#c27838', '#df9b58', '#995420', '#ebd2b4', '#b06527', '#e2b382'];
         const bandH = cvs.height / 24;
@@ -1926,8 +2375,14 @@
         ctx.beginPath();
         ctx.ellipse(cvs.width * 0.65, cvs.height * 0.62, 55, 32, 0, 0, Math.PI * 2);
         ctx.fill();
+      } else if (type === 'saturn') {
+        const bands = ['#e4cdab', '#d6b892', '#f3e3ca', '#caa57b', '#ebd5b3'];
+        const bandH = cvs.height / 20;
+        for (let i = 0; i < 20; i++) {
+          ctx.fillStyle = bands[i % bands.length];
+          ctx.fillRect(0, i * bandH, cvs.width, bandH);
+        }
       } else if (type === 'blackhole') {
-        // Pure absolute black for event horizon
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, cvs.width, cvs.height);
       } else {
@@ -2135,13 +2590,37 @@
     const rightWingGroup = new THREE.Group();
     const engineFlames = [];
 
-    // Glyph Phi Initial Flat Graphic Helper
-    const phiFlatSpine = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.08, 4.8, 16),
-      new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-    );
-    phiFlatSpine.position.set(0, 0, 0);
-    centralPodGroup.add(phiFlatSpine);
+    // Dedicated 3D Holographic Phi Glyph System
+    const phiGlyphGroup = new THREE.Group();
+    const phiRingMat = new THREE.MeshStandardMaterial({
+      color: 0x00f0ff,
+      emissive: 0x00f0ff,
+      emissiveIntensity: 0.95,
+      metalness: 0.3,
+      roughness: 0.15
+    });
+    const phiRingMesh = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.065, 24, 64), phiRingMat);
+    phiGlyphGroup.add(phiRingMesh);
+
+    const phiSpineMat = new THREE.MeshStandardMaterial({
+      color: 0x00f0ff,
+      emissive: 0x00f0ff,
+      emissiveIntensity: 0.95,
+      metalness: 0.3,
+      roughness: 0.15
+    });
+    const phiSpineMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 4.8, 24), phiSpineMat);
+    phiGlyphGroup.add(phiSpineMesh);
+
+    const phiAmberMat = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b,
+      transparent: true,
+      opacity: 0.75
+    });
+    const phiAmberRingMesh = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.022, 16, 64), phiAmberMat);
+    phiGlyphGroup.add(phiAmberRingMesh);
+
+    centralPodGroup.add(phiGlyphGroup);
 
     function buildPhiFighterModel() {
       const hullMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.25 });
@@ -2731,9 +3210,338 @@
     });
 
     // =========================================================================
-    // 8. PROGRESSION & SECTOR TRANSITIONS
+    // 8. CINEMATIC PHYSICS CLIMAX & SECTOR PROGRESSION
     // =========================================================================
-    function registerTargetKill(pts = 100, isEnemy = false) {
+    const SECTOR_PHYSICS_BREAKDOWNS = [
+      {
+        sector: 1,
+        title: "SOLAR RADIATIVE FLUX & PHOTON MOMENTUM",
+        formula: "Φ = L_☉ / (4π r²)   |   F_rad = (Φ A / c) · (1 + R)",
+        metrics: [
+          { label: "Irradiance (Φ)", val: "1,361 W/m²" },
+          { label: "Photon Press.", val: "4.54 µPa" },
+          { label: "Escape Vel.", val: "617.5 km/s" }
+        ],
+        desc: "Stellar radiant energy flux (Φ) transfers direct photon momentum into the debris plume. Microscopic plasma fragments are repelled radially outward into the interstellar heliosphere as photonic radiation pressure directly overcomes solar gravitation.",
+        primaryColor: "#f59e0b",
+        vectorType: "radiation"
+      },
+      {
+        sector: 2,
+        title: "KEPLERIAN ORBITAL DECAY & ATMOSPHERIC ABLATION",
+        formula: "v_orb = √(G M_⊕ / r)   |   F_d = -½ ρ v² C_d A   |   g = -G M_⊕ / r²",
+        metrics: [
+          { label: "Orbital Speed", val: "7.91 km/s" },
+          { label: "Local Gravity (g)", val: "9.81 m/s²" },
+          { label: "Dyn. Pressure", val: "84.2 kPa" }
+        ],
+        desc: "Without tangential velocity (v < 7.91 km/s) to maintain orbital equilibrium, centrifugal support collapses. Earth's gravitational field drags the debris into the upper mesosphere, where hypersonic atmospheric drag converts kinetic energy into thermal ablation.",
+        primaryColor: "#38bdf8",
+        vectorType: "orbital"
+      },
+      {
+        sector: 3,
+        title: "CONSERVATION OF ANGULAR MOMENTUM & ROTATIONAL INERTIA",
+        formula: "L = I·ω = const   |   E_rot = ½ I ω²   |   τ = dL/dt = 0",
+        metrics: [
+          { label: "Angular Mom. (L)", val: "4.82×10⁶ kg·m²/s" },
+          { label: "Spin Rate (ω)", val: "24.6 rad/s" },
+          { label: "Radius Contraction", val: "-68%" }
+        ],
+        desc: "When kinetic impact severs the wing pylons from the central mass, the moment of inertia (I) sharply contracts. By the Law of Conservation of Angular Momentum (L = I·ω), the isolated debris fragments violently accelerate their rotational spin rate.",
+        primaryColor: "#ef4444",
+        vectorType: "angular"
+      },
+      {
+        sector: 4,
+        title: "JOVIAN LORENTZ ACCELERATION & SYNCHROTRON BELT",
+        formula: "F = q(E + v × B)   |   r_L = m v_⊥ / (|q| B)   |   ω_c = q B / m",
+        metrics: [
+          { label: "Magnetic Field (B)", val: "4.28 Gauss" },
+          { label: "Larmor Radius (r_L)", val: "12.4 m" },
+          { label: "Synchrotron Power", val: "2.1 MW" }
+        ],
+        desc: "Jupiter's colossal magnetic dipole exerts intense Lorentz forces on free plasma ions in the explosion fireball. Charged ions are captured into helical cyclotron spirals, funneling down magnetic flux tubes toward the Jovian auroral radiation belts.",
+        primaryColor: "#a855f7",
+        vectorType: "lorentz"
+      },
+      {
+        sector: 5,
+        title: "GENERAL RELATIVITY: TIDAL SPAGHETTIFICATION & REDSHIFT",
+        formula: "r_s = 2GM / c²   |   t' = t √(1 - r_s / r)   |   dF_g/dr = -2GMm / r³ → ∞",
+        metrics: [
+          { label: "Schwarzschild r_s", val: "29.5 km" },
+          { label: "Grav. Redshift (z)", val: "+∞" },
+          { label: "Tidal Gradient", val: ">10⁸ g/m" }
+        ],
+        desc: "Extreme spacetime curvature near the Event Horizon produces infinite differential gravity. Debris is stretched radially and squeezed laterally into subatomic filaments (spaghettification), while outgoing photons redshift infinitely as coordinate time halts.",
+        primaryColor: "#ec4899",
+        vectorType: "relativity"
+      }
+    ];
+
+    let breakdownActive = false;
+    let breakdownTargetPos = new THREE.Vector3();
+    let breakdownTimer = 0;
+    const breakdownDuration = 4.8;
+    const breakdownDebrisGroup = new THREE.Group();
+    scene.add(breakdownDebrisGroup);
+
+    function triggerCinematicPhysicsBreakdown(targetPos, isEnemy = false) {
+      if (breakdownActive) return;
+      breakdownActive = true;
+      breakdownTargetPos.copy(targetPos);
+      breakdownTimer = 0;
+
+      playBassDropSound();
+      playExplosionSound();
+
+      document.body.classList.add('cinema-active');
+
+      const data = SECTOR_PHYSICS_BREAKDOWNS[currentSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
+      const sector = SECTORS[currentSectorIdx];
+
+      document.getElementById('cb-sector-title').innerText = sector.title.toUpperCase();
+      document.getElementById('cb-phenomenon-title').innerText = data.title;
+      document.getElementById('cb-formula-main').innerText = data.formula;
+      document.getElementById('cb-explanation').innerText = data.desc;
+
+      const chipsCont = document.getElementById('cb-metrics-chips');
+      chipsCont.innerHTML = '';
+      for (let m of data.metrics) {
+        const chip = document.createElement('span');
+        chip.className = 'metric-chip';
+        chip.innerText = `${m.label}: ${m.val}`;
+        chipsCont.appendChild(chip);
+      }
+
+      document.getElementById('cb-timer-fill').style.width = '0%';
+      document.getElementById('cinematic-physics-overlay').style.display = 'flex';
+
+      spawnBreakdownPhysicsParticles(breakdownTargetPos, data.vectorType);
+    }
+
+    function spawnBreakdownPhysicsParticles(origin, vectorType) {
+      while (breakdownDebrisGroup.children.length > 0) {
+        breakdownDebrisGroup.remove(breakdownDebrisGroup.children[0]);
+      }
+
+      const count = 36;
+      for (let i = 0; i < count; i++) {
+        let geo, mat;
+        if (vectorType === 'radiation') {
+          geo = new THREE.DodecahedronGeometry(0.35 + Math.random() * 0.35);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xf59e0b,
+            emissive: 0xfbbf24,
+            emissiveIntensity: 0.85,
+            roughness: 0.25
+          });
+        } else if (vectorType === 'orbital') {
+          geo = new THREE.BoxGeometry(0.5, 0.2, 0.7);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0x38bdf8,
+            emissive: 0xf97316,
+            emissiveIntensity: 0.7,
+            roughness: 0.4
+          });
+        } else if (vectorType === 'angular') {
+          geo = new THREE.BoxGeometry(0.15, 1.4, 0.4);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xd1d5db,
+            metalness: 0.8,
+            roughness: 0.2
+          });
+        } else if (vectorType === 'lorentz') {
+          geo = new THREE.SphereGeometry(0.28, 8, 8);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xa855f7,
+            emissive: 0x00f0ff,
+            emissiveIntensity: 0.9,
+            roughness: 0.2
+          });
+        } else {
+          geo = new THREE.CylinderGeometry(0.08, 0.08, 1.8, 8);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xec4899,
+            emissive: 0xef4444,
+            emissiveIntensity: 0.85
+          });
+        }
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.copy(origin).add(new THREE.Vector3(
+          (Math.random() - 0.5) * 2,
+          (Math.random() - 0.5) * 2,
+          (Math.random() - 0.5) * 2
+        ));
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 4 + Math.random() * 8;
+        mesh.userData = {
+          vel: new THREE.Vector3(
+            Math.cos(angle) * speed,
+            (Math.random() - 0.5) * speed * 0.8,
+            Math.sin(angle) * speed
+          ),
+          rotVel: new THREE.Vector3(
+            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 14
+          ),
+          charge: (i % 2 === 0 ? 1 : -1),
+          seed: Math.random() * Math.PI * 2,
+          initDist: mesh.position.distanceTo(origin)
+        };
+        breakdownDebrisGroup.add(mesh);
+      }
+    }
+
+    function updateBreakdownDebris(delta) {
+      const data = SECTOR_PHYSICS_BREAKDOWNS[currentSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
+      const type = data.vectorType;
+
+      for (let mesh of breakdownDebrisGroup.children) {
+        if (type === 'radiation') {
+          mesh.userData.vel.z += delta * 14;
+          mesh.userData.vel.multiplyScalar(0.99);
+        } else if (type === 'orbital') {
+          mesh.userData.vel.y -= delta * 9.8;
+          mesh.userData.vel.multiplyScalar(0.97);
+        } else if (type === 'angular') {
+          mesh.userData.rotVel.multiplyScalar(1.015);
+        } else if (type === 'lorentz') {
+          const q = mesh.userData.charge;
+          const vx = mesh.userData.vel.x;
+          const vz = mesh.userData.vel.z;
+          mesh.userData.vel.x += vz * q * 12 * delta;
+          mesh.userData.vel.z -= vx * q * 12 * delta;
+        } else if (type === 'relativity') {
+          mesh.scale.y += delta * 1.8;
+          mesh.scale.x = Math.max(0.1, mesh.scale.x - delta * 0.3);
+          mesh.scale.z = Math.max(0.1, mesh.scale.z - delta * 0.3);
+          mesh.userData.vel.multiplyScalar(0.94);
+        }
+
+        mesh.position.addScaledVector(mesh.userData.vel, delta);
+        mesh.rotation.x += mesh.userData.rotVel.x * delta;
+        mesh.rotation.y += mesh.userData.rotVel.y * delta;
+        mesh.rotation.z += mesh.userData.rotVel.z * delta;
+      }
+    }
+
+    function renderBreakdownVectors() {
+      if (!breakdownActive) return;
+      const sp = breakdownTargetPos.clone().project(camera);
+      if (sp.z > 1) return;
+      const px = (sp.x * 0.5 + 0.5) * window.innerWidth;
+      const py = (-sp.y * 0.5 + 0.5) * window.innerHeight;
+
+      const data = SECTOR_PHYSICS_BREAKDOWNS[currentSectorIdx] || SECTOR_PHYSICS_BREAKDOWNS[0];
+      const timer = breakdownTimer;
+
+      vecCtx.save();
+
+      if (data.vectorType === 'radiation') {
+        const angle = timer * 0.8;
+        for (let i = 0; i < 4; i++) {
+          const a = angle + (i * Math.PI) / 2;
+          const len = 50 + Math.sin(timer * 4 + i) * 15;
+          drawForceVector(px, py, Math.cos(a) * len, Math.sin(a) * len, '#f59e0b', i === 0 ? 'F_rad (Photon Pressure)' : '');
+        }
+        drawForceVector(px, py, 0, 70, '#ef4444', 'Fg (Solar Gravity: -42 kN)');
+      } else if (data.vectorType === 'orbital') {
+        drawForceVector(px, py, 110, -25, '#38bdf8', 'v_orb (7.91 km/s)');
+        drawForceVector(px, py, -85, 20, '#f97316', 'F_drag (Atmospheric Ablation)');
+        drawForceVector(px, py, 0, 80, '#10b981', 'g (Earth: 9.81 m/s²)');
+      } else if (data.vectorType === 'angular') {
+        const spin = timer * 6.0;
+        const rad = 45;
+        vecCtx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
+        vecCtx.lineWidth = 2;
+        vecCtx.beginPath();
+        vecCtx.arc(px, py, rad, spin, spin + Math.PI * 1.4);
+        vecCtx.stroke();
+        drawForceVector(px + Math.cos(spin) * rad, py + Math.sin(spin) * rad, -Math.sin(spin) * 50, Math.cos(spin) * 50, '#ef4444', 'v_tan = ω × r');
+        drawForceVector(px, py, 0, -75, '#00f0ff', 'L = I·ω (Conserved)');
+      } else if (data.vectorType === 'lorentz') {
+        drawForceVector(px, py, 0, -90, '#a855f7', 'B-field (Jovian Flux Tube)');
+        const helix = timer * 8.0;
+        const hRad = 35;
+        drawForceVector(px + Math.cos(helix) * hRad, py + Math.sin(helix) * hRad, -Math.sin(helix) * 45, Math.cos(helix) * 45, '#38bdf8', 'F = q(v × B)');
+      } else if (data.vectorType === 'relativity') {
+        drawForceVector(px, py, 0, 110, '#ec4899', 'dFg/dr → ∞ (Tidal Spaghettification)');
+        drawForceVector(px, py, -70, -40, '#a855f7', 'Grav. Redshift: z → ∞');
+        drawForceVector(px, py, 70, -40, '#00f0ff', 'Δt\' = Δt √(1 - rs/r)');
+      }
+
+      vecCtx.restore();
+    }
+
+    function endCinematicBreakdown() {
+      if (!breakdownActive) return;
+      breakdownActive = false;
+      document.getElementById('cinematic-physics-overlay').style.display = 'none';
+
+      while (breakdownDebrisGroup.children.length > 0) {
+        breakdownDebrisGroup.remove(breakdownDebrisGroup.children[0]);
+      }
+
+      if (currentSectorIdx + 1 < SECTORS.length) {
+        advanceToNextSector();
+      } else {
+        document.body.classList.remove('cinema-active');
+        document.querySelector('#sector-cleared-modal h1').innerText = 'MISSION COMPLETE // COSMOS DEFENDED';
+        document.getElementById('cleared-subtitle').innerText = 'You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.';
+        document.getElementById('btn-next-sector').innerText = 'RESTART CAMPAIGN 🔄';
+        document.getElementById('sector-cleared-modal').style.display = 'flex';
+      }
+    }
+
+    function advanceToNextSector() {
+      playWarpSound();
+      const warp = document.getElementById('warp-screen');
+      warp.style.opacity = '1';
+
+      setTimeout(() => {
+        currentSectorIdx++;
+        destroyedInSector = 0;
+        playerShields = Math.min(100, playerShields + 50);
+
+        const s = SECTORS[currentSectorIdx];
+        buildSectorPlanet(s);
+
+        for (let e of enemies) scene.remove(e);
+        enemies.length = 0;
+
+        for (let i = 0; i < s.enemyCount; i++) {
+          spawnSectorEnemy(-80 - i * 30);
+        }
+
+        document.getElementById('hud-sector-title').innerText = s.title;
+        document.getElementById('hud-progress-fill').style.width = '0%';
+        document.getElementById('hud-progress-label').innerText = `THREATS CLEARED: 0 / ${s.quota}`;
+        document.getElementById('ui-body-name').innerText = s.bodyName;
+        document.getElementById('ui-gravity').innerText = `${s.g} m/s²`;
+        document.getElementById('ui-vesc').innerText = `${s.vEsc.toFixed(1)} km/s`;
+        document.getElementById('ui-formula').innerText = s.formula;
+        document.getElementById('ui-tip').innerHTML = s.tip;
+        document.getElementById('cockpit-flux-num').innerText = `${s.flux} W/m²`;
+
+        shipRoot.position.set(0, 0, 0);
+        shipVelocity.set(0, 0, 0);
+
+        document.body.classList.remove('cinema-active');
+        warp.style.opacity = '0';
+        showNotification(`ENTERED ${s.bodyName.toUpperCase()} ORBIT // CLEARED QUOTA: 0 / ${s.quota}`);
+      }, 600);
+    }
+
+    document.getElementById('cb-btn-continue').addEventListener('click', () => {
+      endCinematicBreakdown();
+    });
+
+    function registerTargetKill(pts = 100, isEnemy = false, targetPos = null) {
       score += pts;
       destroyedInSector++;
       document.getElementById('ui-score').innerText = String(score).padStart(5, '0');
@@ -2743,67 +3551,13 @@
       document.getElementById('hud-progress-fill').style.width = `${pct}%`;
       document.getElementById('hud-progress-label').innerText = `THREATS CLEARED: ${destroyedInSector} / ${sector.quota}`;
 
-      showNotification(isEnemy ? `+${pts} PTS // HOSTILE DRONE DESTROYED` : `+${pts} PTS // TARGET PULVERIZED`, isEnemy ? '#ff0055' : '#00ff66');
+      showNotification(isEnemy ? `+${pts} PTS // HOSTILE STARSHIP DESTROYED` : `+${pts} PTS // TARGET PULVERIZED`, isEnemy ? '#ff0055' : '#00ff66');
 
       if (destroyedInSector >= sector.quota) {
-        handleSectorCleared();
+        const focalPos = targetPos ? targetPos.clone() : shipRoot.position.clone().add(new THREE.Vector3(0, 0, -35));
+        triggerCinematicPhysicsBreakdown(focalPos, isEnemy);
       }
     }
-
-    function handleSectorCleared() {
-      playWarpSound();
-      document.getElementById('cleared-score-stat').innerText = score;
-
-      if (currentSectorIdx + 1 < SECTORS.length) {
-        document.getElementById('cleared-next-planet').innerText = SECTORS[currentSectorIdx + 1].bodyName.toUpperCase();
-        document.getElementById('sector-cleared-modal').style.display = 'flex';
-      } else {
-        document.querySelector('#sector-cleared-modal h1').innerText = 'MISSION COMPLETE // COSMOS DEFENDED';
-        document.getElementById('cleared-subtitle').innerText = 'You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.';
-        document.getElementById('btn-next-sector').innerText = 'RESTART CAMPAIGN 🔄';
-        document.getElementById('sector-cleared-modal').style.display = 'flex';
-      }
-    }
-
-    document.getElementById('btn-next-sector').addEventListener('click', () => {
-      document.getElementById('sector-cleared-modal').style.display = 'none';
-
-      if (currentSectorIdx + 1 < SECTORS.length) {
-        const warp = document.getElementById('warp-screen');
-        warp.style.opacity = '1';
-        setTimeout(() => {
-          currentSectorIdx++;
-          destroyedInSector = 0;
-          playerShields = Math.min(100, playerShields + 50);
-
-          const s = SECTORS[currentSectorIdx];
-          buildSectorPlanet(s);
-
-          // Clear remaining enemies from scene
-          for (let e of enemies) scene.remove(e);
-          enemies.length = 0;
-
-          // Spawn new enemies for this sector
-          for (let i = 0; i < s.enemyCount; i++) {
-            spawnSectorEnemy(-80 - i * 30);
-          }
-
-          document.getElementById('hud-sector-title').innerText = s.title;
-          document.getElementById('hud-progress-fill').style.width = '0%';
-          document.getElementById('hud-progress-label').innerText = `THREATS CLEARED: 0 / ${s.quota}`;
-          document.getElementById('ui-body-name').innerText = s.bodyName;
-          document.getElementById('ui-gravity').innerText = `${s.g} m/s²`;
-          document.getElementById('ui-vesc').innerText = `${s.vEsc.toFixed(1)} km/s`;
-          document.getElementById('ui-formula').innerText = s.formula;
-          document.getElementById('ui-tip').innerHTML = s.tip;
-          document.getElementById('cockpit-flux-num').innerText = `${s.flux} W/m²`;
-
-          warp.style.opacity = '0';
-        }, 500);
-      } else {
-        window.location.reload();
-      }
-    });
 
     // =========================================================================
     // 9. DYNAMIC PHYSICS FORCE VECTOR OVERLAY (NEW FEATURE)
@@ -2859,6 +3613,7 @@
     // 10. STEP-BY-STEP CINEMATIC TRANSFORMATION SEQUENCE
     // =========================================================================
     let introActive = true;
+    let transformationInProgress = false;
     const morphHud = document.getElementById('morph-hud');
     const morphFill = document.getElementById('morph-fill');
     const morphLabel = document.getElementById('morph-status-label');
@@ -2868,18 +3623,28 @@
     rightPylonGroup.position.set(-0.5, 0, 0);
     leftWingGroup.position.set(-0.15, 0, 0);
     rightWingGroup.position.set(0.15, 0, 0);
-    leftWingGroup.scale.set(0.05, 1, 0.05); // Flat vertical blades
-    rightWingGroup.scale.set(0.05, 1, 0.05);
+    leftWingGroup.scale.set(0.02, 1, 0.02); // Flat vertical blades
+    rightWingGroup.scale.set(0.02, 1, 0.02);
+    phiGlyphGroup.visible = true;
+
+    // Start with cinema scope bars active on intro!
+    document.body.classList.add('cinema-active');
+    camera.position.set(0, 0.1, -7.8);
+    camera.lookAt(0, 0, 0);
 
     document.getElementById('btn-launch').addEventListener('click', () => {
       initAudio();
+      playBassDropSound();
+      playHydraulicServoSound();
+
+      transformationInProgress = true;
       document.getElementById('intro-screen').style.opacity = '0';
       setTimeout(() => document.getElementById('intro-screen').style.display = 'none', 600);
 
       morphHud.style.display = 'flex';
 
-      // 4-Stage Progressive Cinematic Assembly Timeline (4.2 seconds total)
-      const totalDuration = 4200;
+      // 4-Stage Progressive Cinematic Assembly Timeline (4.6 seconds total)
+      const totalDuration = 4600;
       let startTime = null;
 
       function stepTransformation(timestamp) {
@@ -2888,11 +3653,33 @@
         const p = Math.min(1, elapsed / totalDuration);
         morphFill.style.width = `${Math.round(p * 100)}%`;
 
+        // Smooth quintic easing curve
+        const u = p;
+        const s = u * u * u * (u * (u * 6 - 15) + 10);
+
+        // Continuous Cinematic Bezier Camera Swoop from Front to Rear Chase View
+        const p0 = new THREE.Vector3(0, 0.1, -7.8);
+        const pCtrl = new THREE.Vector3(3.8, 2.6, -1.2);
+        const pEnd = new THREE.Vector3(0, 1.8, 6.4);
+
+        const ca = (1 - s) * (1 - s);
+        const cb = 2 * (1 - s) * s;
+        const cc = s * s;
+
+        camera.position.set(
+          ca * p0.x + cb * pCtrl.x + cc * pEnd.x,
+          ca * p0.y + cb * pCtrl.y + cc * pEnd.y,
+          ca * p0.z + cb * pCtrl.z + cc * pEnd.z
+        );
+        camera.lookAt(shipRoot.position.x, shipRoot.position.y + 0.15, shipRoot.position.z);
+
         // PHASE 1: 0% - 25%: Decoupling Spine & Pylons Slide Outward
         if (p < 0.25) {
           const subP = p / 0.25;
-          morphLabel.innerText = 'STAGE 1: DECOUPLING PHI CENTRAL AXIS';
-          phiFlatSpine.scale.y = 1 - subP * 0.8;
+          morphLabel.innerText = 'STAGE 1: DECOUPLING Φ CENTRAL AXIS & SPINAL DISSOCIATION';
+          phiSpineMesh.scale.set(1 + subP * 1.8, 1 - subP * 0.75, 1);
+          phiRingMesh.scale.setScalar(1 + subP * 0.25);
+          phiRingMat.emissiveIntensity = 0.95 + subP * 1.6;
           leftPylonGroup.position.x = 0.5 - subP * 0.5;
           rightPylonGroup.position.x = -0.5 + subP * 0.5;
           if (Math.random() < 0.08) playMechanicalStepSound(220);
@@ -2900,25 +3687,31 @@
         // PHASE 2: 25% - 55%: Wings Traverse Along Telescoping Struts
         else if (p < 0.55) {
           const subP = (p - 0.25) / 0.3;
-          morphLabel.innerText = 'STAGE 2: EXTENDING WING STRUTS & PYLONS';
-          phiFlatSpine.visible = false;
+          morphLabel.innerText = 'STAGE 2: EXTENDING WING STRUTS & TELESCOPING PYLONS';
+          phiGlyphGroup.visible = false;
           leftWingGroup.position.x = -0.15 - subP * 1.65;
           rightWingGroup.position.x = 0.15 + subP * 1.65;
+          leftWingGroup.scale.x = 0.02 + subP * 0.2;
+          rightWingGroup.scale.x = 0.02 + subP * 0.2;
           if (Math.random() < 0.08) playMechanicalStepSound(340);
         }
         // PHASE 3: 55% - 85%: Unfolding Hexagonal Solar Arrays
         else if (p < 0.85) {
           const subP = (p - 0.55) / 0.3;
-          morphLabel.innerText = 'STAGE 3: EXPANDING HEX-CELL SOLAR ARRAYS';
-          leftWingGroup.scale.set(0.05 + subP * 0.95, 1, 0.05 + subP * 0.95);
-          rightWingGroup.scale.set(0.05 + subP * 0.95, 1, 0.05 + subP * 0.95);
+          morphLabel.innerText = 'STAGE 3: UNFOLDING HEX-CELL SOLAR ARRAYS (S-FOILS)';
+          leftWingGroup.scale.set(0.22 + subP * 0.78, 1, 0.22 + subP * 0.78);
+          rightWingGroup.scale.set(0.22 + subP * 0.78, 1, 0.22 + subP * 0.78);
           if (Math.random() < 0.08) playMechanicalStepSound(480);
         }
-        // PHASE 4: 85% - 100%: Ion Thruster Ignition & Camera Sweep to Chase View
+        // PHASE 4: 85% - 100%: Ion Thruster Ignition & Camera Lock into Chase View
         else {
-          morphLabel.innerText = 'STAGE 4: IGNITING TWIN ION MANIFOLDS';
-          for (let f of engineFlames) f.visible = true;
-          if (Math.random() < 0.05) playMechanicalStepSound(720);
+          const subP = (p - 0.85) / 0.15;
+          morphLabel.innerText = 'STAGE 4: IGNITING TWIN ION MANIFOLDS // AVIONICS ONLINE';
+          for (let f of engineFlames) {
+            f.visible = true;
+            f.scale.setScalar(subP);
+          }
+          if (Math.random() < 0.06) playMechanicalStepSound(720);
         }
 
         if (p < 1) {
@@ -2927,6 +3720,8 @@
           morphHud.style.opacity = '0';
           setTimeout(() => morphHud.style.display = 'none', 400);
           introActive = false;
+          transformationInProgress = false;
+          document.body.classList.remove('cinema-active');
           showNotification('FLIGHT CONTROL ONLINE // DEFEND THE SECTOR');
         }
       }
@@ -3073,7 +3868,13 @@
       if (k === 's' || k === 'arrowdown') keys.s = true;
       if (k === 'a' || k === 'arrowleft') keys.a = true;
       if (k === 'd' || k === 'arrowright') keys.d = true;
-      if (k === ' ' || e.code === 'Space') fireLasers();
+      if (k === ' ' || e.code === 'Space') {
+        if (breakdownActive) {
+          endCinematicBreakdown();
+          return;
+        }
+        fireLasers();
+      }
       if (k === 'c') setCameraView(!isCockpitView);
       if (k === 'v') {
         showForceVectors = !showForceVectors;
@@ -3104,6 +3905,7 @@
     });
 
     window.addEventListener('click', (e) => {
+      if (breakdownActive) return;
       if (e.clientY > 80 && e.clientY < window.innerHeight - 130) {
         fireLasers();
       }
@@ -3122,6 +3924,32 @@
 
       // Clear 2D Vector Canvas
       vecCtx.clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
+
+      // Handle End-of-Sector Cinematic Physics Breakdown (Slow-Mo Bullet Time)
+      if (breakdownActive) {
+        breakdownTimer += delta;
+        const progress = Math.min(1, breakdownTimer / breakdownDuration);
+        document.getElementById('cb-timer-fill').style.width = `${Math.round(progress * 100)}%`;
+
+        const orbitAngle = breakdownTimer * 0.75;
+        const orbitDist = 12 + Math.sin(breakdownTimer * 0.6) * 2;
+        camera.position.set(
+          breakdownTargetPos.x + Math.sin(orbitAngle) * orbitDist,
+          breakdownTargetPos.y + 3.2 + Math.cos(orbitAngle * 0.6) * 1.6,
+          breakdownTargetPos.z + Math.cos(orbitAngle) * orbitDist
+        );
+        camera.lookAt(breakdownTargetPos.x, breakdownTargetPos.y, breakdownTargetPos.z);
+
+        updateBreakdownDebris(delta);
+        renderBreakdownVectors();
+
+        renderer.render(scene, camera);
+
+        if (progress >= 1) {
+          endCinematicBreakdown();
+        }
+        return;
+      }
 
       const currentSector = SECTORS[currentSectorIdx];
 
@@ -3253,7 +4081,15 @@
       }
 
       // Camera Positioning
-      if (isCockpitView) {
+      if (introActive) {
+        if (!transformationInProgress) {
+          // Floating cinematic steadicam in front of 3D Phi glyph
+          phiGlyphGroup.rotation.z = Math.sin(time * 1.4) * 0.08;
+          phiAmberRingMesh.rotation.z = -time * 0.45;
+          camera.position.set(Math.sin(time * 0.7) * 0.35, 0.1 + Math.cos(time * 0.9) * 0.15, -7.8);
+          camera.lookAt(0, 0, 0);
+        }
+      } else if (isCockpitView) {
         camera.position.copy(shipRoot.position);
         camera.rotation.copy(shipRoot.rotation);
       } else {
@@ -3331,10 +4167,11 @@
             en.userData.health -= 1;
 
             if (en.userData.health <= 0) {
+              const enPos = en.position.clone();
               triggerExplosion(en.position, true);
               scene.remove(en);
               enemies.splice(j, 1);
-              registerTargetKill(en.userData.points || 250, true);
+              registerTargetKill(en.userData.points || 250, true, enPos);
               if (destroyedInSector < currentSector.quota) {
                 spawnSectorEnemy(-150);
               }
@@ -3351,11 +4188,12 @@
           for (let j = asteroids.length - 1; j >= 0; j--) {
             const ast = asteroids[j];
             if (laser.position.distanceTo(ast.position) < ast.userData.radius + 0.9) {
+              const astPos = ast.position.clone();
               triggerExplosion(ast.position, false);
               scene.remove(ast);
               asteroids.splice(j, 1);
               hit = true;
-              registerTargetKill(100, false);
+              registerTargetKill(100, false, astPos);
               spawnAsteroid(-160);
               break;
             }

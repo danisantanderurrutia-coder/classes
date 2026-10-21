@@ -3430,7 +3430,7 @@
     });
 
     // =========================================================================
-    // 8. CINEMATIC PHYSICS CLIMAX & SECTOR PROGRESSION
+    // 8. CINEMATIC PHYSICS CLIMAX & SECTOR PROGRESSION (10 CELESTIAL SECTORS)
     // =========================================================================
     const SECTOR_PHYSICS_BREAKDOWNS = [
       {
@@ -3438,8 +3438,8 @@
         title: "SOLAR RADIATIVE FLUX & PHOTON MOMENTUM",
         formula: "Φ = L_☉ / (4π r²)   |   F_rad = (Φ A / c) · (1 + R)",
         metrics: [
-          { label: "Irradiance (Φ)", val: "1,361 W/m²" },
-          { label: "Photon Press.", val: "4.54 µPa" },
+          { label: "Irradiance (Φ)", val: "63,200 W/m²" },
+          { label: "Photon Press.", val: "0.21 mPa" },
           { label: "Escape Vel.", val: "617.5 km/s" }
         ],
         desc: "Stellar radiant energy flux (Φ) transfers direct photon momentum into the debris plume. Microscopic plasma fragments are repelled radially outward into the interstellar heliosphere as photonic radiation pressure directly overcomes solar gravitation.",
@@ -3448,6 +3448,45 @@
       },
       {
         sector: 2,
+        title: "GENERAL RELATIVISTIC PERIHELION PRECESSION",
+        formula: "Δφ = (6π G M_☉) / (c² a (1 - e²))   |   g_rel = -(GM/r²)(1 + 3L²/(r² c²))",
+        metrics: [
+          { label: "Perihelion Shift", val: "43.0″ / century" },
+          { label: "Solar Curvature", val: "1.75 arcsec" },
+          { label: "Orbital Speed", val: "47.4 km/s" }
+        ],
+        desc: "The Sun's intense gravitational spacetime curvature bends geodesic paths around Mercury. Kinetic debris does not follow closed Newtonian ellipses, instead precessing along open rosette trajectories verified by Einstein's field equations.",
+        primaryColor: "#fbbf24",
+        vectorType: "precession"
+      },
+      {
+        sector: 3,
+        title: "HYDRODYNAMIC SUPER-ROTATION & RUNAWAY GREENHOUSE",
+        formula: "v_zonal = 100 m/s   |   dP/dr = -ρ g   |   τ_visc = μ ∇²v",
+        metrics: [
+          { label: "Surface Pressure", val: "93.0 bar (9.3 MPa)" },
+          { label: "Zonal Wind Speed", val: "360 km/h" },
+          { label: "Atm. Velocity Ratio", val: "60× Planetary Spin" }
+        ],
+        desc: "Venusian atmosphere experiences extreme cyclostrophic balance, rotating 60 times faster than the solid crust. Explosion debris encounters supersonic zonal shear vortices, tearing hull fragments along atmospheric isobar gradients.",
+        primaryColor: "#e0a96d",
+        vectorType: "superrotation"
+      },
+      {
+        sector: 4,
+        title: "TIDAL LOCKING, GRAVITATIONAL TORQUE & ROTATIONAL SYNCHRONY",
+        formula: "τ_tidal = -3 G M_⊕² R_m⁵ k₂ / (2 a⁶ Q)   |   T_orb = T_rot = 27.3 d",
+        metrics: [
+          { label: "Tidal Dissipation (Q)", val: "26.5" },
+          { label: "Orbital Radius (a)", val: "384,400 km" },
+          { label: "Recession Rate", val: "+3.8 cm/year" }
+        ],
+        desc: "Differential Earth gravitational forces raise solid-body tidal bulges on the Moon. Gravitational torque continuously damped lunar rotation until orbital period equalled rotational spin, locking the far side in permanent celestial alignment.",
+        primaryColor: "#94a3b8",
+        vectorType: "tidallock"
+      },
+      {
+        sector: 5,
         title: "KEPLERIAN ORBITAL DECAY & ATMOSPHERIC ABLATION",
         formula: "v_orb = √(G M_⊕ / r)   |   F_d = -½ ρ v² C_d A   |   g = -G M_⊕ / r²",
         metrics: [
@@ -3455,25 +3494,38 @@
           { label: "Local Gravity (g)", val: "9.81 m/s²" },
           { label: "Dyn. Pressure", val: "84.2 kPa" }
         ],
-        desc: "Without tangential velocity (v < 7.91 km/s) to maintain orbital equilibrium, centrifugal support collapses. Earth's gravitational field drags the debris into the upper mesosphere, where hypersonic atmospheric drag converts kinetic energy into thermal ablation.",
+        desc: "Without sufficient tangential velocity to sustain centrifugal equilibrium, debris penetrates Earth's mesosphere. Hypersonic aerodynamic compression ionizes surrounding air into an incandescent plasma wake, rapidly vaporizing alloy structures.",
         primaryColor: "#38bdf8",
         vectorType: "orbital"
       },
       {
-        sector: 3,
-        title: "CONSERVATION OF ANGULAR MOMENTUM & ROTATIONAL INERTIA",
-        formula: "L = I·ω = const   |   E_rot = ½ I ω²   |   τ = dL/dt = 0",
+        sector: 6,
+        title: "ROCHE LIMIT DESTRUCTION & TIDAL DISRUPTION SHEAR",
+        formula: "d_Roche ≈ 2.44 R_M (ρ_M / ρ_m)^(1/3)   |   F_tidal = 2 G M m r / R³",
         metrics: [
-          { label: "Angular Mom. (L)", val: "4.82×10⁶ kg·m²/s" },
-          { label: "Spin Rate (ω)", val: "24.6 rad/s" },
-          { label: "Radius Contraction", val: "-68%" }
+          { label: "Phobos Altitude", val: "6,000 km" },
+          { label: "Roche Distance", val: "5,470 km" },
+          { label: "Tidal Stress", val: "1.42×10⁵ Pa" }
         ],
-        desc: "When kinetic impact severs the wing pylons from the central mass, the moment of inertia (I) sharply contracts. By the Law of Conservation of Angular Momentum (L = I·ω), the isolated debris fragments violently accelerate their rotational spin rate.",
+        desc: "As orbital radius approaches the fluid Roche limit, differential gravitational tidal gradients exceed internal tensile strength. Fragmented debris undergoes catastrophic elongation and mechanical rupture, foreshadowing Phobos's future ring collapse.",
         primaryColor: "#ef4444",
         vectorType: "angular"
       },
       {
-        sector: 4,
+        sector: 7,
+        title: "N-BODY GRAVITATIONAL PERTURBATION & KIRKWOOD GAPS",
+        formula: "d²r_i/dt² = -∑ (G m_j (r_i - r_j)) / |r_i - r_j|³   |   T_ast / T_Jup = p/q",
+        metrics: [
+          { label: "Jovian Resonance", val: "3:1 Mean-Motion" },
+          { label: "Orbital Period", val: "4.60 years" },
+          { label: "Chaotic Lyapunov", val: "2.4×10⁴ yrs" }
+        ],
+        desc: "Jupiter's periodic gravitational tug pumps orbital eccentricities inside Mean-Motion Resonances. Ceres debris fields are flung chaotically across intersecting interplanetary transfer trajectories, sculpting the famous Kirkwood voids.",
+        primaryColor: "#a1a1aa",
+        vectorType: "nbody"
+      },
+      {
+        sector: 8,
         title: "JOVIAN LORENTZ ACCELERATION & SYNCHROTRON BELT",
         formula: "F = q(E + v × B)   |   r_L = m v_⊥ / (|q| B)   |   ω_c = q B / m",
         metrics: [
@@ -3486,7 +3538,20 @@
         vectorType: "lorentz"
       },
       {
-        sector: 5,
+        sector: 9,
+        title: "KEPLERIAN DIFFERENTIAL SHEAR & SPIRAL DENSITY WAVES",
+        formula: "Ω(r) = √(G M_♄ / r³)   |   v_shear = -3/2 Ω r   |   λ_wave = 4π² G σ / κ²",
+        metrics: [
+          { label: "Cassini Division", val: "4,800 km wide" },
+          { label: "Shear Gradient", val: "-1.8 m/s per km" },
+          { label: "Ring Thickness", val: "~10 meters" }
+        ],
+        desc: "Because orbital angular velocity scales as Ω ∝ r^(-3/2), inner ring particles orbit dramatically faster than outer ones. This Keplerian differential shear tears apart colliding debris clouds into razor-thin concentric spiral density waves.",
+        primaryColor: "#fef08a",
+        vectorType: "ringshear"
+      },
+      {
+        sector: 10,
         title: "GENERAL RELATIVITY: TIDAL SPAGHETTIFICATION & REDSHIFT",
         formula: "r_s = 2GM / c²   |   t' = t √(1 - r_s / r)   |   dF_g/dr = -2GMm / r³ → ∞",
         metrics: [
@@ -3503,7 +3568,7 @@
     let breakdownActive = false;
     let breakdownTargetPos = new THREE.Vector3();
     let breakdownTimer = 0;
-    const breakdownDuration = 4.8;
+    const breakdownDuration = 5.2;
     const breakdownDebrisGroup = new THREE.Group();
     scene.add(breakdownDebrisGroup);
 
@@ -3536,6 +3601,12 @@
       }
 
       document.getElementById('cb-timer-fill').style.width = '0%';
+      const continueBtn = document.getElementById('cb-btn-continue');
+      if (continueBtn) {
+        continueBtn.innerText = 'ANALYZING TELEMETRY... (2s)';
+        continueBtn.style.opacity = '0.5';
+        continueBtn.style.pointerEvents = 'none';
+      }
       document.getElementById('cinematic-physics-overlay').style.display = 'flex';
 
       spawnBreakdownPhysicsParticles(breakdownTargetPos, data.vectorType);
@@ -3546,7 +3617,7 @@
         breakdownDebrisGroup.remove(breakdownDebrisGroup.children[0]);
       }
 
-      const count = 36;
+      const count = 38;
       for (let i = 0; i < count; i++) {
         let geo, mat;
         if (vectorType === 'radiation') {
@@ -3557,12 +3628,36 @@
             emissiveIntensity: 0.85,
             roughness: 0.25
           });
+        } else if (vectorType === 'precession') {
+          geo = new THREE.OctahedronGeometry(0.35 + Math.random() * 0.3);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xfbbf24,
+            emissive: 0xf59e0b,
+            emissiveIntensity: 0.8,
+            roughness: 0.3
+          });
+        } else if (vectorType === 'superrotation') {
+          geo = new THREE.BoxGeometry(0.6, 0.15, 0.35);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xe0a96d,
+            emissive: 0xea580c,
+            emissiveIntensity: 0.75,
+            roughness: 0.35
+          });
+        } else if (vectorType === 'tidallock') {
+          geo = new THREE.SphereGeometry(0.25, 8, 8);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0x94a3b8,
+            emissive: 0x64748b,
+            emissiveIntensity: 0.7,
+            roughness: 0.4
+          });
         } else if (vectorType === 'orbital') {
           geo = new THREE.BoxGeometry(0.5, 0.2, 0.7);
           mat = new THREE.MeshStandardMaterial({
             color: 0x38bdf8,
             emissive: 0xf97316,
-            emissiveIntensity: 0.7,
+            emissiveIntensity: 0.75,
             roughness: 0.4
           });
         } else if (vectorType === 'angular') {
@@ -3572,6 +3667,14 @@
             metalness: 0.8,
             roughness: 0.2
           });
+        } else if (vectorType === 'nbody') {
+          geo = new THREE.TetrahedronGeometry(0.38 + Math.random() * 0.25);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xa1a1aa,
+            emissive: 0x38bdf8,
+            emissiveIntensity: 0.8,
+            roughness: 0.3
+          });
         } else if (vectorType === 'lorentz') {
           geo = new THREE.SphereGeometry(0.28, 8, 8);
           mat = new THREE.MeshStandardMaterial({
@@ -3580,7 +3683,16 @@
             emissiveIntensity: 0.9,
             roughness: 0.2
           });
+        } else if (vectorType === 'ringshear') {
+          geo = new THREE.CylinderGeometry(0.45, 0.45, 0.06, 6);
+          mat = new THREE.MeshStandardMaterial({
+            color: 0xfef08a,
+            emissive: 0xeab308,
+            emissiveIntensity: 0.85,
+            roughness: 0.25
+          });
         } else {
+          // relativity
           geo = new THREE.CylinderGeometry(0.08, 0.08, 1.8, 8);
           mat = new THREE.MeshStandardMaterial({
             color: 0xec4899,
@@ -3623,24 +3735,44 @@
 
       for (let mesh of breakdownDebrisGroup.children) {
         if (type === 'radiation') {
-          mesh.userData.vel.z += delta * 14;
+          mesh.userData.vel.z += delta * 15;
           mesh.userData.vel.multiplyScalar(0.99);
+        } else if (type === 'precession') {
+          const curA = Math.atan2(mesh.userData.vel.z, mesh.userData.vel.x) + delta * 2.4;
+          const spd = Math.hypot(mesh.userData.vel.x, mesh.userData.vel.z);
+          mesh.userData.vel.x = Math.cos(curA) * spd;
+          mesh.userData.vel.z = Math.sin(curA) * spd;
+        } else if (type === 'superrotation') {
+          mesh.userData.vel.x += (mesh.position.y > 0 ? 1 : -1) * 24 * delta;
+          mesh.userData.vel.y += Math.sin(mesh.position.x * 2) * 6 * delta;
+        } else if (type === 'tidallock') {
+          mesh.userData.rotVel.multiplyScalar(0.96);
+          mesh.userData.vel.multiplyScalar(0.98);
         } else if (type === 'orbital') {
-          mesh.userData.vel.y -= delta * 9.8;
-          mesh.userData.vel.multiplyScalar(0.97);
+          mesh.userData.vel.y -= delta * 11.5;
+          mesh.userData.vel.multiplyScalar(0.965);
         } else if (type === 'angular') {
-          mesh.userData.rotVel.multiplyScalar(1.015);
+          mesh.userData.rotVel.multiplyScalar(1.02);
+        } else if (type === 'nbody') {
+          const pert = Math.sin(mesh.userData.seed + breakdownTimer * 5) * 16 * delta;
+          mesh.userData.vel.x += pert;
+          mesh.userData.vel.y -= pert * 0.45;
         } else if (type === 'lorentz') {
           const q = mesh.userData.charge;
           const vx = mesh.userData.vel.x;
           const vz = mesh.userData.vel.z;
-          mesh.userData.vel.x += vz * q * 12 * delta;
-          mesh.userData.vel.z -= vx * q * 12 * delta;
+          mesh.userData.vel.x += vz * q * 13 * delta;
+          mesh.userData.vel.z -= vx * q * 13 * delta;
+        } else if (type === 'ringshear') {
+          const r = Math.max(1.0, mesh.position.length());
+          const shear = -16.0 / (r * 0.7 + 1.0);
+          mesh.userData.vel.x += -mesh.userData.vel.z * shear * delta * 0.12;
+          mesh.userData.vel.z += mesh.userData.vel.x * shear * delta * 0.12;
         } else if (type === 'relativity') {
-          mesh.scale.y += delta * 1.8;
-          mesh.scale.x = Math.max(0.1, mesh.scale.x - delta * 0.3);
-          mesh.scale.z = Math.max(0.1, mesh.scale.z - delta * 0.3);
-          mesh.userData.vel.multiplyScalar(0.94);
+          mesh.scale.y += delta * 2.0;
+          mesh.scale.x = Math.max(0.08, mesh.scale.x - delta * 0.35);
+          mesh.scale.z = Math.max(0.08, mesh.scale.z - delta * 0.35);
+          mesh.userData.vel.multiplyScalar(0.935);
         }
 
         mesh.position.addScaledVector(mesh.userData.vel, delta);
@@ -3670,6 +3802,20 @@
           drawForceVector(px, py, Math.cos(a) * len, Math.sin(a) * len, '#f59e0b', i === 0 ? 'F_rad (Photon Pressure)' : '');
         }
         drawForceVector(px, py, 0, 70, '#ef4444', 'Fg (Solar Gravity: -42 kN)');
+      } else if (data.vectorType === 'precession') {
+        const rotA = timer * 2.0;
+        drawForceVector(px, py, Math.cos(rotA) * 85, Math.sin(rotA) * 65, '#fbbf24', 'v_perihelion (47.4 km/s)');
+        drawForceVector(px, py, -Math.sin(rotA) * 60, Math.cos(rotA) * 60, '#f59e0b', 'Δφ (Relativistic Precession: 43″/cy)');
+        drawForceVector(px, py, 0, 75, '#ef4444', 'g_Einstein (Geodesic Curvature)');
+      } else if (data.vectorType === 'superrotation') {
+        drawForceVector(px, py - 30, 110, 0, '#e0a96d', 'v_zonal (Supersonic Wind: 360 km/h)');
+        drawForceVector(px, py + 30, -110, 0, '#ea580c', 'v_counter (Atmospheric Vortex)');
+        drawForceVector(px, py, 0, 75, '#ef4444', '∇P (Pressure Gradient: 93 bar)');
+      } else if (data.vectorType === 'tidallock') {
+        const lockA = timer * 1.5;
+        drawForceVector(px, py, Math.cos(lockA) * 70, Math.sin(lockA) * 70, '#94a3b8', 'F_tidal (Tidal Bulge Coupling)');
+        drawForceVector(px, py, -Math.cos(lockA) * 70, -Math.sin(lockA) * 70, '#64748b', 'τ_torque → 0 (Synchronous Lock)');
+        drawForceVector(px, py, 0, -65, '#38bdf8', 'T_orb = T_rot (27.3 d)');
       } else if (data.vectorType === 'orbital') {
         drawForceVector(px, py, 110, -25, '#38bdf8', 'v_orb (7.91 km/s)');
         drawForceVector(px, py, -85, 20, '#f97316', 'F_drag (Atmospheric Ablation)');
@@ -3683,12 +3829,21 @@
         vecCtx.arc(px, py, rad, spin, spin + Math.PI * 1.4);
         vecCtx.stroke();
         drawForceVector(px + Math.cos(spin) * rad, py + Math.sin(spin) * rad, -Math.sin(spin) * 50, Math.cos(spin) * 50, '#ef4444', 'v_tan = ω × r');
-        drawForceVector(px, py, 0, -75, '#00f0ff', 'L = I·ω (Conserved)');
+        drawForceVector(px, py, 0, -75, '#00f0ff', 'L = I·ω (Momentum Conserved)');
+        drawForceVector(px, py, 0, 70, '#f97316', 'd_Roche (Tidal Rupture Gradient)');
+      } else if (data.vectorType === 'nbody') {
+        drawForceVector(px, py, 95, -45, '#38bdf8', 'F_Jupiter (3:1 Resonance Tug)');
+        drawForceVector(px, py, -65, 30, '#a1a1aa', 'F_Ceres (Belt Perturbation)');
+        drawForceVector(px, py, 0, 75, '#f59e0b', 'a_chaos (Kirkwood Void Ejection)');
       } else if (data.vectorType === 'lorentz') {
         drawForceVector(px, py, 0, -90, '#a855f7', 'B-field (Jovian Flux Tube)');
         const helix = timer * 8.0;
         const hRad = 35;
-        drawForceVector(px + Math.cos(helix) * hRad, py + Math.sin(helix) * hRad, -Math.sin(helix) * 45, Math.cos(helix) * 45, '#38bdf8', 'F = q(v × B)');
+        drawForceVector(px + Math.cos(helix) * hRad, py + Math.sin(helix) * hRad, -Math.sin(helix) * 45, Math.cos(helix) * 45, '#38bdf8', 'F = q(v × B) (Lorentz Cyclotron)');
+      } else if (data.vectorType === 'ringshear') {
+        drawForceVector(px, py - 25, 115, 0, '#fef08a', 'v_inner (Keplerian Speed: +4.2 km/s)');
+        drawForceVector(px, py + 25, 65, 0, '#eab308', 'v_outer (Reduced Speed: -2.4 km/s)');
+        drawForceVector(px, py, 0, 70, '#00f0ff', 'dΩ/dr = -3/2 Ω/r (Differential Shear)');
       } else if (data.vectorType === 'relativity') {
         drawForceVector(px, py, 0, 110, '#ec4899', 'dFg/dr → ∞ (Tidal Spaghettification)');
         drawForceVector(px, py, -70, -40, '#a855f7', 'Grav. Redshift: z → ∞');
@@ -3711,8 +3866,10 @@
         advanceToNextSector();
       } else {
         document.body.classList.remove('cinema-active');
-        document.querySelector('#sector-cleared-modal h1').innerText = 'MISSION COMPLETE // COSMOS DEFENDED';
+        document.querySelector('#sector-cleared-modal h1').innerText = 'CAMPAIGN COMPLETE // ALL 10 SECTORS SECURED';
         document.getElementById('cleared-subtitle').innerText = 'You mastered General Relativity and Newtonian mechanics, escaped the supermassive Singularity, and safeguarded the Solar System.';
+        document.getElementById('cleared-score-stat').innerText = score;
+        document.getElementById('cleared-next-planet').innerText = 'SOLAR SYSTEM SECURED';
         document.getElementById('btn-next-sector').innerText = 'RESTART CAMPAIGN 🔄';
         document.getElementById('sector-cleared-modal').style.display = 'flex';
       }
@@ -3758,7 +3915,17 @@
     }
 
     document.getElementById('cb-btn-continue').addEventListener('click', () => {
+      if (breakdownActive && breakdownTimer < 2.0) return;
       endCinematicBreakdown();
+    });
+
+    document.getElementById('btn-next-sector').addEventListener('click', () => {
+      document.getElementById('sector-cleared-modal').style.display = 'none';
+      if (currentSectorIdx + 1 < SECTORS.length) {
+        advanceToNextSector();
+      } else {
+        window.location.reload();
+      }
     });
 
     function registerTargetKill(pts = 100, isEnemy = false, targetPos = null) {
@@ -4090,7 +4257,9 @@
       if (k === 'd' || k === 'arrowright') keys.d = true;
       if (k === ' ' || e.code === 'Space') {
         if (breakdownActive) {
-          endCinematicBreakdown();
+          if (breakdownTimer >= 2.0) {
+            endCinematicBreakdown();
+          }
           return;
         }
         fireLasers();

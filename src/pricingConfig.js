@@ -6,17 +6,27 @@
 export const CUSTOM_PRICING_STORAGE_KEY = 'ds_custom_pricing_v1';
 
 // Course-to-Complexity-Tier mapping:
-// - 'ib' (Tier 1: Cálculo I-II, Física Base, Bachillerato IB / PAES / Abitur)
-// - 'bachelor' (Tier 2: Álgebra Lineal, EDOs, Mecánica Analítica, Exámenes Ingeniería)
-// - 'master' (Tier 3: Mecánica de Fluidos, Geofísica, Python Científico + IA, Tesis)
+// - 'ib' (Tier 1: Cálculo I-II, Matemática Base, Física Plan Común, Bachillerato IB / PAES / Abitur / Cuántica Curiosos)
+// - 'bachelor' (Tier 2: Álgebra Lineal, EDOs, Mecánica Analítica, Electromagnetismo)
+// - 'master' (Tier 3: Física Atmosférica, Suelos & Hidrología, Python Científico, Tesis & Proyectos)
 export const COURSE_TIER_MAP = {
-  klausur: 'ib',           // Cálculo I, II & III -> Nivel 1 ($20.000 CLP / €25)
-  ib: 'ib',                // IB Math & Physics HL -> Nivel 1 ($20.000 CLP / €25)
-  linear_algebra: 'bachelor', // Álgebra Lineal y EDOs -> Nivel 2 ($23.000 CLP / €29)
-  mechanics: 'bachelor',   // Mecánica Clásica y Dinámica -> Nivel 2 ($23.000 CLP / €29)
-  computational: 'master', // Física Computacional y Python -> Nivel 3 ($26.000 CLP / €35)
-  geophysics: 'master',    // Geofísica y Fluidos -> Nivel 3 ($26.000 CLP / €35)
-  relativity: 'master'     // Relatividad y Astrofísica -> Nivel 3 ($26.000 CLP / €35)
+  // Tier 1 • Fundamentos, Cálculo, Plan Común & Aficionados
+  klausur: 'ib',
+  math_bachelor: 'ib',
+  physics_bachelor: 'ib',
+  quantum_curious: 'ib',
+  ib: 'ib',
+
+  // Tier 2 • Ingeniería Intermedia & Física Aplicada
+  linear_algebra: 'bachelor',
+  mechanics: 'bachelor',
+  electromagnetism: 'bachelor',
+
+  // Tier 3 • Especialidad, Python, Suelos, Atmósfera & Tesis
+  computational: 'master',
+  atmospheric: 'master',
+  soil_physics: 'master',
+  thesis_projects: 'master'
 };
 
 export const SUBJECT_COMPLEXITY_TIERS = [

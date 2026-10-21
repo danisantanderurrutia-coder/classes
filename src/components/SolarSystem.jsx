@@ -6,6 +6,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { PLANET_SUBJECTS } from '../data/planetSubjects';
+export { PLANET_SUBJECTS };
 
 export const DEFAULT_VIEWER_SETTINGS = {
   sunIntensity: 2.2,       // Calibrated from 5.2 to avoid blown-out sector
@@ -248,9 +250,6 @@ function createAmbientEngine() {
 // ============================================================================
 // 1. ASTROPHYSICAL & ACADEMIC METADATA (11 CELESTIAL BODIES: 8 PLANETS + SUN + MOON + SGR A*)
 // ============================================================================
-import { PLANET_SUBJECTS } from '../data/planetSubjects';
-export { PLANET_SUBJECTS };
-
 export const LINEUP_PLANETS = PLANET_SUBJECTS.filter((p) => p.inLineup);
 
 export const getPlanetName = (p, lang) => !p ? '' : (lang === 'en' ? (p.nameEn || p.name) : (p.nameEs || p.name));
@@ -3102,6 +3101,7 @@ export default function SolarSystem({
       const delta = Math.min(clock.getDelta(), 0.05);
       const elapsedTime = clock.getElapsedTime();
 
+      const st = animStateRef.current;
       const {
         activePlanet: currentActive,
         viewVariant: currentVariant,
@@ -3112,7 +3112,7 @@ export default function SolarSystem({
         isRealScale: realScaleMode,
         isGalacticDriftActive: driftActive,
         isTransitioning: transitioning,
-      } = animStateRef.current;
+      } = st;
 
       const isShowcase = currentVariant !== 'orbital' && !realScaleMode;
 
@@ -3477,7 +3477,6 @@ export default function SolarSystem({
       // ======================================================================
       // CAMERA FRAMING SYSTEM: DEEP SPACE FLY-IN -> LINEUP -> ZOOM
       // ======================================================================
-      const st = animStateRef.current;
       const shot = st.shot;
       const cineOn = st.cinemaMode;
       const bhRadiusNow = 7.0 * blackHoleGroup.scale.x;

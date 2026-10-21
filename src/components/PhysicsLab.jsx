@@ -1,5 +1,7 @@
 import MathFormula from './MathFormula';
 import React, { useState, useEffect, useRef } from 'react';
+import { LAB_PROBLEMS } from '../data/labProblems';
+export { LAB_PROBLEMS };
 import {
   Play,
   Pause,
@@ -42,12 +44,6 @@ const getFormulaMath = (f, lang) =>
   (lang === 'en' ? f.latexEn : f.latexEs) ||
   f.latex ||
   (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq));
-
-// ============================================================================
-// CATALOG OF 14 CLASSICAL PHYSICS, ENGINEERING & GEOPHYSICS LAB PROBLEMS
-// ============================================================================
-import { LAB_PROBLEMS } from '../data/labProblems';
-export { LAB_PROBLEMS };
 
 // ============================================================================
 // HELPER: DRAW COILED SPRING ON CANVAS

@@ -1610,14 +1610,16 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                 <div id="planetarium-viewport" className="rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_0_90px_rgba(56,189,248,0.07)]">
                   <ErrorBoundary key="solar-system-boundary">
-                    <SolarSystem
-                      onSelectSubject={handleSelectPlanetSubject}
-                      selectedSubjectId={selectedSubjectId}
-                      lang={lang}
-                      onNavigate={navigateTo}
-                      onOpenBooking={handleOpenBooking}
-                      courses={ACADEMIC_COURSES}
-                    />
+                    <Suspense fallback={<div className="h-[560px] sm:h-[620px] flex items-center justify-center bg-black text-slate-400 font-mono text-xs">{lang === 'en' ? 'Initializing 3D Observatory…' : 'Iniciando Observatorio 3D…'}</div>}>
+                      <SolarSystem
+                        onSelectSubject={handleSelectPlanetSubject}
+                        selectedSubjectId={selectedSubjectId}
+                        lang={lang}
+                        onNavigate={navigateTo}
+                        onOpenBooking={handleOpenBooking}
+                        courses={ACADEMIC_COURSES}
+                      />
+                    </Suspense>
                   </ErrorBoundary>
                 </div>
               </div>

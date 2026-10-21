@@ -117,13 +117,20 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   // MASTER COMPENDIUM OF FUNDAMENTAL LAWS (KATEX LATEX FORMULATIONS)
   // ==========================================================================
   const ALL_FUNDAMENTAL_LAWS = [
-    // ------------------------------------------------------------------------
-    // A. CLASSICAL MECHANICS, GRAVITATION & CONTINUUM (PHY-201 / GEO-301)
-    // ------------------------------------------------------------------------
     {
-      id: 'newton_second',
-      category: 'mechanics',
-      courseCode: 'PHY-201',
+      id: "newton_first",
+      category: "mechanics",
+      courseCode: "PHY-201",
+      titleEn: "Newton's 1st Law of Motion (Law of Inertia)",
+      titleEs: "1ª Ley de Newton (Principio de Inercia)",
+      latex: "\\sum \\mathbf{F} = \\mathbf{0} \\implies \\frac{d\\mathbf{v}}{dt} = \\mathbf{0} \\quad (\\mathbf{v} = \\text{const})",
+      descEn: "An object remains at rest or in uniform straight-line motion unless acted upon by a net external force. Defines inertial reference frames.",
+      descEs: "Un cuerpo permanece en reposo o en movimiento rectilíneo uniforme a menos que actúe sobre él una fuerza neta externa. Define los marcos de referencia inerciales."
+    },
+    {
+      id: "newton_second",
+      category: "mechanics",
+      courseCode: "PHY-201",
       titleEn: "Newton's 2nd Law of Motion (Momentum Formulation)",
       titleEs: "2ª Ley de Newton (Dinámica y Momento Lineal)",
       latex: "\\mathbf{F}_{\\text{net}} = \\frac{d\\mathbf{p}}{dt} = m\\mathbf{a}",
@@ -131,9 +138,19 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "La tasa temporal de cambio del momento lineal es igual a la fuerza neta exterior. Con masa constante se reduce a F = ma, base de la dinámica clásica."
     },
     {
-      id: 'universal_gravitation',
-      category: 'mechanics',
-      courseCode: 'AST-401 / PHY-201',
+      id: "newton_third",
+      category: "mechanics",
+      courseCode: "PHY-201",
+      titleEn: "Newton's 3rd Law of Motion (Action and Reaction)",
+      titleEs: "3ª Ley de Newton (Acción y Reacción)",
+      latex: "\\mathbf{F}_{12} = -\\mathbf{F}_{21} \\quad \\Big| \\quad \\sum_{i=1}^N \\mathbf{p}_i = \\text{const}",
+      descEn: "When two bodies interact, forces occur in equal and opposite pairs collinear with the interaction axis, leading directly to global conservation of momentum.",
+      descEs: "Al interactuar dos cuerpos, las fuerzas surgen en pares de igual magnitud y sentido opuesto, fundamentando la conservación del momento lineal del sistema."
+    },
+    {
+      id: "universal_gravitation",
+      category: "mechanics",
+      courseCode: "AST-401 / PHY-201",
       titleEn: "Newton's Law of Universal Gravitation & Gravitational Potential",
       titleEs: "Ley de Gravitación Universal y Potencial Gravitatorio",
       latex: "\\mathbf{F}_g = -G \\frac{M m}{r^2} \\hat{\\mathbf{r}} \\quad \\Big| \\quad \\Phi(r) = -\\frac{G M}{r}",
@@ -141,9 +158,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Toda masa atrae a cualquier otra a lo largo de la línea radial. El campo conservativo deriva del potencial escalar F = -m∇Φ y satisface la ley de Gauss gravitatoria."
     },
     {
-      id: 'conservation_energy_momentum',
-      category: 'mechanics',
-      courseCode: 'PHY-201',
+      id: "conservation_energy_momentum",
+      category: "mechanics",
+      courseCode: "PHY-201",
       titleEn: "Conservation of Mechanical Energy & Angular Momentum",
       titleEs: "Conservación de Energía Mecánica y Momento Angular",
       latex: "E = T + V = \\text{const} \\quad \\Big| \\quad \\mathbf{L} = \\mathbf{r} \\times \\mathbf{p}, \\; \\frac{d\\mathbf{L}}{dt} = \\boldsymbol{\\tau}_{\\text{ext}}",
@@ -151,43 +168,179 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Por el teorema de Noether, la simetría temporal garantiza la conservación de la energía, y la simetría rotacional conserva el momento angular en campos centrales."
     },
     {
-      id: 'kepler_third',
-      category: 'mechanics',
-      courseCode: 'AST-401',
-      titleEn: "Kepler's 3rd Law of Planetary Motion (Harmonic Law)",
-      titleEs: "3ª Ley de Kepler (Ley Armónica de Órbitas)",
-      latex: "T^2 = \\frac{4\\pi^2}{G (M + m)} \\, a^3",
-      descEn: "The square of the orbital period T is directly proportional to the cube of the semi-major axis a, derived rigorously from balance of gravitational and centripetal acceleration.",
-      descEs: "El cuadrado del período orbital T es proporcional al cubo del semieje mayor a, deducible rigurosamente del balance entre gravitación y aceleración centrípeta."
+      id: "kepler_laws",
+      category: "mechanics",
+      courseCode: "AST-401",
+      titleEn: "Kepler's Planetary Laws (Harmonic Law & Equal Areas)",
+      titleEs: "Leyes de Kepler (Ley Armónica y Áreas Iguales)",
+      latex: "T^2 = \\frac{4\\pi^2}{G (M + m)} \\, a^3 \\quad \\Big| \\quad \\frac{dA}{dt} = \\frac{L}{2m} = \\text{const}",
+      descEn: "Orbital periods scale with semi-major axes cubed (3rd law). The radius vector sweeps equal orbital areas in equal intervals (2nd law), reflecting constant angular momentum.",
+      descEs: "El cuadrado del período orbital es proporcional al cubo del semieje mayor (3ª ley). El radio vector barre áreas iguales en tiempos iguales (2ª ley) por conservación de L."
     },
     {
-      id: 'hooke_elasticity',
-      category: 'mechanics',
-      courseCode: 'GEO-301',
-      titleEn: "Hooke's Generalized Law of Linear Elasticity (Stress Tensor)",
-      titleEs: "Ley Generalizada de Hooke (Tensor de Esfuerzos y Deformaciones)",
-      latex: "\\sigma_{ij} = c_{ijkl} \\, \\varepsilon_{kl} = \\lambda \\delta_{ij} \\varepsilon_{kk} + 2\\mu \\varepsilon_{ij}",
-      descEn: "Relates the 2nd-order Cauchy stress tensor σ to infinitesimal strain ε via Lamé parameters (λ, μ), governing seismic P and S wave propagation in solid earth.",
-      descEs: "Relaciona el tensor de esfuerzos de Cauchy con la deformación infinitesimal mediante los parámetros de Lamé (λ, μ), rigiendo las ondas sísmicas P y S."
+      id: "harmonic_oscillator",
+      category: "mechanics",
+      courseCode: "PHY-201",
+      titleEn: "Damped & Forced Harmonic Oscillator Equation",
+      titleEs: "Oscilador Armónico Amortiguado y Forzado",
+      latex: "m \\ddot{x} + c \\dot{x} + k x = F_0 \\cos(\\omega t) \\implies x_p(t) = A(\\omega)\\cos(\\omega t - \\delta)",
+      descEn: "Fundamental resonance equation for structural, seismic, and mechanical vibrations. Yields quality factor Q, bandwidth Δω, and sharp resonance peaks at ω₀.",
+      descEs: "Ecuación fundamental de resonancia para vibraciones estructurales y sísmicas. Determina el factor de calidad Q, ancho de banda y picos de resonancia en ω₀."
     },
     {
-      id: 'work_energy',
-      category: 'mechanics',
-      courseCode: 'PHY-201',
+      id: "coupled_oscillators_modes",
+      category: "mechanics",
+      courseCode: "PHY-201 / MAT-102",
+      titleEn: "Coupled Oscillators & Normal Vibration Modes",
+      titleEs: "Osciladores Acoplados y Modos Normales de Vibración",
+      latex: "\\mathbf{M} \\ddot{\\mathbf{x}} + \\mathbf{K} \\mathbf{x} = \\mathbf{0} \\implies \\det(\\mathbf{K} - \\omega^2 \\mathbf{M}) = 0",
+      descEn: "Generalized eigenvalue problem governing multi-degree-of-freedom buildings, molecular lattices, and terrestrial normal modes excited by megathrust earthquakes.",
+      descEs: "Problema generalizado de autovalores que rige edificios multisísmicos, redes moleculares y modos normales de la Tierra tras megaterremotos."
+    },
+    {
+      id: "work_energy",
+      category: "mechanics",
+      courseCode: "PHY-201",
       titleEn: "Work-Kinetic Energy Theorem",
       titleEs: "Teorema del Trabajo y la Energía Cinética",
       latex: "W_{\\text{net}} = \\int \\mathbf{F}_{\\text{net}} \\cdot d\\mathbf{r} = \\Delta K = \\frac{1}{2}m v_f^2 - \\frac{1}{2}m v_i^2",
       descEn: "The line integral of net force along a particle's trajectory equals the exact change in kinetic energy, independent of conservative or non-conservative paths.",
       descEs: "La integral de línea de la fuerza neta a lo largo de la trayectoria equivale exactamente a la variación de energía cinética, con fuerzas conservativas o disipativas."
     },
-
-    // ------------------------------------------------------------------------
-    // B. FLUID DYNAMICS & CONTINUUM MECHANICS (PHY-201 / GEO-301)
-    // ------------------------------------------------------------------------
     {
-      id: 'continuity_equation',
-      category: 'fluids',
-      courseCode: 'PHY-201',
+      id: "lagrange_hamilton_mechanics",
+      category: "mechanics",
+      courseCode: "PHY-201 / FCFM-501",
+      titleEn: "Euler-Lagrange & Hamilton's Canonical Equations",
+      titleEs: "Mecánica Analítica de Lagrange y Hamilton",
+      latex: "\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right) - \\frac{\\partial L}{\\partial q_i} = 0, \\quad \\dot{q}_i = \\frac{\\partial H}{\\partial p_i}, \\; \\dot{p}_i = -\\frac{\\partial H}{\\partial q_i}",
+      descEn: "Variational principle of stationary action (Hamilton's Principle). Reformulates Newtonian mechanics in generalized coordinates, crucial for geodynamics and modern physics.",
+      descEs: "Principio variacional de acción estacionaria (Hamilton). Reformula la mecánica newtoniana en coordenadas generalizadas, vital en geodinámica y física teórica."
+    },
+    {
+      id: "navier_cauchy_elastodynamics",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Navier-Cauchy Equation of Elastodynamics (Seismic Waves)",
+      titleEs: "Ecuación de Navier-Cauchy (Elastodinámica y Ondas Sísmicas)",
+      latex: "\\rho \\frac{\\partial^2 \\mathbf{u}}{\\partial t^2} = (\\lambda + \\mu) \\nabla(\\nabla \\cdot \\mathbf{u}) + \\mu \\nabla^2 \\mathbf{u} + \\mathbf{f}",
+      descEn: "Governing equation for seismic wave propagation in isotropic elastic media. Governs both body wave types and boundary-guided surface waves (Rayleigh & Love).",
+      descEs: "Ecuación diferencial que rige la propagación de ondas sísmicas en sólidos elásticos isotrópicos. Determina ondas de cuerpo y ondas superficiales (Rayleigh y Love)."
+    },
+    {
+      id: "helmholtz_p_s_waves",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Helmholtz Decomposition & P and S Wave Speeds",
+      titleEs: "Descomposición de Helmholtz y Velocidades de Onda P y S",
+      latex: "\\mathbf{u} = \\nabla\\phi + \\nabla \\times \\boldsymbol{\\psi} \\implies v_P = \\sqrt{\\frac{\\lambda + 2\\mu}{\\rho}}, \\quad v_S = \\sqrt{\\frac{\\mu}{\\rho}}",
+      descEn: "Separates displacement into irrotational dilational P-waves (compressional) and equivoluminal rotational S-waves (shear). Since μ > 0, v_P is always greater than v_S.",
+      descEs: "Descompone el desplazamiento en ondas P compresionales (sin rotación) y ondas S de cizalle (sin cambio de volumen). Dado que μ > 0, v_P siempre supera a v_S."
+    },
+    {
+      id: "snell_seismic_refraction",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Snell's Law of Seismic Refraction & Ray Parameter",
+      titleEs: "Ley de Snell Sísmica, Parámetro de Rayo y Ángulo Crítico",
+      latex: "\\frac{\\sin\\theta_1}{v_1} = \\frac{\\sin\\theta_2}{v_2} = p \\quad \\implies \\quad \\sin\\theta_c = \\frac{v_1}{v_2}",
+      descEn: "Governs seismic ray bending across acoustic interfaces with ray parameter p. At critical angle θ_c, waves generate head waves propagating along the Moho discontinuity.",
+      descEs: "Rige la refracción de rayos sísmicos en interfaces acústicas. En el ángulo crítico θ_c se generan ondas cónicas que viajan por discontinuidades como el Moho."
+    },
+    {
+      id: "seismic_moment_magnitude",
+      category: "geophysics",
+      courseCode: "GEO-401",
+      titleEn: "Seismic Moment & Moment Magnitude Scale (Hanks-Kanamori)",
+      titleEs: "Momento Sísmico y Escala de Magnitud de Momento (Mw)",
+      latex: "M_0 = \\mu A \\bar{D} \\quad \\Big| \\quad M_w = \\frac{2}{3}\\left(\\log_{10} M_0 - 9.1\\right)",
+      descEn: "Physical quantification of earthquake rupture size based on shear modulus μ, fault rupture area A, and average slip D. Unlike Richter scales, Mw does not saturate.",
+      descEs: "Cuantificación física de la energía de ruptura sísmica basada en rigidez μ, área de falla A y deslizamiento medio D. No se satura en megaterremotos de subducción."
+    },
+    {
+      id: "gutenberg_richter",
+      category: "geophysics",
+      courseCode: "GEO-401",
+      titleEn: "Gutenberg-Richter Frequency-Magnitude Distribution",
+      titleEs: "Ley de Gutenberg-Richter (Frecuencia-Magnitud Sísmica)",
+      latex: "\\log_{10} N(\\ge M_w) = a - b M_w \\quad (b \\approx 1.0)",
+      descEn: "Statistical scaling law stating that the cumulative number of earthquakes N with magnitude ≥ Mw decreases exponentially. Parameter b reveals regional tectonic stress state.",
+      descEs: "Ley empírica universal que indica que el número acumulado de sismos de magnitud ≥ Mw decae exponencialmente. El valor b refleja el estado de esfuerzo tectónico."
+    },
+    {
+      id: "omori_utsu_aftershocks",
+      category: "geophysics",
+      courseCode: "GEO-401",
+      titleEn: "Modified Omori-Utsu Law for Aftershock Decay Rate",
+      titleEs: "Ley Modificada de Omori-Utsu (Tasa de Réplicas Sísmicas)",
+      latex: "n(t) = \\frac{K}{(t + c)^p} \\quad (p \\approx 1.0 - 1.2)",
+      descEn: "Predicts the temporal frequency of aftershocks n(t) following a mainshock. The power-law decay parameter p characterizes crustal thermal gradient and stress relaxation.",
+      descEs: "Describe el decaimiento hiperbólico temporal de réplicas tras un sismo principal. El parámetro p refleja el gradiente térmico cortical y la relajación de esfuerzos."
+    },
+    {
+      id: "isostasy_airy_pratt",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Airy-Heiskanen Isostasy & Crustal Root Compensation",
+      titleEs: "Isostasia de Airy y Compensación de Raíces Corticales",
+      latex: "\\rho_c (h + H_0 + b) = \\rho_c H_0 + \\rho_m b \\implies b = h \\frac{\\rho_c}{\\rho_m - \\rho_c}",
+      descEn: "Hydrostatic balance of Earth's lithosphere floating atop the denser asthenosphere. Mountain topography of height h is buoyantly supported by deep crustal roots b.",
+      descEs: "Equilibrio hidrostático de la litosfera sobre la astenosfera. Cordilleras de altitud h están compensadas por raíces corticales profundas b según el empuje de Arquímedes."
+    },
+    {
+      id: "gravimetry_bouguer_poisson",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Poisson's Gravitational Equation & Complete Bouguer Anomaly",
+      titleEs: "Ecuación de Poisson Gravitatoria y Anomalía de Bouguer",
+      latex: "\\nabla^2 U = 4\\pi G \\rho \\quad \\Big| \\quad \\Delta g_B = g_{\\text{obs}} - \\gamma_0 + 0.3086 h - 2\\pi G \\rho_c h",
+      descEn: "Gravimetric potential equation and reduction formula isolating subsurface density contrasts from free-air and slab topographic effects, imaging magma and subduction slabs.",
+      descEs: "Ecuación de potencial gravitatorio y reducción de Bouguer que aísla contrastes de densidad en el subsuelo corrigiendo aire libre y relieve topográfico."
+    },
+    {
+      id: "fourier_geothermal_heat",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Fourier's Law of Heat Conduction & Lithospheric Geotherm",
+      titleEs: "Ley de Conducción de Fourier y Geoterma Litosférica",
+      latex: "\\mathbf{q} = -k \\nabla T \\quad \\Big| \\quad \\rho c_p \\frac{\\partial T}{\\partial t} = k \\nabla^2 T + A(z)",
+      descEn: "Thermal conduction equation with radiogenic crustal heat production A(z). Explains oceanic plate cooling (half-space cooling model) and continental geotherms.",
+      descEs: "Ecuación de conducción térmica con generación radiogénica A(z). Explica el enfriamiento de la litosfera oceánica y la geoterma continental profunda."
+    },
+    {
+      id: "cagniard_magnetotellurics",
+      category: "geophysics",
+      courseCode: "GEO-401",
+      titleEn: "Cagniard Impedance & Magnetotelluric Skin Depth",
+      titleEs: "Impedancia de Cagniard y Profundidad de Penetración (MT)",
+      latex: "Z_{xy}(\\omega) = \\frac{E_x}{H_y} = \\sqrt{\\frac{i \\omega \\mu_0}{\\sigma}} \\implies \\delta = \\sqrt{\\frac{2}{\\omega \\mu_0 \\sigma}} \\approx 503 \\sqrt{\\frac{\\rho}{f}}",
+      descEn: "Induction of natural electromagnetic variations in conductive subterranean strata. Resolves electrical resistivity profiles to depths of tens of kilometers in the crust.",
+      descEs: "Inducción de variaciones electromagnéticas naturales en la corteza terrestre. Permite resolver la resistividad eléctrica y localizar zonas fluidas o magmáticas."
+    },
+    {
+      id: "hooke_elasticity",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Hooke's Generalized Law of Linear Elasticity (Stress Tensor)",
+      titleEs: "Ley Generalizada de Hooke (Tensor de Esfuerzos y Deformaciones)",
+      latex: "\\sigma_{ij} = \\lambda \\delta_{ij} \\varepsilon_{kk} + 2\\mu \\varepsilon_{ij}",
+      descEn: "Relates the 2nd-order Cauchy stress tensor σ to infinitesimal strain ε via Lamé parameters (λ, μ), governing seismic P and S wave propagation in solid earth.",
+      descEs: "Relaciona el tensor de esfuerzos de Cauchy con la deformación infinitesimal mediante los parámetros de Lamé (λ, μ), rigiendo las ondas sísmicas P y S."
+    },
+    {
+      id: "darcy_archie_porous",
+      category: "geophysics",
+      courseCode: "GEO-301",
+      titleEn: "Darcy's Law of Fluid Flow & Archie's Law in Porous Media",
+      titleEs: "Ley de Darcy y Ley de Archie en Medios Porosos y Acuíferos",
+      latex: "\\mathbf{q} = -\\frac{k}{\\mu} (\\nabla P - \\rho \\mathbf{g}) \\quad \\Big| \\quad \\rho_w = a \\phi^{-m} S_w^{-n} \\rho_f",
+      descEn: "Pore fluid flow through permeable rock matrices (Darcy) and empirical electrical resistivity relation (Archie) linking bulk resistivity to porosity φ and fluid saturation.",
+      descEs: "Flujo de fluidos en medios porosos permeables (Darcy) y correlación de resistividad eléctrica (Archie) con porosidad φ y saturación de agua en reservorios y acuíferos."
+    },
+    {
+      id: "continuity_equation",
+      category: "fluids",
+      courseCode: "PHY-201",
       titleEn: "Fluid Mass Continuity Equation (Conservation of Mass)",
       titleEs: "Ecuación de Continuidad de Fluidos (Conservación de Masa)",
       latex: "\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\mathbf{u}) = 0 \\quad (\\nabla \\cdot \\mathbf{u} = 0 \\text{ for incompressible})",
@@ -195,9 +348,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Ley diferencial fundamental: la variación local de densidad equilibra la divergencia del flujo de masa. Para fluidos incompresibles, la velocidad es solenoidal."
     },
     {
-      id: 'navier_stokes',
-      category: 'fluids',
-      courseCode: 'PHY-201 / GEO-301',
+      id: "navier_stokes",
+      category: "fluids",
+      courseCode: "PHY-201 / GEO-301",
       titleEn: "Navier-Stokes Equations of Momentum for Viscous Fluids",
       titleEs: "Ecuaciones de Navier-Stokes (Conservación de Momento en Fluidos)",
       latex: "\\rho \\left(\\frac{\\partial \\mathbf{u}}{\\partial t} + (\\mathbf{u} \\cdot \\nabla)\\mathbf{u}\\right) = -\\nabla P + \\mu \\nabla^2 \\mathbf{u} + \\rho \\mathbf{g}",
@@ -205,9 +358,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Aplica la 2ª ley de Newton a medios continuos: equilibra aceleración advectiva, gradientes de presión, disipación viscosa por cizalle y gravedad."
     },
     {
-      id: 'bernoulli_principle',
-      category: 'fluids',
-      courseCode: 'PHY-201',
+      id: "bernoulli_principle",
+      category: "fluids",
+      courseCode: "PHY-201",
       titleEn: "Bernoulli's Streamline Energy Conservation Principle",
       titleEs: "Ecuación de Bernoulli (Conservación de Energía en Líneas de Corriente)",
       latex: "P + \\frac{1}{2} \\rho v^2 + \\rho g z = \\text{const} \\quad (\\text{along streamline})",
@@ -215,23 +368,59 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Conservación de energía mecánica para flujo estacionario e incompresible sin viscosidad: la presión estática disminuye cuando la velocidad aumenta (efecto Venturi)."
     },
     {
-      id: 'hydrostatic_equation',
-      category: 'fluids',
-      courseCode: 'GEO-301 / AST-401',
-      titleEn: "Hydrostatic Equilibrium & Atmospheric Pressure Profile",
-      titleEs: "Equilibrio Hidrostático y Perfil de Presión Atmosférica",
-      latex: "\\frac{dP}{dz} = -\\rho(z) g \\implies P(z) = P_0 e^{-z / H}",
-      descEn: "Balance between vertical upward pressure gradient and downward gravity. Explains the barometric formula, ocean water columns, and stellar hydrostatic stability.",
-      descEs: "Equilibrio entre el gradiente vertical de presión hacia arriba y la gravedad. Explica la fórmula barométrica, la columna oceánica y la estabilidad estelar."
+      id: "hydrostatic_equation",
+      category: "fluids",
+      courseCode: "GEO-301 / AST-401",
+      titleEn: "Hydrostatic Equilibrium & Atmospheric Hypsometric Equation",
+      titleEs: "Equilibrio Hidrostático y Ecuación Hipsométrica Atmosférica",
+      latex: "\\frac{dP}{dz} = -\\rho(z) g \\implies P(z) = P_0 e^{-z / H}, \\quad H = \\frac{R_d \\bar{T}}{g}",
+      descEn: "Balance between vertical upward pressure gradient and downward gravity. Determines atmospheric scale height H, ocean water columns, and barometric altimetry.",
+      descEs: "Equilibrio entre el gradiente vertical de presión hacia arriba y la gravedad. Determina la altura de escala atmosférica H y perfiles barométricos de altimetría."
     },
-
-    // ------------------------------------------------------------------------
-    // C. ELECTRODYNAMICS & WAVE PHYSICS (PHY-201 / IB-HL)
-    // ------------------------------------------------------------------------
     {
-      id: 'gauss_electric',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "geostrophic_wind_balance",
+      category: "fluids",
+      courseCode: "GEO-301",
+      titleEn: "Geostrophic Balance & Thermal Wind Equation",
+      titleEs: "Balance Geostrófico y Viento Térmico",
+      latex: "-f v_g = -\\frac{1}{\\rho}\\frac{\\partial P}{\\partial x}, \\quad f u_g = -\\frac{1}{\\rho}\\frac{\\partial P}{\\partial y} \\quad \\Big| \\quad f = 2\\Omega\\sin\\phi",
+      descEn: "Exact equilibrium between horizontal pressure gradient force and Coriolis force in large-scale mid-latitude atmospheric cyclones and oceanic gyres.",
+      descEs: "Equilibrio exacto entre el gradiente de presión horizontal y la fuerza de Coriolis en ciclones atmosféricos de escala sinóptica y corrientes marinas."
+    },
+    {
+      id: "ekman_transport_spiral",
+      category: "fluids",
+      courseCode: "GEO-301",
+      titleEn: "Ekman Spiral & Coastal Upwelling Transport",
+      titleEs: "Espiral de Ekman y Transporte de Surgencia Costera",
+      latex: "A_z \\frac{\\partial^2 \\mathbf{V}}{\\partial z^2} = i f \\mathbf{V} \\implies \\mathbf{M}_E = \\frac{\\boldsymbol{\\tau}_0 \\times \\hat{\\mathbf{k}}}{\\rho |f|}",
+      descEn: "Wind stress balance with vertical eddy viscosity and Coriolis force. Induces a net ocean mass transport 90° to the wind, driving Humboldt upwelling along Chile's coast.",
+      descEs: "Balance entre tensión del viento, viscosidad turbulenta y Coriolis. Produce transporte neto a 90° del viento, motor de la surgencia de la corriente de Humboldt en Chile."
+    },
+    {
+      id: "potential_vorticity_rossby",
+      category: "fluids",
+      courseCode: "GEO-301",
+      titleEn: "Ertel's Potential Vorticity Conservation & Planetary Rossby Waves",
+      titleEs: "Conservación de Vorticidad Potencial y Ondas de Rossby",
+      latex: "\\frac{D}{Dt}\\left( \\frac{\\zeta + f}{H} \\right) = 0 \\quad \\implies \\quad c_x = U - \\frac{\\beta}{k^2 + l^2}",
+      descEn: "Conservation of absolute vorticity divided by fluid layer depth. Explains large-scale meandering planetary jet streams and oceanic planetary wave propagation.",
+      descEs: "Conservación de la vorticidad absoluta dividida por el espesor de la capa fluida. Explica los meandros de la corriente en chorro y las ondas planetarias de Rossby."
+    },
+    {
+      id: "brunt_vaisala_buoyancy",
+      category: "fluids",
+      courseCode: "GEO-301",
+      titleEn: "Brunt-Väisälä Buoyancy Frequency (Atmospheric Stability)",
+      titleEs: "Frecuencia de Brunt-Väisälä (Estabilidad Térmica Atmosférica)",
+      latex: "N^2 = -\\frac{g}{\\rho}\\frac{\\partial \\rho}{\\partial z} = \\frac{g}{\\theta}\\frac{\\partial \\theta}{\\partial z}",
+      descEn: "Angular oscillation frequency of vertically displaced fluid parcels in stably stratified atmospheres and oceans. N² > 0 indicates stability; N² < 0 indicates deep convection.",
+      descEs: "Frecuencia angular de oscilación de una parcela fluida en una atmósfera u océano estratificado. N² > 0 indica estabilidad; N² < 0 desata convección violenta."
+    },
+    {
+      id: "gauss_electric",
+      category: "electromagnetism",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "Gauss's Law for Electricity (1st Maxwell Equation)",
       titleEs: "Ley de Gauss para el Campo Eléctrico (1ª Ecuación de Maxwell)",
       latex: "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon_0} \\quad \\Big| \\quad \\oiint_{\\partial V} \\mathbf{E} \\cdot d\\mathbf{A} = \\frac{Q_{\\text{enc}}}{\\varepsilon_0}",
@@ -239,9 +428,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Las cargas eléctricas actúan como fuentes (positivas) o sumideros (negativas) del flujo eléctrico. Deduce la ley de Coulomb por simetría esférica."
     },
     {
-      id: 'gauss_magnetic',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "gauss_magnetic",
+      category: "electromagnetism",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "Gauss's Law for Magnetism (2nd Maxwell Equation)",
       titleEs: "Ley de Gauss para el Magnetismo (2ª Ecuación de Maxwell)",
       latex: "\\nabla \\cdot \\mathbf{B} = 0 \\quad \\Big| \\quad \\oiint_{\\partial V} \\mathbf{B} \\cdot d\\mathbf{A} = 0",
@@ -249,9 +438,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "No existen monopolos magnéticos aislados en la naturaleza. Las líneas de campo magnético siempre forman bucles cerrados con divergencia nula."
     },
     {
-      id: 'faraday_lenz',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "faraday_lenz",
+      category: "electromagnetism",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "Faraday-Lenz Law of Induction (3rd Maxwell Equation)",
       titleEs: "Ley de Inducción de Faraday-Lenz (3ª Ecuación de Maxwell)",
       latex: "\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t} \\quad \\Big| \\quad \\mathcal{E} = -\\frac{d\\Phi_B}{dt}",
@@ -259,9 +448,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Un campo magnético variable en el tiempo induce un campo eléctrico rotacional. El signo negativo representa la oposición de Lenz, base de transformadores y dínamos."
     },
     {
-      id: 'ampere_maxwell',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "ampere_maxwell",
+      category: "electromagnetism",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "Ampère-Maxwell Circuital Law with Displacement Current (4th)",
       titleEs: "Ley de Ampère-Maxwell con Corriente de Desplazamiento (4ª)",
       latex: "\\nabla \\times \\mathbf{B} = \\mu_0 \\left(\\mathbf{J} + \\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}\\right)",
@@ -269,9 +458,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Las corrientes eléctricas y los campos eléctricos variables generan campos magnéticos. El término de Maxwell predice la propagación de ondas de luz a velocidad c."
     },
     {
-      id: 'lorentz_force_law',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "lorentz_force_law",
+      category: "electromagnetism",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "Lorentz Force Law on Charged Particles",
       titleEs: "Ley de Fuerza de Lorentz sobre Partículas Cargadas",
       latex: "\\mathbf{F} = q (\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B})",
@@ -279,43 +468,119 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "Fuerza electromagnética total que combina aceleración eléctrica colineal con E y deflexión magnética perpendicular responsable de órbitas ciclotrónicas."
     },
     {
-      id: 'poynting_vector',
-      category: 'electromagnetism',
-      courseCode: 'PHY-201',
+      id: "poynting_vector",
+      category: "electromagnetism",
+      courseCode: "PHY-201",
       titleEn: "Poynting Vector & Electromagnetic Energy Flux Density",
-      titleEs: "Vector de Poynting y Densidad de Flujo de Energía Electromagnética",
-      latex: "\\mathbf{S} = \\frac{1}{\\mu_0} (\\mathbf{E} \\times \\mathbf{B}) \\quad \\Big| \\quad \\langle |\\mathbf{S}| \\rangle = \\frac{1}{2} c \\varepsilon_0 E_0^2",
-      descEn: "Represents the directional energy flux density (watts per square meter) carried by an electromagnetic wave through space, perpendicular to both E and B.",
-      descEs: "Representa el flujo direccional de energía (vatios por metro cuadrado) transportado por una onda electromagnética a través del espacio, perpendicular a E y B."
+      titleEs: "Vector de Poynting y Teorema de Conservación de Energía EM",
+      latex: "\\mathbf{S} = \\frac{1}{\\mu_0} (\\mathbf{E} \\times \\mathbf{B}) \\quad \\Big| \\quad \\frac{\\partial u_{\\text{em}}}{\\partial t} + \\nabla \\cdot \\mathbf{S} = -\\mathbf{J} \\cdot \\mathbf{E}",
+      descEn: "Represents the directional energy flux density (W/m²) carried by an electromagnetic wave. Its divergence balances field energy density and Ohmic dissipation.",
+      descEs: "Representa el flujo direccional de energía (W/m²) transportado por ondas EM. Su divergencia equilibra la densidad de energía del campo y la disipación óhmica."
     },
-
-    // ------------------------------------------------------------------------
-    // D. THERMODYNAMICS & RELATIVITY (AST-401 / COMP-205)
-    // ------------------------------------------------------------------------
     {
-      id: 'thermo_first_law',
-      category: 'thermo_relativity',
-      courseCode: 'PHY-201 / IB-HL',
+      id: "em_wave_speed_light",
+      category: "electromagnetism",
+      courseCode: "PHY-201",
+      titleEn: "Electromagnetic Wave Equation & Speed of Light",
+      titleEs: "Ecuación de Onda Electromagnética y Velocidad de la Luz",
+      latex: "\\nabla^2 \\mathbf{E} - \\frac{1}{c^2}\\frac{\\partial^2 \\mathbf{E}}{\\partial t^2} = \\mathbf{0} \\quad \\implies \\quad c = \\frac{1}{\\sqrt{\\mu_0 \\varepsilon_0}} \\approx 3\\times 10^8 \\; \\text{m/s}",
+      descEn: "Direct consequence of Maxwell's curl equations in vacuum. Unified optics and electromagnetism by proving that light is an electromagnetic transverse disturbance.",
+      descEs: "Consecuencia directa del rotacional de Maxwell en el vacío. Unificó la óptica con el electromagnetismo al demostrar que la luz es una onda transversal."
+    },
+    {
+      id: "biot_savart",
+      category: "electromagnetism",
+      courseCode: "PHY-201",
+      titleEn: "Biot-Savart Law of Magnetostatics",
+      titleEs: "Ley de Biot-Savart de la Magnetostática",
+      latex: "d\\mathbf{B} = \\frac{\\mu_0 I}{4\\pi} \\frac{d\\mathbf{l} \\times \\hat{\\mathbf{r}}}{r^2} \\quad \\implies \\quad B = \\frac{\\mu_0 I}{2\\pi r}",
+      descEn: "Calculates the magnetic field generated by steady electric currents. The cross product enforces perpendicularity between the current element and the induced B field.",
+      descEs: "Calcula el campo magnético generado por corrientes eléctricas continuas. El producto cruz asegura la perpendicularidad entre el conductor y las líneas de B."
+    },
+    {
+      id: "snell_descartes_brewster",
+      category: "electromagnetism",
+      courseCode: "PHY-201",
+      titleEn: "Snell-Descartes Law of Refraction & Brewster's Angle",
+      titleEs: "Ley de Refracción de Snell y Ángulo de Polarización de Brewster",
+      latex: "n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2 \\quad \\Big| \\quad \\theta_B = \\arctan\\left(\\frac{n_2}{n_1}\\right)",
+      descEn: "Derived from Fermat's principle of least time and Maxwell boundary conditions. At Brewster's angle, reflected light is 100% linearly polarized perpendicular to the plane.",
+      descEs: "Derivada del principio de Fermat y condiciones de borde EM. En el ángulo de Brewster, la onda reflejada queda totalmente polarizada en dirección paralela a la interfaz."
+    },
+    {
+      id: "thermo_first_law",
+      category: "thermo_relativity",
+      courseCode: "PHY-201 / IB-HL",
       titleEn: "First Law of Thermodynamics (Conservation of Energy)",
       titleEs: "Primera Ley de la Termodinámica (Conservación de Energía)",
-      latex: "dU = \\delta Q - \\delta W = \\delta Q - P dV",
+      latex: "\\Delta U = Q - W = Q - \\int P \\, dV",
       descEn: "The change in internal energy of a closed system equals heat supplied minus mechanical work done on the surroundings. Internal energy U is a state function.",
       descEs: "La variación de energía interna de un sistema cerrado equivale al calor absorbido menos el trabajo realizado. La energía interna U es función de estado."
     },
     {
-      id: 'thermo_second_law',
-      category: 'thermo_relativity',
-      courseCode: 'PHY-201',
+      id: "thermo_second_law",
+      category: "thermo_relativity",
+      courseCode: "PHY-201",
       titleEn: "Second Law of Thermodynamics (Entropy & Irreversibility)",
       titleEs: "Segunda Ley de la Termodinámica (Entropía e Irreversibilidad)",
-      latex: "dS \\ge \\frac{\\delta Q}{T} \\quad \\Big| \\quad \\Delta S_{\\text{univ}} \\ge 0 \\quad \\Big| \\quad \\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}",
+      latex: "dS = \\frac{\\delta Q_{\\text{rev}}}{T} \\quad \\Big| \\quad \\Delta S_{\\text{universe}} \\ge 0",
       descEn: "Spontaneous natural processes increase the net entropy of an isolated universe. Defines the thermodynamic arrow of time and sets the Carnot efficiency ceiling.",
       descEs: "Los procesos espontáneos aumentan la entropía total del universo aislado. Define la flecha del tiempo termodinámica y el límite de eficiencia de Carnot."
     },
     {
-      id: 'einstein_field_equations',
-      category: 'thermo_relativity',
-      courseCode: 'AST-401',
+      id: "thermo_third_carnot",
+      category: "thermo_relativity",
+      courseCode: "PHY-201",
+      titleEn: "Third Law of Thermodynamics & Maximum Carnot Efficiency",
+      titleEs: "Tercera Ley de la Termodinámica y Eficiencia Máxima de Carnot",
+      latex: "\\lim_{T \\to 0} S = 0 \\quad \\Big| \\quad \\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}",
+      descEn: "Nernst heat theorem: entropy of a pure crystalline substance approaches zero as temperature reaches absolute zero. Sets the absolute theoretical efficiency limit for heat engines.",
+      descEs: "Teorema de Nernst: la entropía tiende a cero en el cero absoluto. Establece el límite físico insuperable para el rendimiento de cualquier máquina térmica entre dos focos."
+    },
+    {
+      id: "boltzmann_entropy_distribution",
+      category: "thermo_relativity",
+      courseCode: "PHY-201 / AST-401",
+      titleEn: "Boltzmann's Statistical Entropy & Maxwell-Boltzmann Statistics",
+      titleEs: "Entropía Estadística de Boltzmann y Distribución Canónica",
+      latex: "S = k_B \\ln \\Omega \\quad \\Big| \\quad P_i = \\frac{1}{Z} e^{-E_i / k_B T}",
+      descEn: "Bridges microscopic quantum microstates Ω with macroscopic thermodynamic entropy S. Predicts molecular velocity profiles and thermal gas equilibrium.",
+      descEs: "Conecta los microestados microscópicos Ω con la entropía termodinámica macroscópica S. Determina la distribución de velocidades moleculares y equilibrios térmicos."
+    },
+    {
+      id: "planck_stefan_boltzmann",
+      category: "thermo_relativity",
+      courseCode: "AST-401",
+      titleEn: "Planck's Blackbody Radiation & Stefan-Boltzmann Law",
+      titleEs: "Ley de Radiación de Planck y Ley de Stefan-Boltzmann",
+      latex: "B_\\lambda(T) = \\frac{2hc^2}{\\lambda^5 \\left(e^{\\frac{hc}{\\lambda k_B T}} - 1\\right)} \\quad \\Big| \\quad j^* = \\sigma T^4",
+      descEn: "Quantized spectral energy density emitted by an ideal thermal blackbody. Integrating over all wavelengths yields the T⁴ total radiative flux powering stars and planetary atmospheres.",
+      descEs: "Densidad de energía espectral emitida por un cuerpo negro ideal. Su integral en todas las longitudes de onda produce el flujo radiativo T⁴ clave en climatología y astrofísica."
+    },
+    {
+      id: "lorentz_transformation",
+      category: "thermo_relativity",
+      courseCode: "PHY-201 / AST-401",
+      titleEn: "Lorentz Spacetime Transformation & Time Dilation",
+      titleEs: "Transformaciones de Lorentz y Dilatación Temporal Relativista",
+      latex: "x' = \\gamma (x - vt), \\quad t' = \\gamma \\left(t - \\frac{vx}{c^2}\\right), \\quad \\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}}",
+      descEn: "Invariance of the speed of light c requires non-Galilean coordinates mixing space and time. Yields Lorentz contraction and kinematic time dilation verified in particle colliders.",
+      descEs: "La invariancia de la velocidad de la luz c exige transformaciones que mezclan espacio y tiempo. Deduce la contracción espacial y dilatación del tiempo para velocidades relativistas."
+    },
+    {
+      id: "mass_energy_equivalence",
+      category: "thermo_relativity",
+      courseCode: "PHY-201 / AST-401",
+      titleEn: "Einstein's Relativistic Energy-Momentum Relation",
+      titleEs: "Relación Energía-Momento Relativista de Einstein",
+      latex: "E^2 = (p c)^2 + (m_0 c^2)^2 \\quad \\implies \\quad E_0 = m_0 c^2",
+      descEn: "Universal equivalence between mass and energy. At zero rest momentum p=0, it collapses to E=mc², explaining nuclear binding energies, fusion in stars, and positron annihilation.",
+      descEs: "Equivalencia universal entre masa y energía. Con momento nulo p=0 se reduce a E=mc², explicando la energía nuclear de enlace, la fusión estelar y aniquilación de pares."
+    },
+    {
+      id: "einstein_field_equations",
+      category: "thermo_relativity",
+      courseCode: "AST-401",
       titleEn: "Einstein's Field Equations of Spacetime Curvature (General Relativity)",
       titleEs: "Ecuaciones de Campo de Einstein (Relatividad General y Curvatura)",
       latex: "G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu} \\quad (G_{\\mu\\nu} = R_{\\mu\\nu} - \\tfrac{1}{2}R g_{\\mu\\nu})",
@@ -323,9 +588,9 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
       descEs: "El espacio-tiempo le dice a la materia cómo moverse; la materia le dice al espacio-tiempo cómo curvarse. El tensor G equilibra el tensor energía-momento T."
     },
     {
-      id: 'schwarzschild_metric',
-      category: 'thermo_relativity',
-      courseCode: 'AST-401',
+      id: "schwarzschild_metric",
+      category: "thermo_relativity",
+      courseCode: "AST-401",
       titleEn: "Schwarzschild Metric & Gravitational Horizon Radius",
       titleEs: "Métrica de Schwarzschild y Radio del Horizonte de Sucesos",
       latex: "ds^2 = -\\left(1 - \\frac{r_s}{r}\\right)c^2 dt^2 + \\left(1 - \\frac{r_s}{r}\\right)^{-1} dr^2 + r^2 d\\Omega^2 \\quad (r_s = \\tfrac{2GM}{c^2})",
@@ -1125,24 +1390,24 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
       {/* Header Bar */}
-      <div className="p-6 sm:p-8 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-mono font-bold uppercase tracking-wider mb-2">
+      <div className="p-6 sm:p-8 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-950 space-y-5">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-mono font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{isEn ? 'University & TU9 STEM Rigorous Reference' : 'Referencia Universitaria FCFM & TU9'}</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-3">
             <span>{isEn ? 'Compendium of Laws, Algebra & Mathematical Physics' : 'Compendio de Leyes, Álgebra y Física Matemática'}</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-4xl leading-relaxed">
             {isEn
               ? 'The conceptual pillars that university and IB examinations demand: from interactive 3D right-hand rules and matrix diagonalization to canonical PDEs, Fourier signal decomposition, and complex residue theorems.'
               : 'Los pilares obligados en la formación de geofísica y ciencias exactas: desde la regla de la mano derecha 3D y la diagonalización matricial hasta las 3 EDPs canónicas, descomposición de señales y residuos complejos.'}
           </p>
         </div>
 
-        {/* 5 Main Compendium Section Pills */}
-        <div className="flex flex-wrap gap-1 p-1 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs font-bold shrink-0">
+        {/* 5 Main Compendium Section Pills - Dedicated full-width navigation strip */}
+        <div className="pt-3 border-t border-slate-800/80 flex flex-wrap gap-2">
           {[
             { id: 'physics', labelEs: '1. Física & Leyes', labelEn: '1. Physics & Laws', icon: Compass },
             { id: 'algebra', labelEs: '2. Álgebra & Axiomas', labelEn: '2. Algebra & Axioms', icon: Calculator },
@@ -1153,20 +1418,19 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 text-xs sm:text-sm font-mono font-bold ${
                 activeTab === tab.id
                   ? 'bg-sky-500 text-slate-950 shadow-md font-bold'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                  : 'bg-slate-900/90 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
               }`}
             >
-              <tab.icon className="w-3 h-3" />
+              <tab.icon className="w-3.5 h-3.5" />
               <span>{isEn ? tab.labelEn : tab.labelEs}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* ==================================================================== */}
       {/* TAB 1: PHYSICS LAWS & INTERACTIVE RIGHT-HAND RULE                     */}
       {/* ==================================================================== */}
       {activeTab === 'physics' && (
@@ -1285,13 +1549,14 @@ export default function PhysicsToolkit({ lang = 'en', onOpenBooking }) {
               </div>
 
               {/* Sub-filter chips */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-900 rounded-xl border border-slate-800 font-mono text-xs">
+              <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-900 rounded-xl border border-slate-800 font-mono text-xs">
                 {[
-                  { id: 'all', labelEn: 'All Laws (20)', labelEs: 'Todas (20)', icon: Sparkles },
-                  { id: 'mechanics', labelEn: 'Mechanics & Gravity', labelEs: 'Mecánica & Gravedad', icon: Compass },
-                  { id: 'fluids', labelEn: 'Fluids & Continua', labelEs: 'Fluidos & Medios', icon: Wind },
-                  { id: 'electromagnetism', labelEn: 'Electrodynamics', labelEs: 'Electrodinámica', icon: Zap },
-                  { id: 'thermo_relativity', labelEn: 'Thermo & Relativity', labelEs: 'Termo & Relatividad', icon: Flame }
+                  { id: 'all', labelEn: `All (${ALL_FUNDAMENTAL_LAWS.length})`, labelEs: `Todas (${ALL_FUNDAMENTAL_LAWS.length})`, icon: Sparkles },
+                  { id: 'mechanics', labelEn: `Mechanics (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'mechanics').length})`, labelEs: `Mecánica (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'mechanics').length})`, icon: Compass },
+                  { id: 'geophysics', labelEn: `Geophysics & Earth (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'geophysics').length})`, labelEs: `Geofísica & Tierra (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'geophysics').length})`, icon: Layers },
+                  { id: 'fluids', labelEn: `Fluids & Atmosphere (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'fluids').length})`, labelEs: `Fluidos & Atmósfera (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'fluids').length})`, icon: Wind },
+                  { id: 'electromagnetism', labelEn: `Electrodynamics (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'electromagnetism').length})`, labelEs: `Electrodinámica (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'electromagnetism').length})`, icon: Zap },
+                  { id: 'thermo_relativity', labelEn: `Thermo & Relativity (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'thermo_relativity').length})`, labelEs: `Termo & Relatividad (${ALL_FUNDAMENTAL_LAWS.filter(l => l.category === 'thermo_relativity').length})`, icon: Flame }
                 ].map((cat) => (
                   <button
                     key={cat.id}

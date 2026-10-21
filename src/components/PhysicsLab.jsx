@@ -1,3 +1,4 @@
+import MathFormula from './MathFormula';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Play,
@@ -81,11 +82,13 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Equilibrio eje normal (y′) sobre m₁:',
           labelEn: '1. Normal axis equilibrium (y′) on m₁:',
+          latex: '\\sum F_{y\'} = N - m_1 g \\cos\\theta = 0 \\implies N = m_1 g \\cos\\theta',
           eq: '∑F_y′ = N - m₁·g·cos(θ) = 0   ⇒   N = m₁·g·cos(θ)'
         },
         {
           labelEs: '2. Condición de bloqueo estático (¿Se mueve o no?):',
           labelEn: '2. Static lock threshold (Does it move?):',
+          latex: '|m_2 g - m_1 g \\sin\\theta| \\le f_{s,\\max} = \\mu m_1 g \\cos\\theta \\implies a = 0',
           eq: '|m₂·g - m₁·g·sin(θ)| ≤ f_s,max = μ·m₁·g·cos(θ)   ⇒   a = 0'
         },
         {
@@ -107,16 +110,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ecuación Diferencial de 2º Orden (Cinemática en cuerda inextensible s(t)):',
           labelEn: '1. 2nd-Order Differential Equation (Inextensible string coordinate s(t)):',
+          latex: '(m_1 + m_2) \\frac{d^2 s}{dt^2} = (m_2 - m_1 \\sin\\theta) g - \\mu m_1 g \\cos\\theta \\operatorname{sgn}\\left(\\frac{ds}{dt}\\right)',
           eq: '(m₁ + m₂) · (d²s / dt²) = (m₂ - m₁·sin(θ))·g - μ·m₁·g·cos(θ)·sgn(ds/dt)'
         },
         {
           labelEs: '2. Integración temporal para velocidad y posición:',
           labelEn: '2. Time integration for velocity and displacement:',
+          latex: 'v(t) = \\int_0^t a(\\tau) d\\tau = a t \\quad ; \\quad s(t) = \\int_0^t v(\\tau) d\\tau = \\frac{1}{2} a t^2',
           eq: 'v(t) = ∫₀ᵗ a(τ) dτ = a·t     ;     s(t) = ∫₀ᵗ v(τ) dτ = ½·a·t²'
         },
         {
           labelEs: '3. Teorema del Trabajo y la Energía No Conservativa:',
           labelEn: '3. Work-Energy Theorem with Non-Conservative Friction:',
+          latex: 'W_{\\text{fric}} = -\\int_0^s (\\mu m_1 g \\cos\\theta) dx = \\Delta K + \\Delta U_g = \\frac{1}{2}(m_1+m_2)v^2 + (m_1 \\sin\\theta - m_2)gs',
           eq: 'W_roce = -∫₀ˢ (μ·m₁·g·cos(θ)) dx = ΔK + ΔU_g = ½(m₁+m₂)v² + (m₁·sin(θ) - m₂)g·s'
         }
       ]
@@ -193,6 +199,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Componentes iniciales de velocidad:',
           labelEn: '1. Initial velocity vector components:',
+          latex: 'v_{0x} = v_0 \\cos\\theta \\quad ; \\quad v_{0y} = v_0 \\sin\\theta',
           eq: 'v₀ₓ = v₀ · cos(θ)     ;     v₀ᵧ = v₀ · sin(θ)'
         },
         {
@@ -214,16 +221,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. La derivada espacial como dirección instantánea del vector velocidad:',
           labelEn: '1. Spatial derivative as instantaneous velocity slope:',
+          latex: '\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt} = \\frac{v_y(t)}{v_x(t)} = \\tan\\alpha(t)',
           eq: 'dy / dx = (dy/dt) / (dx/dt) = vᵧ(t) / vₓ(t) = tan(α(t))'
         },
         {
           labelEs: '2. Ecuación Diferencial Vectorial con Arrastre Lineal (F_d = -γ·v):',
           labelEn: '2. Vector Differential Equation with Linear Drag (F_d = -γ·v):',
+          latex: 'm \\frac{d\\mathbf{v}}{dt} = m\\mathbf{g} - \\gamma \\mathbf{v} \\implies \\frac{dv_x}{dt} = -\\frac{\\gamma}{m}v_x, \\quad \\frac{dv_y}{dt} = -g - \\frac{\\gamma}{m}v_y',
           eq: 'm · (dv⃗ / dt) = m·g⃗ - γ·v⃗   ⇒   dvₓ/dt = -(γ/m)vₓ  ,  dvᵧ/dt = -g - (γ/m)vᵧ'
         },
         {
           labelEs: '3. Solución analítica por separación de variables:',
           labelEn: '3. Analytical solution via separation of variables:',
+          latex: 'x(t) = \\frac{m v_{0x}}{\\gamma}(1 - e^{-\\gamma t/m}) \\quad ; \\quad v_y(t) = -\\frac{mg}{\\gamma} + \\left(v_{0y} + \\frac{mg}{\\gamma}\\right)e^{-\\gamma t/m}',
           eq: 'x(t) = (m·v₀ₓ/γ)·(1 - e^(-γt/m))   ;   vᵧ(t) = -m·g/γ + (v₀ᵧ + m·g/γ)·e^(-γt/m)'
         }
       ]
@@ -298,16 +308,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Condiciones fundamentales de equilibrio estático en el plano:',
           labelEn: '1. Fundamental planar static equilibrium conditions:',
+          latex: '\\sum F_x = 0, \\quad \\sum F_y = R_A + R_B - M g = 0, \\quad \\sum M_A = R_B L - M g x_L = 0',
           eq: '∑Fₓ = 0   ,   ∑Fᵧ = R_A + R_B - M·g = 0   ,   ∑M_A = R_B·L - (M·g)·x_L = 0'
         },
         {
           labelEs: '2. Reacciones exactas en los apoyos A (x=0) y B (x=L=10m):',
           labelEn: '2. Exact reactions at supports A (x=0) and B (x=L=10m):',
+          latex: 'R_B = M g \\frac{x_L}{L} \\quad ; \\quad R_A = M g \\left(1 - \\frac{x_L}{L}\\right)',
           eq: 'R_B = M·g · (x_L / L)     ;     R_A = M·g · (1 - x_L / L)'
         },
         {
           labelEs: '3. Momento flector máximo bajo el punto de aplicación de la carga:',
           labelEn: '3. Maximum bending moment right under the point load:',
+          latex: 'M_{\\max} = R_A x_L = M g x_L \\left(1 - \\frac{x_L}{L}\\right)',
           eq: 'M_max = R_A · x_L = M·g · x_L · (1 - x_L / L)'
         }
       ]
@@ -319,16 +332,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Relación diferencial entre Carga q(x), Cortante V(x) y Momento M(x):',
           labelEn: '1. Differential relation between Load q(x), Shear V(x), and Moment M(x):',
+          latex: '\\frac{dV}{dx} = -q(x), \\quad \\frac{dM}{dx} = V(x), \\quad E I \\frac{d^2 w}{dx^2} = -M(x)',
           eq: 'dV / dx = -q(x)     ;     dM / dx = V(x)     ;     EI · (d²w / dx²) = M(x)'
         },
         {
           labelEs: '2. EDO de 2º orden para la vibración vertical u(t) del soporte elástico:',
           labelEn: '2. 2nd-order ODE for vertical vibration u(t) of the elastic mount:',
+          latex: 'M \\frac{d^2 u}{dt^2} + c \\frac{du}{dt} + k u(t) = 0',
           eq: 'M · (d²u / dt²) + c · (du / dt) + k · u(t) = 0'
         },
         {
           labelEs: '3. Polinomio característico (λ²·M + λ·c + k = 0) y solución sub-amortiguada:',
           labelEn: '3. Characteristic polynomial (λ²·M + λ·c + k = 0) & underdamped solution:',
+          latex: 'u(t) = A e^{-\\gamma t} \\cos(\\omega_d t - \\phi), \\quad \\gamma = \\frac{c}{2M}, \\quad \\omega_d = \\sqrt{\\frac{k}{M} - \\gamma^2}',
           eq: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)',
           eqEs: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)   con   γ = c/(2M) , ω_d = √(k/M - γ²)',
           eqEn: 'u(t) = A · e^(-γt) · cos(ω_d·t - φ)   with   γ = c/(2M) , ω_d = √(k/M - γ²)'
@@ -405,16 +421,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Fuerza de Lorentz total sobre una carga puntual q:',
           labelEn: '1. Total Lorentz force on a point charge q:',
+          latex: '\\mathbf{F}_{\\text{total}} = \\mathbf{F}_E + \\mathbf{F}_B = q \\mathbf{E} + q (\\mathbf{v} \\times \\mathbf{B})',
           eq: 'F⃗_total = F⃗_E + F⃗_B = q·E⃗ + q·(v⃗ × B⃗)'
         },
         {
           labelEs: '2. Con E⃗ = -E·ĵ (hacia abajo), B⃗ = -B·k̂ (entrando) y v⃗ = v₀·î:',
           labelEn: '2. With E⃗ = -E·ĵ (downward), B⃗ = -B·k̂ (into page), and v⃗ = v₀·î:',
+          latex: 'F_y = q (-E + v_0 B) \\implies F_{\\text{net}, y} = 0 \\iff v_0 = \\frac{E}{B}',
           eq: 'Fᵧ = q · ( -E + v₀ · B )'
         },
         {
           labelEs: '3. Condición de equilibrio dinámico (Trayectoria rectilínea Fᵧ = 0):',
           labelEn: '3. Dynamic equilibrium condition (Straight trajectory Fᵧ = 0):',
+          latex: 'q E = q v_0 B \\implies v_{\\text{filter}} = \\frac{E}{B}',
           eq: 'q·E = q·v₀·B   ⇒   v_filtro = E / B   (¡Independiente de la masa y del signo de q!)'
         }
       ]
@@ -426,16 +445,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Sistema de ecuaciones diferenciales acopladas de movimiento:',
           labelEn: '1. Coupled differential equations of motion:',
+          latex: 'm \\frac{dv_x}{dt} = -q B v_y \\quad ; \\quad m \\frac{dv_y}{dt} = q (v_x B - E)',
           eq: 'm · (dvₓ / dt) = -q·B·vᵧ     ;     m · (dvᵧ / dt) = q·(vₓ·B - E)'
         },
         {
           labelEs: '2. Potencia magnética nula (demostración por producto mixto):',
           labelEn: '2. Zero magnetic work (proof via scalar triple product):',
+          latex: '\\frac{dK_B}{dt} = \\mathbf{F}_B \\cdot \\frac{d\\mathbf{r}}{dt} = q (\\mathbf{v} \\times \\mathbf{B}) \\cdot \\mathbf{v} = 0 \\implies |\\mathbf{v}| = \\text{const}',
           eq: 'dK_B / dt = F⃗_B · (dr⃗/dt) = q·(v⃗ × B⃗) · v⃗ = 0   ⇒   B⃗ nunca cambia la rapidez |v⃗| si E⃗ = 0'
         },
         {
           labelEs: '3. Frecuencia angular de ciclotrón (ω_c) y Radio de Larmor (R_L):',
           labelEn: '3. Cyclotron angular frequency (ω_c) and Larmor Radius (R_L):',
+          latex: '\\omega_c = \\frac{q B}{m}, \\quad r_L = \\frac{m v_0}{q B}',
           eq: 'ω_c = |q|·B / m     ;     R_L = (m · v_⊥) / (|q| · B)'
         }
       ]
@@ -510,16 +532,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. DCL cuasi-estático del émbolo de área A y masa M_p:',
           labelEn: '1. Quasi-static FBD of the piston with area A and mass M_p:',
+          latex: 'P_1 V_1 = P_2 V_2 = n R T = \\text{const} \\quad (T = \\text{const})',
           eq: '∑Fᵧ = F_gas - F_atm - M_p·g = 0   ⇒   P_gas · A = P₀ · A + M_p · g'
         },
         {
           labelEs: '2. Ecuación de Estado del Gas Ideal y Energía Interna (gas monoatómico):',
           labelEn: '2. Ideal Gas Equation of State & Internal Energy (monatomic):',
+          latex: 'P = P_0 + \\frac{M_p g}{A}',
           eq: 'P · V = n · R · T     ;     U = (3/2) · n · R · T'
         },
         {
           labelEs: '3. Primera Ley de la Termodinámica (Conservación de Energía):',
           labelEn: '3. First Law of Thermodynamics (Energy Conservation):',
+          latex: '\\Delta U = Q - W = 0 \\implies Q = W',
           eq: 'ΔU = Q - W   (En proceso isotérmico ΔT = 0  ⇒  ΔU = 0  ⇒  Q = W)'
         }
       ]
@@ -531,16 +556,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Definición diferencial del trabajo mecánico de frontera:',
           labelEn: '1. Differential definition of boundary mechanical work:',
+          latex: 'W = \\int_{V_1}^{V_2} P(V) dV = \\int_{V_1}^{V_2} \\frac{n R T}{V} dV = n R T \\ln\\left(\\frac{V_2}{V_1}\\right)',
           eq: 'δW = F_gas · dy = (P · A) · dy = P · dV'
         },
         {
           labelEs: '2. Integración en Expansión Isotérmica (T = cte, P(V) = nRT / V):',
           labelEn: '2. Integration for Isothermal Expansion (T = const, P(V) = nRT / V):',
+          latex: '\\Delta S_{\\text{gas}} = \\int_{T_1}^{T_2} \\frac{C_V dT}{T} + \\int_{V_1}^{V_2} \\frac{n R dV}{V} = n R \\ln\\left(\\frac{V_2}{V_1}\\right)',
           eq: 'W_iso = ∫_{V₁}^{V₂} (nRT / V) dV = n·R·T · ln(V₂ / V₁)'
         },
         {
           labelEs: '3. Integración en Proceso Isobárico (P = cte) y Cambio de Entropía:',
           labelEn: '3. Integration for Isobaric Process (P = const) & Entropy Change:',
+          latex: '\\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}',
           eq: 'W_isob = ∫_{V₁}^{V₂} P₀ dV = P₀ · (V₂ - V₁)     ;     ΔS = ∫ (δQ_rev / T)'
         }
       ]
@@ -615,16 +643,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ley de reflexión y Ley de refracción de Snell:',
           labelEn: '1. Law of reflection and Snell’s Law of refraction:',
+          latex: '\\frac{\\sin\\theta_1}{v_1} = \\frac{\\sin\\theta_2}{v_2} = p \\quad (\\text{Ray parameter } p)',
           eq: 'θ_reflexión = θ₁     ;     sin(θ₁) / v₁ = sin(θ₂) / v₂'
         },
         {
           labelEs: '2. Condición de Ángulo Crítico (θ₂ = 90°, Onda de Cabeza / Head Wave):',
           labelEn: '2. Critical Angle Condition (θ₂ = 90°, Seismic Head Wave):',
+          latex: '\\sin\\theta_c = \\frac{v_1}{v_2} \\implies \\theta_c = \\arcsin\\left(\\frac{v_1}{v_2}\\right) \\quad (v_2 > v_1)',
           eq: 'sin(θ_c) = v₁ / v₂   (Existe sólo si el estrato inferior es más rápido: v₂ > v₁)'
         },
         {
           labelEs: '3. Conservación de la componente horizontal del vector de onda (kₓ):',
           labelEn: '3. Conservation of horizontal wavevector component (kₓ):',
+          latex: 'k_1 \\sin\\theta_1 = k_2 \\sin\\theta_2, \\quad k_i = \\frac{\\omega}{v_i}',
           eq: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)',
           eqEs: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)   con   kᵢ = 2π·f / vᵢ = ω / vᵢ',
           eqEn: 'k₁ · sin(θ₁) = k₂ · sin(θ₂)   with   kᵢ = 2π·f / vᵢ = ω / vᵢ'
@@ -638,6 +669,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Tiempo de viaje total T(x) entre A(0, h₁) y B(L, -h₂) cruzando en x:',
           labelEn: '1. Total travel time T(x) from A(0, h₁) to B(L, -h₂) crossing at x:',
+          latex: '\\delta \\int_A^B \\frac{ds}{v(\\mathbf{r})} = 0 \\implies \\text{Fermat\'s Principle of Stationary Travel Time}',
           eq: 'T(x) = √(x² + h₁²) / v₁  +  √((L - x)² + h₂²) / v₂'
         },
         {
@@ -722,6 +754,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Descomposición del campo vectorial en componentes P y Q:',
           labelEn: '1. Vector field decomposition into P and Q components:',
+          latex: '\\mathbf{F}(x,y) = -3y\\,\\hat{\\mathbf{i}} + 3x\\,\\hat{\\mathbf{j}}',
           eq: 'F⃗(x, y) = P(x, y) î + Q(x, y) ĵ = (k·x - ω·y) î + (ω·x + k·y) ĵ'
         },
         {
@@ -743,6 +776,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Teorema de Green en el plano (Integral de línea ↔ Integral doble de área):',
           labelEn: '1. Green’s Theorem in the plane (Line integral ↔ Double area integral):',
+          latex: '\\nabla \\times \\mathbf{F} = \\left(\\frac{\\partial F_y}{\\partial x} - \\frac{\\partial F_x}{\\partial y}\\right)\\hat{\\mathbf{k}} = (3 - (-3))\\hat{\\mathbf{k}} = 6\\hat{\\mathbf{k}}',
           eq: '∮_C F⃗ · d r⃗ = ∮_C (P dx + Q dy) = ∬_D (∂Q/∂x - ∂P/∂y) dA = ∬_D (2ω) dA = 2ω · Área(D)'
         },
         {
@@ -831,16 +865,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Conservación de energía E y momento angular L:',
           labelEn: '1. Conservation of energy E and angular momentum L:',
+          latex: '\\Delta\\phi_{\\text{GR}} = \\frac{6\\pi G M}{c^2 a (1 - e^2)} \\quad (\\text{radians per orbit})',
           eq: 'L = r² · (dθ/dt) = cte     ;     E = ½ m (dr/dt)² + V_eff(r) = cte'
         },
         {
           labelEs: '2. Potencial Efectivo de Schwarzschild (Término cúbico relativista):',
           labelEn: '2. Schwarzschild Effective Potential (Cubic relativistic term):',
+          latex: 'r_{\\min} = a(1 - e) \\quad ; \\quad r_{\\max} = a(1 + e)',
           eq: 'V_eff(r) = - (G·M·m) / r  +  L² / (2m·r²)  -  (G·M·L²) / (c²·m·r³)'
         },
         {
           labelEs: '3. Ecuación de Binet modificada en variable u = 1/r:',
           labelEn: '3. Modified Binet equation in variable u = 1/r:',
+          latex: 'E = \\frac{m c^2 (1 - 2GM/c^2 r)}{\\sqrt{1 - 2GM/c^2 r - v^2/c^2}}',
           eq: 'd²u / dθ² + u = (G·M·m²) / L²  +  (3·G·M / c²) · u²   (El término u² rompe la simetría de Kepler)'
         }
       ]
@@ -852,16 +889,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Métrica de Schwarzschild y Principio Variacional de Acción Geodésica:',
           labelEn: '1. Schwarzschild Metric & Variational Geodesic Action Principle:',
+          latex: '\\left(\\frac{dr}{d\\tau}\\right)^2 = \\frac{E^2}{m^2 c^2} - \\left(1 - \\frac{2GM}{c^2 r}\\right)\\left(c^2 + \\frac{L^2}{m^2 r^2}\\right)',
           eq: 'ds² = - (1 - 2GM/c²r) c² dt² + (1 - 2GM/c²r)⁻¹ dr² + r² dθ²     ;     δ ∫ ds = 0'
         },
         {
           labelEs: '2. Desplazamiento angular del perihelio por órbita (Teorema de Perturbaciones):',
           labelEn: '2. Perihelion angular shift per orbit (Perturbation Theory):',
+          latex: '\\frac{d^2 u}{d\\phi^2} + u = \\frac{G M}{h^2} + \\frac{3 G M}{c^2} u^2 \\quad \\left(u = \\frac{1}{r}\\right)',
           eq: 'Δφ = ∮ (dθ/du) du - 2π ≈ (6π · G · M) / (c² · a · (1 - e²))'
         },
         {
           labelEs: '3. Límite Clásico Newtoniano (Velocidad de la luz c → ∞):',
           labelEn: '3. Classical Newtonian Limit (Speed of light c → ∞):',
+          latex: '\\Delta\\tau = \\int \\sqrt{1 - \\frac{2GM}{c^2 r} - \\frac{v^2}{c^2}} \\, dt',
           eq: 'lim_{c → ∞} Δφ = 0   ⇒   Órbita perfectamente cerrada (Teorema de Bertrand: sólo V~1/r y V~r² cierran)'
         }
       ]
@@ -959,16 +999,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Sistema de Ecuaciones Diferenciales Ordinarias (EDOs) acopladas:',
           labelEn: '1. Coupled Ordinary Differential Equations (ODEs):',
+          latex: 'L = T - V = \\frac{1}{2}m(\\dot{x}_1^2 + \\dot{x}_2^2) - \\frac{1}{2}k(x_1^2 + x_2^2) - \\frac{1}{2}k_{12}(x_2 - x_1)^2',
           eq: 'm₁ d²x₁/dt² = -k x₁ + k₁₂(x₂ - x₁)     ;     m₂ d²x₂/dt² = -k x₂ - k₁₂(x₂ - x₁)'
         },
         {
           labelEs: '2. Cambio de base a coordenadas normales desacopladas q₁ y q₂:',
           labelEn: '2. Change of basis to decoupled normal coordinates q₁ & q₂:',
+          latex: '\\eta_1(t) = \\frac{x_1 + x_2}{\\sqrt{2}} = A_1 \\cos(\\omega_1 t + \\phi_1), \\quad \\eta_2(t) = \\frac{x_1 - x_2}{\\sqrt{2}} = A_2 \\cos(\\omega_2 t + \\phi_2)',
           eq: 'q₁ = (x₁ + x₂)/√2  ⇒  d²q₁/dt² + ω₁² q₁ = 0     ;     q₂ = (x₁ - x₂)/√2  ⇒  d²q₂/dt² + ω₂² q₂ = 0'
         },
         {
           labelEs: '3. Frecuencia de batimiento (Beats) y modulación periódica de energía:',
           labelEn: '3. Beat frequency and periodic energy envelope modulation:',
+          latex: 'x_1(t) = 2 A \\cos\\left(\\frac{\\omega_2 - \\omega_1}{2} t\\right) \\sin\\left(\\frac{\\omega_1 + \\omega_2}{2} t\\right) \\implies \\Omega_{\\text{beat}} = \\frac{\\omega_2 - \\omega_1}{2}',
           eq: 'x₁(t) = 2A · cos(½(ω₂ - ω₁)t) · sin(½(ω₁ + ω₂)t)   ⇒   ω_batimiento = ω₂ - ω₁'
         }
       ]
@@ -1048,6 +1091,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Parámetro de Coriolis f en función de la latitud φ:',
           labelEn: '1. Coriolis parameter f as a function of latitude φ:',
+          latex: '-\\frac{1}{\\rho}\\nabla P - 2\\boldsymbol{\\Omega}\\times\\mathbf{v}_g = \\mathbf{0}',
           eq: 'f = 2 · Ω · sin(φ)',
           eqEs: 'f = 2 · Ω_Tierra · sin(φ)   con   Ω_Tierra = 7.292 × 10⁻⁵ rad/s',
           eqEn: 'f = 2 · Ω_Earth · sin(φ)   with   Ω_Earth = 7.292 × 10⁻⁵ rad/s'
@@ -1071,16 +1115,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ecuación de Navier-Stokes en sistema no inercial rotante:',
           labelEn: '1. Navier-Stokes in rotating non-inertial frame:',
+          latex: '\\frac{D\\mathbf{v}}{Dt} + 2\\boldsymbol{\\Omega}\\times\\mathbf{v} = -\\frac{1}{\\rho}\\nabla P + \\mathbf{g} + \\nu \\nabla^2 \\mathbf{v}',
           eq: 'D v⃗ / Dt = ∂v⃗/∂t + (v⃗·∇)v⃗ = - (1/ρ) ∇P - 2 (Ω⃗ × v⃗) + g⃗ + ν ∇²v⃗'
         },
         {
           labelEs: '2. Escalamiento sinóptico y Número de Rossby (Ro ≪ 1):',
           labelEn: '2. Synoptic scaling and Rossby Number (Ro ≪ 1):',
+          latex: 'Ro = \\frac{U}{f L} \\ll 1 \\implies \\frac{D\\mathbf{v}}{Dt} \\approx \\mathbf{0}',
           eq: 'Ro = U / (f · L) ≈ 0.1 ≪ 1   ⇒   La aceleración inercial D v⃗ / Dt ≈ 0 es despreciable'
         },
         {
           labelEs: '3. Ley de Buys Ballot (Geofísica Meteorológica):',
           labelEn: '3. Buys Ballot’s Law (Meteorological Geophysics):',
+          latex: '\\frac{D}{Dt}\\left(\\frac{\\zeta + f}{H}\\right) = 0 \\quad (\\text{Ertel\'s Potential Vorticity Conservation})',
           eq: 'Hemisferio Norte: Si te paras de espaldas al viento, la BAJA presión queda a tu IZQUIERDA.'
         }
       ]
@@ -1160,6 +1207,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Tensor de Momento Sísmico de Doble Par (Double Couple):',
           labelEn: '1. Double Couple Seismic Moment Tensor:',
+          latex: 'M_{ij} = M_0 (u_i n_j + u_j n_i)',
           eq: 'M_ij = M₀ (u_i n_j + u_j n_i)',
           eqEs: 'M_ij = M₀ (u_i n_j + u_j n_i)   donde u⃗ = slip, n̂ = normal de falla, Tr(M) = 0',
           eqEn: 'M_ij = M₀ (u_i n_j + u_j n_i)   where u⃗ = slip, n̂ = fault normal, Tr(M) = 0'
@@ -1167,11 +1215,13 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Relación de Kanamori para Magnitud de Momento (Mw):',
           labelEn: '2. Kanamori Relation for Moment Magnitude (Mw):',
+          latex: 'M_0 = \\mu A \\bar{D} \\quad ; \\quad M_w = \\frac{2}{3}(\\log_{10} M_0 - 9.1)',
           eq: 'M_w = ⅔ (log₁₀ M₀ - 9.1)     ;     M₀ = μ · A · D  (N·m)'
         },
         {
           labelEs: '3. Descomposición Espectral en Ejes Principales (P, T, B):',
           labelEn: '3. Spectral Decomposition into Principal Axes (P, T, B):',
+          latex: '\\hat{\\mathbf{P}} = \\frac{\\hat{\\mathbf{n}} - \\hat{\\mathbf{u}}}{\\sqrt{2}}, \\quad \\hat{\\mathbf{T}} = \\frac{\\hat{\\mathbf{n}} + \\hat{\\mathbf{u}}}{\\sqrt{2}}',
           eq: 'P⃗ = (n̂ - u⃗)/√2   ;   T⃗ = (n̂ + u⃗)/√2',
           eqEs: 'P⃗ = (n̂ - u⃗)/√2 (Compresión Máxima)   ;   T⃗ = (n̂ + u⃗)/√2 (Tracción Máxima)',
           eqEn: 'P⃗ = (n̂ - u⃗)/√2 (Maximum Compression)   ;   T⃗ = (n̂ + u⃗)/√2 (Maximum Tension)'
@@ -1185,16 +1235,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ecuación de Navier-Cauchy en medios continuos elásticos:',
           labelEn: '1. Navier-Cauchy elastodynamic continuous medium equation:',
+          latex: '\\rho \\frac{\\partial^2 \\mathbf{u}}{\\partial t^2} = (\\lambda + \\mu)\\nabla(\\nabla \\cdot \\mathbf{u}) + \\mu \\nabla^2 \\mathbf{u} + \\mathbf{f}',
           eq: 'ρ ∂²u⃗/∂t² = (λ + μ) ∇(∇·u⃗) + μ ∇²u⃗ + f⃗'
         },
         {
           labelEs: '2. Descomposición de Helmholtz en potencial escalar y vectorial:',
           labelEn: '2. Helmholtz decomposition into scalar & vector potentials:',
+          latex: '\\mathbf{u} = \\nabla\\phi + \\nabla \\times \\boldsymbol{\\psi} \\implies \\frac{\\partial^2 \\phi}{\\partial t^2} = v_P^2 \\nabla^2 \\phi, \\quad \\frac{\\partial^2 \\boldsymbol{\\psi}}{\\partial t^2} = v_S^2 \\nabla^2 \\boldsymbol{\\psi}',
           eq: 'u⃗ = ∇φ + ∇ × ψ⃗   ⇒   ∂²φ/∂t² = v_P² ∇²φ   ;   ∂²ψ⃗/∂t² = v_S² ∇²ψ⃗'
         },
         {
           labelEs: '3. Velocidades elásticas de ondas de cuerpo y razón teórica:',
           labelEn: '3. Elastic body wave velocities & theoretical ratio:',
+          latex: 'v_P = \\sqrt{\\frac{\\lambda + 2\\mu}{\\rho}}, \\quad v_S = \\sqrt{\\frac{\\mu}{\\rho}} \\implies \\frac{v_P}{v_S} = \\sqrt{\\frac{\\lambda + 2\\mu}{\\mu}} \\approx \\sqrt{3} \\approx 1.73',
           eq: 'v_P = √((λ + 2μ)/ρ)   ;   v_S = √(μ/ρ)   ⇒   v_P / v_S = √((λ+2μ)/μ) ≈ √3 ≈ 1.73'
         }
       ]
@@ -1272,16 +1325,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Condición de Compensación Isostática de Airy (Presión Litostática):',
           labelEn: '1. Airy Isostatic Compensation (Lithostatic Pressure Balance):',
+          latex: '\\rho_c (h + H_0 + b) = \\rho_c H_0 + \\rho_m b \\implies b = h \\frac{\\rho_c}{\\rho_m - \\rho_c}',
           eq: 'ρ_c (h + H₀ + b) = ρ_c H₀ + ρ_m b   ⇒   b = h · ρ_c / (ρ_m - ρ_c)'
         },
         {
           labelEs: '2. Corrección de Placa de Bouguer (Atracción de Masa Topográfica):',
           labelEn: '2. Bouguer Slab Reduction (Topographic Mass Attraction):',
+          latex: '\\delta g_{\\text{BS}} = -2\\pi G \\rho_c h \\approx -0.04193 \\cdot 10^{-3} \\rho_c h \\quad (\\text{mGal})',
           eq: 'δg_BS = -2π G ρ_c h ≈ -0.04193 · 10⁻³ · ρ_c · h  (mGal)'
         },
         {
           labelEs: '3. Anomalía Completa de Bouguer en Cordillera:',
           labelEn: '3. Complete Bouguer Anomaly across Mountain Ranges:',
+          latex: '\\Delta g_B = g_{\\text{obs}} - \\gamma_0 + 0.3086 h - 2\\pi G \\rho_c h + \\delta g_{\\text{root}}',
           eq: 'Δg_B = g_obs - g₀ + 0.3086 h - 2πG ρ_c h + δg_root  (Valores fuertemente negativos en Andes)'
         }
       ]
@@ -1293,16 +1349,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ecuación diferencial parcial de Poisson (Ley de Gauss gravitatoria):',
           labelEn: '1. Poisson Partial Differential Equation (Gravitational Gauss Law):',
+          latex: '\\nabla^2 U = 4\\pi G \\rho(\\mathbf{r}) \\implies \\mathbf{g} = -\\nabla U',
           eq: '∇² U = 4π G ρ(x⃗)   ⇒   g⃗ = -∇U'
         },
         {
           labelEs: '2. Solución integral por función de Green en semiespacio 3D:',
           labelEn: '2. Green function integral solution in 3D half-space:',
+          latex: 'U(\\mathbf{r}) = -G \\iiint \\frac{\\rho(\\mathbf{r}\')}{|\\mathbf{r} - \\mathbf{r}\'|} d^3\\mathbf{r}\'',
           eq: 'U(x⃗) = -G ∭ (ρ(x⃗\') / |x⃗ - x⃗\'|) dV\''
         },
         {
           labelEs: '3. Tensor de Gradiente Gravimétrico (Segundas Derivadas Cruzadas):',
           labelEn: '3. Gravity Gradient Tensor (Cross Second Derivatives):',
+          latex: '\\Gamma_{ij} = \\frac{\\partial^2 U}{\\partial x_i \\partial x_j} = \\frac{\\partial g_i}{\\partial x_j}',
           eq: 'Γ_ij = ∂²U / ∂x_i ∂x_j',
           eqEs: 'Γ_ij = ∂²U / ∂x_i ∂x_j   con   Tr(Γ) = ∇²U = 4π G ρ (Ecuación diferencial local)',
           eqEn: 'Γ_ij = ∂²U / ∂x_i ∂x_j   with   Tr(Γ) = ∇²U = 4π G ρ (Local Poisson field PDE)'
@@ -1381,6 +1440,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Desviación superficial a 45° de la corriente inducida por viento:',
           labelEn: '1. Surface current 45° deflection under wind stress:',
+          latex: 'V_0 = \\frac{\\tau_0}{\\rho \\sqrt{|f| A_z}} e^{-i \\pi/4} \\quad (45^\\circ \\text{ surface deflection})',
           eq: 'V₀ = τ₀ / (ρ √( |f| A_z ))',
           eqEs: 'V₀ = τ₀ / (ρ √( |f| A_z ))   con   θ_sup = ±45° (Izquierda en Chile, Derecha en Hem. Norte)',
           eqEn: 'V₀ = τ₀ / (ρ √( |f| A_z ))   with   θ_surf = ±45° (Left in Chile/SH, Right in NH)'
@@ -1388,11 +1448,13 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Transporte Neto Integrado de Masa de Ekman (M_E):',
           labelEn: '2. Net Depth-Integrated Ekman Transport (M_E):',
+          latex: '\\mathbf{M}_E = \\int_{-\\infty}^0 \\rho \\mathbf{V}(z) dz = \\frac{\\boldsymbol{\\tau}_0 \\times \\hat{\\mathbf{k}}}{|f|}',
           eq: 'M⃗_E = (τ⃗₀ × k̂) / (ρ f)   ⇒   Dirección exactamente ortogonal (90°) al viento'
         },
         {
           labelEs: '3. Parámetro de Coriolis y Profundidad de Ekman:',
           labelEn: '3. Coriolis Parameter & Ekman Boundary Layer Depth:',
+          latex: 'f = 2\\Omega\\sin\\phi \\quad ; \\quad D_E = \\pi \\sqrt{\\frac{2 A_z}{|f|}}',
           eq: 'f = 2Ω sin(φ)     ;     D_E = π √( 2 A_z / |f| )'
         }
       ]
@@ -1404,6 +1466,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Sistema de EDOs acopladas unificadas en variable compleja V = u + iv:',
           labelEn: '1. Coupled viscous ODE system unified via complex velocity V = u + iv:',
+          latex: 'A_z \\frac{\\partial^2 \\mathbf{V}}{\\partial z^2} - i f \\mathbf{V} = 0 \\quad (\\mathbf{V} = u + i v)',
           eq: 'A_z d²V/dz² - i f V = 0',
           eqEs: 'A_z d²V/dz² - i f V = 0   con condición de borde   A_z dV/dz|_{z=0} = τ₀/ρ',
           eqEn: 'A_z d²V/dz² - i f V = 0   with boundary condition   A_z dV/dz|_{z=0} = τ₀/ρ'
@@ -1411,11 +1474,13 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '2. Solución analítica exponencial amortiguada (Espiral):',
           labelEn: '2. Damped exponential analytical solution (Spiral):',
+          latex: '\\mathbf{V}(z) = V_0 \\exp\\left(-\\frac{z}{D_E}\\right) \\exp\\left(-i \\frac{z}{D_E}\\right)',
           eq: 'V(z) = V₀ · exp( -(1 ± i) z / D_E )'
         },
         {
           labelEs: '3. Velocidad vertical de surgencia por divergencia (Bombeo de Ekman):',
           labelEn: '3. Vertical upwelling velocity via transport divergence (Ekman Pumping):',
+          latex: 'w_E = \\frac{1}{\\rho f} (\\nabla \\times \\boldsymbol{\\tau}_0)_z \\quad (\\text{Ekman Pumping / Upwelling})',
           eq: 'w_E = (1 / (ρ f)) (∇ × τ⃗₀)_z   (Ascenso de aguas frías ricas en nutrientes)'
         }
       ]
@@ -1493,11 +1558,13 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Módulo de impedancia de onda electromagnética en superficie:',
           labelEn: '1. Surface electromagnetic wave impedance modulus:',
+          latex: 'Z(\\omega) = \\frac{E_x}{H_y} = \\sqrt{i \\omega \\mu_0 \\rho} \\quad (\\Omega)',
           eq: 'Z(ω) = E_x / H_y = √( i ω μ₀ ρ )   (Ω, Volts/Ampere)'
         },
         {
           labelEs: '2. Fórmula de resistividad aparente de Cagniard:',
           labelEn: '2. Cagniard apparent resistivity formula:',
+          latex: '\\rho_a(T) = \\frac{1}{\\omega \\mu_0}\\left|\\frac{E_x}{H_y}\\right|^2 \\approx 0.2 T \\left|\\frac{E_x}{H_y}\\right|^2',
           eq: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|²',
           eqEs: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (con T = 1/f)',
           eqEn: 'ρ_a(T) = (1 / (ω μ₀)) |E_x / H_y|² = 0.2 · T · |E_x / H_y|²  (with T = 1/f)'
@@ -1505,6 +1572,7 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '3. Fórmula práctica de profundidad de penetración (Skin Depth):',
           labelEn: '3. Practical Skin Depth penetration formula:',
+          latex: '\\delta \\approx \\sqrt{\\frac{2}{\\omega \\mu_0 \\sigma}} \\approx 503 \\sqrt{\\frac{\\rho}{f}} \\quad (\\text{meters})',
           eq: 'δ ≈ √( 2 / (ω μ₀ σ) ) ≈ 503 √( ρ / f )   (metros)'
         }
       ]
@@ -1516,16 +1584,19 @@ export const LAB_PROBLEMS = [
         {
           labelEs: '1. Ecuación de difusión electromagnética cuasi-estacionaria en la Tierra:',
           labelEn: '1. Quasi-stationary electromagnetic diffusion PDE in conductive Earth:',
+          latex: '\\nabla^2 \\mathbf{E} = \\mu_0 \\sigma \\frac{\\partial \\mathbf{E}}{\\partial t} \\quad \\left(\\frac{\\partial \\mathbf{D}}{\\partial t} \\approx \\mathbf{0}\\right)',
           eq: '∇² E⃗ = μ₀ σ ∂E⃗/∂t   (Corriente de desplazamiento ∂D/∂t despreciable)'
         },
         {
           labelEs: '2. Solución armónica en profundidad para semiespacio homogéneo:',
           labelEn: '2. Harmonic depth solution in homogeneous half-space:',
+          latex: 'E_x(z, t) = E_0 e^{-z/\\delta} \\cos(\\omega t - z/\\delta)',
           eq: 'E_x(z, t) = E₀ · e^{-z/δ} · cos(ω t - z/δ)'
         },
         {
           labelEs: '3. Ecuación diferencial no lineal de Riccati para subsuelo estratificado:',
           labelEn: '3. Nonlinear Riccati differential equation for stratified ground:',
+          latex: '\\frac{dZ}{dz} - \\frac{\\sigma}{\\mu_0} Z^2 = i\\omega \\quad (\\text{Nonlinear Riccati ODE})',
           eq: 'dZ/dz - (σ / μ₀) Z² = i ω',
           eqEs: 'dZ/dz - (σ / μ₀) Z² = i ω   (Recursión de capas para inversión tomográfica)',
           eqEn: 'dZ/dz - (σ / μ₀) Z² = i ω   (Layer recursion for tomographic inversion)'
@@ -4303,9 +4374,9 @@ export default function PhysicsLab({
                       <span className="text-xs font-semibold text-slate-700 block mb-1.5">
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
-                      <pre className="font-mono text-xs sm:text-sm text-slate-900 font-bold whitespace-pre-wrap overflow-x-auto bg-white p-2.5 rounded-xl border border-slate-200">
-                        {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
-                      </pre>
+                      <div className="p-3 bg-white rounded-xl border border-slate-200 text-slate-900 overflow-x-auto">
+                        <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -4334,9 +4405,9 @@ export default function PhysicsLab({
                       <span className="text-xs font-semibold text-slate-700 block mb-1.5">
                         {lang === 'en' ? f.labelEn : f.labelEs}
                       </span>
-                      <pre className="font-mono text-xs sm:text-sm text-emerald-950 font-bold whitespace-pre-wrap overflow-x-auto bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-200/80">
-                        {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
-                      </pre>
+                      <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200/80 text-emerald-950 overflow-x-auto">
+                        <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -4596,9 +4667,9 @@ export default function PhysicsLab({
                         <span className="text-xs font-mono text-slate-600 block mb-1">
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
-                        <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
-                          {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
-                        </pre>
+                        <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 overflow-x-auto">
+                          <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -4620,9 +4691,9 @@ export default function PhysicsLab({
                         <span className="text-xs font-mono text-slate-600 block mb-1">
                           {lang === 'en' ? f.labelEn : f.labelEs}
                         </span>
-                        <pre className="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-2.5 rounded-lg border border-slate-200 overflow-x-auto whitespace-pre-wrap">
-                          {lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq)}
-                        </pre>
+                        <div className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 overflow-x-auto">
+                          <MathFormula math={f.latex || (lang === 'en' ? (f.eqEn || f.eq) : (f.eqEs || f.eq))} display={true} />
+                        </div>
                       </div>
                     ))}
                   </div>

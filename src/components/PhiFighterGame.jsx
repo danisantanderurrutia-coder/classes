@@ -167,6 +167,31 @@ export default function PhiFighterGame({ lang = 'es', onNavigate, onOpenBooking 
           </div>
         </div>
 
+        {/* Fullscreen Recommendation & Scroll Lock Notice */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-slate-900 to-sky-500/15 border border-amber-400/40 shadow-lg shadow-amber-500/5">
+          <div className="flex items-center gap-2.5 text-xs font-mono">
+            <span className="p-1.5 rounded-lg bg-amber-400/20 text-amber-300">⛶</span>
+            <div>
+              <span className="font-bold text-amber-300 block">
+                {lang === 'en' ? 'FULLSCREEN RECOMMENDED' : 'PANTALLA COMPLETA RECOMENDADA'}
+              </span>
+              <span className="text-slate-400 text-[11px]">
+                {lang === 'en'
+                  ? 'Locks browser page scroll and maximizes 3D cockpit controls'
+                  : 'Bloquea el scroll de la página web para maniobrar libremente sin saltos de pantalla'}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={enterFullscreenMode}
+            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-mono font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-md shadow-amber-400/20 cursor-pointer whitespace-nowrap"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+            <span>{lang === 'en' ? 'Launch Fullscreen' : 'Activar Pantalla Completa'}</span>
+          </button>
+        </div>
+
         {/* Action Bar (Above the Screen) */}
         <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 border border-white/10 rounded-xl px-4 py-2.5 backdrop-blur-md">
           <div className="flex items-center gap-2">

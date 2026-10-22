@@ -1866,17 +1866,25 @@
     body:not(.cinema-active) .imperial-top-bar {
       height: 46px !important;
       min-height: 46px !important;
+      display: flex !important;
       flex-wrap: nowrap !important;
+      justify-content: space-between !important;
+      align-items: center !important;
       border-radius: 0 !important;
       border-top: none !important;
       border-left: none !important;
       border-right: none !important;
       border-bottom: 2px solid rgba(0, 240, 255, 0.4) !important;
       background: linear-gradient(180deg, #0b111e 0%, #050811 100%) !important;
-      padding: 4px 10px !important;
-      gap: 6px !important;
+      padding: 4px 14px !important;
+      gap: 8px !important;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.9) !important;
       overflow-x: auto !important;
+      box-sizing: border-box !important;
+      scrollbar-width: none !important;
+    }
+    body:not(.cinema-active) .imperial-top-bar::-webkit-scrollbar {
+      display: none !important;
     }
 
     body:not(.cinema-active) .imperial-top-bar .phi-icon-badge {
@@ -1901,10 +1909,27 @@
       letter-spacing: 0.5px !important;
       gap: 4px !important;
       white-space: nowrap !important;
+      flex-shrink: 0 !important;
     }
 
-    body:not(.cinema-active) .imperial-top-bar #btn-open-physics {
-      padding: 4px 8px !important;
+    @media (max-width: 1350px) {
+      body:not(.cinema-active) .imperial-top-bar .title-group p {
+        display: none !important;
+      }
+      body:not(.cinema-active) .imperial-top-bar .bank-label {
+        display: none !important;
+      }
+      body:not(.cinema-active) .imperial-top-bar .btn-full-text {
+        display: none !important;
+      }
+      body:not(.cinema-active) .imperial-top-bar .imperial-switch {
+        padding: 3px 5px !important;
+        font-size: 0.52rem !important;
+      }
+      body:not(.cinema-active) .imperial-top-bar .sector-progress-box {
+        min-width: 125px !important;
+        max-width: 165px !important;
+      }
     }
 
     body:not(.cinema-active) .imperial-top-bar .sector-progress-box {
@@ -2221,28 +2246,31 @@
       </div>
 
       <!-- Module 3: Tactical Flight Optics & Science Archive -->
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div class="avionics-bank">
+      <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+        <div class="avionics-bank" style="display: flex; align-items: center; gap: 4px;">
           <span class="bank-label">HUD:</span>
-          <button class="imperial-switch active" id="btn-toggle-vectors">
-            <span class="led-dot"></span>VECTORS: <span id="vector-badge-text" style="color:var(--emerald-laser);">ON</span> [V]
+          <button class="imperial-switch active" id="btn-toggle-vectors" title="Toggle 2D Force Vectors [V]">
+            <span class="led-dot"></span><span class="btn-full-text">VECTORS: </span><span id="vector-badge-text" style="color:var(--emerald-laser);">ON</span> [V]
           </button>
-          <button class="imperial-switch" id="btn-toggle-cam">
+          <button class="imperial-switch" id="btn-toggle-cam" title="Toggle Camera View [C]">
             <span class="led-dot"></span><span id="cam-badge-text">3RD PERSON</span> [C]
           </button>
           <button class="imperial-switch danger" id="btn-fire-missile" title="Right-Click or Press [X] to fire guided missile">
-            <span class="led-dot" style="background:#ef4444;"></span>MISSILE [X]: <span id="ui-missile-count">4/4</span>
+            <span class="led-dot" style="background:#ef4444;"></span><span class="btn-full-text">MISSILE </span>[X]: <span id="ui-missile-count">4/4</span>
           </button>
           <button class="imperial-switch" id="btn-toggle-diff" title="Click or Press [T] to cycle difficulty">
             <span class="led-dot" id="diff-led-dot" style="background:#38bdf8;"></span>DIFF: <span id="ui-diff-badge">PILOT</span>
           </button>
+          <button class="imperial-switch amber" id="btn-open-physics" title="Open Astrophysics Codex [O]">
+            <span class="led-dot" style="background:#f59e0b;"></span>CODEX [O]
+          </button>
+          <button class="imperial-switch" id="btn-pause-game" style="border-color:#38bdf8;" title="Pause Combat Simulation [P / ESC]">
+            <span class="led-dot" id="pause-led-dot" style="background:#38bdf8;"></span>PAUSE [P]
+          </button>
+          <button class="imperial-switch" id="btn-open-ranking" style="border-color:#f59e0b; color:#fde047;" title="Galactic Hall of Fame [L]">
+            <span class="led-dot" style="background:#f59e0b;"></span>🏆 RANK [L]
+          </button>
         </div>
-        <button class="imperial-switch amber" id="btn-open-physics" style="padding: 5px 11px; font-weight:bold;" title="Open Astrophysics Codex [O]">
-          <span class="led-dot" style="background:#f59e0b;"></span>CODEX [O]
-        </button>
-        <button class="imperial-switch" id="btn-pause-game" style="padding: 5px 12px; font-weight:bold; border-color:#38bdf8;" title="Pause Combat Simulation [P / ESC]">
-          <span class="led-dot" id="pause-led-dot" style="background:#38bdf8;"></span>PAUSE [P]
-        </button>
       </div>
     </div>
 
@@ -2370,7 +2398,7 @@
           <button class="dossier-pill-btn" data-species="einstein" style="border-color:#f59e0b; color:#fde047;">👴 EINSTEIN</button>
           <button class="dossier-pill-btn" data-species="curie" style="border-color:#10b981; color:#6ee7b7;">👩‍🔬 CURIE</button>
           <button class="dossier-pill-btn" data-species="newton" style="border-color:#a855f7; color:#d8b4fe;">🍎 NEWTON</button>
-          <button class="dossier-pill-btn" data-species="schrodinger" style="border-color:#00f0ff; color:#67e8f9;">🐱 GATO SCHRÖDINGER</button>
+          <button class="dossier-pill-btn" data-species="schrodinger" style="border-color:#00f0ff; color:#67e8f9;">🐱 SCHRÖDINGER</button>
         </div>
       </div>
 
@@ -2488,12 +2516,12 @@
         </div>
       </div>
 
-      <div style="display:flex; gap:10px; align-items:center;">
-        <div style="font-size:0.68rem; color:#64748b; font-family:'Share Tech Mono', monospace; letter-spacing:1.5px; background:rgba(10, 15, 26, 0.72); padding:6px 14px; border-radius:4px; border:1px solid #1e293b;">
-          FLEET HANGAR ARMED &bull; SELECT FIGHTER OR LAUNCH MISSION
-        </div>
-        <button id="btn-open-fleet-museum-stage" style="pointer-events:auto; background:linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(10, 15, 26, 0.85) 100%); border:1px solid #f59e0b; color:#fbbf24; font-family:'Orbitron', sans-serif; font-size:0.72rem; letter-spacing:1.5px; padding:8px 16px; border-radius:4px; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 15px rgba(245, 158, 11, 0.3); transition:all 0.2s ease;">
-          <span>🛸</span> <span>INSPECCIONAR FLOTA 3D</span>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+        <button id="btn-open-ranking-stage" style="pointer-events:auto; background:linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(10, 15, 26, 0.85) 100%); border:1px solid #f59e0b; color:#fbbf24; font-family:'Orbitron', sans-serif; font-size:0.72rem; letter-spacing:1.5px; padding:8px 16px; border-radius:4px; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 15px rgba(245, 158, 11, 0.3); transition:all 0.2s ease;">
+          <span>🏆</span> <span>HALL OF FAME [L]</span>
+        </button>
+        <button id="btn-open-fleet-museum-stage" style="pointer-events:auto; background:linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(10, 15, 26, 0.85) 100%); border:1px solid #38bdf8; color:#38bdf8; font-family:'Orbitron', sans-serif; font-size:0.72rem; letter-spacing:1.5px; padding:8px 16px; border-radius:4px; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 15px rgba(56, 189, 248, 0.25); transition:all 0.2s ease;">
+          <span>🛸</span> <span>INSPECT 3D FLEET</span>
         </button>
       </div>
     </div>
@@ -2504,13 +2532,13 @@
     <div class="museum-header">
       <div>
         <div class="museum-header-title">
-          <span>🛸</span> <span id="m-hdr-title">IMPERIAL STARSHIP ARCHIVES // HANGAR ESPACIAL</span>
+          <span>🛸</span> <span id="m-hdr-title">IMPERIAL STARSHIP ARCHIVES // FLEET HANGAR</span>
         </div>
         <div class="museum-header-sub" id="m-hdr-sub">
-          INSPECCIÓN HOLOGRÁFICA 3D &bull; TELEMETRÍA DE CASCO &bull; ESPECIFICACIONES DE COMBATE (15 NAVES)
+          3D HOLOGRAPHIC INSPECTION &bull; HULL TELEMETRY &bull; COMBAT SPECIFICATIONS (15 SHIPS)
         </div>
       </div>
-      <button class="museum-close-btn" id="btn-close-fleet-museum">✕ CERRAR HANGAR</button>
+      <button class="museum-close-btn" id="btn-close-fleet-museum">✕ CLOSE HANGAR [ESC]</button>
     </div>
 
     <div class="museum-body">
@@ -2779,9 +2807,14 @@
         <div id="over-sector-stat" style="color:var(--amber-glow);">1</div>
       </div>
     </div>
-    <button class="master-btn" id="btn-restart">
-      REDEPLOY INTERCEPTOR 🔄
-    </button>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px; width:100%; max-width:440px; margin-left:auto; margin-right:auto;">
+      <button class="master-btn" id="btn-restart" style="flex:1; margin-top:0;">
+        REDEPLOY INTERCEPTOR 🔄
+      </button>
+      <button class="hud-btn" id="btn-game-over-ranking" style="padding:10px 18px; border-color:#f59e0b; color:#fde047; font-weight:bold;">
+        🏆 VIEW HALL OF FAME [L]
+      </button>
+    </div>
   </div>
 
   <!-- Tactical Pause Modal -->
@@ -2819,10 +2852,50 @@
         <button class="hud-btn" id="btn-pause-open-codex" style="padding: 10px 18px; border-color:#f59e0b; color:#f59e0b; font-weight:bold;">
           ⚛️ ASTROPHYSICS CODEX [O]
         </button>
+        <button class="hud-btn" id="btn-pause-open-ranking" style="padding: 10px 18px; border-color:#f59e0b; color:#fde047; font-weight:bold;">
+          🏆 GALACTIC HALL OF FAME [L]
+        </button>
         <button class="hud-btn" id="btn-pause-quit-hangar" style="padding: 10px 18px; border-color:#ef4444; color:#ef4444; font-weight:bold;">
           🛸 RETURN TO HANGAR & DOSSIER
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Galactic Hall of Fame & Leaderboard Modal -->
+  <div class="fullscreen-modal" id="hall-of-fame-modal" style="background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px);">
+    <div style="background: linear-gradient(180deg, #0b1329 0%, #030712 100%); border: 1px solid rgba(245, 158, 11, 0.45); border-top: 3px solid #f59e0b; border-radius: 8px; padding: 24px 30px; max-width: 780px; width: 94%; box-shadow: 0 20px 60px rgba(0,0,0,0.95), 0 0 35px rgba(245, 158, 11, 0.25); text-align: left; max-height: 90vh; display: flex; flex-direction: column;">
+      
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+        <div>
+          <div style="font-family:'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; color: #f8fafc; display:flex; align-items:center; gap:10px;">
+            <span>🏆</span> <span>GALACTIC HALL OF FAME</span>
+          </div>
+          <div style="font-family:'Share Tech Mono', monospace; font-size: 0.78rem; color: #f59e0b; letter-spacing: 1.5px; margin-top:3px;">
+            IMPERIAL FLIGHT ACADEMY TOP RECORDS &bull; ASTROPHYSICIST LEADERBOARD
+          </div>
+        </div>
+        <button class="hud-btn" id="btn-close-ranking" style="padding: 6px 14px; border-color:#f59e0b; color:#f59e0b; font-weight:bold;">
+          ✕ CLOSE [ESC]
+        </button>
+      </div>
+
+      <!-- Leaderboard Table Container -->
+      <div style="flex:1; overflow-y:auto; background: rgba(10, 16, 30, 0.7); border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; min-height: 280px;" id="hof-table-container">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- Cloud Sync & Dreamlo Info Notice -->
+      <div style="margin-top: 12px; padding: 10px 14px; background: rgba(15, 23, 42, 0.85); border: 1px solid #334155; border-radius: 6px; font-family:'Share Tech Mono', monospace; font-size: 0.72rem; color: #94a3b8; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="color:#f59e0b; font-weight:bold;">⚡ GITHUB PAGES STORAGE:</span> Scores are permanently saved in your browser (LocalStorage). Runs with Albert Einstein, Marie Curie, Isaac Newton and your pilot are tracked!
+        </div>
+        <button class="hud-btn" id="btn-clear-local-hof" style="padding: 4px 10px; font-size: 0.65rem; border-color:#64748b; color:#94a3b8; white-space:nowrap; margin-left:12px;">
+          RESET RECORDS 🔄
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -2832,7 +2905,7 @@
       <div class="physics-header">
         <h2>⚛️ ASTROPHYSICS & CLASSICAL MECHANICS CODEX</h2>
         <button class="hud-btn" id="btn-close-physics" style="padding:8px 18px; border-color:var(--amber-glow); color:var(--amber-glow); font-weight:bold;">
-          ✕ CLOSE [P]
+          ✕ CLOSE [O / ESC]
         </button>
       </div>
 
@@ -4267,6 +4340,127 @@
         document.getElementById('intro-screen').style.display = 'flex';
         document.body.classList.remove('cinema-active');
         showNotification('RETURNED TO IMPERIAL HANGAR', '#f59e0b');
+      });
+    }
+
+    // =========================================================================
+    // 3.5. GALACTIC HALL OF FAME (PERSISTENT HIGH SCORES)
+    // =========================================================================
+    const HOF_STORAGE_KEY = 'phi_fighter_hall_of_fame_v1';
+    const DEFAULT_HOF = [
+      { rank: 1, name: 'Albert Einstein', species: 'einstein', ship: 'advanced', score: 88400, stars: 5, difficulty: 'hard', date: '1905-09-26' },
+      { rank: 2, name: 'Marie Curie', species: 'curie', ship: 'crimson', score: 82100, stars: 5, difficulty: 'hard', date: '1911-12-10' },
+      { rank: 3, name: 'Isaac Newton', species: 'newton', ship: 'obsidian', score: 76500, stars: 4, difficulty: 'medium', date: '1687-07-05' },
+      { rank: 4, name: 'Schrödinger', species: 'schrodinger', ship: 'shadow', score: 71200, stars: 4, difficulty: 'medium', date: '1935-11-29' },
+      { rank: 5, name: 'Daniel Santander', species: 'chiss', ship: 'obsidian', score: 68000, stars: 4, difficulty: 'medium', date: '2026-10-22' }
+    ];
+
+    function getHallOfFame() {
+      try {
+        const raw = localStorage.getItem(HOF_STORAGE_KEY);
+        if (!raw) return DEFAULT_HOF;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_HOF;
+      } catch(e) {
+        return DEFAULT_HOF;
+      }
+    }
+
+    function saveHallOfFameRecord(record) {
+      try {
+        let list = getHallOfFame();
+        list.push(record);
+        list.sort((a, b) => b.score - a.score);
+        list = list.slice(0, 15);
+        list.forEach((item, idx) => item.rank = idx + 1);
+        localStorage.setItem(HOF_STORAGE_KEY, JSON.stringify(list));
+        renderHallOfFameTable();
+      } catch(e) {
+        console.warn('Failed to save to localStorage:', e);
+      }
+    }
+
+    function renderHallOfFameTable() {
+      const container = document.getElementById('hof-table-container');
+      if (!container) return;
+      const list = getHallOfFame();
+
+      let html = `
+        <table style="width:100%; border-collapse:collapse; font-family:'Share Tech Mono', monospace; font-size:0.75rem; text-align:left;">
+          <thead>
+            <tr style="border-bottom:1px solid #334155; color:#94a3b8; font-family:'Orbitron', sans-serif; font-size:0.68rem; letter-spacing:1px;">
+              <th style="padding:8px 6px;">RANK</th>
+              <th style="padding:8px 6px;">PILOT & LINEAGE</th>
+              <th style="padding:8px 6px;">STARFIGHTER</th>
+              <th style="padding:8px 6px; text-align:right;">FINAL SCORE</th>
+              <th style="padding:8px 6px; text-align:center;">STARS</th>
+              <th style="padding:8px 6px; text-align:right;">DATE</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      list.forEach((item, idx) => {
+        const medal = idx === 0 ? '🥇 ' : (idx === 1 ? '🥈 ' : (idx === 2 ? '🥉 ' : `#${idx + 1} `));
+        const isPlayer = item.name.toLowerCase() === playerPilot.name.toLowerCase();
+        const rowBg = isPlayer ? 'rgba(56, 189, 248, 0.15)' : (idx % 2 === 0 ? 'rgba(15, 23, 42, 0.4)' : 'transparent');
+        const nameColor = idx === 0 ? '#fde047' : (idx === 1 ? '#e2e8f0' : (idx === 2 ? '#f59e0b' : '#38bdf8'));
+        const shipName = STARFIGHTERS[item.ship] ? STARFIGHTERS[item.ship].name : (item.ship || 'TIE FIGHTER');
+        const starStr = '⭐'.repeat(item.stars || 3);
+
+        html += `
+          <tr style="background:${rowBg}; border-bottom:1px solid rgba(30, 41, 59, 0.6); transition:background 0.15s;">
+            <td style="padding:9px 6px; font-weight:bold; font-family:'Orbitron', sans-serif; color:${nameColor};">${medal}</td>
+            <td style="padding:9px 6px;">
+              <strong style="color:#f8fafc; font-family:'Orbitron', sans-serif; font-size:0.76rem;">${item.name.toUpperCase()}</strong>
+              <span style="font-size:0.62rem; color:#94a3b8; margin-left:6px; background:#1e293b; padding:2px 6px; border-radius:3px;">${(item.species || 'CADET').toUpperCase()}</span>
+            </td>
+            <td style="padding:9px 6px; color:#cbd5e1; font-size:0.70rem;">${shipName}</td>
+            <td style="padding:9px 6px; text-align:right; font-weight:bold; color:#00ff66; font-size:0.85rem;">${item.score.toLocaleString()} PTS</td>
+            <td style="padding:9px 6px; text-align:center; font-size:0.75rem;">${starStr}</td>
+            <td style="padding:9px 6px; text-align:right; color:#64748b; font-size:0.68rem;">${item.date}</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    let isHallOfFameOpen = false;
+    function toggleHallOfFame() {
+      isHallOfFameOpen = !isHallOfFameOpen;
+      const modal = document.getElementById('hall-of-fame-modal');
+      if (modal) modal.style.display = isHallOfFameOpen ? 'flex' : 'none';
+      if (isHallOfFameOpen) {
+        renderHallOfFameTable();
+        playMechanicalStepSound(440);
+      }
+    }
+
+    const btnOpenRanking = document.getElementById('btn-open-ranking');
+    if (btnOpenRanking) btnOpenRanking.addEventListener('click', toggleHallOfFame);
+
+    const btnCloseRanking = document.getElementById('btn-close-ranking');
+    if (btnCloseRanking) btnCloseRanking.addEventListener('click', toggleHallOfFame);
+
+    const btnOpenRankingStage = document.getElementById('btn-open-ranking-stage');
+    if (btnOpenRankingStage) btnOpenRankingStage.addEventListener('click', toggleHallOfFame);
+
+    const btnPauseOpenRanking = document.getElementById('btn-pause-open-ranking');
+    if (btnPauseOpenRanking) {
+      btnPauseOpenRanking.addEventListener('click', () => {
+        if (isGamePaused) togglePauseGame();
+        toggleHallOfFame();
+      });
+    }
+
+    const btnClearLocalHof = document.getElementById('btn-clear-local-hof');
+    if (btnClearLocalHof) {
+      btnClearLocalHof.addEventListener('click', () => {
+        localStorage.removeItem(HOF_STORAGE_KEY);
+        renderHallOfFameTable();
+        showNotification('HALL OF FAME RESET TO CANONICAL RECORDS', '#f59e0b');
       });
     }
 
@@ -6230,6 +6424,19 @@
       document.getElementById('over-reason-text').innerHTML = msg;
       document.getElementById('over-score-stat').innerText = score;
       document.getElementById('over-sector-stat').innerText = `${currentSectorIdx + 1} (${SECTORS[currentSectorIdx].bodyName})`;
+
+      if (typeof saveHallOfFameRecord === 'function' && score > 0) {
+        saveHallOfFameRecord({
+          name: playerPilot.name || 'Cadet',
+          species: playerPilot.species || 'chiss',
+          ship: selectedFighterId || 'obsidian',
+          score: score,
+          stars: Math.max(1, Math.min(5, Math.floor((currentSectorIdx + 1) / 2))),
+          difficulty: gameDifficulty,
+          date: new Date().toISOString().split('T')[0]
+        });
+      }
+
       setTimeout(() => {
         document.getElementById('game-over-modal').style.display = 'flex';
       }, 700);
@@ -6238,6 +6445,11 @@
     document.getElementById('btn-restart').addEventListener('click', () => {
       window.location.reload();
     });
+
+    const btnGameOverRanking = document.getElementById('btn-game-over-ranking');
+    if (btnGameOverRanking) {
+      btnGameOverRanking.addEventListener('click', toggleHallOfFame);
+    }
 
     // =========================================================================
     // 8. CINEMATIC PHYSICS CLIMAX & SECTOR PROGRESSION (10 CELESTIAL SECTORS)
@@ -6557,6 +6769,33 @@
         };
         breakdownDebrisGroup.add(mesh);
       }
+
+      // Bullet-time slow-motion shockwave rings
+      const shockGeo = new THREE.RingGeometry(0.3, 0.9, 36);
+      const shockMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.9
+      });
+      const shockMesh = new THREE.Mesh(shockGeo, shockMat);
+      shockMesh.rotation.x = Math.PI / 2;
+      shockMesh.position.copy(origin);
+      shockMesh.userData = { isShockwave: true, scaleSpeed: 16.0 };
+      breakdownDebrisGroup.add(shockMesh);
+
+      const shockGeo2 = new THREE.RingGeometry(0.2, 0.6, 36);
+      const shockMat2 = new THREE.MeshBasicMaterial({
+        color: 0xf59e0b,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.85
+      });
+      const shockMesh2 = new THREE.Mesh(shockGeo2, shockMat2);
+      shockMesh2.rotation.y = Math.PI / 2;
+      shockMesh2.position.copy(origin);
+      shockMesh2.userData = { isShockwave: true, scaleSpeed: 11.0 };
+      breakdownDebrisGroup.add(shockMesh2);
     }
 
     function updateBreakdownDebris(delta) {
@@ -6564,6 +6803,11 @@
       const type = data.vectorType;
 
       for (let mesh of breakdownDebrisGroup.children) {
+        if (mesh.userData.isShockwave) {
+          mesh.scale.addScalar(delta * mesh.userData.scaleSpeed);
+          mesh.material.opacity = Math.max(0, 0.9 - (breakdownTimer / breakdownDuration) * 1.1);
+          continue;
+        }
         if (type === 'radiation') {
           // Sector 1: Solar Photon Radiation Pressure (F_rad = Phi * A / c)
           // Blows microscopic debris outwards away from the Sun (+Z) creating an ion comet tail!
@@ -6910,6 +7154,19 @@
           waBtn.href = `https://wa.me/4917676497440?text=${msg}`;
         }
 
+        // Record victorious campaign completion into the Galactic Hall of Fame
+        if (typeof saveHallOfFameRecord === 'function') {
+          saveHallOfFameRecord({
+            name: playerPilot.name || 'Cadet',
+            species: playerPilot.species || 'chiss',
+            ship: selectedFighterId || 'obsidian',
+            score: score,
+            stars: starCount,
+            difficulty: gameDifficulty,
+            date: new Date().toISOString().split('T')[0]
+          });
+        }
+
         document.getElementById('btn-next-sector').innerText = 'RESTART CAMPAIGN 🔄';
         document.getElementById('sector-cleared-modal').style.display = 'flex';
       }
@@ -6997,6 +7254,7 @@
     const cbBtnContinue = document.getElementById('cb-btn-continue');
     if (cbBtnContinue) {
       cbBtnContinue.addEventListener('click', () => {
+        if (breakdownTimer < 2.0) return;
         endCinematicBreakdown();
       });
     }
@@ -8894,6 +9152,10 @@
       if (k === 'd' || k === 'arrowright') keys.d = true;
       if (k === ' ' || e.code === 'Space') {
         if (breakdownActive) {
+          // Lock Space key during the initial 2.0s so rapid firing doesn't skip the cinematic!
+          if (breakdownTimer < 2.0) {
+            return;
+          }
           endCinematicBreakdown();
           return;
         }
@@ -8919,11 +9181,16 @@
       if (k === 'o') {
         togglePhysicsModal();
       }
+      if (k === 'l') {
+        toggleHallOfFame();
+      }
       if (e.key === 'Escape') {
         if (isPhysicsModalOpen) {
           togglePhysicsModal();
         } else if (typeof isFleetMuseumOpen !== 'undefined' && isFleetMuseumOpen) {
           closeFleetMuseum();
+        } else if (typeof isHallOfFameOpen !== 'undefined' && isHallOfFameOpen) {
+          toggleHallOfFame();
         } else if (breakdownActive) {
           endCinematicBreakdown();
         } else if (isGamePaused) {
@@ -9025,21 +9292,31 @@
 
         const continueBtn = document.getElementById('cb-btn-continue');
         if (continueBtn) {
-          continueBtn.innerText = 'ENGAGE HYPERDRIVE [SPACE / CLICK] 🌌';
-          continueBtn.style.opacity = '1.0';
-          continueBtn.style.pointerEvents = 'auto';
+          if (breakdownTimer < 2.0) {
+            const rem = Math.max(0, (2.0 - breakdownTimer)).toFixed(1);
+            continueBtn.innerText = `ANALYZING TELEMETRY... (${rem}s)`;
+            continueBtn.style.opacity = '0.55';
+            continueBtn.style.cursor = 'wait';
+            continueBtn.style.pointerEvents = 'none';
+          } else {
+            continueBtn.innerText = 'ENGAGE HYPERDRIVE [SPACE / CLICK] 🌌';
+            continueBtn.style.opacity = '1.0';
+            continueBtn.style.cursor = 'pointer';
+            continueBtn.style.pointerEvents = 'auto';
+          }
         }
 
-        const orbitAngle = breakdownTimer * 0.75;
-        const orbitDist = 12 + Math.sin(breakdownTimer * 0.6) * 2;
+        const orbitAngle = breakdownTimer * 0.55;
+        const orbitDist = 14 + Math.sin(breakdownTimer * 0.4) * 2.5;
         camera.position.set(
           breakdownTargetPos.x + Math.sin(orbitAngle) * orbitDist,
-          breakdownTargetPos.y + 3.2 + Math.cos(orbitAngle * 0.6) * 1.6,
+          breakdownTargetPos.y + 3.0 + Math.cos(orbitAngle * 0.5) * 1.8,
           breakdownTargetPos.z + Math.cos(orbitAngle) * orbitDist
         );
         camera.lookAt(breakdownTargetPos.x, breakdownTargetPos.y, breakdownTargetPos.z);
 
-        updateBreakdownDebris(delta);
+        // Slow-Motion Explosion Physics (Bullet-time time dilation: 0.22x)
+        updateBreakdownDebris(delta * 0.22);
         renderBreakdownVectors();
 
         renderer.render(scene, camera);

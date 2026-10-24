@@ -3734,21 +3734,21 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
             <div className="flex justify-center">
               <div
                 id="printable-a4-flyer"
-                className="w-full max-w-[794px] bg-white text-slate-900 rounded-2xl border-2 border-slate-900 shadow-2xl overflow-hidden flex flex-col justify-between"
+                className="w-full max-w-[794px] bg-white text-slate-900 rounded-2xl border-2 border-slate-900 shadow-2xl overflow-hidden flex flex-col justify-between print:rounded-none print:border-none print:shadow-none print:max-w-none print:w-full print:h-full print:min-h-0"
                 style={{ minHeight: '1080px' }}
               >
-                <div className="p-8 pb-6">
+                <div className="p-8 pb-6 print:p-0 flex-1 flex flex-col justify-between">
                   <div
-                    className={`rounded-2xl p-6 mb-6 border-2 ${
+                    className={`rounded-2xl p-6 mb-6 border-2 print:p-3.5 print:mb-2 ${
                       flyerInkSaving
                         ? 'bg-white border-slate-900 text-slate-900'
                         : 'bg-slate-900 border-slate-900 text-white'
                     }`}
                   >
-                    <div className="font-mono text-xs uppercase tracking-widest font-bold mb-2 text-sky-700">
+                    <div className="font-mono text-xs uppercase tracking-widest font-bold mb-2 print:mb-1 text-sky-700">
                       {customFlyer.badge}
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight mb-2">
+                    <h1 className="text-2xl sm:text-3xl print:text-2xl font-extrabold tracking-tight leading-tight mb-2 print:mb-1">
                       {customFlyer.headline}
                     </h1>
                     <p className={`text-sm font-mono font-semibold ${flyerInkSaving ? 'text-slate-700' : 'text-slate-300'}`}>
@@ -3756,16 +3756,16 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-slate-100 border-2 border-slate-900 text-xs font-mono font-bold text-slate-900 mb-6 leading-relaxed">
+                  <div className="p-4 rounded-xl bg-slate-100 border-2 border-slate-900 text-xs font-mono font-bold text-slate-900 mb-6 print:mb-2 print:p-2 print:text-[11px] leading-relaxed">
                     {customFlyer.languageNotice}
                   </div>
 
-                  <div className="grid grid-cols-12 gap-6 items-center mb-6">
-                    <div className="col-span-7 space-y-3">
+                  <div className="grid grid-cols-12 gap-6 items-center mb-6 print:gap-3.5 print:mb-2">
+                    <div className="col-span-7 space-y-3 print:space-y-2">
                       <div className="font-mono text-xs uppercase tracking-wider font-extrabold text-slate-900 border-b-2 border-slate-900 pb-1">
                         SUBJECT TIERS &amp; INTERACTIVE STEM PLATFORM:
                       </div>
-                      <ul className="space-y-2.5 text-xs text-slate-900 font-medium">
+                      <ul className="space-y-2.5 print:space-y-1.5 text-xs text-slate-900 font-medium">
                         {customFlyer.bullets.map((b, idx) => (
                           <li key={idx} className="flex items-start gap-2">
                             <span className="font-mono font-extrabold text-slate-900">▸</span>
@@ -3901,14 +3901,14 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                       )}
                     </div>
 
-                    <div className="col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-slate-900 bg-white text-center">
-                      <span className="font-mono text-[10px] uppercase tracking-wider font-extrabold text-slate-900 mb-2">
+                    <div className="col-span-5 flex flex-col items-center justify-center p-4 print:p-2.5 rounded-2xl border-2 border-slate-900 bg-white text-center">
+                      <span className="font-mono text-[10px] uppercase tracking-wider font-extrabold text-slate-900 mb-2 print:mb-1">
                         SCAN TO TEST THE LAB FOR FREE
                       </span>
                       <img
                         src={flyerQrImageUrl}
                         alt="QR Code to STEM Platform"
-                        className="w-40 h-40 object-contain border border-slate-300 rounded-lg p-1 mb-2"
+                        className="w-40 h-40 print:w-28 print:h-28 object-contain border border-slate-300 rounded-lg p-1 mb-2 print:mb-1"
                       />
                       <span className="font-mono text-[11px] font-extrabold text-slate-900">
                         WhatsApp: +49 176 7649 7440
@@ -3919,13 +3919,13 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl border-2 border-slate-900 bg-slate-50 text-center font-mono text-xs font-extrabold text-slate-900">
+                  <div className="p-3 rounded-xl border-2 border-slate-900 bg-slate-50 text-center font-mono text-xs font-extrabold text-slate-900 print:p-2 print:text-[11px]">
                     {customFlyer.footerCallout}
                   </div>
                 </div>
 
-                <div className="border-t-2 border-dashed border-slate-900 bg-white px-4 pt-2 pb-4">
-                  <div className="text-center font-mono text-[10px] uppercase tracking-widest text-slate-600 font-bold mb-2">
+                <div className="border-t-2 border-dashed border-slate-900 bg-white px-4 pt-2 pb-4 print:px-0 print:pt-1 print:pb-0 shrink-0">
+                  <div className="text-center font-mono text-[10px] uppercase tracking-widest text-slate-600 font-bold mb-2 print:mb-1">
                     ✂️ Tear off a tab (WhatsApp &amp; Interactive STEM Lab QR) ✂️
                   </div>
                   <div
@@ -3935,16 +3935,16 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     {Array.from({ length: flyerTabsCount }).map((_, idx) => (
                       <div
                         key={idx}
-                        className="border-r last:border-r-0 border-dashed border-slate-900 p-1.5 flex flex-col items-center justify-between text-center"
+                        className="border-r last:border-r-0 border-dashed border-slate-900 p-1.5 flex flex-col items-center justify-between text-center print:p-1 print:min-h-0 print:h-[165px]"
                         style={{ minHeight: '210px' }}
                       >
                         <img
                           src={flyerQrImageUrl}
                           alt="QR"
-                          className="w-11 h-11 object-contain mb-1"
+                          className="w-11 h-11 print:w-8 print:h-8 object-contain mb-1 print:mb-0.5"
                         />
                         <div
-                          className="font-mono text-[9px] leading-tight text-slate-900 font-bold py-1"
+                          className="font-mono text-[9px] print:text-[8px] leading-tight text-slate-900 font-bold py-1 print:py-0.5"
                           style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
                         >
                           {customFlyer.tearOffTitle}

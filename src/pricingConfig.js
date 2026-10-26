@@ -295,8 +295,8 @@ export const CURRENCY_LIST = Object.values(DEFAULT_CURRENCY_TIERS);
 
 export function convertToEur(amount, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
-  const tier = tiers[currencyCode] || tiers.EUR;
-  return Math.round((Number(amount) || 0) * (tier.eurRate || 1));
+  const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
+  return Math.round((Number(amount) || 0) * (tier?.eurRate || 1));
 }
 
 export function mapCountryToCurrency(countryCode) {
@@ -332,15 +332,16 @@ export function detectInitialCurrency() {
 
 export function formatMoney(amount, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
-  const tier = tiers[currencyCode] || tiers.EUR;
+  const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const rounded = Math.round(Number(amount) || 0);
+  if (!tier) return `€${rounded}`;
   if (tier.code === 'CLP') {
     return `$${rounded.toLocaleString('es-CL')} CLP`;
   }
   if (tier.code === 'CHF') {
     return `CHF ${rounded.toLocaleString('de-CH')}`;
   }
-  return `${tier.symbol}${rounded.toLocaleString('en-US')}${tier.suffix}`;
+  return `${tier.symbol || '€'}${rounded.toLocaleString('en-US')}${tier.suffix || ''}`;
 }
 
 export function getCourseTierKey(course) {
@@ -353,16 +354,16 @@ export function getCourseTierKey(course) {
 
 export function getCourseHourlyRate(course, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
-  const tier = tiers[currencyCode] || tiers.EUR;
+  const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const key = getCourseTierKey(course);
-  return tier.rates[key] || tier.rates.bachelor;
+  return tier?.rates?.[key] || tier?.rates?.bachelor || 25;
 }
 
 export function getCoursePackRate(course, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
-  const tier = tiers[currencyCode] || tiers.EUR;
+  const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const key = getCourseTierKey(course);
-  return tier.packs8h[key] || tier.packs8h.bachelor;
+  return tier?.packs8h?.[key] || tier?.packs8h?.bachelor || 170;
 }
 
 // ============================================================================

@@ -48,15 +48,49 @@ import {
   Lock
 } from 'lucide-react';
 import { PLANET_SUBJECTS } from './data/planetSubjects';
-const SolarSystem = lazy(() => import('./components/SolarSystem'));
 import { LAB_PROBLEMS } from './data/labProblems';
-const PhysicsLab = lazy(() => import('./components/PhysicsLab'));
 import { ProblemThumbnail } from './components/LabThumbnails';
-const PIADMethod = lazy(() => import('./components/PIADMethod'));
-const PhysicsToolkit = lazy(() => import('./components/PhysicsToolkit'));
-const TutorPage = lazy(() => import('./components/TutorPage').then((m) => ({ default: m.TutorPage })));
-const PhiFighterGame = lazy(() => import('./components/PhiFighterGame'));
+
+// Resilient dynamic chunk loader that auto-reloads with cache-buster instead of crashing on stale hashes
+function lazyWithRetry(componentImport) {
+  return lazy(async () => {
+    const hasAlreadyAttempted = sessionStorage.getItem('ds_chunk_retry_in_progress');
+    try {
+      const comp = await componentImport();
+      sessionStorage.removeItem('ds_chunk_retry_in_progress');
+      return comp;
+    } catch (error) {
+      console.warn('Chunk load failed. Checking if auto-recovery is possible...', error);
+      const isChunkError = Boolean(
+        error?.name === 'ChunkLoadError' ||
+        error?.message?.includes('Failed to fetch dynamically imported module') ||
+        error?.message?.includes('dynamically imported module') ||
+        error?.message?.includes('Importing a module script failed') ||
+        error?.message?.includes('Loading chunk')
+      );
+
+      if (isChunkError && !hasAlreadyAttempted) {
+        sessionStorage.setItem('ds_chunk_retry_in_progress', 'true');
+        const url = new URL(window.location.href);
+        url.searchParams.set('_v', Date.now().toString());
+        window.location.replace(url.toString());
+        return new Promise(() => {}); // Suspend indefinitely while navigation triggers
+      }
+      sessionStorage.removeItem('ds_chunk_retry_in_progress');
+      throw error;
+    }
+  });
+}
+
+const SolarSystem = lazyWithRetry(() => import('./components/SolarSystem'));
+const PhysicsLab = lazyWithRetry(() => import('./components/PhysicsLab'));
+const PIADMethod = lazyWithRetry(() => import('./components/PIADMethod'));
+const PhysicsToolkit = lazyWithRetry(() => import('./components/PhysicsToolkit'));
+const TutorPage = lazyWithRetry(() => import('./components/TutorPage').then((m) => ({ default: m.TutorPage })));
+const PhiFighterGame = lazyWithRetry(() => import('./components/PhiFighterGame'));
+
 import {
+  DEFAULT_CURRENCY_TIERS,
   CURRENCY_TIERS,
   SUBJECT_COMPLEXITY_TIERS,
   getCurrencyTiers,
@@ -278,6 +312,25 @@ export default function App() {
     } catch {}
   }, []);
 
+  // Preload secondary chunks in background during idle time to prevent chunk 404s and eliminate lazy loading delays
+  useEffect(() => {
+    const preloadChunks = () => {
+      import('./components/PhysicsLab').catch(() => {});
+      import('./components/PIADMethod').catch(() => {});
+      import('./components/PhysicsToolkit').catch(() => {});
+      import('./components/TutorPage').catch(() => {});
+      import('./components/PhiFighterGame').catch(() => {});
+    };
+
+    if (typeof window !== 'undefined') {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(preloadChunks, { timeout: 3000 });
+      } else {
+        setTimeout(preloadChunks, 2000);
+      }
+    }
+  }, []);
+
   // Multi-page navigation state: 'landing' | 'lab' | 'courses' | 'tutor' | 'piad' | 'library' | 'pricing' | 'contact' | 'game'
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeLabProblemId, setActiveLabProblemId] = useState('newtonian');
@@ -351,10 +404,10 @@ export default function App() {
   const [bookSearchQuery, setBookSearchQuery] = useState('');
 
   const liveTiers = getCurrencyTiers();
-  const activeTier = liveTiers[currency] || liveTiers.EUR;
-  const baseRates = activeTier.rates;
-  const baseRate = baseRates[calcLevel] || baseRates.ib;
-  const inPersonExtraPerHour = activeTier.inPersonSurchargePerHour || Math.round(baseRate * 0.25);
+  const activeTier = liveTiers[currency] || liveTiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
+  const baseRates = activeTier?.rates || DEFAULT_CURRENCY_TIERS.EUR.rates;
+  const baseRate = baseRates?.[calcLevel] || baseRates?.ib || 25;
+  const inPersonExtraPerHour = activeTier?.inPersonSurchargePerHour || Math.round(baseRate * 0.25);
   const hourlyRateWithMode = baseRate + (calcMode === 'inperson' ? inPersonExtraPerHour : 0);
   const sprintMultiplier = calcSprintDiscount ? 0.85 : 1.0;
   const singleEffectiveHourly = Math.round(hourlyRateWithMode * sprintMultiplier);

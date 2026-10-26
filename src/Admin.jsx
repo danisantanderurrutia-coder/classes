@@ -1819,7 +1819,7 @@ ${selectedWaSubject.simUrl}
 Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today or tomorrow to review your syllabus and exam date?`;
   }
 
-  const flyerTargetUrl = `${BASE_SITE_URL}?src=${encodeURIComponent(customFlyer.qrTag || 'flyer')}`;
+  const flyerTargetUrl = `${BASE_SITE_URL}?src=${encodeURIComponent(customFlyer?.qrTag || 'flyer')}`;
   const flyerQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=6&data=${encodeURIComponent(flyerTargetUrl)}`;
   const currentSocialPostText =
     customFlyer?.socialMedia?.[flyerSocialChannel] ||
@@ -1828,7 +1828,9 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
   const handleSelectFlyerPreset = (key) => {
     setFlyerPresetKey(key);
-    setCustomFlyer(FLYER_PRESETS[key]);
+    if (FLYER_PRESETS[key]) {
+      setCustomFlyer(FLYER_PRESETS[key]);
+    }
   };
 
   return (
@@ -3767,7 +3769,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                         SUBJECT TIERS &amp; INTERACTIVE STEM PLATFORM:
                       </div>
                       <ul className="space-y-2.5 print:space-y-1.5 text-xs text-slate-900 font-medium">
-                        {customFlyer.bullets.map((b, idx) => (
+                        {(customFlyer?.bullets || []).map((b, idx) => (
                           <li key={idx} className="flex items-start gap-2">
                             <span className="font-mono font-extrabold text-slate-900">▸</span>
                             <span className="leading-snug">{b}</span>

@@ -105,7 +105,11 @@ class RootErrorBoundary extends React.Component {
                   type="button"
                   onClick={() => {
                     this.setState({ hasError: false, error: null });
-                    window.location.hash = '#/landing';
+                    if (window.location.hash === '#/landing' || window.location.hash === '#/' || !window.location.hash) {
+                      window.location.reload();
+                    } else {
+                      window.location.hash = '#/landing';
+                    }
                   }}
                   className="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer transition-all"
                 >
@@ -153,6 +157,71 @@ const isSessionUnlocked = () => {
     return false;
   }
 };
+
+class AdminErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('AdminErrorBoundary caught error:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6 text-center font-mono">
+          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl">
+              ⚙️
+            </div>
+            <div className="text-amber-400 text-sm font-bold uppercase tracking-wider">
+              Aviso del Cockpit de Administración
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed font-sans">
+              Ocurrió un error al procesar la vista administrativa. Puedes reintentar la carga o volver a la web pública.
+            </p>
+            <div className="flex flex-col gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  this.setState({ hasError: false, error: null });
+                  window.location.reload();
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs cursor-pointer transition-all shadow-md"
+              >
+                Reintentar Carga ↻
+              </button>
+              <button
+                type="button"
+                onClick={this.props.onBack}
+                className="w-full py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer transition-all"
+              >
+                Volver a la Web Pública
+              </button>
+            </div>
+            {this.state.error && (
+              <details className="text-left text-[11px] text-slate-400 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800/80 mt-2">
+                <summary className="cursor-pointer text-slate-400 hover:text-slate-200 select-none">
+                  Detalle técnico del error
+                </summary>
+                <div className="mt-2 text-rose-300 break-words font-semibold">
+                  {this.state.error.name || 'Error'}: {this.state.error.message}
+                </div>
+              </details>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function Root() {
   const [admin, setAdmin] = useState(isAdminHash());
@@ -237,7 +306,13 @@ function Root() {
     );
   }
 
-  return admin ? <Admin onBack={handleBackToPublic} /> : <App />;
+  return admin ? (
+    <AdminErrorBoundary onBack={handleBackToPublic}>
+      <Admin onBack={handleBackToPublic} />
+    </AdminErrorBoundary>
+  ) : (
+    <App />
+  );
 }
 
 // Auto-recover if GitHub Pages deploys a new build while the tab is open.

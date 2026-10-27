@@ -206,7 +206,7 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
         subjects_text = "Cálculo Diferencial & Integral  •  Álgebra Lineal  •  Física  •  Mecánica Clásica  •  Electromagnetismo"
         cta_main = "SESIÓN DIAGNÓSTICA GRATUITA (15 MIN) ➔"
         cta_sub = "100% en Español o Inglés  •  WhatsApp: +49 176 7649 7440  •  DM por interno"
-        sim_badge = "LABORATORIO & SIMULADORES INTERACTIVOS"
+        sim_badge = "DIAGRAMA DE CUERPO LIBRE & DINÁMICA"
     else:
         pill_text = "★  UNIVERSITY EXAM PREPARATION & IB CANDIDATES  ★"
         title_part1 = "MATH & PHYSICS "
@@ -241,7 +241,7 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
         subjects_text = "Calculus  •  Linear Algebra  •  Physics  •  Classical Mechanics  •  Electromagnetism"
         cta_main = "FREE 15-MIN DIAGNOSTIC SESSION ➔"
         cta_sub = "Fluent English & Spanish  •  Direct WhatsApp: +49 176 7649 7440  •  DM for Inquiries"
-        sim_badge = "INTERACTIVE 3D PHYSICS LAB & SIMULATORS"
+        sim_badge = "FREE BODY DIAGRAM & INCLINE DYNAMICS"
 
     # --- TOP HEADER ---
     bbox_pill = draw.textbbox((0, 0), pill_text, font=f_badge)
@@ -272,8 +272,12 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
     box_sim = [(col_l_x, 430), (col_l_x + col_l_w, 1070)]
     draw_card_box(draw, box_sim, fill=(10, 18, 38, 235), border=(56, 189, 248, 120), radius=44, width=2)
 
-    # Embed hero universe / lab image
-    lab_img_path = 'public/images/hero-universe.jpg'
+    # Embed DCL Incline with Spring illustration
+    lab_img_path = 'public/emblems/dcl_incline_spring.jpg'
+    if not os.path.exists(lab_img_path):
+        import generate_dcl_incline_spring
+        generate_dcl_incline_spring.generate_dcl_incline_spring(lab_img_path)
+
     if os.path.exists(lab_img_path):
         l_img = Image.open(lab_img_path).convert('RGBA')
         l_w, l_h = col_l_w - 40, 480

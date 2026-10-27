@@ -4,9 +4,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 # 2160 x 2160 (Retina 2x resolution for Instagram 1080x1080)
 W, H = 2160, 2160
-SCALE = 2
 
-# Helper: Wrap text cleanly
 def wrap_text(text, max_w, font, draw_ctx):
     words = text.split()
     lines = []
@@ -24,16 +22,15 @@ def wrap_text(text, max_w, font, draw_ctx):
         lines.append(' '.join(current_line))
     return '\n'.join(lines)
 
-def draw_card_box(d, bbox, fill=(15, 23, 42, 215), border=(255, 255, 255, 45), radius=40, width=2):
+def draw_card_box(d, bbox, fill=(15, 23, 42, 225), border=(255, 255, 255, 45), radius=40, width=2):
     d.rounded_rectangle(bbox, radius=radius, fill=fill, outline=border, width=width)
 
 def create_sun_spacetime_background(W, H):
-    # Deep obsidian cosmic base
     base = Image.new('RGBA', (W, H), (6, 9, 18, 255))
     
-    # 1. Distant Starfield with stellar magnitude distribution
+    # 1. Distant Starfield
     import random
-    random.seed(42)  # Consistent aesthetic starfield
+    random.seed(42)
     d_stars = ImageDraw.Draw(base)
     for _ in range(400):
         sx = random.randint(0, W)
@@ -47,7 +44,7 @@ def create_sun_spacetime_background(W, H):
         ])
         d_stars.ellipse([(sx, sy), (sx + s_size, sy + s_size)], fill=color_choice)
 
-    # 2. 3D Perspective Spacetime Curvature Grid (Einstein Gravitational Funnel)
+    # 2. 3D Perspective Spacetime Curvature Grid (Einstein Funnel)
     grid_img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d_grid = ImageDraw.Draw(grid_img)
 
@@ -70,7 +67,6 @@ def create_sun_spacetime_background(W, H):
         r = math.sqrt(dx * dx + dz * dz)
         return -72000.0 / (r**0.84 + 130.0)
 
-    # Longitudinal geodesic grid lines (cyan/laser)
     for x in range(-1800, 1801, 75):
         pts = []
         for z in range(250, 2550, 30):
@@ -83,7 +79,6 @@ def create_sun_spacetime_background(W, H):
             alpha = int(max(25, min(190, (1.0 - dist_c * 0.65) * 175)))
             d_grid.line(pts, fill=(0, 240, 255, alpha), width=3)
 
-    # Transverse geodesic grid lines
     for z in range(300, 2500, 70):
         pts = []
         for x in range(-1800, 1801, 30):
@@ -96,7 +91,6 @@ def create_sun_spacetime_background(W, H):
             alpha = int(max(25, min(180, (1.0 - dist_z * 0.6) * 165)))
             d_grid.line(pts, fill=(0, 225, 255, alpha), width=3)
 
-    # Concentric circular orbital rings around the gravitational funnel throat
     for r in [90, 160, 250, 360, 500, 680, 900, 1180, 1500]:
         pts = []
         for deg in range(0, 361, 4):
@@ -111,47 +105,36 @@ def create_sun_spacetime_background(W, H):
             alpha = int(max(40, min(240, (1.0 - (r / 1600.0)) * 235)))
             d_grid.line(pts, fill=(0, 255, 220, alpha), width=4 if r < 600 else 3)
 
-    # Composite Grid onto Base
     base = Image.alpha_composite(base, grid_img)
 
-    # 3. The Brilliant Celestial Sun (Einstein Gravitational Source)
+    # 3. Celestial Sun
     sun_x = W // 2
     sun_y = 860
 
-    # Solar Corona & Plasma Halos
     sun_layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d_sun = ImageDraw.Draw(sun_layer)
 
-    # Massive deep crimson & orange outer atmosphere (R ~ 750px)
     d_sun.ellipse([(sun_x - 750, sun_y - 750), (sun_x + 750, sun_y + 750)], fill=(234, 88, 12, 45))
-    # Radiant amber/gold mid corona (R ~ 460px)
     d_sun.ellipse([(sun_x - 460, sun_y - 460), (sun_x + 460, sun_y + 460)], fill=(245, 158, 11, 75))
-    # Intense solar plasma ring (R ~ 280px)
     d_sun.ellipse([(sun_x - 280, sun_y - 280), (sun_x + 280, sun_y + 280)], fill=(251, 191, 36, 120))
-    # Relativistic photon ring (lensed bright boundary)
     d_sun.ellipse([(sun_x - 190, sun_y - 190), (sun_x + 190, sun_y + 190)], fill=(255, 237, 160, 160))
 
-    # Blur solar halos smoothly
     sun_layer = sun_layer.filter(ImageFilter.GaussianBlur(90))
 
-    # Core Sun Disk (Intense thermonuclear fusion core)
     d_core = ImageDraw.Draw(sun_layer)
     d_core.ellipse([(sun_x - 145, sun_y - 145), (sun_x + 145, sun_y + 145)], fill=(255, 200, 50, 240))
     d_core.ellipse([(sun_x - 110, sun_y - 110), (sun_x + 110, sun_y + 110)], fill=(255, 245, 200, 255))
     d_core.ellipse([(sun_x - 70, sun_y - 70), (sun_x + 70, sun_y + 70)], fill=(255, 255, 255, 255))
 
-    # Horizontal anamorphic lens flare beam through the Sun
     flare_layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d_flare = ImageDraw.Draw(flare_layer)
     d_flare.line([(sun_x - 900, sun_y), (sun_x + 900, sun_y)], fill=(255, 230, 150, 160), width=12)
     d_flare.line([(sun_x - 600, sun_y), (sun_x + 600, sun_y)], fill=(255, 255, 255, 220), width=6)
     flare_layer = flare_layer.filter(ImageFilter.GaussianBlur(14))
 
-    # Composite Sun & Flares onto Base
     base = Image.alpha_composite(base, sun_layer)
     base = Image.alpha_composite(base, flare_layer)
 
-    # 4. Vignette Overlay for maximum contrast
     vignette = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d_vig = ImageDraw.Draw(vignette)
     for y in range(H):
@@ -162,13 +145,10 @@ def create_sun_spacetime_background(W, H):
 
     return base
 
-def :
-    # 1. Base Sun + Spacetime Curvature Grid Background
+def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
     base = create_sun_spacetime_background(W, H)
-
     draw = ImageDraw.Draw(base)
 
-    # Fonts (scaled 2x for 2160x2160)
     font_bold = '/System/Library/Fonts/HelveticaNeue.ttc'
     font_mono = '/System/Library/Fonts/Menlo.ttc'
     font_serif = '/System/Library/Fonts/Supplemental/Georgia.ttf'
@@ -178,221 +158,228 @@ def :
     f_title_accent = ImageFont.truetype(font_bold, 114, index=1)
     f_tagline = ImageFont.truetype(font_bold, 42, index=0)
 
-    f_name = ImageFont.truetype(font_bold, 50, index=1)
-    f_creds_title = ImageFont.truetype(font_bold, 32, index=1)
-    f_creds = ImageFont.truetype(font_bold, 28, index=0)
-    f_loc = ImageFont.truetype(font_bold, 30, index=1)
+    f_name = ImageFont.truetype(font_bold, 44, index=1)
+    f_creds_title = ImageFont.truetype(font_bold, 28, index=1)
+    f_creds = ImageFont.truetype(font_bold, 24, index=0)
+    f_loc = ImageFont.truetype(font_bold, 26, index=1)
 
-    f_phi_badge = ImageFont.truetype(font_serif, 46)
+    f_phi_badge = ImageFont.truetype(font_serif, 32)
     f_card_tag = ImageFont.truetype(font_bold, 28, index=1)
     f_card_title = ImageFont.truetype(font_bold, 40, index=1)
-    f_card_desc = ImageFont.truetype(font_bold, 28, index=0)
+    f_card_desc = ImageFont.truetype(font_bold, 27, index=0)
 
-    f_cta_bold = ImageFont.truetype(font_bold, 46, index=1)
-    f_cta_sub = ImageFont.truetype(font_bold, 34, index=0)
-    f_url = ImageFont.truetype(font_mono, 40, index=1)
+    f_cta_bold = ImageFont.truetype(font_bold, 48, index=1)
+    f_cta_sub = ImageFont.truetype(font_bold, 32, index=0)
+    f_url = ImageFont.truetype(font_mono, 38, index=1)
 
-    # Language strings (Strictly NO German)
     if lang == 'es':
         pill_text = "★  PREPARACIÓN PARA EXÁMENES UNIVERSITARIOS & IB  ★"
         title_part1 = "CLASES DE "
         title_part2 = "FÍSICA & MATEMÁTICAS"
-        tagline = "Mentoría Individual 1-a-1  •  Online para todo el mundo"
+        tagline = "Mentoría Individual 1-a-1  •  100% Online para todo el mundo"
         creds_title = "DOBLE M.SC. & GEOFÍSICO"
-        uni_text = "Facultad de Ciencias Físicas y Matemáticas\nUniversidad de Chile • CAU Kiel (Alemania)"
-        loc_text = "📍 Hannover, Alemania • Clases Online Internacionales"
+        uni_text = "FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland"
+        loc_text = "📍 Online Worldwide"
         features = [
             {
                 "tag": "MÉTODO PIAD™",
                 "title": "De la Intuición a la Demostración",
                 "desc": "Desde la visualización física y diagramas de cuerpo libre hasta el rigor matemático formal, sin memorización mecánica.",
-                "border": (56, 189, 248, 120),
+                "border": (56, 189, 248, 140),
                 "tag_color": (56, 189, 248)
             },
             {
-                "tag": "14 SIMULADORES INTERACTIVOS",
+                "tag": "SIMULADORES INTERACTIVOS",
                 "title": "Laboratorio de Física en Tiempo Real",
-                "desc": "Mecánica orbital, osciladores, óptica, termodinámica y pozos cuánticos con simulación interactiva paso a paso.",
-                "border": (168, 85, 247, 120),
+                "desc": "Mecánica orbital, osciladores, óptica, termodinámica y ondas con simulación interactiva paso a paso.",
+                "border": (168, 85, 247, 140),
                 "tag_color": (192, 132, 252)
             },
             {
-                "tag": "ENTRENAMIENTO DE EXÁMENES",
-                "title": "Resolución Formal & Puntaje Parcial",
-                "desc": "Estrategias para redactar demostraciones paso a paso, evitar errores algebraicos y asegurar el máximo puntaje en cada problema.",
-                "border": (245, 158, 11, 120),
+                "tag": "RESÚMENES DE ALTO IMPACTO",
+                "title": "Apuntes Clave & Enfoque de Examen",
+                "desc": "Acceso a resúmenes increíbles y apuntes de alto impacto, enfocados exactamente en los contenidos y necesidades reales de tu curso.",
+                "border": (245, 158, 11, 140),
                 "tag_color": (251, 191, 36)
             }
         ]
-        subjects_text = "Cálculo Diferencial & Integral  •  Álgebra Lineal  •  Mecánica Clásica  •  Electromagnetismo  •  Física Cuántica"
-        cta_main = "AGENDAR SESIÓN DIAGNÓSTICA (20 MIN) ➔"
-        cta_sub = "100% en Español o Inglés  •  Planes Intensivos  •  Claridad Conceptual Garantizada"
+        subjects_text = "Cálculo Diferencial & Integral  •  Álgebra Lineal  •  Física  •  Mecánica Clásica  •  Electromagnetismo"
+        cta_main = "SESIÓN DIAGNÓSTICA GRATUITA (15 MIN) ➔"
+        cta_sub = "100% en Español o Inglés  •  WhatsApp: +49 176 7649 7440  •  DM por interno"
+        sim_badge = "LABORATORIO & SIMULADORES INTERACTIVOS"
     else:
         pill_text = "★  UNIVERSITY EXAM PREPARATION & IB CANDIDATES  ★"
         title_part1 = "MATH & PHYSICS "
         title_part2 = "CLASSES"
-        tagline = "Rigorous 1-on-1 Mentorship  •  Online Worldwide & In-Person"
+        tagline = "Rigorous 1-on-1 Mentorship  •  100% Online Worldwide"
         creds_title = "DOUBLE M.SC. & GEOPHYSICIST"
-        uni_text = "Facultad de Ciencias Físicas y Matemáticas\nUniversidad de Chile • CAU Kiel (Germany)"
-        loc_text = "📍 Hannover, Germany • Worldwide Online"
+        uni_text = "FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland"
+        loc_text = "📍 Online Worldwide"
         features = [
             {
                 "tag": "PIAD METHOD™",
                 "title": "Physical Intuition to Proofs",
                 "desc": "From deep visual intuition and Free Body Diagrams to airtight mathematical rigor without blind formula memorization.",
-                "border": (56, 189, 248, 120),
+                "border": (56, 189, 248, 140),
                 "tag_color": (56, 189, 248)
             },
             {
-                "tag": "14 INTERACTIVE SIMULATORS",
+                "tag": "INTERACTIVE SIMULATORS",
                 "title": "Real-Time 3D Physics Lab",
-                "desc": "Hands-on orbital mechanics, harmonic oscillators, optics, thermodynamics, and quantum well wavefunctions in real time.",
-                "border": (168, 85, 247, 120),
+                "desc": "Hands-on orbital mechanics, harmonic oscillators, optics, thermodynamics, and wavefunctions in real time.",
+                "border": (168, 85, 247, 140),
                 "tag_color": (192, 132, 252)
             },
             {
-                "tag": "EXAM SPRINT DRILLS",
-                "title": "Scoring Partial Credit & Proofs",
-                "desc": "Targeted drills to master multi-step problem solving, formal proof structures, and secure maximum partial credit on exam day.",
-                "border": (245, 158, 11, 120),
+                "tag": "TARGETED COURSE SUMMARIES",
+                "title": "Tailored Notes & Exam Focus",
+                "desc": "Access amazing, high-yield summary notes specifically targeted to your course syllabus, past exams, and real grading requirements.",
+                "border": (245, 158, 11, 140),
                 "tag_color": (251, 191, 36)
             }
         ]
-        subjects_text = "Calculus  •  Linear Algebra  •  Classical Mechanics  •  Electromagnetism  •  Quantum Physics"
-        cta_main = "BOOK FREE 20-MIN DIAGNOSTIC SESSION ➔"
-        cta_sub = "Fluent English & Spanish  •  Targeted Study Sprints  •  Guaranteed Conceptual Clarity"
+        subjects_text = "Calculus  •  Linear Algebra  •  Physics  •  Classical Mechanics  •  Electromagnetism"
+        cta_main = "FREE 15-MIN DIAGNOSTIC SESSION ➔"
+        cta_sub = "Fluent English & Spanish  •  Direct WhatsApp: +49 176 7649 7440  •  DM for Inquiries"
+        sim_badge = "INTERACTIVE 3D PHYSICS LAB & SIMULATORS"
 
-    # --- TOP SECTION ---
-    # 1. Pill
+    # --- TOP HEADER ---
     bbox_pill = draw.textbbox((0, 0), pill_text, font=f_badge)
     tw_pill = bbox_pill[2] - bbox_pill[0]
     pill_x = (W - tw_pill) // 2
-    draw.rounded_rectangle([(pill_x - 45, 80), (pill_x + tw_pill + 45, 160)], radius=40, fill=(15, 23, 42, 235), outline=(56, 189, 248, 150), width=2)
-    draw.text((pill_x, 98), pill_text, font=f_badge, fill=(56, 189, 248))
+    draw.rounded_rectangle([(pill_x - 45, 75), (pill_x + tw_pill + 45, 150)], radius=38, fill=(15, 23, 42, 235), outline=(56, 189, 248, 150), width=2)
+    draw.text((pill_x, 93), pill_text, font=f_badge, fill=(56, 189, 248))
 
-    # 2. Main Title
     bbox_t1 = draw.textbbox((0, 0), title_part1, font=f_title_main)
     bbox_t2 = draw.textbbox((0, 0), title_part2, font=f_title_accent)
     tot_title_w = (bbox_t1[2] - bbox_t1[0]) + (bbox_t2[2] - bbox_t2[0])
     title_x = (W - tot_title_w) // 2
-    title_y = 200
+    title_y = 185
 
     draw.text((title_x, title_y), title_part1, font=f_title_main, fill=(255, 255, 255))
     draw.text((title_x + (bbox_t1[2] - bbox_t1[0]), title_y), title_part2, font=f_title_accent, fill=(56, 189, 248))
 
-    # 3. Subtitle / Tagline
     bbox_tag = draw.textbbox((0, 0), tagline, font=f_tagline)
-    draw.text(((W - (bbox_tag[2] - bbox_tag[0])) // 2, 340), tagline, font=f_tagline, fill=(203, 213, 225))
+    draw.text(((W - (bbox_tag[2] - bbox_tag[0])) // 2, 320), tagline, font=f_tagline, fill=(203, 213, 225))
 
-    # Divider line
-    draw.line([(140, 430), (W - 140, 430)], fill=(255, 255, 255, 35), width=2)
+    draw.line([(130, 395), (W - 130, 395)], fill=(255, 255, 255, 40), width=2)
 
-    # --- MIDDLE SECTION (y: 470 to 1340) ---
-    prof_w = 780
-    prof_box = [(130, 470), (130 + prof_w, 1340)]
-    draw_card_box(draw, prof_box, fill=(15, 23, 42, 225), border=(56, 189, 248, 90), radius=48, width=2)
+    # --- MIDDLE SECTION (y: 430 to 1420) ---
+    col_l_x = 130
+    col_l_w = 880
+    
+    # 1. Left Card: Featured Interactive Lab Visual Showcase
+    box_sim = [(col_l_x, 430), (col_l_x + col_l_w, 1070)]
+    draw_card_box(draw, box_sim, fill=(10, 18, 38, 235), border=(56, 189, 248, 120), radius=44, width=2)
 
-    # Circular photo
+    # Embed hero universe / lab image
+    lab_img_path = 'public/images/hero-universe.jpg'
+    if os.path.exists(lab_img_path):
+        l_img = Image.open(lab_img_path).convert('RGBA')
+        l_w, l_h = col_l_w - 40, 480
+        l_img = ImageOps.fit(l_img, (l_w, l_h), method=Image.Resampling.LANCZOS)
+        
+        # Rounded mask for image
+        l_mask = Image.new('L', (l_w, l_h), 0)
+        d_lmask = ImageDraw.Draw(l_mask)
+        d_lmask.rounded_rectangle([(0, 0), (l_w, l_h)], radius=32, fill=255)
+        
+        base.paste(l_img, (col_l_x + 20, 450), l_mask)
+        draw.rounded_rectangle([(col_l_x + 20, 450), (col_l_x + 20 + l_w, 450 + l_h)], radius=32, outline=(56, 189, 248, 100), width=2)
+
+    # Simulation badge & caption
+    draw.rounded_rectangle([(col_l_x + 40, 955), (col_l_x + col_l_w - 40, 1045)], radius=22, fill=(15, 23, 42, 235), outline=(56, 189, 248, 180), width=2)
+    bbox_simb = draw.textbbox((0, 0), sim_badge, font=f_creds_title)
+    draw.text((col_l_x + (col_l_w - (bbox_simb[2] - bbox_simb[0])) // 2, 985), sim_badge, font=f_creds_title, fill=(56, 189, 248))
+
+    # 2. Compact Tutor Profile Card (Small on border/corner as requested!)
+    box_prof = [(col_l_x, 1100), (col_l_x + col_l_w, 1420)]
+    draw_card_box(draw, box_prof, fill=(15, 23, 42, 235), border=(56, 189, 248, 90), radius=44, width=2)
+
     prof_img_path = 'public/profile.jpg'
     if os.path.exists(prof_img_path):
         p_img = Image.open(prof_img_path).convert('RGBA')
-        circ_size = 400
+        circ_size = 190
         p_img = ImageOps.fit(p_img, (circ_size, circ_size), method=Image.Resampling.LANCZOS)
 
         mask = Image.new('L', (circ_size, circ_size), 0)
         d_mask = ImageDraw.Draw(mask)
         d_mask.ellipse([(0, 0), (circ_size, circ_size)], fill=255)
 
-        ring_x = 130 + (prof_w - circ_size) // 2
-        ring_y = 510
+        ring_x = col_l_x + 35
+        ring_y = 1135
 
-        # Rings
-        draw.ellipse([(ring_x - 10, ring_y - 10), (ring_x + circ_size + 10, ring_y + circ_size + 10)], outline=(56, 189, 248, 230), width=4)
-        draw.ellipse([(ring_x - 18, ring_y - 18), (ring_x + circ_size + 18, ring_y + circ_size + 18)], outline=(245, 158, 11, 150), width=2)
+        draw.ellipse([(ring_x - 6, ring_y - 6), (ring_x + circ_size + 6, ring_y + circ_size + 6)], outline=(56, 189, 248, 220), width=3)
+        draw.ellipse([(ring_x - 12, ring_y - 12), (ring_x + circ_size + 12, ring_y + circ_size + 12)], outline=(245, 158, 11, 150), width=2)
 
         base.paste(p_img, (ring_x, ring_y), mask)
 
-        # Golden Phi Badge
-        phi_box = [(ring_x + circ_size - 75, ring_y + circ_size - 75), (ring_x + circ_size + 15, ring_y + circ_size + 15)]
-        draw.ellipse(phi_box, fill=(245, 158, 11), outline=(15, 23, 42), width=3)
-        draw.text((phi_box[0][0] + 25, phi_box[0][1] + 12), "Φ", font=f_phi_badge, fill=(15, 23, 42))
+        phi_box = [(ring_x + circ_size - 45, ring_y + circ_size - 45), (ring_x + circ_size + 10, ring_y + circ_size + 10)]
+        draw.ellipse(phi_box, fill=(245, 158, 11), outline=(15, 23, 42), width=2)
+        draw.text((phi_box[0][0] + 16, phi_box[0][1] + 9), "Φ", font=f_phi_badge, fill=(15, 23, 42))
 
-    # Tutor Name
-    name_text = "Daniel S. Santander Urrutia"
-    bbox_n = draw.textbbox((0, 0), name_text, font=f_name)
-    name_x = 130 + (prof_w - (bbox_n[2] - bbox_n[0])) // 2
-    draw.text((name_x, 950), name_text, font=f_name, fill=(255, 255, 255))
+        # Profile text beside the avatar
+        info_x = ring_x + circ_size + 35
+        draw.text((info_x, 1140), "Daniel S. Santander Urrutia", font=f_name, fill=(255, 255, 255))
+        draw.text((info_x, 1200), creds_title, font=f_creds_title, fill=(251, 191, 36))
+        
+        # Universities line
+        wrapped_uni = wrap_text(uni_text, col_l_w - (info_x - col_l_x) - 25, f_creds, draw)
+        draw.multiline_text((info_x, 1245), wrapped_uni, font=f_creds, fill=(148, 163, 184), spacing=4)
+        
+        # Location line
+        draw.text((info_x, 1345), loc_text, font=f_loc, fill=(52, 211, 153))
 
-    # Credentials Title
-    bbox_ct = draw.textbbox((0, 0), creds_title, font=f_creds_title)
-    draw.text((130 + (prof_w - (bbox_ct[2] - bbox_ct[0])) // 2, 1025), creds_title, font=f_creds_title, fill=(251, 191, 36))
-
-    # University
-    bbox_u = draw.multiline_textbbox((0, 0), uni_text, font=f_creds, align='center')
-    draw.multiline_text((130 + (prof_w - (bbox_u[2] - bbox_u[0])) // 2, 1085), uni_text, font=f_creds, fill=(148, 163, 184), align='center', spacing=6)
-
-    # Location pill
-    bbox_loc = draw.textbbox((0, 0), loc_text, font=f_loc)
-    draw.text((130 + (prof_w - (bbox_loc[2] - bbox_loc[0])) // 2, 1250), loc_text, font=f_loc, fill=(52, 211, 153))
-
-    # Right Column: 3 Feature Cards
-    col_r_x = 950
+    # --- Right Column: 3 Feature Cards (x: 1050 to W-130) ---
+    col_r_x = 1050
     col_r_w = (W - 130) - col_r_x
-    y_feat = 470
-    h_feat = 265
-    gap_feat = 30
+    y_feat = 430
+    h_feat = 310
+    gap_feat = 25
 
     for i, feat in enumerate(features):
         top = y_feat + i * (h_feat + gap_feat)
         box = [(col_r_x, top), (W - 130, top + h_feat)]
         draw_card_box(draw, box, fill=(15, 23, 42, 225), border=feat["border"], radius=40, width=2)
 
-        # Tag
-        draw.text((col_r_x + 44, top + 26), feat["tag"], font=f_card_tag, fill=feat["tag_color"])
+        draw.text((col_r_x + 45, top + 30), feat["tag"], font=f_card_tag, fill=feat["tag_color"])
+        draw.text((col_r_x + 45, top + 78), feat["title"], font=f_card_title, fill=(255, 255, 255))
 
-        # Title
-        draw.text((col_r_x + 44, top + 70), feat["title"], font=f_card_title, fill=(255, 255, 255))
+        wrapped_desc = wrap_text(feat["desc"], col_r_w - 90, f_card_desc, draw)
+        draw.multiline_text((col_r_x + 45, top + 144), wrapped_desc, font=f_card_desc, fill=(203, 213, 225), spacing=8)
 
-        # Description
-        wrapped_desc = wrap_text(feat["desc"], col_r_w - 88, f_card_desc, draw)
-        draw.multiline_text((col_r_x + 44, top + 130), wrapped_desc, font=f_card_desc, fill=(203, 213, 225), spacing=8)
+    # --- BOTTOM SECTION (y: 1470 to 2070) ---
+    bottom_box = [(130, 1470), (W - 130, 2060)]
+    draw_card_box(draw, bottom_box, fill=(10, 18, 38, 245), border=(56, 189, 248, 140), radius=54, width=2)
 
-    # --- BOTTOM CALL TO ACTION CAPSULE (y: 1390 to 2040) ---
-    bottom_box = [(130, 1390), (W - 130, 2040)]
-    draw_card_box(draw, bottom_box, fill=(10, 18, 38, 245), border=(56, 189, 248, 140), radius=56, width=2)
-
-    # Subjects strip
     bbox_subjs = draw.textbbox((0, 0), subjects_text, font=f_tagline)
-    draw.text(((W - (bbox_subjs[2] - bbox_subjs[0])) // 2, 1440), subjects_text, font=f_tagline, fill=(148, 163, 184))
+    draw.text(((W - (bbox_subjs[2] - bbox_subjs[0])) // 2, 1520), subjects_text, font=f_tagline, fill=(148, 163, 184))
 
-    # Big CTA Button
-    cta_box = [(300, 1530), (W - 300, 1690)]
-    draw.rounded_rectangle(cta_box, radius=44, fill=(16, 185, 129), outline=(52, 211, 153), width=3)
+    # Big CTA Button (NO 'Book', 15 mins)
+    cta_box = [(280, 1600), (W - 280, 1750)]
+    draw.rounded_rectangle(cta_box, radius=42, fill=(16, 185, 129), outline=(52, 211, 153), width=3)
 
     bbox_cta = draw.textbbox((0, 0), cta_main, font=f_cta_bold)
-    draw.text(((W - (bbox_cta[2] - bbox_cta[0])) // 2, 1585), cta_main, font=f_cta_bold, fill=(3, 7, 18))
+    draw.text(((W - (bbox_cta[2] - bbox_cta[0])) // 2, 1650), cta_main, font=f_cta_bold, fill=(3, 7, 18))
 
     # Sub-CTA
-    bbox_bil = draw.textbbox((0, 0), cta_sub, font=f_cta_sub)
-    draw.text(((W - (bbox_bil[2] - bbox_bil[0])) // 2, 1740), cta_sub, font=f_cta_sub, fill=(226, 232, 240))
+    bbox_sub = draw.textbbox((0, 0), cta_sub, font=f_cta_sub)
+    draw.text(((W - (bbox_sub[2] - bbox_sub[0])) // 2, 1795), cta_sub, font=f_cta_sub, fill=(226, 232, 240))
 
     # Web URL Pill
-    url_bg_w = 1240
+    url_bg_w = 1200
     url_bg_x = (W - url_bg_w) // 2
-    draw.rounded_rectangle([(url_bg_x, 1825), (url_bg_x + url_bg_w, 1915)], radius=28, fill=(15, 23, 42, 225), outline=(56, 189, 248, 100), width=2)
+    draw.rounded_rectangle([(url_bg_x, 1870), (url_bg_x + url_bg_w, 1960)], radius=28, fill=(15, 23, 42, 225), outline=(56, 189, 248, 100), width=2)
 
     url_text = "danisantanderurrutia-coder.github.io/classes"
     bbox_url = draw.textbbox((0, 0), url_text, font=f_url)
-    draw.text(((W - (bbox_url[2] - bbox_url[0])) // 2, 1847), url_text, font=f_url, fill=(56, 189, 248))
+    draw.text(((W - (bbox_url[2] - bbox_url[0])) // 2, 1893), url_text, font=f_url, fill=(56, 189, 248))
 
-    # Save 2160x2160 with highest quality 98 and no chroma downsampling (subsampling=0)
     out_rgb = base.convert('RGB')
     out_rgb.save(filename, 'JPEG', quality=98, subsampling=0)
-    print(f"Generated {filename} (2160x2160, quality=98, subsampling=0) successfully!")
+    print(f"Generated {filename} (2160x2160) successfully!")
 
 # Generate English version
 generate_card(lang='en', filename='public/instagram_post_en.jpg')
 # Generate Spanish version
 generate_card(lang='es', filename='public/instagram_post_es.jpg')
-# Default preview to Spanish
-

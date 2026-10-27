@@ -4273,61 +4273,61 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
 
 I’m offering private university tutoring (Physics, Calculus, Linear Algebra) and B.Sc. / M.Sc. thesis guidance while I look for a job :) If you know anyone who might need this, let me know!
 
-🔬 Focused on deep physical intuition, rigorous derivations, and 14 interactive 3D physics simulators.
-📍 Available 1-on-1 online worldwide & in-person in Hannover.
+🔬 Focused on deep physical intuition, rigorous derivations, interactive 3D physics simulators, and tailored course summaries.
+📍 Available 1-on-1 online worldwide.
 
-👉 Free 20-min diagnostic & interactive simulators:
+👉 Free 15-min diagnostic & interactive simulators:
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #Hannover #MathTutor`;
+#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #MathTutor`;
 
                         const captionReferralEs = `¡Hola a todos! 👋
 
 Estoy abriendo cupos para clases particulares universitarias (Física, Cálculo, Álgebra Lineal) y asesoría en tesis de pregrado/máster mientras busco trabajo :) Si saben de alguien a quien le pueda servir, ¡se agradece mucho si le avisan o comparten el dato!
 
-🔬 Enfoque en intuición física profunda, demostraciones formales y 14 simuladores 3D interactivos.
-📍 Clases 1 a 1 online para todo el mundo y presenciales en Hannover.
+🔬 Enfoque en intuición física profunda, demostraciones formales, simuladores 3D interactivos y resúmenes de alto impacto para cursos universitarios.
+📍 Clases 1 a 1 online para todo el mundo.
 
-👉 Detalles y sesión diagnóstica gratuita:
+👉 Detalles y sesión diagnóstica gratuita de 15 min:
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`;
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #TutorSTEM`;
 
                         const captionPitchEn = `🚀 Master University Physics & Calculus with Mathematical Rigor & Physical Intuition!
 
 Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
 
 I offer specialized 1-on-1 mentorship designed to bridge the gap between abstract concepts and airtight mathematical proofs:
-🔬 PIAD Method™: From Physical Intuition & Free Body Diagrams to formal derivations
-🔭 14 Interactive 3D Simulators: Hands-on exploration of orbital mechanics, optics, wavefunctions & oscillators
-🎯 Exam Sprint Drills: Step-by-step scoring strategies to capture every partial credit point
+🔬 PIAD Method™: From physical intuition & Free Body Diagrams to formal mathematical derivations
+🔭 Interactive Simulators: Real-time 3D exploration of orbital mechanics, optics, thermodynamics & oscillators
+📚 Targeted Course Summaries: High-yield notes tailored directly to your syllabus and actual exam requirements
 
 👨‍🏫 Mentor: Daniel S. Santander Urrutia
-🎓 Geophysicist (FCFM, Universidad de Chile) • Double M.Sc. (CAU Kiel, Germany)
-📍 Hannover & 1-on-1 Online Worldwide (Fluent English & Spanish)
+🎓 FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland
+📍 1-on-1 Online Worldwide (Fluent English & Spanish)
 
-👉 Book your free 20-minute diagnostic session via link in bio!
+👉 Free 15-minute diagnostic session via link in bio or WhatsApp (+49 176 7649 7440)!
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`;
+#UniversityPhysics #Calculus #LinearAlgebra #PhysicsTutor #STEMEducation #MathTutor`;
 
                         const captionPitchEs = `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
 
-¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
+¿Preparando exámenes universitarios de cálculo diferencial, álgebra lineal o física?
 
-Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y redactar demostraciones impecables:
+Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y aprobar con solidez:
 🔬 Método PIAD™: Desde la intuición visual y diagramas DCL hasta el rigor matemático formal
-🔭 14 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y física cuántica
-🎯 Entrenamiento para Exámenes: Estrategias paso a paso para evitar errores algebraicos y asegurar todo el puntaje parcial
+🔭 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y osciladores
+📚 Resúmenes de Alto Impacto: Apuntes y síntesis enfocados exactamente en las exigencias y pautas de tu curso
 
 👨‍🏫 Tutor: Daniel S. Santander Urrutia
-🎓 Geofísico (FCFM, Universidad de Chile) • Doble Máster en Ciencias (CAU Kiel, Alemania)
-📍 Hannover, Alemania y Clases Online para todo el mundo (100% en Español o Inglés)
+🎓 FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland
+📍 Clases 1-a-1 Online para todo el mundo (100% en Español o Inglés)
 
-👉 Agenda tu sesión diagnóstica gratuita de 20 minutos en el enlace de la bio!
+👉 Sesión diagnóstica gratuita de 15 minutos en el enlace de la bio o WhatsApp (+49 176 7649 7440)!
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`;
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #TutorSTEM`;
 
                         const textToCopy = adminInstaCaptionMode === 'referral'
                           ? (adminInstaLang === 'en' ? captionReferralEn : captionReferralEs)
@@ -4350,25 +4350,25 @@ Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a 
 
 I’m offering private university tutoring (Physics, Calculus, Linear Algebra) and B.Sc. / M.Sc. thesis guidance while I look for a job :) If you know anyone who might need this, let me know!
 
-🔬 Focused on deep physical intuition, rigorous derivations, and 14 interactive 3D physics simulators.
-📍 Available 1-on-1 online worldwide & in-person in Hannover.
+🔬 Focused on deep physical intuition, rigorous derivations, interactive 3D physics simulators, and tailored course summaries.
+📍 Available 1-on-1 online worldwide.
 
-👉 Free 20-min diagnostic & interactive simulators:
+👉 Free 15-min diagnostic & interactive simulators:
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #Hannover #MathTutor`
+#UniversityPhysics #Calculus #PhysicsTutor #ThesisGuidance #STEMEducation #MathTutor`
                       ) : (
                         `¡Hola a todos! 👋
 
 Estoy abriendo cupos para clases particulares universitarias (Física, Cálculo, Álgebra Lineal) y asesoría en tesis de pregrado/máster mientras busco trabajo :) Si saben de alguien a quien le pueda servir, ¡se agradece mucho si le avisan o comparten el dato!
 
-🔬 Enfoque en intuición física profunda, demostraciones formales y 14 simuladores 3D interactivos.
-📍 Clases 1 a 1 online para todo el mundo y presenciales en Hannover.
+🔬 Enfoque en intuición física profunda, demostraciones formales, simuladores 3D interactivos y resúmenes de alto impacto para cursos universitarios.
+📍 Clases 1 a 1 online para todo el mundo.
 
-👉 Detalles y sesión diagnóstica gratuita:
+👉 Detalles y sesión diagnóstica gratuita de 15 min:
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #AsesoriaTesis #Ingenieria #UniversidadDeChile #TutorSTEM`
                       )
                     ) : (
                       adminInstaLang === 'en' ? (
@@ -4377,36 +4377,36 @@ Estoy abriendo cupos para clases particulares universitarias (Física, Cálculo,
 Preparing for high-stakes university exam sessions or IB Higher Level Physics & Math?
 
 I offer specialized 1-on-1 mentorship designed to bridge the gap between abstract concepts and airtight mathematical proofs:
-🔬 PIAD Method™: From Physical Intuition & Free Body Diagrams to formal derivations
-🔭 14 Interactive 3D Simulators: Hands-on exploration of orbital mechanics, optics, wavefunctions & oscillators
-🎯 Exam Sprint Drills: Step-by-step scoring strategies to capture every partial credit point
+🔬 PIAD Method™: From physical intuition & Free Body Diagrams to formal mathematical derivations
+🔭 Interactive Simulators: Real-time 3D exploration of orbital mechanics, optics, thermodynamics & oscillators
+📚 Targeted Course Summaries: High-yield notes tailored directly to your syllabus and actual exam requirements
 
 👨‍🏫 Mentor: Daniel S. Santander Urrutia
-🎓 Geophysicist (FCFM, Universidad de Chile) • Double M.Sc. (CAU Kiel, Germany)
-📍 Hannover & 1-on-1 Online Worldwide (Fluent English & Spanish)
+🎓 FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland
+📍 1-on-1 Online Worldwide (Fluent English & Spanish)
 
-👉 Book your free 20-minute diagnostic session via link in bio!
+👉 Free 15-minute diagnostic session via link in bio or WhatsApp (+49 176 7649 7440)!
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#UniversityPhysics #Calculus #LinearAlgebra #IBPhysics #PhysicsTutor #STEMEducation #Hannover #MathTutor`
+#UniversityPhysics #Calculus #LinearAlgebra #PhysicsTutor #STEMEducation #MathTutor`
                       ) : (
                         `🚀 ¡Domina la Física y el Cálculo Universitario con Rigor Matemático e Intuición Física!
 
-¿Preparando exámenes de grado, cálculo diferencial o física universitaria / IB Higher Level?
+¿Preparando exámenes universitarios de cálculo diferencial, álgebra lineal o física?
 
-Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y redactar demostraciones impecables:
+Te ofrezco mentoría 1-a-1 personalizada enfocada en entender los fundamentos a fondo y aprobar con solidez:
 🔬 Método PIAD™: Desde la intuición visual y diagramas DCL hasta el rigor matemático formal
-🔭 14 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y física cuántica
-🎯 Entrenamiento para Exámenes: Estrategias paso a paso para evitar errores algebraicos y asegurar todo el puntaje parcial
+🔭 Simuladores Interactivos: Laboratorio en tiempo real de mecánica orbital, óptica y osciladores
+📚 Resúmenes de Alto Impacto: Apuntes y síntesis enfocados exactamente en las exigencias y pautas de tu curso
 
 👨‍🏫 Tutor: Daniel S. Santander Urrutia
-🎓 Geofísico (FCFM, Universidad de Chile) • Doble Máster en Ciencias (CAU Kiel, Alemania)
-📍 Hannover, Alemania y Clases Online para todo el mundo (100% en Español o Inglés)
+🎓 FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland
+📍 Clases 1-a-1 Online para todo el mundo (100% en Español o Inglés)
 
-👉 Agenda tu sesión diagnóstica gratuita de 20 minutos en el enlace de la bio!
+👉 Sesión diagnóstica gratuita de 15 minutos en el enlace de la bio o WhatsApp (+49 176 7649 7440)!
 🔗 danisantanderurrutia-coder.github.io/classes
 
-#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #Hannover #TutorSTEM`
+#FisicaUniversitaria #Calculo #AlgebraLineal #ClasesParticulares #Ingenieria #UniversidadDeChile #TutorSTEM`
                       )
                     )}
                   </div>

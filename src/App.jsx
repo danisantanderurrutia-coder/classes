@@ -164,7 +164,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-import { COURSE_FILTER_TABS, ACADEMIC_COURSES, FOUNDATIONAL_BOOKS, WHY_ME_REASONS, COURSE_LAB_MAPPING } from './data/courseCatalog';
+import { COURSE_FILTER_TABS, ACADEMIC_COURSES, FOUNDATIONAL_BOOKS, WHY_ME_REASONS, COURSE_LAB_MAPPING, COURSE_ACADEMIC_GUIDES } from './data/courseCatalog';
 
 const HISPANIC_COUNTRIES = new Set([
   'ES', // Spain
@@ -342,6 +342,7 @@ export default function App() {
   const [modalCourse, setModalCourse] = useState(null);
   const [modalSubmitted, setModalSubmitted] = useState(false);
   const [lastMailtoUrl, setLastMailtoUrl] = useState('');
+  const [selectedCourseForGuide, setSelectedCourseForGuide] = useState(null);
 
   // Discreet Admin Gate Modal State
   const [isAdminAuthOpen, setIsAdminAuthOpen] = useState(false);
@@ -489,6 +490,7 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        if (selectedCourseForGuide) setSelectedCourseForGuide(null);
         if (isModalOpen) setIsModalOpen(false);
         if (isAdminAuthOpen) setIsAdminAuthOpen(false);
       }
@@ -499,7 +501,7 @@ export default function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, isAdminAuthOpen]);
+  }, [isModalOpen, isAdminAuthOpen, selectedCourseForGuide]);
 
   const handleOpenBooking = (course = null, isSpontaneous = false) => {
     setModalCourse(course);
@@ -1747,11 +1749,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
 
                       <div className="pt-2 space-y-2">
                         <button
-                          onClick={() => openLabProblem(COURSE_LAB_MAPPING[course.id] || 'newtonian')}
+                          onClick={() => setSelectedCourseForGuide(course)}
                           className="w-full py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-800 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
                         >
-                          <Compass className="w-3.5 h-3.5 text-sky-600" />
-                          <span>{lang === 'en' ? 'Open Subject Mini-Lab (DCL) →' : 'Ver Mini-Lab de esta Materia (DCL) →'}</span>
+                          <BookOpen className="w-3.5 h-3.5 text-sky-600" />
+                          <span>{lang === 'en' ? 'Course Syllabus & Academic Guide →' : 'Ver Guía Académica y Temario →'}</span>
                         </button>
 
                         <button
@@ -3076,6 +3078,255 @@ Sent from Open Knowledge & Science Mentorship Portal`;
           </div>
         </div>
       )}
+
+      {/* --- MODAL: ACADEMIC COURSE SYLLABUS & GUIDE (2 PAGES MAX, UNIVERSITY CATALOG STYLE, 50/50 POLICY) --- */}
+      {selectedCourseForGuide && (() => {
+        const guide = selectedCourseForGuide.academicGuide || COURSE_ACADEMIC_GUIDES[selectedCourseForGuide.id] || {};
+        const code = guide.courseCode || selectedCourseForGuide.code || 'COURSE';
+        const title = guide.courseTitle || selectedCourseForGuide.titleEn || selectedCourseForGuide.titleEs;
+        const faculty = guide.faculty || selectedCourseForGuide.facultyEn || selectedCourseForGuide.facultyEs;
+        const level = guide.academicLevel || selectedCourseForGuide.badgeEn || 'University Level';
+        const format = guide.format || '1-on-1 Online Mentorship (iPad + LaTeX Whiteboard + Live Problem Solving)';
+        const overview = guide.courseOverview || selectedCourseForGuide.targetEn || selectedCourseForGuide.descriptionEn || '';
+        const prerequisites = guide.prerequisites || 'Introductory calculus and basic physical modeling concepts.';
+        const fiftyFifty = guide.fiftyFiftyPolicy || 'Instruction is structured with a strict 50/50 balance across all sessions: 50% dedicated strictly to the student\'s official university course syllabus, professor lecture slides, official problem sets, and past exams; and 50% powered by proprietary PIAD vector notes, custom-tailored diagnostic drills, and structured step-by-step synthesis sheets.';
+        const modules = guide.modules || [];
+        const piad = guide.piadMethodology || [];
+        const readings = guide.recommendedReadings || [];
+        const notesPolicy = guide.lectureNotesMaterial || 'High-resolution vector Miro PDF exported within 1 hour after each session, complete with color-coded LaTeX equation derivations, free body diagrams, and step-by-step problem templates, backed by direct asynchronous WhatsApp support.';
+
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+            <div
+              onClick={() => setSelectedCourseForGuide(null)}
+              className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"
+            />
+
+            <div className="relative w-full max-w-4xl bg-white border border-slate-200 rounded-3xl shadow-2xl z-10 my-6 sm:my-8 overflow-hidden max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+              {/* Top Banner & Header (University Catalog Style) */}
+              <div className="p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white shrink-0 relative border-b border-slate-700/80">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCourseForGuide(null)}
+                  className="absolute top-5 right-5 w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                  title="Close Guide (Esc)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex flex-wrap items-center gap-2 mb-2 font-mono text-[11px]">
+                  <span className="px-2.5 py-0.5 rounded-md bg-sky-500/20 text-sky-300 border border-sky-400/30 font-bold uppercase tracking-wider">
+                    {code}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-md bg-white/10 text-slate-300 border border-white/15">
+                    {faculty}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">
+                    {level}
+                  </span>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-snug">
+                  {title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 font-mono mt-1 flex items-center gap-2">
+                  <span>🎓</span>
+                  <span>{format}</span>
+                </p>
+              </div>
+
+              {/* Scrollable Document Body (2 pages equivalent) */}
+              <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-800 font-sans leading-relaxed text-sm">
+                
+                {/* 50/50 Dual-Core Academic Balance Banner (Mandatory Across All Courses) */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 space-y-2">
+                  <div className="flex items-center gap-2 text-amber-900 font-bold text-xs sm:text-sm uppercase tracking-wider font-mono">
+                    <span className="text-base">⚖️</span>
+                    <span>Mandatory Academic Policy: 50% Course Syllabus / 50% Proprietary PIAD Notes</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-amber-950/90 leading-relaxed">
+                    {fiftyFifty}
+                  </p>
+                </div>
+
+                {/* Course Overview & Scope */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-sky-800 flex items-center gap-1.5">
+                    <span>📖</span>
+                    <span>Course Overview & What Will Be Taught</span>
+                  </h4>
+                  <p className="text-slate-700 leading-relaxed text-sm">
+                    {overview}
+                  </p>
+                  <div className="pt-1 text-xs text-slate-500 font-mono flex items-center gap-2">
+                    <strong className="text-slate-700">Prerequisites:</strong>
+                    <span>{prerequisites}</span>
+                  </div>
+                </div>
+
+                {/* Modular Curriculum Breakdown (4 Modules) */}
+                {modules.length > 0 && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                        <span>📚</span>
+                        <span>Modular Syllabus & Learning Outcomes (4 Units)</span>
+                      </h4>
+                      <span className="text-[11px] font-mono text-slate-500">University Catalog Standard</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {modules.map((mod) => (
+                        <div
+                          key={mod.number}
+                          className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-sky-300 transition-all space-y-2"
+                        >
+                          <div className="flex items-center gap-2 font-mono text-xs font-bold text-sky-800">
+                            <span className="w-6 h-6 rounded-lg bg-sky-600 text-white flex items-center justify-center text-[11px] shrink-0">
+                              0{mod.number}
+                            </span>
+                            <span className="truncate">{mod.title}</span>
+                          </div>
+                          <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                            {mod.description}
+                          </p>
+                          {mod.competencies && mod.competencies.length > 0 && (
+                            <div className="pt-1 flex flex-wrap gap-1">
+                              {mod.competencies.map((comp, ci) => (
+                                <span
+                                  key={ci}
+                                  className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700"
+                                >
+                                  ✓ {comp}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* PIAD Pedagogical Framework Applied to this Subject */}
+                {piad.length > 0 && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+                        <span>🧭</span>
+                        <span>PIAD Pedagogical Methodology for this Course</span>
+                      </h4>
+                      <span className="text-[11px] font-mono text-indigo-600 font-semibold">4-Phase Learning Protocol</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                      {piad.map((ph) => (
+                        <div
+                          key={ph.phase}
+                          className="p-3 rounded-xl bg-indigo-50/60 border border-indigo-100 space-y-1"
+                        >
+                          <div className="font-mono text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider">
+                            Phase 0{ph.phase}: {ph.name}
+                          </div>
+                          <p className="text-[11px] text-slate-600 font-sans leading-snug">
+                            {ph.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recommended Literature & Textbooks */}
+                {readings.length > 0 && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                        <span>📚</span>
+                        <span>Recommended Literature & Standard University Textbooks</span>
+                      </h4>
+                      <span className="text-[11px] font-mono text-slate-500">Curated Bibliography</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {readings.map((book, bi) => (
+                        <div
+                          key={bi}
+                          className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-2"
+                        >
+                          <div>
+                            <div className="text-xs font-bold text-slate-900 leading-snug">
+                              {book.title}
+                            </div>
+                            <div className="text-[11px] font-mono text-slate-600 mt-1">
+                              by {book.author}
+                            </div>
+                            <div className="text-[10px] font-mono text-sky-700 mt-0.5">
+                              {book.edition}
+                            </div>
+                          </div>
+                          <p className="text-[11px] text-slate-500 italic font-sans border-t border-slate-200/80 pt-1.5">
+                            {book.scope}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Lecture Notes & Post-Session Deliverables */}
+                <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-2">
+                  <div className="flex items-center gap-2 font-mono text-xs font-bold text-sky-400 uppercase tracking-wider">
+                    <span>⚡</span>
+                    <span>Lecture Notes & Post-Session Open Deliverables</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    {notesPolicy}
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Bottom Fixed Action Bar */}
+              <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 shrink-0 flex flex-wrap items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCourseForGuide(null)}
+                  className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-mono text-xs font-semibold cursor-pointer transition-all"
+                >
+                  Close Guide
+                </button>
+
+                <div className="flex items-center gap-2.5">
+                  <a
+                    href="https://wa.me/4915223030386?text=Hi%20Daniel,%20I%20am%20interested%20in%20the%20academic%20mentorship%20program%20for%20this%20course."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                  >
+                    <span>💬</span>
+                    <span>Inquire via WhatsApp</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const courseToBook = selectedCourseForGuide;
+                      setSelectedCourseForGuide(null);
+                      handleOpenBooking(courseToBook);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Request Free 15-Min Diagnostic Call →</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        );
+      })()}
 
       {/* --- MODAL: BOOKING & DIAGNOSTIC REQUEST (PROGRAMMED TO EMAIL DANISANTANDER.URRUTIA@GMAIL.COM) --- */}
       {isModalOpen && (

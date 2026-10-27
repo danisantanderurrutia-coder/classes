@@ -790,4 +790,15 @@ export const COURSE_LAB_MAPPING = {
   curious_minds: 'intro_physics'
 };
 
+import { COURSE_ACADEMIC_GUIDES } from './courseAcademicGuides';
+export { COURSE_ACADEMIC_GUIDES };
+
+// Attach academicGuide to all ACADEMIC_COURSES
+ACADEMIC_COURSES.forEach((c) => {
+  if (COURSE_ACADEMIC_GUIDES[c.id]) {
+    c.academicGuide = COURSE_ACADEMIC_GUIDES[c.id];
+  }
+});
+
+
 // Official Spanish-speaking countries (ISO 3166-1 alpha-2)

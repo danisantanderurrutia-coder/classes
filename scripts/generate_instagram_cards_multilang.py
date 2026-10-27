@@ -165,8 +165,8 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
 
     f_phi_badge = ImageFont.truetype(font_serif, 32)
     f_card_tag = ImageFont.truetype(font_bold, 28, index=1)
-    f_card_title = ImageFont.truetype(font_bold, 40, index=1)
-    f_card_desc = ImageFont.truetype(font_bold, 27, index=0)
+    f_card_title = ImageFont.truetype(font_bold, 38, index=1)
+    f_card_desc = ImageFont.truetype(font_bold, 26, index=0)
 
     f_cta_bold = ImageFont.truetype(font_bold, 48, index=1)
     f_cta_sub = ImageFont.truetype(font_bold, 32, index=0)
@@ -180,6 +180,15 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
         creds_title = "DOBLE M.SC. & GEOFÍSICO"
         uni_text = "FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland"
         loc_text = "📍 Online Worldwide"
+        
+        # Left card text directly beneath the DCL simulation
+        left_sim_card = {
+            "tag": "SIMULADORES INTERACTIVOS",
+            "title": "Laboratorio en Tiempo Real",
+            "desc": "Diagramas de Cuerpo Libre (DCL), mecánica orbital, osciladores y óptica con simulación interactiva paso a paso."
+        }
+        
+        # 3 Right column features
         features = [
             {
                 "tag": "MÉTODO PIAD™",
@@ -189,24 +198,23 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
                 "tag_color": (56, 189, 248)
             },
             {
-                "tag": "SIMULADORES INTERACTIVOS",
-                "title": "Laboratorio de Física en Tiempo Real",
-                "desc": "Mecánica orbital, osciladores, óptica, termodinámica y ondas con simulación interactiva paso a paso.",
-                "border": (168, 85, 247, 140),
-                "tag_color": (192, 132, 252)
-            },
-            {
                 "tag": "RESÚMENES DE ALTO IMPACTO",
                 "title": "Apuntes Clave & Enfoque de Examen",
                 "desc": "Acceso a resúmenes increíbles y apuntes de alto impacto, enfocados exactamente en los contenidos y necesidades reales de tu curso.",
                 "border": (245, 158, 11, 140),
                 "tag_color": (251, 191, 36)
+            },
+            {
+                "tag": "RESOLUCIÓN DE CERTÁMENES",
+                "title": "Pautas Reales & Apuntes Vectoriales",
+                "desc": "Entrenamiento directo en problemas de certámenes universitarios con pizarra interactiva Miro y entrega de apuntes PDF vectoriales.",
+                "border": (168, 85, 247, 140),
+                "tag_color": (192, 132, 252)
             }
         ]
         subjects_text = "Cálculo Diferencial & Integral  •  Álgebra Lineal  •  Física  •  Mecánica Clásica  •  Electromagnetismo"
         cta_main = "SESIÓN DIAGNÓSTICA GRATUITA (15 MIN) ➔"
         cta_sub = "100% en Español o Inglés  •  WhatsApp: +49 176 7649 7440  •  DM por interno"
-        sim_badge = "DIAGRAMA DE CUERPO LIBRE & DINÁMICA"
     else:
         pill_text = "★  UNIVERSITY EXAM PREPARATION & IB CANDIDATES  ★"
         title_part1 = "MATH & PHYSICS "
@@ -215,6 +223,15 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
         creds_title = "DOUBLE M.SC. & GEOPHYSICIST"
         uni_text = "FCFM Universidad de Chile, CAU Kiel Germany, AMU Poznan Poland"
         loc_text = "📍 Online Worldwide"
+
+        # Left card text directly beneath the DCL simulation
+        left_sim_card = {
+            "tag": "INTERACTIVE SIMULATORS",
+            "title": "Real-Time 3D Physics Lab",
+            "desc": "Hands-on Free Body Diagrams (DCL), orbital mechanics, harmonic oscillators, optics, and wave dynamics in real time."
+        }
+
+        # 3 Right column features
         features = [
             {
                 "tag": "PIAD METHOD™",
@@ -224,24 +241,23 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
                 "tag_color": (56, 189, 248)
             },
             {
-                "tag": "INTERACTIVE SIMULATORS",
-                "title": "Real-Time 3D Physics Lab",
-                "desc": "Hands-on orbital mechanics, harmonic oscillators, optics, thermodynamics, and wavefunctions in real time.",
-                "border": (168, 85, 247, 140),
-                "tag_color": (192, 132, 252)
-            },
-            {
                 "tag": "TARGETED COURSE SUMMARIES",
                 "title": "Tailored Notes & Exam Focus",
                 "desc": "Access amazing, high-yield summary notes specifically targeted to your course syllabus, past exams, and real grading requirements.",
                 "border": (245, 158, 11, 140),
                 "tag_color": (251, 191, 36)
+            },
+            {
+                "tag": "EXAM-FOCUSED PROBLEM SOLVING",
+                "title": "Past Papers & Vector PDF Notes",
+                "desc": "Step-by-step solutions to university exam problems on collaborative Miro whiteboards, with full vector PDF notes delivered after class.",
+                "border": (168, 85, 247, 140),
+                "tag_color": (192, 132, 252)
             }
         ]
         subjects_text = "Calculus  •  Linear Algebra  •  Physics  •  Classical Mechanics  •  Electromagnetism"
         cta_main = "FREE 15-MIN DIAGNOSTIC SESSION ➔"
         cta_sub = "Fluent English & Spanish  •  Direct WhatsApp: +49 176 7649 7440  •  DM for Inquiries"
-        sim_badge = "FREE BODY DIAGRAM & INCLINE DYNAMICS"
 
     # --- TOP HEADER ---
     bbox_pill = draw.textbbox((0, 0), pill_text, font=f_badge)
@@ -268,9 +284,9 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
     col_l_x = 130
     col_l_w = 880
     
-    # 1. Left Card: Featured Interactive Lab Visual Showcase
+    # 1. Left Card: Featured Interactive Simulators Showcase (Image + Explanatory Card)
     box_sim = [(col_l_x, 430), (col_l_x + col_l_w, 1070)]
-    draw_card_box(draw, box_sim, fill=(10, 18, 38, 235), border=(56, 189, 248, 120), radius=44, width=2)
+    draw_card_box(draw, box_sim, fill=(10, 18, 38, 235), border=(56, 189, 248, 140), radius=44, width=2)
 
     # Embed DCL Incline with Spring illustration
     lab_img_path = 'public/emblems/dcl_incline_spring.jpg'
@@ -280,23 +296,24 @@ def generate_card(lang='en', filename='public/instagram_post_en.jpg'):
 
     if os.path.exists(lab_img_path):
         l_img = Image.open(lab_img_path).convert('RGBA')
-        l_w, l_h = col_l_w - 40, 480
+        l_w, l_h = col_l_w - 40, 390
         l_img = ImageOps.fit(l_img, (l_w, l_h), method=Image.Resampling.LANCZOS)
         
         # Rounded mask for image
         l_mask = Image.new('L', (l_w, l_h), 0)
         d_lmask = ImageDraw.Draw(l_mask)
-        d_lmask.rounded_rectangle([(0, 0), (l_w, l_h)], radius=32, fill=255)
+        d_lmask.rounded_rectangle([(0, 0), (l_w, l_h)], radius=28, fill=255)
         
         base.paste(l_img, (col_l_x + 20, 450), l_mask)
-        draw.rounded_rectangle([(col_l_x + 20, 450), (col_l_x + 20 + l_w, 450 + l_h)], radius=32, outline=(56, 189, 248, 100), width=2)
+        draw.rounded_rectangle([(col_l_x + 20, 450), (col_l_x + 20 + l_w, 450 + l_h)], radius=28, outline=(56, 189, 248, 120), width=2)
 
-    # Simulation badge & caption
-    draw.rounded_rectangle([(col_l_x + 40, 955), (col_l_x + col_l_w - 40, 1045)], radius=22, fill=(15, 23, 42, 235), outline=(56, 189, 248, 180), width=2)
-    bbox_simb = draw.textbbox((0, 0), sim_badge, font=f_creds_title)
-    draw.text((col_l_x + (col_l_w - (bbox_simb[2] - bbox_simb[0])) // 2, 985), sim_badge, font=f_creds_title, fill=(56, 189, 248))
+    # Interactive Simulators Card content directly beneath the DCL image:
+    draw.text((col_l_x + 35, 860), left_sim_card["tag"], font=f_card_tag, fill=(56, 189, 248))
+    draw.text((col_l_x + 35, 902), left_sim_card["title"], font=f_card_title, fill=(255, 255, 255))
+    wrapped_sim_desc = wrap_text(left_sim_card["desc"], col_l_w - 70, f_card_desc, draw)
+    draw.multiline_text((col_l_x + 35, 955), wrapped_sim_desc, font=f_card_desc, fill=(203, 213, 225), spacing=6)
 
-    # 2. Compact Tutor Profile Card (Small on border/corner as requested!)
+    # 2. Compact Tutor Profile Card (Small on border/corner)
     box_prof = [(col_l_x, 1100), (col_l_x + col_l_w, 1420)]
     draw_card_box(draw, box_prof, fill=(15, 23, 42, 235), border=(56, 189, 248, 90), radius=44, width=2)
 

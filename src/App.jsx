@@ -342,6 +342,9 @@ export default function App() {
   const [modalCourse, setModalCourse] = useState(null);
   const [modalSubmitted, setModalSubmitted] = useState(false);
   const [lastMailtoUrl, setLastMailtoUrl] = useState('');
+  const [lastGmailUrl, setLastGmailUrl] = useState('');
+  const [lastBodyText, setLastBodyText] = useState('');
+  const [copiedEmailText, setCopiedEmailText] = useState(false);
   const [selectedCourseForGuide, setSelectedCourseForGuide] = useState(null);
 
   // Discreet Admin Gate Modal State
@@ -544,8 +547,36 @@ ${bookingData.notes || 'None provided'}
 Sent from Open Knowledge & Science Mentorship Portal`;
 
     const mailto = `mailto:danisantander.urrutia@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=danisantander.urrutia@gmail.com&su=${subject}&body=${encodeURIComponent(bodyText)}`;
     setLastMailtoUrl(mailto);
+    setLastGmailUrl(gmailUrl);
+    setLastBodyText(bodyText);
+    setCopiedEmailText(false);
     setModalSubmitted(true);
+
+    try {
+      // Also register lead into local CRM storage so it shows in Admin Hub
+      const existingLeadsRaw = localStorage.getItem('ds_admin_leads_v3');
+      const existingLeads = existingLeadsRaw ? JSON.parse(existingLeadsRaw) : [];
+      const newLead = {
+        id: `lead-${Date.now()}`,
+        name: bookingData.name || 'Web Applicant',
+        subject: bookingData.courseCode || 'Diagnostic / General Mentorship',
+        university: bookingData.university || 'Not specified',
+        countryCurrency: currency || 'EUR',
+        mode: bookingData.deliveryMode || 'Online 1-on-1',
+        quotedRate: 'Standard',
+        hoursTotal: 8,
+        hoursCompleted: 0,
+        paymentStatus: 'pending',
+        paymentMethod: 'Pending Selection',
+        contact: `${bookingData.phone || 'No phone'} • ${bookingData.email || 'No email'}`,
+        status: 'New Inquiry',
+        notes: `Submitted via Web Form on ${new Date().toLocaleDateString()}.\nLanguage: ${bookingData.languagePref}\nNotes: ${bookingData.notes || 'None'}`
+      };
+      const updated = [newLead, ...(Array.isArray(existingLeads) ? existingLeads : [])];
+      localStorage.setItem('ds_admin_leads_v3', JSON.stringify(updated));
+    } catch (err) {}
 
     try {
       confetti({
@@ -3553,11 +3584,23 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     : 'Tu solicitud ha sido formulada para danisantander.urrutia@gmail.com. Si tu cliente de correo no se abrió automáticamente, haz clic abajo:'}
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
+                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+                  {lastGmailUrl && (
+                    <a
+                      href={lastGmailUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-xs"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? 'Open in Gmail Web' : 'Abrir en Gmail Web'}</span>
+                    </a>
+                  )}
+
                   {lastMailtoUrl && (
                     <a
                       href={lastMailtoUrl}
-                      className="px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-xs font-mono font-bold flex items-center gap-1.5"
+                      className="px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-xs"
                     >
                       <Mail className="w-3.5 h-3.5" />
                       <span>{lang === 'en' ? 'Open in Mail Client' : 'Abrir en Cliente de Correo'}</span>
@@ -3568,11 +3611,28 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Knowledge & Science Mentorship'}. My name is ${bookingData.name}.`)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-xs"
                   >
                     <Phone className="w-3.5 h-3.5" />
                     <span>{lang === 'en' ? 'Send on WhatsApp' : 'Enviar por WhatsApp'}</span>
                   </a>
+
+                  {lastBodyText && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try {
+                          navigator.clipboard.writeText(lastBodyText);
+                          setCopiedEmailText(true);
+                          setTimeout(() => setCopiedEmailText(false), 2500);
+                        } catch {}
+                      }}
+                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      {copiedEmailText ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedEmailText ? (lang === 'en' ? 'Copied!' : '¡Copiado!') : (lang === 'en' ? 'Copy Text' : 'Copiar Texto')}</span>
+                    </button>
+                  )}
                 </div>
 
                 <div className="pt-2">

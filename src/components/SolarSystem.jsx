@@ -3995,7 +3995,7 @@ export default function SolarSystem({
                 }`}
               >
                 <span>📚</span>
-                <span>Course Overview</span>
+                <span>{lang === 'en' ? 'Course Overview' : 'Resumen del Curso'}</span>
               </button>
               <button
                 onClick={() => setActiveDossierTab('celestial')}
@@ -4006,7 +4006,7 @@ export default function SolarSystem({
                 }`}
               >
                 <span>🪐</span>
-                <span>View info on {planetName}</span>
+                <span>{lang === 'en' ? `View info on ${planetName}` : `Ver info de ${planetName}`}</span>
               </button>
             </div>
 
@@ -4019,7 +4019,7 @@ export default function SolarSystem({
                 className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-mono text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span>←</span>
-                <span>Back to Panoramic Lineup</span>
+                <span>{lang === 'en' ? 'Back to Panoramic Lineup' : 'Volver a la Fila de Astros'}</span>
               </button>
             )}
           </div>
@@ -4036,7 +4036,7 @@ export default function SolarSystem({
                   <div className="space-y-2">
                     <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                       <span>✓</span>
-                      <span>Topics Covered in Mentorship:</span>
+                      <span>{lang === 'en' ? 'Topics Covered in Mentorship:' : 'Temas que Cubrimos en la Mentoría:'}</span>
                     </div>
                     <div className={`grid grid-cols-1 ${isCompact ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'} gap-2`}>
                       {syllabusList.map((topic, idx) => (
@@ -4055,7 +4055,7 @@ export default function SolarSystem({
                 {skriptKeywords.length > 0 && (
                   <div className="pt-1 flex flex-wrap items-center gap-1.5">
                     <span className="text-[10px] font-mono text-slate-400 uppercase mr-1">
-                      Core Concepts:
+                      {lang === 'en' ? 'Core Concepts:' : 'Conceptos Clave:'}
                     </span>
                     {skriptKeywords.map((kw, i) => (
                       <span
@@ -4074,10 +4074,10 @@ export default function SolarSystem({
                     <span className="text-xl">{activePlanet.emoji || '🪐'}</span>
                     <div>
                       <span className="text-xs font-bold text-white block">
-                        Celestial Body: {planetName}
+                        {lang === 'en' ? `Celestial Body: ${planetName}` : `Cuerpo Celeste: ${planetName}`}
                       </span>
                       <span className="text-[11px] text-slate-400">
-                        Astrophysical parameters, orbit, gravity & composition.
+                        {lang === 'en' ? 'Astrophysical parameters, orbit, gravity & composition.' : 'Parámetros astrofísicos, órbita, gravedad y composición.'}
                       </span>
                     </div>
                   </div>
@@ -4086,13 +4086,13 @@ export default function SolarSystem({
                     className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5"
                   >
                     <span>🪐</span>
-                    <span>View info on {planetName} →</span>
+                    <span>{lang === 'en' ? `View info on ${planetName} →` : `Ver info de ${planetName} →`}</span>
                   </button>
                 </div>
 
                 <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-400 font-sans">
-                    <span>🎯 1-on-1 Online Mentorship (iPad + LaTeX whiteboard + live code)</span>
+                    <span>{lang === 'en' ? '🎯 1-on-1 Online Mentorship (iPad + LaTeX whiteboard + live code)' : '🎯 Mentoría 1-a-1 Online (iPad + pizarra LaTeX + código en vivo)'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -4106,7 +4106,7 @@ export default function SolarSystem({
                       }}
                       className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs font-semibold transition-all cursor-pointer"
                     >
-                      Full Course Catalog →
+                      {lang === 'en' ? 'Full Course Catalog →' : 'Ver Catálogo Completo →'}
                     </button>
                     <button
                       onClick={() => {
@@ -4118,7 +4118,7 @@ export default function SolarSystem({
                       }}
                       className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
                     >
-                      Schedule 1-on-1 Session →
+                      {lang === 'en' ? 'Schedule 1-on-1 Session →' : 'Agendar Mentoría 1-a-1 →'}
                     </button>
                   </div>
                 </div>
@@ -4132,69 +4132,93 @@ export default function SolarSystem({
                     <span>{activePlanet.emoji || '🪐'}</span>
                     <span>{planetName}</span>
                     <span className="text-xs font-normal text-slate-400 font-sans">
-                      ({activePlanet.spectralClass || 'Celestial Body'})
+                      ({activePlanet.spectralClass || (lang === 'en' ? 'Celestial Body' : 'Cuerpo Celeste')})
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-400 font-mono">
-                    Solar System Body
+                    {lang === 'en' ? 'Solar System Body' : 'Cuerpo del Sistema Solar'}
                   </div>
                 </div>
 
-                {activePlanet.descriptionEn && (
+                {(lang === 'en' ? activePlanet.descriptionEn : (activePlanet.descriptionEs || activePlanet.descriptionEn)) && (
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                    {activePlanet.descriptionEn}
+                    {lang === 'en' ? activePlanet.descriptionEn : (activePlanet.descriptionEs || activePlanet.descriptionEn)}
                   </p>
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-mono text-xs">
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Distance from Sun (Semi-Major Axis)</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Distance from Sun (Semi-Major Axis)' : 'Distancia al Sol (Semieje Mayor)'}
+                    </span>
                     <div className="text-sm font-bold text-white">
                       {activePlanet.semiMajorAxisAU || `${liveTelemetry.rAU} AU`}
                     </div>
-                    <div className="text-[10px] text-slate-500">~{astroData.r_millionKm} million km</div>
+                    <div className="text-[10px] text-slate-500">
+                      {lang === 'en' ? `~${astroData.r_millionKm} million km` : `~${astroData.r_millionKm} millones de km`}
+                    </div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Orbital Period & Speed</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Orbital Period & Speed' : 'Periodo y Velocidad Orbital'}
+                    </span>
                     <div className="text-sm font-bold text-emerald-400">
                       {activePlanet.orbitalSpeedKms || `${liveTelemetry.velKms} km/s`}
                     </div>
-                    <div className="text-[10px] text-slate-400">Period: {activePlanet.orbitalPeriod || 'N/A'}</div>
+                    <div className="text-[10px] text-slate-400">
+                      {lang === 'en' ? `Period: ${activePlanet.orbitalPeriod || 'N/A'}` : `Periodo: ${activePlanet.orbitalPeriod || 'N/A'}`}
+                    </div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Surface Gravity & Mass</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Surface Gravity & Mass' : 'Gravedad Superficial y Masa'}
+                    </span>
                     <div className="text-sm font-bold text-sky-400">
                       {activePlanet.surfaceGravityMs2 ? `${activePlanet.surfaceGravityMs2} m/s²` : 'N/A'}
                     </div>
                     <div className="text-[10px] text-slate-400">
-                      Mass: {activePlanet.massKg ? `${activePlanet.massKg.toExponential(2)} kg` : 'N/A'}
+                      {lang === 'en'
+                        ? `Mass: ${activePlanet.massKg ? activePlanet.massKg.toExponential(2) + ' kg' : 'N/A'}`
+                        : `Masa: ${activePlanet.massKg ? activePlanet.massKg.toExponential(2) + ' kg' : 'N/A'}`}
                     </div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Escape Velocity</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Escape Velocity' : 'Velocidad de Escape'}
+                    </span>
                     <div className="text-sm font-bold text-amber-300">
                       {activePlanet.escapeVelocityKms ? `${activePlanet.escapeVelocityKms} km/s` : `${astroData.v_escapeKms} km/s`}
                     </div>
-                    <div className="text-[10px] text-slate-500">Gravitational potential threshold</div>
+                    <div className="text-[10px] text-slate-500">
+                      {lang === 'en' ? 'Gravitational potential threshold' : 'Umbral de potencial gravitatorio'}
+                    </div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Surface Temperature</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Surface Temperature' : 'Temperatura Superficial'}
+                    </span>
                     <div className="text-sm font-bold text-white">
                       {activePlanet.temperatureK || 'N/A'}
                     </div>
-                    <div className="text-[10px] text-slate-500">Thermal equilibrium range</div>
+                    <div className="text-[10px] text-slate-500">
+                      {lang === 'en' ? 'Thermal equilibrium range' : 'Rango de equilibrio térmico'}
+                    </div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold block">Magnetic Field</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold block">
+                      {lang === 'en' ? 'Magnetic Field' : 'Campo Magnético'}
+                    </span>
                     <div className="text-sm font-bold text-rose-300">
-                      {activePlanet.magneticFieldTesla || 'Negligible (< 10⁻⁹ T)'}
+                      {activePlanet.magneticFieldTesla || (lang === 'en' ? 'Negligible (< 10⁻⁹ T)' : 'Inapreciable (< 10⁻⁹ T)')}
                     </div>
-                    <div className="text-[10px] text-slate-500">Dipole / magnetosphere presence</div>
+                    <div className="text-[10px] text-slate-500">
+                      {lang === 'en' ? 'Dipole / magnetosphere presence' : 'Presencia de dipolo o magnetósfera'}
+                    </div>
                   </div>
                 </div>
 
@@ -4204,7 +4228,7 @@ export default function SolarSystem({
                     className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-sky-300 font-mono text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
                   >
                     <span>←</span>
-                    <span>Back to Course Information</span>
+                    <span>{lang === 'en' ? 'Back to Course Information' : 'Volver a Información del Curso'}</span>
                   </button>
                   <button
                     onClick={() => {
@@ -4216,7 +4240,7 @@ export default function SolarSystem({
                     }}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
                   >
-                    Schedule 1-on-1 Session →
+                    {lang === 'en' ? 'Schedule 1-on-1 Session →' : 'Agendar Mentoría 1-a-1 →'}
                   </button>
                 </div>
               </div>

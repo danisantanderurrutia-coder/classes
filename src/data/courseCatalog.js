@@ -790,7 +790,7 @@ export const COURSE_LAB_MAPPING = {
   curious_minds: 'intro_physics'
 };
 
-import { COURSE_ACADEMIC_GUIDES } from './courseAcademicGuides';
+import { COURSE_ACADEMIC_GUIDES } from './courseAcademicGuides.js';
 export { COURSE_ACADEMIC_GUIDES };
 
 // Attach academicGuide to all ACADEMIC_COURSES

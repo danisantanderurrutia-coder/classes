@@ -520,12 +520,15 @@ export default function App() {
   // Form Submit Handler with automatic email trigger to danisantander.urrutia@gmail.com
   const handleBookingSubmit = (e) => {
     e.preventDefault();
+    const isEn = lang === 'en';
 
     const subject = encodeURIComponent(
-      `[Open Knowledge & Science Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
+      isEn
+        ? `[Open Knowledge & Science Mentorship] ${bookingData.courseCode || 'Diagnostic Call'} - ${bookingData.name}`
+        : `[Mentoría Open Knowledge & Science] ${bookingData.courseCode || 'Llamada de Diagnóstico'} - ${bookingData.name}`
     );
-    const bodyText = 
-`Hi Daniel,
+    const bodyText = isEn
+      ? `Hi Daniel,
 
 I am requesting an Open Knowledge & Science Mentorship session.
 
@@ -544,7 +547,27 @@ Target Exam Date / Deadline: ${bookingData.targetDate || 'Not specified'}
 --- QUESTIONS / BOTTLENECKS ---
 ${bookingData.notes || 'None provided'}
 
-Sent from Open Knowledge & Science Mentorship Portal`;
+Sent from Open Knowledge & Science Mentorship Portal`
+      : `Hola Daniel,
+
+Solicito una sesión de Mentoría de Open Knowledge & Science.
+
+--- DETALLES DEL ESTUDIANTE ---
+Nombre: ${bookingData.name}
+Email: ${bookingData.email}
+Teléfono / WhatsApp: ${bookingData.phone || 'No especificado'}
+Universidad / Centro de Estudios: ${bookingData.university}
+Curso / Módulo Seleccionado: ${bookingData.courseCode || 'Diagnóstico / Mentoría General'}
+Tipo de Sesión: ${bookingData.sessionType}
+Modalidad: ${bookingData.deliveryMode}${bookingData.deliveryMode.includes('Hannover') ? ' (Nota: Presencial incluye suplemento de desplazamiento)' : ''}
+Moneda Preferida: ${currency}${detectedCountry ? ` (País: ${detectedCountry})` : ''}
+Preferencia de Idioma: ${bookingData.languagePref}
+Fecha Objetivo de Examen / Plazo: ${bookingData.targetDate || 'No especificado'}
+
+--- PREGUNTAS / DUDAS / CUELLOS DE BOTELLA ---
+${bookingData.notes || 'Ninguna indicada'}
+
+Enviado desde el Portal de Mentoría Open Knowledge & Science`;
 
     const mailto = `mailto:danisantander.urrutia@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=danisantander.urrutia@gmail.com&su=${subject}&body=${encodeURIComponent(bodyText)}`;
@@ -3114,17 +3137,40 @@ Sent from Open Knowledge & Science Mentorship Portal`;
       {selectedCourseForGuide && (() => {
         const guide = selectedCourseForGuide.academicGuide || COURSE_ACADEMIC_GUIDES[selectedCourseForGuide.id] || {};
         const code = guide.courseCode || selectedCourseForGuide.code || 'COURSE';
-        const title = guide.courseTitle || selectedCourseForGuide.titleEn || selectedCourseForGuide.titleEs;
-        const faculty = guide.faculty || selectedCourseForGuide.facultyEn || selectedCourseForGuide.facultyEs;
-        const level = guide.academicLevel || selectedCourseForGuide.badgeEn || 'University Level';
-        const format = guide.format || '1-on-1 Online Mentorship (iPad + LaTeX Whiteboard + Live Problem Solving)';
-        const overview = guide.courseOverview || selectedCourseForGuide.targetEn || selectedCourseForGuide.descriptionEn || '';
-        const prerequisites = guide.prerequisites || 'Introductory calculus and basic physical modeling concepts.';
-        const fiftyFifty = guide.fiftyFiftyPolicy || 'Instruction is structured with a strict 50/50 balance across all sessions: 50% dedicated strictly to the student\'s official university course syllabus, professor lecture slides, official problem sets, and past exams; and 50% powered by proprietary PIAD vector notes, custom-tailored diagnostic drills, and structured step-by-step synthesis sheets.';
-        const modules = guide.modules || [];
-        const piad = guide.piadMethodology || [];
-        const readings = guide.recommendedReadings || [];
-        const notesPolicy = guide.lectureNotesMaterial || 'High-resolution vector Miro PDF exported within 1 hour after each session, complete with color-coded LaTeX equation derivations, free body diagrams, and step-by-step problem templates, backed by direct asynchronous WhatsApp support.';
+        const isEn = lang === 'en';
+        const title = isEn
+          ? (guide.courseTitleEn || guide.courseTitle || selectedCourseForGuide.titleEn)
+          : (guide.courseTitleEs || guide.courseTitle || selectedCourseForGuide.titleEs);
+        const faculty = isEn
+          ? (guide.facultyEn || guide.faculty || selectedCourseForGuide.facultyEn)
+          : (guide.facultyEs || guide.faculty || selectedCourseForGuide.facultyEs);
+        const level = isEn
+          ? (guide.academicLevelEn || guide.academicLevel || selectedCourseForGuide.badgeEn || 'University Level')
+          : (guide.academicLevelEs || guide.academicLevel || selectedCourseForGuide.badgeEs || 'Nivel Universitario');
+        const format = isEn
+          ? (guide.formatEn || guide.format || '1-on-1 Online Mentorship (iPad + LaTeX Whiteboard + Live Problem Solving)')
+          : (guide.formatEs || guide.format || 'Mentoría Online 1-a-1 (iPad + Pizarra LaTeX + Resolución de Problemas en Vivo)');
+        const overview = isEn
+          ? (guide.courseOverviewEn || guide.courseOverview || selectedCourseForGuide.targetEn || selectedCourseForGuide.descriptionEn || '')
+          : (guide.courseOverviewEs || guide.courseOverview || selectedCourseForGuide.targetEs || selectedCourseForGuide.descriptionEs || '');
+        const prerequisites = isEn
+          ? (guide.prerequisitesEn || guide.prerequisites || 'Introductory calculus and basic physical modeling concepts.')
+          : (guide.prerequisitesEs || guide.prerequisites || 'Cálculo diferencial/integral elemental y nociones básicas de modelado.');
+        const fiftyFifty = isEn
+          ? (guide.fiftyFiftyPolicyEn || guide.fiftyFiftyPolicy || 'Instruction is structured with a strict 50/50 balance across all sessions: 50% dedicated strictly to the student\'s official university course syllabus, professor lecture slides, official problem sets, and past exams; and 50% powered by proprietary PIAD vector notes, custom-tailored diagnostic drills, and structured step-by-step synthesis sheets.')
+          : (guide.fiftyFiftyPolicyEs || guide.fiftyFiftyPolicy || 'La enseñanza se estructura con un equilibrio estricto del 50/50 en todas las sesiones: 50% dedicado estrictamente al programa oficial de la universidad del estudiante, diapositivas del profesor, guías de ejercicios y exámenes anteriores; y 50% impulsado por apuntes vectoriales propietarios PIAD, ejercicios de diagnóstico a medida y hojas de síntesis paso a paso.');
+        const modules = isEn
+          ? (guide.modulesEn || guide.modules || [])
+          : (guide.modulesEs || guide.modules || []);
+        const piad = isEn
+          ? (guide.piadMethodologyEn || guide.piadMethodology || [])
+          : (guide.piadMethodologyEs || guide.piadMethodology || []);
+        const readings = isEn
+          ? (guide.recommendedReadingsEn || guide.recommendedReadings || [])
+          : (guide.recommendedReadingsEs || guide.recommendedReadings || []);
+        const notesPolicy = isEn
+          ? (guide.lectureNotesMaterialEn || guide.lectureNotesMaterial || 'High-resolution vector Miro PDF exported within 1 hour after each session, complete with color-coded LaTeX equation derivations, free body diagrams, and step-by-step problem templates, backed by direct asynchronous WhatsApp support.')
+          : (guide.lectureNotesMaterialEs || guide.lectureNotesMaterial || 'PDF vectorial de alta resolución en Miro exportado en menos de 1 hora tras cada sesión, con deducciones en LaTeX codificadas por colores, diagramas de cuerpo libre y plantillas de resolución paso a paso, respaldado por soporte asíncrono vía WhatsApp.');
 
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
@@ -3140,7 +3186,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   type="button"
                   onClick={() => setSelectedCourseForGuide(null)}
                   className="absolute top-5 right-5 w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-                  title="Close Guide (Esc)"
+                  title={isEn ? "Close Guide (Esc)" : "Cerrar Guía (Esc)"}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -3173,7 +3219,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 space-y-2">
                   <div className="flex items-center gap-2 text-amber-900 font-bold text-xs sm:text-sm uppercase tracking-wider font-mono">
                     <span className="text-base">⚖️</span>
-                    <span>Mandatory Academic Policy: 50% Course Syllabus / 50% Proprietary PIAD Notes</span>
+                    <span>
+                      {isEn
+                        ? 'Mandatory Academic Policy: 50% Course Syllabus / 50% Proprietary PIAD Notes'
+                        : 'Política Académica Obligatoria: 50% Programa del Curso / 50% Material Propio PIAD'}
+                    </span>
                   </div>
                   <p className="text-xs sm:text-sm text-amber-950/90 leading-relaxed">
                     {fiftyFifty}
@@ -3184,13 +3234,17 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 <div className="space-y-2">
                   <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-sky-800 flex items-center gap-1.5">
                     <span>📖</span>
-                    <span>Course Overview & What Will Be Taught</span>
+                    <span>
+                      {isEn ? 'Course Overview & What Will Be Taught' : 'Resumen del Curso y Contenidos a Impartir'}
+                    </span>
                   </h4>
                   <p className="text-slate-700 leading-relaxed text-sm">
                     {overview}
                   </p>
                   <div className="pt-1 text-xs text-slate-500 font-mono flex items-center gap-2">
-                    <strong className="text-slate-700">Prerequisites:</strong>
+                    <strong className="text-slate-700">
+                      {isEn ? 'Prerequisites:' : 'Prerrequisitos:'}
+                    </strong>
                     <span>{prerequisites}</span>
                   </div>
                 </div>
@@ -3201,9 +3255,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                         <span>📚</span>
-                        <span>Modular Syllabus & Learning Outcomes (4 Units)</span>
+                        <span>
+                          {isEn
+                            ? 'Modular Syllabus & Learning Outcomes (4 Units)'
+                            : 'Temario Modular y Objetivos de Aprendizaje (4 Unidades)'}
+                        </span>
                       </h4>
-                      <span className="text-[11px] font-mono text-slate-500">University Catalog Standard</span>
+                      <span className="text-[11px] font-mono text-slate-500">
+                        {isEn ? 'University Catalog Standard' : 'Estándar de Catálogo Universitario'}
+                      </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -3245,9 +3305,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
                         <span>🧭</span>
-                        <span>PIAD Pedagogical Methodology for this Course</span>
+                        <span>
+                          {isEn
+                            ? 'PIAD Pedagogical Methodology for this Course'
+                            : 'Metodología Pedagógica PIAD para este Curso'}
+                        </span>
                       </h4>
-                      <span className="text-[11px] font-mono text-indigo-600 font-semibold">4-Phase Learning Protocol</span>
+                      <span className="text-[11px] font-mono text-indigo-600 font-semibold">
+                        {isEn ? '4-Phase Learning Protocol' : 'Protocolo de Aprendizaje en 4 Fases'}
+                      </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
@@ -3257,7 +3323,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                           className="p-3 rounded-xl bg-indigo-50/60 border border-indigo-100 space-y-1"
                         >
                           <div className="font-mono text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider">
-                            Phase 0{ph.phase}: {ph.name}
+                            {isEn ? `Phase 0${ph.phase}: ${ph.name}` : `Fase 0${ph.phase}: ${ph.name}`}
                           </div>
                           <p className="text-[11px] text-slate-600 font-sans leading-snug">
                             {ph.description}
@@ -3274,9 +3340,15 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                       <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                         <span>📚</span>
-                        <span>Recommended Literature & Standard University Textbooks</span>
+                        <span>
+                          {isEn
+                            ? 'Recommended Literature & Standard University Textbooks'
+                            : 'Bibliografía Recomendada y Textos Universitarios de Referencia'}
+                        </span>
                       </h4>
-                      <span className="text-[11px] font-mono text-slate-500">Curated Bibliography</span>
+                      <span className="text-[11px] font-mono text-slate-500">
+                        {isEn ? 'Curated Bibliography' : 'Bibliografía Seleccionada'}
+                      </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -3290,7 +3362,7 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                               {book.title}
                             </div>
                             <div className="text-[11px] font-mono text-slate-600 mt-1">
-                              by {book.author}
+                              {isEn ? `by ${book.author}` : `por ${book.author}`}
                             </div>
                             <div className="text-[10px] font-mono text-sky-700 mt-0.5">
                               {book.edition}
@@ -3309,7 +3381,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                 <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-2">
                   <div className="flex items-center gap-2 font-mono text-xs font-bold text-sky-400 uppercase tracking-wider">
                     <span>⚡</span>
-                    <span>Lecture Notes & Post-Session Open Deliverables</span>
+                    <span>
+                      {isEn
+                        ? 'Lecture Notes & Post-Session Open Deliverables'
+                        : 'Apuntes de Clase y Material Entregable Post-Sesión'}
+                    </span>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed font-sans">
                     {notesPolicy}
@@ -3325,18 +3401,22 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   onClick={() => setSelectedCourseForGuide(null)}
                   className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-mono text-xs font-semibold cursor-pointer transition-all"
                 >
-                  Close Guide
+                  {isEn ? 'Close Guide' : 'Cerrar Guía'}
                 </button>
 
                 <div className="flex items-center gap-2.5">
                   <a
-                    href="https://wa.me/4915223030386?text=Hi%20Daniel,%20I%20am%20interested%20in%20the%20academic%20mentorship%20program%20for%20this%20course."
+                    href={
+                      isEn
+                        ? 'https://wa.me/4915223030386?text=Hi%20Daniel,%20I%20am%20interested%20in%20the%20academic%20mentorship%20program%20for%20this%20course.'
+                        : 'https://wa.me/4915223030386?text=Hola%20Daniel,%20estoy%20interesado%20en%20el%20programa%20de%20mentor%C3%ADa%20acad%C3%A9mica%20para%20este%20curso.'
+                    }
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
                   >
                     <span>💬</span>
-                    <span>Inquire via WhatsApp</span>
+                    <span>{isEn ? 'Inquire via WhatsApp' : 'Consultar por WhatsApp'}</span>
                   </a>
 
                   <button
@@ -3349,7 +3429,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                     className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md cursor-pointer"
                   >
                     <Calendar className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Request Free 15-Min Diagnostic Call →</span>
+                    <span>
+                      {isEn
+                        ? 'Request Free 15-Min Diagnostic Call →'
+                        : 'Solicitar Diagnóstico Gratuito de 15 Min →'}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -3608,7 +3692,11 @@ Sent from Open Knowledge & Science Mentorship Portal`;
                   )}
 
                   <a
-                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(`Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Knowledge & Science Mentorship'}. My name is ${bookingData.name}.`)}`}
+                    href={`https://wa.me/4917676497440?text=${encodeURIComponent(
+                      lang === 'en'
+                        ? `Hi Daniel! I just booked a session for ${bookingData.courseCode || 'Open Knowledge & Science Mentorship'}. My name is ${bookingData.name}.`
+                        : `¡Hola Daniel! Acabo de solicitar una sesión para ${bookingData.courseCode || 'Mentoría Open Knowledge & Science'}. Mi nombre es ${bookingData.name}.`
+                    )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-xs"

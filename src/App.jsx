@@ -410,7 +410,7 @@ export default function App() {
   const liveTiers = getCurrencyTiers();
   const activeTier = liveTiers[currency] || liveTiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const baseRates = activeTier?.rates || DEFAULT_CURRENCY_TIERS.EUR.rates;
-  const baseRate = baseRates?.[calcLevel] || baseRates?.ib || 25;
+  const baseRate = baseRates?.[calcLevel] || baseRates?.ib || 15;
   const inPersonExtraPerHour = activeTier?.inPersonSurchargePerHour || Math.round(baseRate * 0.25);
   const hourlyRateWithMode = baseRate + (calcMode === 'inperson' ? inPersonExtraPerHour : 0);
   const sprintMultiplier = calcSprintDiscount ? 0.85 : 1.0;

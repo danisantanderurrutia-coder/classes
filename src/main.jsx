@@ -37,6 +37,7 @@ const forceCleanReload = () => {
 const handleResetLocalData = () => {
   try {
     localStorage.removeItem('ds_custom_pricing_v1');
+    localStorage.removeItem('ds_custom_pricing_v2');
     localStorage.removeItem('ds_admin_master_checklist_v1');
     localStorage.removeItem('ds_admin_channels_v4');
     localStorage.removeItem('ds_admin_leads_v3');

@@ -165,7 +165,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.kleinanzeigen.de',
-    notes: 'Precio gancho: Ab 25 €/h. Categoría: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
+    notes: 'Precio gancho: Ab 15 €/h. Categoría: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
   },
   {
     id: 'ch-kleinanzeigen-en',
@@ -175,7 +175,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.kleinanzeigen.de',
-    notes: 'Enfocado en familias expat, IB Diploma (ISH) y programas internacionales (Ab 25 €/h).'
+    notes: 'Enfocado en familias expat, IB Diploma (ISH) y programas internacionales (Ab 15 €/h).'
   },
   {
     id: 'ch-luh-brett',
@@ -195,7 +195,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.tutti.ch',
-    notes: 'Mercado alto poder adquisitivo (42–55 CHF/h). Sigue siendo económico para Suiza y rinde ~€48/h.'
+    notes: 'Mercado alto poder adquisitivo (25–33 CHF/h). Sigue siendo muy económico para Suiza y rinde ~€27/h.'
   },
   {
     id: 'ch-anibis',
@@ -205,7 +205,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.anibis.ch',
-    notes: 'Ideal para estudiantes de EPFL y colegios IB en Ginebra/Lausanne (42–55 CHF/h).'
+    notes: 'Ideal para estudiantes de EPFL y colegios IB en Ginebra/Lausanne (25–33 CHF/h).'
   },
   {
     id: 'cl-tusclases',
@@ -215,7 +215,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.tusclasesparticulares.cl',
-    notes: 'Precio tracción: $20.000 CLP/h para Cálculo/Física I ($17.000/h en pack). Destacar Geofísico U. de Chile.'
+    notes: 'Precio tracción: $12.000 CLP/h para Cálculo/Física I ($10.200/h en pack). Destacar Geofísico U. de Chile.'
   },
   {
     id: 'cl-yapo',
@@ -225,7 +225,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.yapo.cl',
-    notes: 'Ideal para captar alumnos de Plan Común de Ingeniería ($20.000 CLP/h) y grupos de 2–3 amigos.'
+    notes: 'Ideal para captar alumnos de Plan Común de Ingeniería ($12.000 CLP/h) y grupos de 2–3 amigos.'
   },
   {
     id: 'es-tusclases',
@@ -235,7 +235,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.tusclasesparticulares.com',
-    notes: 'Desde €25/h para Cálculo y Física I. Destacar Método PIAD™ y simuladores interactivos.'
+    notes: 'Desde €15/h para Cálculo y Física I. Destacar Método PIAD™ y simuladores interactivos.'
   },
   {
     id: 'uk-gumtree',
@@ -245,7 +245,7 @@ const INITIAL_CHANNELS = [
     status: 'pendiente',
     lastPosted: '',
     url: 'https://www.gumtree.com',
-    notes: 'Enfocado en A-Levels, IB Diploma y Bachelor en Ingeniería (£24–£34/h).'
+    notes: 'Enfocado en A-Levels, IB Diploma y Bachelor en Ingeniería (£15–£21/h).'
   },
   {
     id: 'forum-reddit-chile',
@@ -423,7 +423,7 @@ const INITIAL_MASTER_CHECKLIST = [
     status: 'pendiente',
     lastChecked: '',
     url: 'https://www.kleinanzeigen.de',
-    notes: 'Precio gancho: Ab 25 €/h. Cat: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
+    notes: 'Precio gancho: Ab 15 €/h. Cat: Unterricht & Kurse -> Nachhilfe. Renovar cada 5 días.'
   },
   {
     id: 'ch-kleinanzeigen-en',
@@ -456,7 +456,7 @@ const INITIAL_MASTER_CHECKLIST = [
     status: 'pendiente',
     lastChecked: '',
     url: 'https://www.tutti.ch',
-    notes: 'Tarifa: 42–55 CHF/h. Mercado de altísimo poder adquisitivo y gran demanda de física/cálculo.'
+    notes: 'Tarifa: 25–33 CHF/h. Mercado de gran demanda de física/cálculo y alta conversión.'
   },
   {
     id: 'ch-anibis',
@@ -478,7 +478,7 @@ const INITIAL_MASTER_CHECKLIST = [
     status: 'pendiente',
     lastChecked: '',
     url: 'https://www.tusclasesparticulares.cl',
-    notes: 'Precio tracción: $20.000 CLP/h. Resaltar Geofísico U. de Chile y método PIAD™.'
+    notes: 'Precio tracción: $12.000 CLP/h. Resaltar Geofísico U. de Chile y método PIAD™.'
   },
   {
     id: 'cl-yapo',
@@ -500,7 +500,7 @@ const INITIAL_MASTER_CHECKLIST = [
     status: 'pendiente',
     lastChecked: '',
     url: 'https://www.tusclasesparticulares.com',
-    notes: 'Desde 25 €/h. Muy activo para Álgebra, Cálculo y Física de primer año.'
+    notes: 'Desde 15 €/h. Muy activo para Álgebra, Cálculo y Física de primer año.'
   },
   {
     id: 'uk-gumtree',
@@ -511,7 +511,7 @@ const INITIAL_MASTER_CHECKLIST = [
     status: 'pendiente',
     lastChecked: '',
     url: 'https://www.gumtree.com',
-    notes: 'A-Levels, IB Diploma y programas de Bachelor en ingeniería (£24–£34/h).'
+    notes: 'A-Levels, IB Diploma y programas de Bachelor en ingeniería (£15–£21/h).'
   },
 
   // FOROS WEB & COMUNIDADES DIGITALES
@@ -649,7 +649,7 @@ const INITIAL_LEADS = [
     contact: '+56 9 ... (WhatsApp)',
     status: 'Diagnostic Booked',
     date: '2026-10-20',
-    notes: 'Entró por el precio de $20.000 CLP/h para Cálculo y probó el DCL en el Lab.'
+    notes: 'Entró por el precio de $12.000 CLP/h para Cálculo y probó el DCL en el Lab.'
   }
 ];
 
@@ -659,7 +659,7 @@ const AD_TEMPLATES = [
     lang: 'en',
     badge: '🇬🇧 🌱 Curious Minds (Ages 9–15) – International / Expat Families',
     title: 'Curious Minds: Intuitive Math, Spatial Geometry & Playful Physics for Kids & Teens (Ages 9–15) – Double M.Sc. Mentor',
-    priceNote: 'Tier 1 (€25 / £24 / $28 / 42 CHF / $20,000 CLP) — Interactive 3D Solar System + Fun First Principles',
+    priceNote: 'Tier 1 (€15 / £15 / $17 / 25 CHF / $12,000 CLP) — Interactive 3D Solar System + Fun First Principles',
     body: `Does your child or teenager love asking "Why?" about space, science, and numbers, but feels constrained by rote school drills?
 
 Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I mentor young curious minds (ages 9–15) to build authentic scientific intuition, visual geometry, and analytical thinking in a playful, low-pressure environment.
@@ -672,7 +672,7 @@ Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer 
 • After-Session Study Artifacts: After every session, parents receive a high-resolution vector PDF summarizing what we explored, complete with visual diagrams and curiosity challenges.
 
 💰 TRANSPARENT RATES (Tier 1):
-• €25 / £24 / $28 / 42 CHF / $20,000 CLP per 60-min session.
+• €15 / £15 / $17 / 25 CHF / $12,000 CLP per 60-min session.
 • 15% discount on an 8-session Curiosity Pack.
 • Small-group option available (up to 3 friends or siblings) at -30% per student!
 
@@ -685,7 +685,7 @@ Hi! I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer 
     lang: 'es',
     badge: '🇪🇸🇨🇱 🌱 Mentes Curiosas (9 a 15 años) – Niños y Jóvenes Curiosos',
     title: 'Mentes Curiosas: Geometría Visual, Lógica y Física Lúdica para Niños y Jóvenes (9 a 15 años) – Geofísico U. Chile + Doble Máster Europa',
-    priceNote: 'Nivel 1 ($20.000 CLP / €25 / £24 / 42 CHF) — Planetario 3D Interactivo + Pensamiento Crítico',
+    priceNote: 'Nivel 1 ($12.000 CLP / €15 / £15 / 25 CHF) — Planetario 3D Interactivo + Pensamiento Crítico',
     body: `¿Tu hijo/a hace preguntas constantes sobre el universo, cómo funcionan las cosas o las matemáticas, pero la escuela tradicional se las hace aburridas con repetición mecánica?
 
 Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Diseñé el programa "Mentes Curiosas" para niños y jóvenes (9 a 15 años) con sed de aprender más allá del currículum escolar.
@@ -698,7 +698,7 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
 • Clases 1-a-1 o grupos pequeños de hermanos/amigos (online para todo el mundo o presencial en Hannover).
 
 💰 VALORES TRANSPARENTES (NIVEL 1):
-• $20.000 CLP / €25 / £24 / 42 CHF por hora pedagógica.
+• $12.000 CLP / €15 / £15 / 25 CHF por hora pedagógica.
 • -15% de descuento en Pack de 8 sesiones.
 • -30% por alumno en grupos de hasta 3 niños.
 
@@ -710,8 +710,8 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
     id: 'ad-ib-en',
     lang: 'en',
     badge: '🇬🇧🎓 IB Diploma Specialists (Mathematics AA/AI HL/SL & Physics HL/SL)',
-    title: 'IB Physics & Math AA/AI HL Mentor (Double M.Sc. Engineer) | 14 Interactive Simulators & Past Paper Mastery – From €25 / £24',
-    priceNote: 'Tier 1 (€25 / £24 / $28 / 42 CHF) — Exam Sprint Packs (-15%) & Study Sheets Included',
+    title: 'IB Physics & Math AA/AI HL Mentor (Double M.Sc. Engineer) | 14 Interactive Simulators & Past Paper Mastery – From €15 / £15',
+    priceNote: 'Tier 1 (€15 / £15 / $17 / 25 CHF) — Exam Sprint Packs (-15%) & Study Sheets Included',
     body: `Struggling with IB Physics HL or Mathematics Analysis & Approaches (AA) HL? Feeling overwhelmed by tricky mark schemes, paper 2/3 problem setups, or Internal Assessment (IA) modeling?
 
 I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer based in Hannover, Germany. I specialize in mentoring IB Diploma candidates worldwide to turn abstract IB syllabus objectives into deep visual intuition and reliable 7s.
@@ -724,7 +724,7 @@ I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer base
 • High-Resolution Miro PDF Board: Receive full vector notes after every single class.
 
 💰 TRANSPARENT IB RATES (Tier 1):
-• €25/h (€21/h in 8h Exam Sprint Pack) | £24/h | $28/h | 42 CHF/h | $20,000 CLP/h.
+• €15/h (€12.75/h in 8h Exam Sprint Pack) | £15/h | $17/h | 25 CHF/h | $12,000 CLP/h.
 • Up to 3 classmates can study together at -30% per student!
 
 🎯 Book your FREE 15-minute diagnostic consultation and test our interactive simulators at:
@@ -736,7 +736,7 @@ I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer base
     lang: 'en',
     badge: '🇬🇧🇺🇸 University Engineering (Calculus, Linear Algebra, Mechanics, Fluids & Python)',
     title: 'University Engineering Calculus, Linear Algebra, Mechanics, Fluids & Python Mentor (Double M.Sc.) | Interactive Lab & First Principles',
-    priceNote: 'Tier 1: €25 / £24 | Tier 2: €29 / £28 | Tier 3 (Fluids/Python): €35 / £34 | Free 15-min Diagnostic',
+    priceNote: 'Tier 1: €15 / £15 | Tier 2: €17 / £17 | Tier 3 (Fluids/Python): €21 / £21 | Free 15-min Diagnostic',
     body: `Facing high-stakes exams in Higher Engineering Mathematics, Classical Mechanics, Vector Calculus, Differential Equations, Fluid Dynamics, or Scientific Python?
 
 I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer with graduate degrees in Europe. I provide rigorous 1-on-1 and small group mentorship for university engineering and science students worldwide (UK, US, Germany, Switzerland, Canada, and beyond).
@@ -748,9 +748,9 @@ I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer with
 4. Exported Vector PDF Notes: Every derivation from our Miro board is delivered immediately after class as a searchable, printable study artifact.
 
 💰 TRANSPARENT RATES BY TIER:
-• Tier 1 (Calculus I–II, Mechanics, General Physics): €25/h (£24 / $28 / 42 CHF / $20,000 CLP)
-• Tier 2 (Linear Algebra, Multi-variable Calculus, ODEs, Thermodynamics): €29/h (£28 / $32 / 48 CHF / $23,000 CLP)
-• Tier 3 (Fluid Mechanics, Geophysics, Scientific Python, M.Sc. Thesis): €35/h (£34 / $38 / 55 CHF / $26,000 CLP)
+• Tier 1 (Calculus I–II, Mechanics, General Physics): €15/h (£15 / $17 / 25 CHF / $12,000 CLP)
+• Tier 2 (Linear Algebra, Multi-variable Calculus, ODEs, Thermodynamics): €17/h (£17 / $19 / 29 CHF / $14,000 CLP)
+• Tier 3 (Fluid Mechanics, Geophysics, Scientific Python, M.Sc. Thesis): €21/h (£21 / $23 / 33 CHF / $16,000 CLP)
 • 15% discount on 8h Exam Sprint Packs. Group discounts available.
 
 🎯 Book a FREE 15-minute diagnostic call & try our interactive lab:
@@ -762,7 +762,7 @@ I’m Daniel S. Santander Urrutia, a Geophysicist and Double M.Sc. Engineer with
     lang: 'es',
     badge: '🇨🇱 Chile (Beauchef FCFM / UC / USM / UdeC) – Tarifas Escalonadas por Ramo',
     title: 'Clases Cálculo, Física, Álgebra, Fluidos y Python (Geofísico U. de Chile + Doble M.Sc. Europa)',
-    priceNote: 'Chile: $20.000 CLP/h (Cálculo/Física I), $23.000 (Álgebra/EDOs), $26.000 (Fluidos/Python) | Packs -15% y Grupos -30%',
+    priceNote: 'Chile: $12.000 CLP/h (Cálculo/Física I), $14.000 (Álgebra/EDOs), $16.000 (Fluidos/Python) | Packs -15% y Grupos -30%',
     body: `¿Se acerca tu control, certamen o examen de Cálculo I–III, Física Mecánica, Álgebra Lineal, Ecuaciones Diferenciales, Mecánica de Fluidos o Python?
 
 Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - Beauchef) e Ingeniero con Doble Máster (M.Sc.) en Europa. Hago clases particulares 1-a-1 y a grupos pequeños con una plataforma interactiva propia.
@@ -774,9 +774,9 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
 • Apuntes en PDF Vectorial: Al terminar cada clase te envío el PDF de alta resolución de nuestra pizarra Miro + Hojas de Estudio resumidas.
 
 💰 TARIFAS SEGÚN COMPLEJIDAD DEL RAMO (CHILE / EUROPA):
-• Nivel 1 (Cálculo I–II, Física Mecánica, Bachillerato IB / PAES): $20.000 CLP/h (€25/h en Europa) — ¡Con Pack de Examen (-15%) te queda en $17.000 CLP/h, o en grupo de hasta 3 amigos (-30%) en $14.000 CLP/h cada uno!
-• Nivel 2 (Álgebra Lineal, EDOs, Electromagnetismo y Termodinámica): $23.000 CLP/h (€29/h).
-• Nivel 3 (Mecánica de Fluidos, Geofísica, Python Científico y Tesis): $26.000 CLP/h (€35/h).
+• Nivel 1 (Cálculo I–II, Física Mecánica, Bachillerato IB / PAES): $12.000 CLP/h (€15/h en Europa) — ¡Con Pack de Examen (-15%) te queda en $10.200 CLP/h, o en grupo de hasta 3 amigos (-30%) en $8.400 CLP/h cada uno!
+• Nivel 2 (Álgebra Lineal, EDOs, Electromagnetismo y Termodinámica): $14.000 CLP/h (€17/h).
+• Nivel 3 (Mecánica de Fluidos, Geofísica, Python Científico y Tesis): $16.000 CLP/h (€21/h).
 
 🎯 Agenda 15 minutos de diagnóstico GRATIS y prueba los simuladores en:
 🌐 ${BASE_SITE_URL}?src=clasificados-cl
@@ -787,7 +787,7 @@ Soy Daniel S. Santander Urrutia, Geofísico de la Universidad de Chile (FCFM - B
     lang: 'es',
     badge: '🇪🇸 España & Latam (Grado en Ingeniería, Física y Matemáticas)',
     title: 'Profesor Particular Análisis Matemático, Álgebra Lineal, Mecánica, Termodinámica y Python (Doble Máster Europa)',
-    priceNote: 'Nivel 1: 25 €/h | Nivel 2: 29 €/h | Nivel 3: 35 €/h | Diagnóstico 15 min Gratis',
+    priceNote: 'Nivel 1: 15 €/h | Nivel 2: 17 €/h | Nivel 3: 21 €/h | Diagnóstico 15 min Gratis',
     body: `¿Preparando tus exámenes de Grado en Ingeniería, Física o Matemáticas (Cálculo / Análisis, Álgebra Lineal, Mecánica Clásica, Ecuaciones Diferenciales, Termodinámica o Fluidos)?
 
 Soy Daniel S. Santander Urrutia, Geofísico e Ingeniero con Doble Máster (M.Sc.) en Europa. Ofrezco mentorías individuales estructuradas y apoyo para exámenes universitarios con enfoque en intuición visual y primeros principios.
@@ -799,9 +799,9 @@ Soy Daniel S. Santander Urrutia, Geofísico e Ingeniero con Doble Máster (M.Sc.
 • Pizarra Miro Vectorial: Tras cada clase recibes el archivo PDF en alta resolución con todo el desarrollo detallado.
 
 💰 TARIFAS POR NIVEL DE COMPLEJIDAD:
-• Nivel 1 (Cálculo I–II, Física Mecánica, Bachillerato / Selectividad): 25 €/h (con Pack de Examen ~21 €/h).
-• Nivel 2 (Álgebra Lineal, EDOs, Mecánica Analítica, Termodinámica): 29 €/h.
-• Nivel 3 (Mecánica de Fluidos, Geofísica, Python Científico y TFG/TFM): 35 €/h.
+• Nivel 1 (Cálculo I–II, Física Mecánica, Bachillerato / Selectividad): 15 €/h (con Pack de Examen ~13 €/h).
+• Nivel 2 (Álgebra Lineal, EDOs, Mecánica Analítica, Termodinámica): 17 €/h.
+• Nivel 3 (Mecánica de Fluidos, Geofísica, Python Científico y TFG/TFM): 21 €/h.
 • Clases online en directo con pizarra digital o presenciales en Hannover.
 
 🎯 Reserva tu diagnóstico gratuito de 15 minutos y prueba el laboratorio interactivo:
@@ -812,8 +812,8 @@ Soy Daniel S. Santander Urrutia, Geofísico e Ingeniero con Doble Máster (M.Sc.
     id: 'ad-de',
     lang: 'de',
     badge: '🇩🇪🇨🇭 Kleinanzeigen / Tutti.ch (Deutsches Skript -> Unterricht auf Englisch/Spanisch)',
-    title: 'Nachhilfe Mathematik, Analysis, Physik & Python (Uni / FH / IB) – M.Sc. Ingenieur – Ab 25 €',
-    priceNote: 'Deutschland: 25 €/h (Level 1), 29 €/h (Level 2), 35 €/h (Level 3) | Schweiz: 42–55 CHF/h',
+    title: 'Nachhilfe Mathematik, Analysis, Physik & Python (Uni / FH / IB) – M.Sc. Ingenieur – Ab 15 €',
+    priceNote: 'Deutschland: 15 €/h (Level 1), 17 €/h (Level 2), 21 €/h (Level 3) | Schweiz: 25–33 CHF/h',
     body: `Steht deine Klausur in Höherer Mathematik (Analysis / Lineare Algebra), Technischer Mechanik, Physik, Fluiddynamik oder Python bevor?
 
 Ich bin Daniel S. Santander Urrutia, Geophysiker und Ingenieur mit Doppel-Masterabschluss (M.Sc.) in Europa. Ich biete strukturierte, hochwirksame 1-zu-1 Mentorships (Online oder Präsenz in Hannover) an.
@@ -828,9 +828,9 @@ ABER: Du kannst mir problemlos deine deutschen Vorlesungsfolien (Skripte), Übun
 • Open-Knowledge Artefakte: Nach jeder Sitzung erhältst du alle Herleitungen als hochauflösendes Vektor-PDF (Miro-Board + druckbares Study Sheet).
 
 💰 FAIRE PREISE NACH FACH-LEVEL:
-• Level 1 (Analysis I–II, Klassische Physik, IB / Abitur): 25 €/Std. (im 8h-Paket nur ~21 €/Std.!)
-• Level 2 (Lineare Algebra, DGL/ODEs, Technische Mechanik): 29 €/Std.
-• Level 3 (Fluiddynamik, Geophysik, Wissenschaftliches Python & Masterarbeit): 35 €/Std.
+• Level 1 (Analysis I–II, Klassische Physik, IB / Abitur): 15 €/Std. (im 8h-Paket nur ~13 €/Std.!)
+• Level 2 (Lineare Algebra, DGL/ODEs, Technische Mechanik): 17 €/Std.
+• Level 3 (Fluiddynamik, Geophysik, Wissenschaftliches Python & Masterarbeit): 21 €/Std.
 • Präsenz in Hannover (TIB, LUH Campus): Kleiner Aufpreis für die Anfahrt.
 • Kostenloses 15-minütiges Diagnosegespräch vorab!
 
@@ -868,16 +868,16 @@ const FLYER_PRESETS = {
     name: '🇩🇪 Hannover / German University (Exams DE/EN)',
     badge: 'OPEN KNOWLEDGE STEM MENTORSHIP • HANNOVER & ONLINE',
     headline: 'EXAM AT RISK? STRUGGLING WITH UNI MATH, PHYSICS OR PYTHON?',
-    subheadline: '1-on-1 Mentorship by a Geophysicist & Double M.Sc. Engineer • From 25 €/h (Study Packs from ~21 €/h)',
+    subheadline: '1-on-1 Mentorship by a Geophysicist & Double M.Sc. Engineer • From 15 €/h (Study Packs from ~13 €/h)',
     languageNotice: '📌 Bilingual Mentorship: English & German/Spanish • Online Worldwide & In-Person in Hannover • Miro Vector PDF Notes after every session',
     bullets: [
-      'Tier 1 (25 €/h): Calculus / Analysis I–II, Classical Physics & IB Diploma / Abitur',
-      'Tier 2 (29 €/h): Linear Algebra, Eigenvalues, ODEs, Analytical Mechanics & Electromagnetism',
-      'Tier 3 (35 €/h): Fluid Dynamics, Geophysics, Scientific Python (NumPy/SciPy) & Thesis Support',
+      'Tier 1 (15 €/h): Calculus / Analysis I–II, Classical Physics & IB Diploma / Abitur',
+      'Tier 2 (17 €/h): Linear Algebra, Eigenvalues, ODEs, Analytical Mechanics & Electromagnetism',
+      'Tier 3 (21 €/h): Fluid Dynamics, Geophysics, Scientific Python (NumPy/SciPy) & Thesis Support',
       'Includes: Free access to 14-Problem Interactive Physics Lab + Vector PDF Notes after every session'
     ],
     footerCallout: 'Free 15-min Diagnostic Call • Online Worldwide or In-Person in Hannover • Scan QR Code to test simulators',
-    tearOffTitle: 'Math/Physics/Python • From 25€',
+    tearOffTitle: 'Math/Physics/Python • From 15€',
     qrTag: 'flyer-hannover-de',
     illustrationType: 'standard_physics',
     targetForums: 'r/Hannover, r/germany, Studis-Online.de, AStA LUH Schwarzes Brett, WG-Gesucht',
@@ -889,7 +889,7 @@ Hey everyone! If you are preparing for your upcoming exam in *Höhere Mathematik
 I'm Daniel Santander, a Geophysicist (FCFM) with a Double M.Sc. in Engineering in Germany. I provide 1-on-1 and small-group mentorship in English and Spanish.
 - We solve past exam problems on collaborative vector whiteboards (Miro).
 - You get free access to my 14-Problem Interactive Physics Lab with live vector force diagrams.
-- Rates start at 25 €/h (discounts up to -52% for 2–4 student study groups).
+- Rates start at 15 €/h (discounts up to -52% for 2–4 student study groups).
 
 Test the free interactive simulators here:
 👉 ${BASE_SITE_URL}?src=reddit-de
@@ -913,16 +913,16 @@ Direct WhatsApp: +49 176 7649 7440`
     name: '🌎 Bilingual STEM Mentorship (English & Spanish)',
     badge: 'OPEN KNOWLEDGE STEM MENTORSHIP • PIAD™ METHOD',
     headline: 'STRUGGLING WITH CALCULUS, PHYSICS, LINEAR ALGEBRA, FLUIDS OR PYTHON?',
-    subheadline: 'Geophysicist (FCFM) & Double M.Sc. in Engineering • From €25/h ($20.000 CLP/h)',
+    subheadline: 'Geophysicist (FCFM) & Double M.Sc. in Engineering • From €15/h ($12.000 CLP/h)',
     languageNotice: '📌 Bilingual Mentorship: English & Spanish • Live Interactive Whiteboards (Miro) with Vector PDF delivery • Up to 52% off for study groups',
     bullets: [
-      'Tier 1 (€25 / $20k CLP): Calculus I–II, Classical Mechanics, Wave Physics & IB / AP Diploma',
-      'Tier 2 (€29 / $23k CLP): Linear Algebra, ODEs, Analytical Mechanics, Electromagnetism & Thermodynamics',
-      'Tier 3 (€35 / $26k CLP): Fluid Dynamics, Geophysics, Scientific Python + Applied AI & Thesis Sprint',
+      'Tier 1 (€15 / $12k CLP): Calculus I–II, Classical Mechanics, Wave Physics & IB / AP Diploma',
+      'Tier 2 (€17 / $14k CLP): Linear Algebra, ODEs, Analytical Mechanics, Electromagnetism & Thermodynamics',
+      'Tier 3 (€21 / $16k CLP): Fluid Dynamics, Geophysics, Scientific Python + Applied AI & Thesis Sprint',
       '14 Live Web Simulators: Interactive Free Body Diagrams (DCL) & real university exam problems solved step-by-step'
     ],
     footerCallout: 'Scan the QR code to test 14 free interactive simulators & book your 15-min diagnostic call.',
-    tearOffTitle: 'Math/Physics/Python • €25/h',
+    tearOffTitle: 'Math/Physics/Python • €15/h',
     qrTag: 'flyer-bilingual',
     illustrationType: 'standard_physics',
     targetForums: 'r/EngineeringStudents, r/learnmath, Expat groups, University forums & Discord',
@@ -1143,16 +1143,16 @@ WhatsApp: +49 176 7649 7440`
     name: '🌍 International & IB Diploma (AA/AI SL & HL)',
     badge: 'IB DIPLOMA & UNIVERSITY STEM MENTORSHIP',
     headline: 'MASTER IB & UNIVERSITY MATH, PHYSICS & PYTHON WITH VISUAL INTUITION',
-    subheadline: 'Geophysicist & Double M.Sc. Engineer • The PIAD™ Scientific Inquiry Method • From €25/h',
+    subheadline: 'Geophysicist & Double M.Sc. Engineer • The PIAD™ Scientific Inquiry Method • From €15/h',
     languageNotice: '📌 Bilingual Mentorship: English & Spanish • Online Worldwide & In-Person in Hannover',
     bullets: [
-      'IB Physics & Math (AA / AI — SL & HL): Exam paper drills, Internal Assessments (IA) & scientific lab graphs (€25/h)',
+      'IB Physics & Math (AA / AI — SL & HL): Exam paper drills, Internal Assessments (IA) & scientific lab graphs (€15/h)',
       'Interactive 14-Problem Physics Lab: Live Free Body Diagrams (DCL) & Algebra ↔ Calculus toggle',
       '5-Pillar Applied Math Toolkit: Taylor Series, 2D Matrices, Damped ODEs, Vector Fields & FFT Signals',
       'Productive AI for Python: Learn to design & verify scientific code + get full Miro Vector PDF notes'
     ],
     footerCallout: 'Scan the QR Code to test the 14 Interactive Simulators for free & book your 15-min diagnostic!',
-    tearOffTitle: 'IB & Uni STEM • €25/h',
+    tearOffTitle: 'IB & Uni STEM • €15/h',
     qrTag: 'flyer-ib-en',
     illustrationType: 'standard_physics',
     targetForums: 'r/IBO, r/learnmath, Expat Facebook Groups, International School Hannover Region',
@@ -1284,7 +1284,7 @@ export default function Admin({ onBack }) {
   // Live Pricing State (synced with localStorage so Admin can tweak rates live)
   const [liveTiers, setLiveTiers] = useState(() => getCurrencyTiers());
   const [priceSavedBanner, setPriceSavedBanner] = useState(false);
-  const [simBaseEur, setSimBaseEur] = useState(25);
+  const [simBaseEur, setSimBaseEur] = useState(15);
 
   // Monthly Revenue Goal in EUR
   const [monthlyGoalEur, setMonthlyGoalEur] = useState(() => {
@@ -1551,12 +1551,12 @@ export default function Admin({ onBack }) {
   };
 
   const handleApplyPonderanteSimulation = () => {
-    const base = Math.max(10, Number(simBaseEur) || 25);
+    const base = Math.max(8, Number(simBaseEur) || 15);
     const updated = { ...liveTiers };
     for (const code of Object.keys(updated)) {
       const t = updated[code];
       const pond = t.ponderante || 1.0;
-      let newIb = 25;
+      let newIb = 15;
       if (code === 'EUR') {
         newIb = Math.round(base);
       } else if (code === 'CHF') {
@@ -1635,7 +1635,7 @@ export default function Admin({ onBack }) {
       date: new Date().toISOString().split('T')[0]
     };
     setLeads([item, ...leads]);
-    const defaultRate = liveTiers[newLead.countryCurrency]?.rates?.ib || 25;
+    const defaultRate = liveTiers[newLead.countryCurrency]?.rates?.ib || 15;
     setNewLead({
       name: '',
       subject: '',
@@ -2252,7 +2252,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               </div>
               <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
                 <span>{t('Base de cobro:', 'Base rate:')}</span>
-                <strong className="text-white">€25 / $20k CLP</strong>
+                <strong className="text-white">€15 / $12k CLP</strong>
               </div>
             </div>
 
@@ -2274,8 +2274,8 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                   </h2>
                   <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
                     {t(
-                      'Cálculo y Física I parten ahora en $20.000 CLP/h en Chile y €25/h en Europa para que te lleguen muchos más alumnos desde el primer día. Puedes modificar cualquier número aquí abajo y pulsar Guardar Cambios en la Web cuando quieras subir tus tarifas.',
-                      'Calculus and Physics I start at $20,000 CLP/h in Chile and €25/h in Europe to maximize inquiry volume from day one. Modify any figure below and click Save Changes to Website whenever you wish to adjust rates.'
+                      'Cálculo y Física I parten ahora en $12.000 CLP/h en Chile y €15/h en Europa para que te lleguen muchos más alumnos desde el primer día. Puedes modificar cualquier número aquí abajo y pulsar Guardar Cambios en la Web cuando quieras subir tus tarifas.',
+                      'Calculus and Physics I start at $12,000 CLP/h in Chile and €15/h in Europe to maximize inquiry volume from day one. Modify any figure below and click Save Changes to Website whenever you wish to adjust rates.'
                     )}
                   </p>
                 </div>
@@ -2286,7 +2286,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs flex items-center gap-1.5 cursor-pointer border border-slate-700 transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>{t('Restaurar Sugeridos ($20k / €25)', 'Restore Recommended ($20k / €25)')}</span>
+                    <span>{t('Restaurar Sugeridos ($12k / €15)', 'Restore Recommended ($12k / €15)')}</span>
                   </button>
                   <button
                     onClick={handleSaveCustomPrices}
@@ -2361,10 +2361,10 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                       <span className="text-slate-400 text-[11px]">{t('Base EUR: €', 'Base EUR: €')}</span>
                       <input
                         type="number"
-                        min="15"
+                        min="10"
                         max="80"
                         value={simBaseEur}
-                        onChange={(e) => setSimBaseEur(Number(e.target.value) || 25)}
+                        onChange={(e) => setSimBaseEur(Number(e.target.value) || 15)}
                         className="w-16 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-sky-500/50 text-white font-bold text-center"
                       />
                       <span className="text-[11px] text-slate-400">/h {t('Nivel 1', 'Tier 1')}</span>
@@ -2904,7 +2904,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
                     value={newLead.countryCurrency}
                     onChange={(e) => {
                       const code = e.target.value;
-                      const defaultRate = liveTiers[code]?.rates?.ib || 25;
+                      const defaultRate = liveTiers[code]?.rates?.ib || 15;
                       setNewLead({
                         ...newLead,
                         countryCurrency: code,
@@ -3555,7 +3555,7 @@ Would you like to hop on a *free 15-minute diagnostic call* on Google Meet today
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-white">
-                    {t('Plantillas de Avisos con Precios Escalonados (Base 1.00x EUR / $20.000 CLP)', 'Classified Ad Templates with Tiered Pricing (Base 1.00x EUR / $20,000 CLP)')}
+                    {t('Plantillas de Avisos con Precios Escalonados (Base 1.00x EUR / $12.000 CLP)', 'Classified Ad Templates with Tiered Pricing (Base 1.00x EUR / $12,000 CLP)')}
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {t('Avisos listos para copiar y pegar en portales clasificados, foros y redes sociales con enlaces de trazabilidad y números de WhatsApp.', 'Ready-to-post classified templates with attribution links and direct WhatsApp action.')}

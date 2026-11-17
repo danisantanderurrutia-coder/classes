@@ -1,9 +1,9 @@
 // ============================================================================
 // GEO-PRICING, SUBJECT-COMPLEXITY TIERS & PURCHASING-POWER PARITY (PPP) ENGINE
-// Supports live overrides from Admin Hub via localStorage ('ds_custom_pricing_v1')
+// Supports live overrides from Admin Hub via localStorage ('ds_custom_pricing_v2')
 // ============================================================================
 
-export const CUSTOM_PRICING_STORAGE_KEY = 'ds_custom_pricing_v1';
+export const CUSTOM_PRICING_STORAGE_KEY = 'ds_custom_pricing_v2';
 
 // Course-to-Complexity-Tier mapping:
 // - 'ib' (Tier 1: Cálculo I-II, Matemática Base, Física Plan Común, Bachillerato IB / PAES / Abitur / Cuántica Curiosos)
@@ -74,27 +74,27 @@ export const DEFAULT_CURRENCY_TIERS = {
     pppIndex: '1.00x (Base EUR)',
     ponderante: 1.00,
     ponderanteLabel: '1.00x (Base EUR)',
-    ponderanteDescEs: 'Referencia base (1.00x): Es la tarifa estándar cobrada en Alemania y Europa Central.',
-    ponderanteDescEn: 'Base reference (1.00x): The standard baseline rate charged in Germany and Central Europe.',
+    ponderanteDescEs: 'Referencia base (1.00x): Es la tarifa estándar cobrada en Alemania y Europa Central (desde 15 €/h).',
+    ponderanteDescEn: 'Base reference (1.00x): The standard baseline rate charged in Germany and Central Europe (from €15/h).',
     eurRate: 1.0,
-    inPersonSurchargePerHour: 8,
+    inPersonSurchargePerHour: 5,
     rates: {
-      ib: 25,       // Nivel 1: Cálculo, Física I, IB
-      bachelor: 29, // Nivel 2: Álgebra Lineal, EDOs, Mecánica
-      mechanics: 29,
-      master: 35    // Nivel 3: Fluidos, Geofísica, Python, Tesis
+      ib: 15,       // Nivel 1: Cálculo, Física I, IB (15 €/h)
+      bachelor: 17, // Nivel 2: Álgebra Lineal, EDOs, Mecánica (17 €/h)
+      mechanics: 17,
+      master: 21    // Nivel 3: Fluidos, Geofísica, Python, Tesis (21 €/h)
     },
     packs8h: {
-      ib: 170,      // ~21.25 €/h (-15%)
-      bachelor: 197, // ~24.60 €/h (-15%)
-      mechanics: 197,
-      master: 238   // ~29.75 €/h (-15%)
+      ib: 102,      // ~12.75 €/h (-15%)
+      bachelor: 116, // ~14.50 €/h (-15%)
+      mechanics: 116,
+      master: 143   // ~17.85 €/h (-15%)
     },
     paymentMethods: ['SEPA IBAN', 'PayPal', 'Wise', 'Revolut'],
     rationaleEs:
-      'Piso competitivo de €25/h para Cálculo y Física Base que multiplica por 3x los mensajes en Kleinanzeigen (Hannover) y Tusclasesparticulares (España), escalando a €29/h en ramos intermedios y €35/h en Python/Geofísica/Tesis.',
+      'Piso súper accesible y competitivo de €15/h para Cálculo y Física Base que maximiza la captación y volumen en Alemania y España, escalando a €17/h en ramos intermedios y €21/h en Python/Geofísica/Tesis.',
     rationaleEn:
-      'High-conversion €25/h entry point for Calculus & IB to maximize initial student inquiries in Germany and Spain, scaling to €29/h for intermediate engineering and €35/h for Python/Geophysics/Thesis.'
+      'Super accessible €15/h entry point for Calculus & IB to maximize inquiry volume in Germany and Spain, scaling to €17/h for intermediate engineering and €21/h for Python/Geophysics/Thesis.'
   },
   CLP: {
     code: 'CLP',
@@ -109,27 +109,27 @@ export const DEFAULT_CURRENCY_TIERS = {
     pppIndex: '0.80x (Ajuste Real Chile)',
     ponderante: 0.80,
     ponderanteLabel: '0.80x (Ajuste Real Chile)',
-    ponderanteDescEs: 'Ponderante 0.80x: Calibrado a la capacidad de gasto de familias y universitarios en Chile ($20.000 CLP/h equivale al 80% del esfuerzo europeo).',
-    ponderanteDescEn: 'Weight 0.80x: Calibrated to Chilean university affordability ($20,000 CLP/h represents ~80% of European effort).',
+    ponderanteDescEs: 'Ponderante 0.80x: Calibrado a la capacidad de gasto de familias y universitarios en Chile ($12.000 CLP/h).',
+    ponderanteDescEn: 'Weight 0.80x: Calibrated to Chilean university affordability ($12,000 CLP/h).',
     eurRate: 0.00098, // ~1.020 CLP = 1 EUR
-    inPersonSurchargePerHour: 6000,
+    inPersonSurchargePerHour: 3500,
     rates: {
-      ib: 20000,       // Nivel 1: Cálculo I-II, Física Base, IB/PAES ($20.000 CLP/h)
-      bachelor: 23000, // Nivel 2: Álgebra Lineal, EDOs, Mecánica ($23.000 CLP/h)
-      mechanics: 23000,
-      master: 26000    // Nivel 3: Fluidos, Geofísica, Python + IA, Tesis ($26.000 CLP/h)
+      ib: 12000,       // Nivel 1: Cálculo I-II, Física Base, IB/PAES ($12.000 CLP/h)
+      bachelor: 14000, // Nivel 2: Álgebra Lineal, EDOs, Mecánica ($14.000 CLP/h)
+      mechanics: 14000,
+      master: 16000    // Nivel 3: Fluidos, Geofísica, Python + IA, Tesis ($16.000 CLP/h)
     },
     packs8h: {
-      ib: 136000,      // $17.000 CLP/h (-15%)
-      bachelor: 156000, // $19.500 CLP/h (-15%)
-      mechanics: 156000,
-      master: 176000   // $22.000 CLP/h (-15%)
+      ib: 81600,      // $10.200 CLP/h (-15%)
+      bachelor: 95200, // $11.900 CLP/h (-15%)
+      mechanics: 95200,
+      master: 108800   // $13.600 CLP/h (-15%)
     },
     paymentMethods: ['Transferencia Bancaria Chile (CLP)', 'Wise', 'PayPal'],
     rationaleEs:
-      '$20.000 CLP/h para Cálculo y Física es el punto exacto en Chile: competitivo frente a profesores particulares ($18k–$25k), muy atractivo en pack ($17.000/h) o grupo de 2–3 amigos ($14.000/h), y sube a $23.000 y $26.000 CLP/h para ramos avanzados de Beauchef/UC/USM.',
+      '$12.000 CLP/h para Cálculo y Física es una tarifa altamente competitiva y accesible en Chile, con packs de examen a ~$10.200/h y grupos de 2–3 amigos a ~$8.500/h cada uno, subiendo a $14.000 y $16.000 CLP/h para ramos avanzados de Beauchef/UC/USM.',
     rationaleEn:
-      '$20,000 CLP/h for Calculus & Foundations hits the exact sweet spot in Chile—accessible for university students while respecting your U. de Chile Geophysics + European Double M.Sc. credentials.'
+      '$12,000 CLP/h for Calculus & Foundations offers extreme accessibility in Chile, with exam packs at ~$10,200/h and group rates down to ~$8,500/h per student.'
   },
   CHF: {
     code: 'CHF',
@@ -144,27 +144,27 @@ export const DEFAULT_CURRENCY_TIERS = {
     pppIndex: '1.65x (Premium CHF)',
     ponderante: 1.65,
     ponderanteLabel: '1.65x (Poder Adquisitivo Suiza)',
-    ponderanteDescEs: 'Ponderante 1.65x: Capacidad de gasto ~1.65 veces mayor que Alemania. 42 CHF/h es muy barato para Suiza y te rinde ~€45/h.',
-    ponderanteDescEn: 'Weight 1.65x: Purchasing power ~1.65x higher than Germany. 42 CHF/h is a bargain in Switzerland while yielding ~€45/h.',
+    ponderanteDescEs: 'Ponderante 1.65x: Capacidad de gasto ~1.65 veces mayor que Alemania. 25 CHF/h es sumamente accesible en Suiza.',
+    ponderanteDescEn: 'Weight 1.65x: Purchasing power ~1.65x higher than Germany. 25 CHF/h is highly accessible in Switzerland.',
     eurRate: 1.06,
-    inPersonSurchargePerHour: 12,
+    inPersonSurchargePerHour: 7,
     rates: {
-      ib: 42,       // Nivel 1: Cálculo, Física I, IB (42 CHF/h)
-      bachelor: 48, // Nivel 2: Álgebra, EDOs, Mecánica (48 CHF/h)
-      mechanics: 48,
-      master: 55    // Nivel 3: Fluidos, Geofísica, Python, Tesis (55 CHF/h)
+      ib: 25,       // Nivel 1: Cálculo, Física I, IB (25 CHF/h)
+      bachelor: 29, // Nivel 2: Álgebra, EDOs, Mecánica (29 CHF/h)
+      mechanics: 29,
+      master: 33    // Nivel 3: Fluidos, Geofísica, Python, Tesis (33 CHF/h)
     },
     packs8h: {
-      ib: 285,
-      bachelor: 326,
-      mechanics: 326,
-      master: 374
+      ib: 170,
+      bachelor: 197,
+      mechanics: 197,
+      master: 224
     },
     paymentMethods: ['SEPA / IBAN (CHF/EUR)', 'Wise', 'Revolut', 'PayPal'],
     rationaleEs:
-      'En Suiza el sueldo estudiantil básico es ~25 CHF/h y las academias cobran 80–120 CHF/h. Cobrar 42 a 55 CHF/h es súper competitivo para familias suizas (ETH, EPFL, colegios IB en Zúrich/Ginebra) y te rinde ~€45–€58 por hora.',
+      'Cobrar 25 a 33 CHF/h es extraordinariamente accesible para familias y universitarios suizos (ETH, EPFL, colegios IB), asegurando una alta tasa de conversión.',
     rationaleEn:
-      'In Switzerland, basic student jobs pay ~25 CHF/h and tutoring agencies charge 80–120 CHF/h. Pricing at 42–55 CHF/h is a bargain for Swiss families while yielding ~€45–€58/h.'
+      'Pricing at 25–33 CHF/h is an exceptional bargain for Swiss families and students (ETH, EPFL, IB), maximizing student enrollment.'
   },
   GBP: {
     code: 'GBP',
@@ -179,27 +179,27 @@ export const DEFAULT_CURRENCY_TIERS = {
     pppIndex: '1.15x (GBP)',
     ponderante: 1.15,
     ponderanteLabel: '1.15x (GBP UK)',
-    ponderanteDescEs: 'Ponderante 1.15x: Calibrado al mercado académico británico en libras (£24/h = ~€28/h).',
-    ponderanteDescEn: 'Weight 1.15x: Calibrated to the UK academic market in British pounds (£24/h = ~€28/h).',
+    ponderanteDescEs: 'Ponderante 1.15x: Calibrado al mercado académico británico en libras (£15/h).',
+    ponderanteDescEn: 'Weight 1.15x: Calibrated to the UK academic market in British pounds (£15/h).',
     eurRate: 1.18,
-    inPersonSurchargePerHour: 8,
+    inPersonSurchargePerHour: 5,
     rates: {
-      ib: 24,
-      bachelor: 28,
-      mechanics: 28,
-      master: 34
+      ib: 15,
+      bachelor: 17,
+      mechanics: 17,
+      master: 21
     },
     packs8h: {
-      ib: 163,
-      bachelor: 190,
-      mechanics: 190,
-      master: 231
+      ib: 102,
+      bachelor: 116,
+      mechanics: 116,
+      master: 143
     },
     paymentMethods: ['Wise (UK Sort Code / IBAN)', 'Revolut', 'PayPal'],
     rationaleEs:
-      'Tarifa atractiva en libras (£24–£34/h) para captar rápido estudiantes de A-Levels, IB Diploma y pregrado de ingeniería en Reino Unido.',
+      'Tarifa atractiva y accesible en libras (£15–£21/h) para captar rápido estudiantes de A-Levels, IB Diploma y pregrado de ingeniería en Reino Unido.',
     rationaleEn:
-      'Competitive GBP pricing (£24–£34/h) calibrated to attract UK A-Level, IB Diploma, and engineering undergraduates.'
+      'Highly competitive and affordable GBP pricing (£15–£21/h) calibrated to attract UK A-Level, IB Diploma, and engineering undergraduates.'
   },
   USD: {
     code: 'USD',
@@ -214,27 +214,27 @@ export const DEFAULT_CURRENCY_TIERS = {
     pppIndex: '1.10x (USD)',
     ponderante: 1.10,
     ponderanteLabel: '1.10x (USD Global)',
-    ponderanteDescEs: 'Ponderante 1.10x: Tarifa para colegios internacionales, familias expat y estudiantes en EE.UU. ($28 USD/h).',
-    ponderanteDescEn: 'Weight 1.10x: Standard rate for international schools, expat families, and US students ($28 USD/h).',
+    ponderanteDescEs: 'Ponderante 1.10x: Tarifa para colegios internacionales, familias expat y estudiantes en EE.UU. ($17 USD/h).',
+    ponderanteDescEn: 'Weight 1.10x: Standard rate for international schools, expat families, and US students ($17 USD/h).',
     eurRate: 0.92,
-    inPersonSurchargePerHour: 10,
+    inPersonSurchargePerHour: 6,
     rates: {
-      ib: 28,
-      bachelor: 32,
-      mechanics: 32,
-      master: 38
+      ib: 17,
+      bachelor: 19,
+      mechanics: 19,
+      master: 23
     },
     packs8h: {
-      ib: 190,
-      bachelor: 218,
-      mechanics: 218,
-      master: 258
+      ib: 116,
+      bachelor: 129,
+      mechanics: 129,
+      master: 156
     },
     paymentMethods: ['Wise', 'PayPal', 'International Wire'],
     rationaleEs:
-      'Rango de $28 a $38 USD/h ideal para familias internacionales, colegios americanos/IB y estudiantes universitarios globales.',
+      'Rango de $17 a $23 USD/h ideal y muy asequible para familias internacionales, colegios americanos/IB y estudiantes universitarios globales.',
     rationaleEn:
-      '$28–$38 USD/h range tailored for international families, American/IB schools, and global university students.'
+      '$17–$23 USD/h range tailored and affordable for international families, American/IB schools, and global university students.'
   }
 };
 
@@ -356,14 +356,14 @@ export function getCourseHourlyRate(course, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
   const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const key = getCourseTierKey(course);
-  return tier?.rates?.[key] || tier?.rates?.bachelor || 25;
+  return tier?.rates?.[key] || tier?.rates?.bachelor || 15;
 }
 
 export function getCoursePackRate(course, currencyCode = 'EUR') {
   const tiers = getCurrencyTiers();
   const tier = tiers[currencyCode] || tiers.EUR || DEFAULT_CURRENCY_TIERS.EUR;
   const key = getCourseTierKey(course);
-  return tier?.packs8h?.[key] || tier?.packs8h?.bachelor || 170;
+  return tier?.packs8h?.[key] || tier?.packs8h?.bachelor || 102;
 }
 
 // ============================================================================
